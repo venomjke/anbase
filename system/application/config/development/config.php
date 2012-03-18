@@ -358,5 +358,12 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 
+
+$config['modules_locations'] = array(
+    APPPATH.'modules/'    => '../modules/',
+    /* controllers -> application -> system -> index.php -> dashboards */
+    FCPATH.'dashboards/'  => '../../../dashboards/'
+);
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */

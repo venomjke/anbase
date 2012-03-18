@@ -1,6 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Site extends CI_Controller {
+
+require APPPATH."libraries/MX/Controller.php";
+
+class Site extends MX_Controller {
 
 	public function index(){
 
