@@ -15,6 +15,14 @@ class Site extends MX_Controller {
 
 
 	public function index(){
+
+		$this->form_validation->set_rules('test_field','test_field','required');
+
+		if($this->form_validation->run()){
+			$this->template->build('site/form');
+			return true;
+		}
+
 		$this->template->build('site/index');
 	}
 
