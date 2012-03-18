@@ -5,9 +5,17 @@ require APPPATH."libraries/MX/Controller.php";
 
 class Site extends MX_Controller {
 
-	public function index(){
 
-		$this->load->view('site/index');
+	public function __construct(){
+
+		parent::__construct();
+
+		$this->template->set_theme('start');
+	}
+
+
+	public function index(){
+		$this->template->build('site/index');
 	}
 
 
