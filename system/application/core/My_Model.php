@@ -106,15 +106,23 @@ class MY_Model extends CI_Model {
         
         $this->_callbacks('before_get', array($where));
         
-        if ($this->result_mode == 'object') {
-            $row = $this->db->get($this->_table())->row();
-        } else {
-            $row = $this->db->get($this->_table())->row_array();
+        $query = $this->db->get($this->_table);
+
+        if($query->num_rows() == 1){
+
+            if($this->result_mode == 'object'){
+                $row = $query->row();
+            }else{
+
+                $row = $query->row_array();
+            }
+       
+            $row = $this->_callbacks('after_get', array($row));
+        
+            return $row;
         }
         
-        $row = $this->_callbacks('after_get', array($row));
-        
-        return $row;
+        return NULL;
     }
     
     /**
