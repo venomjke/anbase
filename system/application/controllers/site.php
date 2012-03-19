@@ -1,8 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
-require APPPATH."libraries/MX/Controller.php";
-
+/*
+*
+*	@author  - Alex.strigin <apstrigin@gmail.com>
+*	@company - Flyweb
+*
+*/
 class Site extends MX_Controller {
 
 
