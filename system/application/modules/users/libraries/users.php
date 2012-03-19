@@ -123,7 +123,7 @@ class Users {
 	private function increase_login_attempt($login){
 		if ($this->ci->config->item('login_count_attempts', 'users')) {
 				if (!$this->is_max_login_attempts_exceeded($login)) {
-					$this->ci->attempt_login_user->increase_attempt($this->ci->input->ip_address(), $login);
+					$this->ci->m_attempt_login_user->increase_attempt($this->ci->input->ip_address(), $login);
 				}
 		}
 	}
@@ -137,7 +137,7 @@ class Users {
 	function is_max_login_attempts_exceeded($login)
 	{
 		if ($this->ci->config->item('login_count_attempts', 'users')) {
-			return $this->ci->attempt_login_user->get_attempts_num($this->ci->input->ip_address(), $login)
+			return $this->ci->m_attempt_login_user->get_attempts_num($this->ci->input->ip_address(), $login)
 					>= $this->ci->config->item('login_max_attempts', 'users');
 		}
 		return FALSE;
@@ -153,7 +153,7 @@ class Users {
 	private function clear_login_attempts($login)
 	{
 		if ($this->ci->config->item('login_count_attempts', 'users')) {
-			$this->ci->attempt_login_user->clear_attempts(
+			$this->ci->m_attempt_login_user->clear_attempts(
 					$this->ci->input->ip_address(),
 					$login,
 					$this->ci->config->item('login_attempt_expire', 'users'));

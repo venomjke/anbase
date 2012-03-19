@@ -51,7 +51,7 @@ $config['email_activation_expire'] = 60*60*24*2;
 */
 $config['login_record_ip'] = TRUE;
 $config['login_record_time'] = TRUE;
-$config['login_count_attempts'] = FALSE;
+$config['login_count_attempts'] = TRUE;
 $config['login_max_attempts'] = 5;
 $config['login_attempt_expire'] = 60*60*24;
 
@@ -83,8 +83,8 @@ $config['forgot_password_expire'] = 60*15;
 | You can get reCAPTCHA keys by registering at http://recaptcha.net
 |--------------------------------------------------------------------------
 */
-$config['recaptcha_public_key'] = '';
-$config['recaptcha_private_key'] = '';
+$config['recaptcha_public_key'] = '6LdoJM8SAAAAAATEtt5irF3WyFTgpPMlvfRxbMAy';
+$config['recaptcha_private_key'] = '6LdoJM8SAAAAABtx7vS9bZybKaz0Pi6GiXE9QqZi';
 
 
 /* End of file users.php */

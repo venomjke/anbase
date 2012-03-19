@@ -59,7 +59,7 @@ class Auth extends MX_Controller{
 			$this->form_validation->set_rules('remember', 'Remember me', 'integer');
 
 			// Get login for counting attempts to login
-			if ($this->config->item('login_count_attempts', 'tank_auth') AND
+			if ($this->config->item('login_count_attempts', 'users') AND
 					($login = $this->input->post('login'))) {
 				$login = $this->security->xss_clean($login);
 			} else {
@@ -89,7 +89,7 @@ class Auth extends MX_Controller{
 
 
 			if ($this->users->is_max_login_attempts_exceeded($login)) {
-				$this->template->set('recaptcha_html',$this->_create_recaptcha);
+				$this->template->set('recaptcha_html',$this->_create_recaptcha());
 			}
 
 			$this->template

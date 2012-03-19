@@ -44,7 +44,7 @@ class M_Attempt_login_user extends MY_Model {
 	 */
 	function get_attempts_num($ip_address, $login)
 	{
-		$this->db->where('id_address',$ip_address)
+		$this->db->where('ip_address',$ip_address)
 				 ->or_where('login',$login);
 		return $this->count_all_results();
 	}
