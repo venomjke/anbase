@@ -381,7 +381,7 @@ class MY_Model extends CI_Model {
      */
     private function _set_where($params) {
         if (count($params) == 1) {
-            if (!is_array($params[0] && !strstr($params[0], "'"))) {
+            if (!is_array($params[0]) && !strstr($params[0], "'")) {
                 $this->db->where($this->primary_key, $params[0]);
             } else {
                 $this->db->where($params[0]);
