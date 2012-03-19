@@ -125,4 +125,24 @@ class M_User extends MY_Model{
 		return $this->count_all_results(array('email'=>$email)) == 0;
 	}
 
+
+	 /**
+	 * Update user login info, such as IP-address or login time, and
+	 * clear previously generated (but not activated) passwords.
+	 *
+	 *	Обновить информацию о пользователе, такую как IP-address и время login
+	 * @param	int
+	 * @param	bool
+	 * @param	bool
+	 * @return	void
+	 */
+	function update_login_info($user_id, $record_ip, $record_time)
+	{
+		if ($record_ip)		$this->db->set('last_ip', $this->input->ip_address());
+		if ($record_time)	$this->db->set('last_login', date('Y-m-d H:i:s'));
+
+		$this->db->where('id', $user_id);
+		$this->db->update($this->table);
+	}
+
 }

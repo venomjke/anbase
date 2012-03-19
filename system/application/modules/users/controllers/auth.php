@@ -66,6 +66,10 @@ class Auth extends MX_Controller{
 				$login = '';
 			}
 
+			if ($this->users->is_max_login_attempts_exceeded($login)) {
+				$this->form_validation->set_rules('recaptcha_response_field', 'Код подтверждения', 'trim|xss_clean|required|callback__check_recaptcha');
+			}
+
 			$errors = array();
 
 			if ($this->form_validation->run()) {								// validation ok
@@ -82,6 +86,12 @@ class Auth extends MX_Controller{
 					}
 				}
 			}
+
+
+			if ($this->users->is_max_login_attempts_exceeded($login)) {
+				$this->template->set('recaptcha_html',$this->_create_recaptcha);
+			}
+
 			$this->template
 			     ->set('errors',$errors)
 			     ->build('login');
@@ -95,8 +105,7 @@ class Auth extends MX_Controller{
 	*
 	*/
 	public function logout(){
-
-
+		$this->users->logout();
 	}
 
 
@@ -108,5 +117,45 @@ class Auth extends MX_Controller{
 	public function register(){
 
 
+	}
+
+
+	/**
+	 * Create reCAPTCHA JS and non-JS HTML to verify user as a human
+	 *
+	 * @return	string
+	 */
+	function _create_recaptcha()
+	{
+		$this->load->helper('users/recaptcha');
+
+		// Add custom theme so we can get only image
+		$options = "<script>var RecaptchaOptions = {theme: 'custom', custom_theme_widget: 'recaptcha_widget'};</script>\n";
+
+		// Get reCAPTCHA JS and non-JS HTML
+		$html = recaptcha_get_html($this->config->item('recaptcha_public_key', 'users'));
+
+		return $options.$html;
+	}
+
+	/**
+	 * Callback function. Check if reCAPTCHA test is passed.
+	 *
+	 * @return	bool
+	 */
+	function _check_recaptcha()
+	{
+		$this->load->helper('recaptcha');
+
+		$resp = recaptcha_check_answer($this->config->item('recaptcha_private_key', 'users'),
+				$_SERVER['REMOTE_ADDR'],
+				$_POST['recaptcha_challenge_field'],
+				$_POST['recaptcha_response_field']);
+
+		if (!$resp->is_valid) {
+			$this->form_validation->set_message('_check_recaptcha', $this->lang->line('auth_incorrect_captcha'));
+			return FALSE;
+		}
+		return TRUE;
 	}
 }
