@@ -1,10 +1,10 @@
 <?php
 /**
- * @name		CodeIgniter Base Model
- * @author		Jens Segers
- * @contributor	Jamie Rumbelow <http://jamierumbelow.net>
- * @link		http://www.jenssegers.be
- * @license		MIT License Copyright (c) 2012 Jens Segers
+ * @name        CodeIgniter Base Model
+ * @author      Jens Segers
+ * @contributor Jamie Rumbelow <http://jamierumbelow.net>
+ * @link        http://www.jenssegers.be
+ * @license     MIT License Copyright (c) 2012 Jens Segers
  * 
  * This model is based on Jamie Rumbelow's model with some personal modifications
  * 
@@ -47,7 +47,7 @@ class MY_Model extends CI_Model {
     
     /*
      * The database table fields, used for filtering data arrays before inserting and updating
-	 * If not set, an additional query will be made to fetch these fields
+     * If not set, an additional query will be made to fetch these fields
      */
     protected $fields = array();
     
