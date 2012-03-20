@@ -3,41 +3,19 @@
 	<head>
 		<?php
 			echo meta('Content-type','text/html; charset=utf-8','equiv');
+			echo link_tag('themes/start/css/site.css');
 		?>
 	</head>
 	<body>
 		<div id="head">
-			<ul id="menu">
-				<li>
-					<a href="#"> Демо | </a>
-				</li>
-				<li>
-					<a href="#"> Регистрация | </a>
-				</li>
-				<li>
-					<a href="#"> О системе | </a>
-				</li>
-				<li>
-					<a href="#"> Цены |</a>
-				</li>
-				<li>
-					<a href="#"> О нас | </a>
-				</li>
-				<li>
-					<a href="#"> FAQ </a>
-				</li>
-			</ul>
+			<?php load_partial_template($template,'menu'); ?>
 		</div>
 		<div id="content">
 			<?php echo $template['body']; ?>
 		</div>
 		<div id="footer">
-			<div id="stats">
-				Время выполнения: 	<?php echo $this->benchmark->elapsed_time(); ?>
-			</div>
-			<div id="copyright">
-				(c) copyright 2012 Flyweb inc.
-			</div>
+			<span id="stats"> Время выполнения <?php echo $this->benchmark->elapsed_time(); ?> </span>
+			<span id="copyright"> (c) copyright 2012 Flyweb inc. </span>
 		</div>
 	</body>
 </html>

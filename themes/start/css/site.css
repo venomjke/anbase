@@ -1,0 +1,19 @@
+body{
+	margin:0px;
+	padding:0px;
+}
+#head{
+	height:100px;
+}
+ul#menu{
+	list-style-type:none;
+	margin:0px;
+	padding:0px;
+	float:right;
+}
+ul#menu li{
+
+}
+ul#menu li a{
+
+}
