@@ -8,6 +8,7 @@ body{
 }
 #content{
 	border-bottom: 1px #B4B4B4 solid;
+	overflow: auto;
 }
 ul#menu{
 	list-style-type: none;
@@ -25,4 +26,53 @@ ul#menu li a{
 }
 ul#menu li a:hover{
 	text-decoration:underline;
-};
+}
+.contentWrap{
+	overflow: auto;
+	width: 1100px;
+	margin: 0 auto;
+}
+#blog{
+	width: 600px;
+	margin-top: 20px;
+	float: left;
+	overflow: hidden;
+}
+#blog h2{
+	margin: 0px 0px 0.83em 0px;
+	border-bottom: 1px #B4B4B4 solid;
+}
+.blogPost{
+
+}
+#loginBox{
+	width: 400px;
+	overflow: auto;
+	float: right;
+	margin: 20px;
+	border: 1px #B4B4B4 solid;
+	padding: 15px;
+}
+#loginBox h3{
+	text-align: center;
+	border-bottom: 1px #B4B4B4 solid;
+}
+#loginWrap{
+
+}
+#loginWrap h4{
+	margin: 0px 0px 10px 0px;
+	font-size: 13pt;
+}
+#loginWrap .loginField{
+	margin-bottom: 19px;
+}
+#loginWrap .loginField input[type="text"],#loginWrap .loginField input[type="password"]{
+	height: 32px;
+	width: 400px;
+	font-size: 13pt;
+}
+#loginWrap .loginField input[type="submit"]{
+	height: 42px;
+	width: 400px;
+}
