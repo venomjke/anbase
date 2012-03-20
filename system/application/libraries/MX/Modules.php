@@ -167,11 +167,13 @@ class Modules
 	**/
 	public static function find($file, $module, $base) {
 	
+
 		$segments = explode('/', $file);
 
 		$file = array_pop($segments);
 		$file_ext = strpos($file, '.') ? $file : $file.EXT;
 		
+
 		$path = ltrim(implode('/', $segments).'/', '/');	
 		$module ? $modules[$module] = $path : $modules = array();
 		
@@ -179,17 +181,19 @@ class Modules
 			$modules[array_shift($segments)] = ltrim(implode('/', $segments).'/','/');
 		}	
 
+
 		foreach (Modules::$locations as $location => $offset) {					
 			foreach($modules as $module => $subpath) {			
 				$fullpath = $location.$module.'/'.$base.$subpath;
-				
-				if ($base == 'libraries/' AND is_file($fullpath.ucfirst($file_ext))) 
-					return array($fullpath, ucfirst($file));
+
+				if ($base == 'libraries/' AND is_file($fullpath.ucfirst($file_ext)))return array($fullpath, ucfirst($file));
+
+					
 					
 				if (is_file($fullpath.$file_ext)) return array($fullpath, $file);
 			}
 		}
-		
+
 		return array(FALSE, $file);	
 	}
 	

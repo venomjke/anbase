@@ -50,7 +50,7 @@ class Auth extends MX_Controller{
 	public function login(){
 
 		if ($this->users->is_logged_in()) {									// logged in
-			redirect('');
+			redirect($this->users->resolve_user_redirect_uri());
 		} else {
 
 
