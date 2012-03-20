@@ -78,7 +78,6 @@ class Users {
 
 					} else {												// success
 						if ($remember) {
-							echo "remember";
 							$this->create_autologin($user->id);
 						}
 
