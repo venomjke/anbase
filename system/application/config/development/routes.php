@@ -41,6 +41,15 @@
 $route['default_controller'] = "site";
 $route['404_override'] = 'site/page404';
 
+/*
+*	
+*	Маршруты для site/*
+*/
+
+$route['about']   = 'site/about';
+$route['prices']  = 'site/prices';
+$route['company'] = 'site/company';
+$route['faq']     = 'site/faq'; 
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
