@@ -276,4 +276,49 @@ class Users {
 	{
 		return $this->error;
 	}
+
+
+	public function resolve_user_redirect_uri(){
+
+
+	}
+
+	/*
+	*
+	*	Определение роли пользователя, является ли админом
+	*
+	*/
+
+	public function is_admin(){
+
+		if($this->ci->session->userdata('role') == $this->ci->m_user::USER_ROLE_ADMIN)return true;
+		return false;
+	}
+
+	/*
+	*
+	*	Определение роли пользователя, является ли менеджером
+	*
+	*/
+
+	public function is_manager(){
+
+		if($this->ci->session->userdata('role') == $this->ci->m_user::USER_ROLE_MANAGER)return true;
+
+		return false;
+	}
+
+	/*
+	*
+	*	Определение роли пользователя, является ли агентом
+	*
+	*/
+	public function is_agent(){
+
+		if($this->ci->session->userdata('role') == $this->ci->m_user::USER_ROLE_AGENT)return true;
+		return false;
+	}
+
+
+
 }
