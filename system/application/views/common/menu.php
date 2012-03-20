@@ -1,20 +1,19 @@
-<ul id="menu">
-	<li>
-		<a href="#"> Демо | </a>
-	</li>
-	<li>
-		<a href="#"> Регистрация | </a>
-	</li>
-	<li>
-		<a href="#"> О системе | </a>
-	</li>
-	<li>
-		<a href="#"> Цены |</a>
-	</li>
-	<li>
-		<a href="#"> О нас | </a>
-	</li>
-	<li>
-		<a href="#"> FAQ </a>
-	</li>
-</ul>
+<?php
+	/*
+	*
+	*	Генерация меню.
+	*
+	*/
+	$menu = array(
+		anchor("","Главная")."|",
+		anchor("demo","Демо")."|",
+		anchor("register","Регистрация")."|",
+		anchor("about","О системе")."|",
+		anchor("prices","Цены")."|",
+		anchor("company","О нас")."|",
+		anchor("faq","Faq")
+	);
+
+	$attributes = array('id'=>'menu');
+	echo ul($menu,$attributes);
+?>
