@@ -33,3 +33,12 @@
 			- is_max_login_attempt_exceed
 
 		* Добавлены небольшие изменения в БД, то есть миграция 002, в ней у таблицы autologin_users больше нету внешнего ключа login на users.login.
+
+2012-03-20 Alex.strigin <apstrigin@gmail.com>
+	
+	- Релиз версии 0.2.2
+
+		* Каркасы модулей, реализующих логику панелей управления
+			agent,manager,admin
+		* Основа модуля agent, включающего lib Agent_Users и model m_Agent для реализации
+		логики управления пользователями со стороны Agent.
