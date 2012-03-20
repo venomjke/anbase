@@ -38,6 +38,10 @@ class Users {
 		$this->ci->load->model('users/m_user');
 		$this->ci->load->model('users/m_attempt_login_user');
 		$this->ci->load->model('users/m_autologin_user');
+
+
+		// Try to autologin
+		$this->autologin();
 	}
 
 	/**
@@ -74,7 +78,8 @@ class Users {
 
 					} else {												// success
 						if ($remember) {
-							//$this->create_autologin($user->id);
+							echo "remember";
+							$this->create_autologin($user->id);
 						}
 
 						$this->clear_login_attempts($login);
@@ -83,6 +88,8 @@ class Users {
 								$user->id,
 								$this->ci->config->item('login_record_ip', 'users'),
 								$this->ci->config->item('login_record_time', 'users'));
+						
+
 						return TRUE;
 					}
 
@@ -106,12 +113,102 @@ class Users {
 	 */
 	function logout()
 	{
-		//$this->delete_autologin();
+		$this->delete_autologin();
 
 	
 		$this->ci->session->set_userdata(array('user_id' => '', 'username' => '', 'status' => '','role'));
 
 		$this->ci->session->sess_destroy();
+	}
+
+
+	/**
+	 * Сохранение данных  - user's autologin
+	 *
+	 * @param	int
+	 * @return	bool
+	 */
+	private function create_autologin($user_id)
+	{
+		$this->ci->load->helper('cookie');
+
+		$key = substr(md5(uniqid(rand().get_cookie($this->ci->config->item('sess_cookie_name')))), 0, 16);
+
+
+	
+		$this->ci->m_autologin_user->purge($user_id);
+		if ($this->ci->m_autologin_user->set($user_id, md5($key))) {
+			
+			set_cookie(array(
+					'name' 		=> $this->ci->config->item('autologin_cookie_name', 'users'),
+					'value'		=> serialize(array('user_id' => $user_id, 'key' => $key)),
+					'expire'	=> $this->ci->config->item('autologin_cookie_life', 'users'),
+			));
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Удаление данных об Autologin
+	 *
+	 * @return	void
+	 */
+	private function delete_autologin()
+	{
+		$this->ci->load->helper('cookie');
+		if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'users'), TRUE)) {
+
+			$data = unserialize($cookie);
+			$this->ci->user_autologin->remove($data['user_id'], md5($data['key']));
+
+			delete_cookie($this->ci->config->item('autologin_cookie_name', 'users'));
+		}
+	}
+
+	/**
+	 *  Автоматический логин если он/она обеспечат корректный autologin verification
+	 *
+	 * @return	void
+	 */
+	private function autologin()
+	{
+		if (!$this->is_logged_in()) {			// not logged in (as any user)
+
+			$this->ci->load->helper('cookie');
+			if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'users'), TRUE)) {
+
+				$data = unserialize($cookie);
+
+				if (isset($data['key']) AND isset($data['user_id'])) {
+
+					if (!is_null($user = $this->ci->m_autologin_user->get($data['user_id'], md5($data['key'])))) {
+
+						// Login user
+						$this->ci->session->set_userdata(array(
+								'user_id'	=> $user->id,
+								'username'	=> $user->username,
+								'status'	=> M_User::USER_ACTIVE,
+								'role'		=> $user->role
+						));
+
+						// Renew users cookie to prevent it from expiring
+						set_cookie(array(
+								'name' 		=> $this->ci->config->item('autologin_cookie_name', 'users'),
+								'value'		=> $cookie,
+								'expire'	=> $this->ci->config->item('autologin_cookie_life', 'users'),
+						));
+
+						$this->ci->m_user->update_login_info(
+								$user->id,
+								$this->ci->config->item('login_record_ip', 'users'),
+								$this->ci->config->item('login_record_time', 'users'));
+						return TRUE;
+					}
+				}
+			}
+		}
+		return FALSE;
 	}
 
 	/**

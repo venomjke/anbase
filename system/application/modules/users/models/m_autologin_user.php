@@ -50,10 +50,11 @@ class M_Autologin_user extends MY_Model{
 
                 $this->db->select("users".'.id');
                 $this->db->select("users".'.login');
+                $this->db->select("users".'.role');
                 $this->db->from("users");
-                $this->db->join($this->table_name(), $this->table_name().'.user_id = '."users".'.id');
-                $this->db->where($this->table_name().'.user_id', $user_id);
-                $this->db->where($this->table_name().'.key_id', $key);
+                $this->db->join($this->table, $this->table.'.user_id = '."users".'.id');
+                $this->db->where($this->table.'.user_id', $user_id);
+                $this->db->where($this->table.'.key_id', $key);
                 $query = $this->db->get();
                 if ($query->num_rows() == 1) return $query->row();
                 return NULL;
@@ -69,12 +70,13 @@ class M_Autologin_user extends MY_Model{
          */
         function set($user_id, $key)
         {
-                return $this->insert(array(
+                $this->insert(array(
                         'user_id'               => $user_id,
                         'key_id'                => $key,
                         'user_agent'    => substr($this->input->user_agent(), 0, 149),
-                        'last_ip'               => $this->input->ip_address(),
+                        'last_ip'               => $this->input->ip_address()
                 ),true);
+                return TRUE;
         }
 
         /**
@@ -84,11 +86,9 @@ class M_Autologin_user extends MY_Model{
          * @param       string
          * @return      void
          */
-        function delete($user_id, $key)
+        function remove($user_id, $key)
         {
-           $this->db->where('user_id', $user_id);
-           $this->db->where('key_id', $key);
-           return $this->delete();
+           return $this->delete(array('user_id' => $user_id, 'key_id' => $key));
         }
 
         /**
@@ -99,8 +99,7 @@ class M_Autologin_user extends MY_Model{
          */
         function clear($user_id)
         {
-           $this->db->where('user_id', $user_id);
-            return $this->delete();
+            return $this->delete('user_id',$user_id);
         }
 
         /**
@@ -110,6 +109,6 @@ class M_Autologin_user extends MY_Model{
          */
         function purge($user_id)
         {
-           $this->delete(array( 'user_id'=>$user_id, 'user_agent'=>substr($this->input->user_agent(), 0, 149), 'last_ip'=>$this->input->ip_address()));
+           return $this->delete(array( 'user_id'=>$user_id, 'user_agent'=>substr($this->input->user_agent(), 0, 149), 'last_ip'=>$this->input->ip_address()));
         }
 }

@@ -4,8 +4,9 @@
 
 <?php echo form_input("login","Логин"); ?>
 
-<?php echo form_input("password","Пароль"); ?>
-
+<?php echo form_input("password","Пароль"); ?> <br/>
+Запомнить меня.
+<?php echo form_checkbox("remember",1); ?> <br/>
 <?php if(!empty($recaptcha_html)): ?>
 	<table>
 	<tr>
