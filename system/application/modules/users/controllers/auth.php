@@ -111,6 +111,8 @@ class Auth extends MX_Controller{
 	*/
 	public function logout(){
 		$this->users->logout();
+		// редирект на главную после logout
+		redirect('');
 	}
 
 
@@ -166,7 +168,7 @@ class Auth extends MX_Controller{
 			$this->template->set_theme('start');
 			$this->template->set_partial('menu','common/menu');
 			$this->template->set('recaptcha_html',$this->_create_recaptcha());
-			$this->template->build('register');
+			$this->template->build('register',$data);
 		}
 
 	}

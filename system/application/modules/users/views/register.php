@@ -5,7 +5,11 @@
 			<div style="overflow: auto; border-bottom: 1px #B4B4B4 solid;">
 				<div class="registerLeftColumn">
 					<h3> Директор </h3>
-
+					<?php
+						if(!empty($errors['register_user_error'])){
+							echo $errors['register_user_error'];
+						};
+					?>
 					<fieldset>
 						<legend> Учетная запись </legend>
 						
@@ -77,6 +81,11 @@
 				</div>
 				<div class="registerRightColumn">
 					<h3> Организация </h3>
+					<?php
+						if(!empty($errors['register_org_error'])){
+							echo $errors['register_org_error'];
+						};
+					?>
 					<table>
 							<tr>
 								<td><label for=""> Название организации </label>

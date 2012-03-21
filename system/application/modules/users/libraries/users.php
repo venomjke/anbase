@@ -128,7 +128,7 @@ class Users {
 		$register_data['password'] = $hasher->HashPassword($register_data['password']);
 		$register_data['role']	   = M_User::USER_ROLE_ADMIN; // делаем его админом
 
-		if (!is_null($res = $this->ci->m_user->insert($register_data))) {
+		if (!is_null(($res = $this->ci->m_user->insert($register_data)))) {
 
 			/*
 			*
@@ -140,19 +140,16 @@ class Users {
 			$org_data['name'] = $register_data['org_name'];
 			$org_data['ceo']  = $register_data['user_id'];
 
-			print_r($register_data);
-			print_r($org_data);
 			if(!is_null($res = $this->ci->m_organization->insert($org_data))){
-
 				return $register_data;
 			}
 			$this->ci->m_user->delete($register_data['user_id']);
 
-			$this->error = array('register_org' => $this->ci->lang('register_org_error'));
+			$this->error = array('register_org_error' => 'register_org_error');
 			return NULL;
 		}
 
-		$this->error = array('register_org' => $this->ci->lang('register_user_error'));
+		$this->error = array('register_user_error' => 'register_user_error');
 		return NULL;
 
 	}
