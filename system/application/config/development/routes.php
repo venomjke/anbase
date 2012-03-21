@@ -51,9 +51,8 @@ $route['prices']  = 'site/prices';
 $route['company'] = 'site/company';
 $route['faq']     = 'site/faq'; 
 
-
-$route['logout(/)?(:any)'] = 'users/auth/logout/$1';
-$route['register']     = 'users/auth/register';
+$route['logout(.*)']       = 'users/auth/logout$1';
+$route['register(.*)']     = 'users/auth/register$1';
 
 
 /* End of file routes.php */
