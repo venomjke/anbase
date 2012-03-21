@@ -49,6 +49,12 @@ class M_User extends MY_Model{
 		*	Правила валидации
 		*/
 		$this->validate = array();
+
+		/*
+		*
+		*	Хуки
+		*/
+		$this->before_create = array("before_insert_user");
 	}
 
 
@@ -143,6 +149,19 @@ class M_User extends MY_Model{
 
 		$this->db->where('id', $user_id);
 		$this->db->update($this->table);
+	}
+
+	/**
+	*
+	*	Функция, для выполнения перед созданием нового пользователя
+	*
+	*/
+	function before_insert_user($data){
+		$data['last_login'] = date('Y-m-d H:i:s');
+		$data['last_ip'] = $this->input->ip_address();
+		$data['created']    = $data['last_login'];
+		$data['activated']  = 1;
+		return $data;
 	}
 
 }

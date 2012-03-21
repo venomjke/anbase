@@ -76,7 +76,7 @@ class Auth extends MX_Controller{
 
 			$errors = array();
 
-			if ($this->form_validation->run()) {								// validation ok
+			if ($this->form_validation->run($this)) {								// validation ok
 				if ($this->users->login(
 						$this->form_validation->set_value('login'),
 						$this->form_validation->set_value('password'),
@@ -114,13 +114,60 @@ class Auth extends MX_Controller{
 	}
 
 
-	/*
+	/**
 	*
 	*	Ok, you are in my trap=)
-	*
+	*	Регистрация организации и главного пользователя.
+	*	Регистрация остальных участников доступна в соотв. разделах ( Админ, Менеджер, Агент ).*   Регистрация участников разрешена только для тех, кто получил инвайт.
+	*	@author Alex.strigin
 	*/
 	public function register(){
+		if ($this->users->is_logged_in()) {									// logged in
+			redirect('');
+		}else {
 
+			/*
+			*
+			*	Вынес правила валидации в отдельный файл, так проще.
+			*/
+			include APPPATH."modules/users/validation_rules/register.php";
+			
+			
+			$data['errors'] = array();
+
+			if ($this->form_validation->run($this)) {	// validation ok
+
+				$register_data = array(
+					'login'       => $this->input->post('login'),
+					'password'    => $this->input->post('password'),
+					'email'    	  => $this->input->post('email'),
+					'name'        => $this->input->post('name'),
+					'middle_name' => $this->input->post('middle_name'),
+					'last_name'   => $this->input->post('last_name'),
+					'org_name'    => $this->input->post('org_name') 
+				);
+				if ($this->users->register($register_data)) {
+					// success и отображение register_finish
+					//$data['success']['register'] = lang('sucess_register'); 
+					// пока редирект на главную страницу
+					redirect('');
+				} else {
+
+					$errors = $this->users->get_error_message();
+					foreach ($errors as $k => $v)	
+						$data['errors'][$k] = $this->lang->line($v);
+				}
+			}
+
+			/*
+			*	
+			*	Настройки шаблона
+			*/
+			$this->template->set_theme('start');
+			$this->template->set_partial('menu','common/menu');
+			$this->template->set('recaptcha_html',$this->_create_recaptcha());
+			$this->template->build('register');
+		}
 
 	}
 
@@ -135,7 +182,7 @@ class Auth extends MX_Controller{
 		$this->load->helper('users/recaptcha');
 
 		// Add custom theme so we can get only image
-		$options = "<script>var RecaptchaOptions = {theme: 'custom', custom_theme_widget: 'recaptcha_widget'};</script>\n";
+		$options = "<script>var RecaptchaOptions = {theme: 'white'};</script>\n";
 
 		// Get reCAPTCHA JS and non-JS HTML
 		$html = recaptcha_get_html($this->config->item('recaptcha_public_key', 'users'));
@@ -150,6 +197,7 @@ class Auth extends MX_Controller{
 	 */
 	function _check_recaptcha()
 	{
+
 		$this->load->helper('recaptcha');
 
 		$resp = recaptcha_check_answer($this->config->item('recaptcha_private_key', 'users'),

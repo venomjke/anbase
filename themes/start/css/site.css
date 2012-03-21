@@ -76,3 +76,39 @@ ul#menu li a:hover{
 	height: 42px;
 	width: 400px;
 }
+#registerBox{
+	padding: 15px;
+}
+#registerWrap{
+	padding: 15px;
+}
+.registerRow{
+	margin-bottom: 20px;
+	overflow: auto;
+}
+.registerLeftColumn{
+	width: 550px;
+	float: left;
+	padding-bottom: 15px;
+}
+.registerRightColumn{
+	width: 515px;
+	float: right;
+}
+.registerRow table td input[type="text"],.registerRow table td input[type="password"]{
+	width: 250px;
+	height: 36px;
+}
+.registerRow h3{
+	margin:0px 0px 20px 0px;
+	border-bottom:1px #b4b4b4 solid;
+}
+.registerRow table{
+	margin: 0px auto;
+}
+.registerRow table tr{
+
+}
+.registerRow table tr td{
+
+}

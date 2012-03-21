@@ -106,6 +106,57 @@ class Users {
 	}
 
 	/**
+	 * Функция, выполняющая регистрацию пользователя и организации пользователя
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	function register($register_data = array())
+	{
+		$this->ci->load->model('m_organization');
+		// Hash password using phpass
+		$hasher = new PasswordHash(
+				$this->ci->config->item('phpass_hash_strength', 'users'),
+				$this->ci->config->item('phpass_hash_portable', 'users'));
+
+		/*
+		*
+		*	Составляем пачку данных для регистрации пользователя
+		*
+		*/
+
+		$register_data['password'] = $hasher->HashPassword($register_data['password']);
+		$register_data['role']	   = M_User::USER_ROLE_ADMIN; // делаем его админом
+
+		if (!is_null($res = $this->ci->m_user->insert($register_data))) {
+
+			/*
+			*
+			*	Составляем пачку данных для регистрации организации
+			*
+			*/
+			$register_data['user_id'] = $res;
+
+			$org_data['name'] = $register_data['org_name'];
+			$org_data['ceo']  = $register_data['user_id'];
+
+			print_r($register_data);
+			print_r($org_data);
+			if(!is_null($res = $this->ci->m_organization->insert($org_data))){
+
+				return $register_data;
+			}
+			$this->ci->m_user->delete($register_data['user_id']);
+
+			$this->error = array('register_org' => $this->ci->lang('register_org_error'));
+			return NULL;
+		}
+
+		$this->error = array('register_org' => $this->ci->lang('register_user_error'));
+		return NULL;
+
+	}
+	/**
 	 * Logout user from the site
 	 *
 	 * @return	void

@@ -23,30 +23,10 @@
 		<div class="loginField">
 		<?php echo form_checkbox("remember","1"); ?> Запомнить | <?php echo anchor("forget_password","Забыли пароль?"); ?>
 		</div>
-				<?php if(!empty($recaptcha_html)): ?>
-			<table>
-			<tr>
-				<td colspan="2">
-					<div id="recaptcha_image"></div>
-				</td>
-				<td>
-					<a href="javascript:Recaptcha.reload()">Get another CAPTCHA</a>
-					<div class="recaptcha_only_if_image"><a href="javascript:Recaptcha.switch_type('audio')">Get an audio CAPTCHA</a></div>
-					<div class="recaptcha_only_if_audio"><a href="javascript:Recaptcha.switch_type('image')">Get an image CAPTCHA</a></div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div class="recaptcha_only_if_image">Введите слово на картинке</div>
-					<div class="recaptcha_only_if_audio">Введите цифры внизу</div>
-				</td>
-				<td>
-								<?php echo form_error('recaptcha_response_field'); ?>
-				<input type="text" id="recaptcha_response_field" name="recaptcha_response_field" />
-			    </td>
+		<?php if(!empty($recaptcha_html)): ?>
+		<div class="loginField">
 				<?php echo $recaptcha_html; ?>
-			</tr>
-		</table>
+		</div>
 		<?php endif; ?>
 		<div class="loginField">
 			<?php echo form_submit("Submit","Войти"); ?>
