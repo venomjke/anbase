@@ -159,7 +159,7 @@ class Users {
 		if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'users'), TRUE)) {
 
 			$data = unserialize($cookie);
-			$this->ci->user_autologin->remove($data['user_id'], md5($data['key']));
+			$this->ci->m_autologin_user->remove($data['user_id'], md5($data['key']));
 
 			delete_cookie($this->ci->config->item('autologin_cookie_name', 'users'));
 		}

@@ -28,7 +28,26 @@ class Site extends MX_Controller {
 	*
 	*/
 	public function index(){
-		$this->template->build('site/index');
+
+		$this->load->library('users/users');
+		/*
+		*	
+		*	Если User залоггинен, то redirect на свою панель, нечего на главной ошиваться;
+		*	пусть работет=)
+		*/
+		if($this->users->is_logged_in()){
+			redirect($this->users->resolve_user_redirect_uri());
+		}else{
+			$loginBox = Modules::run('users/auth/login'); 
+			/*
+			if($this->session->flashdata('max_login_attempts_exceeded'))
+				$this->template->set('recaptcha_html',Modules::run('users/auth/_create_recaptcha'));
+			$this->template->set('validation_erros',$this->session->flashdata('validation_errors'));
+			$this->template->set('')
+			*/
+			$this->template->set('loginBox',$loginBox);
+			$this->template->build('site/index');
+		}
 	}
 
 	/*

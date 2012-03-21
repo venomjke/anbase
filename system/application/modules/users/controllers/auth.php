@@ -44,7 +44,11 @@ class Auth extends MX_Controller{
 	/*
 	*
 	*	Yeahhhh!
-	*
+	*	Действие логин не имеет собственной страницы отображения. То есть,
+	*	это действие предназначено для вызова из вне. Во время вызова
+	*	login проверит, залоггинен ли пользователь, и сделает redirect в случае если да.
+	*	Если нет, Login попробует авторизовать пользователя, а если эта попытка не пройдет,
+	*   то будет возвращена форма для повторного выполнения login. 
 	*
 	*/
 	public function login(){
@@ -53,7 +57,7 @@ class Auth extends MX_Controller{
 			redirect($this->users->resolve_user_redirect_uri());
 		} else {
 
-
+			$data = array();
 			$this->form_validation->set_rules('login', 'Login', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('remember', 'Remember me', 'integer');
@@ -76,9 +80,9 @@ class Auth extends MX_Controller{
 				if ($this->users->login(
 						$this->form_validation->set_value('login'),
 						$this->form_validation->set_value('password'),
-						$this->form_validation->set_value('remember'))) {								// success
-					redirect('');
-
+						$this->form_validation->set_value('remember'))) {
+														// success
+					redirect($this->users->resolve_user_redirect_uri());
 				} else {
 					$errors = $this->users->get_error_message();
 					foreach($errors as $k => $v){
@@ -87,14 +91,15 @@ class Auth extends MX_Controller{
 				}
 			}
 
-
 			if ($this->users->is_max_login_attempts_exceeded($login)) {
 				$this->template->set('recaptcha_html',$this->_create_recaptcha());
+
+				$data['recaptcha_html'] = $this->_create_recaptcha();
 			}
 
-			$this->template
-			     ->set('errors',$errors)
-			     ->build('login');
+			$data['errors']            = $errors;
+			return $this->load->view('users/login',$data,true);
+			
 		}
 	}
 
