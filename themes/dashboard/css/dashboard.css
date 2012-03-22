@@ -1,0 +1,105 @@
+body{
+	margin:0px;
+	padding:0px;
+}
+ul{
+	list-style-type:none;
+	margin:0px;
+	padding:0px;
+}
+#dashboard_head{
+	height: 100px;
+	border-bottom: 1px #B4B4B4 solid;
+}
+#dashboard_content{
+
+}
+#dashboard_foot{
+
+}
+#dashboard_head #menu{
+
+}
+ul#menu{
+	position: relative;
+	left: 40%;
+	height: 30px;
+	width: 200px;
+	float: left;
+	margin-top: 70px;
+}
+ul#menu li{
+	float:left;
+}
+ul#menu li a{
+	margin-right: 10px;
+	color: #333;
+}
+#dashboard_head #user_box{
+	float: right;
+	margin-right: 50px;
+	margin-top: 30px;
+}
+#user_box #greetings{
+	display:block;
+}
+#user_box #profile{
+	display: block;
+}
+#user_box .user_box_btn{
+	color:#333;
+	padding:5px;
+	text-decoration:none;
+	display:block;
+	float:left;
+	background-color:#ccc;
+	margin-right:10px;
+}
+#user_box a.user_box_btn:hover{
+	background-color:#cbb;
+}
+#dashboard_tabs{
+	height: 80px;
+	overflow: auto;
+	border-bottom: 1px #B4B4B4 solid;
+}
+#dashboard_tabs ul{
+	position: relative;
+	left: 10%;
+	margin-top: 50px;
+	height: 30px;
+	width: 400px;
+}
+#dashboard_tabs ul li{
+	float: left;
+}
+#dashboard_tabs ul li a{
+	margin-right: 15px;
+	display: block;
+	padding: 5px;
+}
+#wrap1{
+	padding: 20px;
+}
+#toolbar{
+
+}
+ul#toolbar{
+
+}
+ul#toolbar li{
+	float: left;
+}
+ul#toolbar li a{
+	display: block;
+	margin-right: 15px;
+}
+#dashboard_table{
+	clear: both;
+}
+#dashboard_table tr{
+
+}
+#dashboard_table tr td{
+
+}
