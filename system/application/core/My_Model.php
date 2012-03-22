@@ -106,7 +106,7 @@ class MY_Model extends CI_Model {
         
         $this->_callbacks('before_get', array($where));
         
-        $query = $this->db->get($this->_table);
+        $query = $this->db->get($this->_table());
 
         if($query->num_rows() == 1){
 
