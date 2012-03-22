@@ -146,6 +146,7 @@ class Auth extends MX_Controller{
 					'name'        => $this->input->post('name'),
 					'middle_name' => $this->input->post('middle_name'),
 					'last_name'   => $this->input->post('last_name'),
+					'phone'		  => $this->input->post('phone'),
 					'org_name'    => $this->input->post('org_name') 
 				);
 				if ($this->users->register($register_data)) {
