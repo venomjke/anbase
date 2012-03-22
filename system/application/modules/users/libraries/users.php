@@ -38,6 +38,7 @@ class Users {
 		$this->ci->load->model('users/m_user');
 		$this->ci->load->model('users/m_attempt_login_user');
 		$this->ci->load->model('users/m_autologin_user');
+		$this->ci->load->model('users/m_user_organization');
 
 
 		// Try to autologin
@@ -59,40 +60,44 @@ class Users {
 		if ((strlen($login) > 0) AND (strlen($password) > 0)) {
 
 			if (!is_null($user = $this->ci->m_user->get_user_by_login_or_email($login))) {	// login ok
-
 				// Does password match hash in database?
 				$hasher = new PasswordHash(
 						$this->ci->config->item('phpass_hash_strength', 'users'),
 						$this->ci->config->item('phpass_hash_portable', 'users'));
 
+				
 				if ($hasher->CheckPassword($password, $user->password)) {		// password ok
-					$this->ci->session->set_userdata(array(
-						'user_id'	=> $user->id,
-						'login'	    => $user->login,
-						'status'	=> ($user->activated == 1) ? M_User::USER_ACTIVE  : M_User::USER_NON_ACTIVE,
-						'role'		=>  $user->role,
-						'name'      => $user->name,
-						'last_name' => $user->last_name,
-						'middle_name'=> $user->middle_name
-					));
 
-					if ($user->activated == 0) {							// fail - not activated
-						$this->error = array('not_activated' => '');
+					/*
+					*
+					*	Если пользователь существует, и все впорядке, 
+					*	 то выбераем информацию об организации
+					*
+					*/
+					if(!is_null($user_as_org = $this->ci->m_user_organization->get(array('user_id' => $user->id)))){
 
-					} else {												// success
-						if ($remember) {
-							$this->create_autologin($user->id);
+
+						$this->save_user_session_data($user,$user_as_org);
+
+						if ($user->activated == 0) {							// fail - not activated
+							$this->error = array('not_activated' => '');
+
+						} else {												// success
+							if ($remember) {
+								$this->create_autologin($user->id);
+							}
+
+							$this->clear_login_attempts($login);
+
+							$this->ci->m_user->update_login_info(
+									$user->id,
+									$this->ci->config->item('login_record_ip', 'users'),
+									$this->ci->config->item('login_record_time', 'users'));
+							
+
+							return TRUE;
 						}
 
-						$this->clear_login_attempts($login);
-
-						$this->ci->m_user->update_login_info(
-								$user->id,
-								$this->ci->config->item('login_record_ip', 'users'),
-								$this->ci->config->item('login_record_time', 'users'));
-						
-
-						return TRUE;
 					}
 
 				} else {														// fail - wrong password
@@ -144,6 +149,14 @@ class Users {
 			$org_data['ceo']  = $register_data['user_id'];
 
 			if(!is_null($res = $this->ci->m_organization->insert($org_data))){
+
+				/**
+				*
+				*	Добавляем юзера и org_id в таблицу user_orgs, чтобы юзер мог свободно заходить в систему
+				*	будем думать, что это пройдет без проблем...
+				*
+				*/
+				$this->ci->m_user_organization->insert(array('user_id'=>$register_data['user_id'], 'org_id' => $res));
 				return $register_data;
 			}
 			$this->ci->m_user->delete($register_data['user_id']);
@@ -234,29 +247,27 @@ class Users {
 
 					if (!is_null($user = $this->ci->m_autologin_user->get($data['user_id'], md5($data['key'])))) {
 
-						// Login user
-						$this->ci->session->set_userdata(array(
-								'user_id'	=> $user->id,
-								'login'	    => $user->login,
-								'status'	=> M_User::USER_ACTIVE,
-								'role'		=> $user->role,
-								'name'      => $user->name,
-								'last_name' => $user->last_name,
-								'middle_name'=> $user->middle_name
-						));
+						
+						if( !is_null($user_as_org = $this->ci->m_user_organization->get(array('user_id' => $user->id)))){
 
-						// Renew users cookie to prevent it from expiring
-						set_cookie(array(
-								'name' 		=> $this->ci->config->item('autologin_cookie_name', 'users'),
-								'value'		=> $cookie,
-								'expire'	=> $this->ci->config->item('autologin_cookie_life', 'users'),
-						));
 
-						$this->ci->m_user->update_login_info(
-								$user->id,
-								$this->ci->config->item('login_record_ip', 'users'),
-								$this->ci->config->item('login_record_time', 'users'));
-						return TRUE;
+							$this->save_user_session_data($user,$user_as_org);
+							// Renew users cookie to prevent it from expiring
+							set_cookie(array(
+									'name' 		=> $this->ci->config->item('autologin_cookie_name', 'users'),
+									'value'		=> $cookie,
+									'expire'	=> $this->ci->config->item('autologin_cookie_life', 'users'),
+							));
+
+							$this->ci->m_user->update_login_info(
+									$user->id,
+									$this->ci->config->item('login_record_ip', 'users'),
+									$this->ci->config->item('login_record_time', 'users'));
+							return TRUE;
+
+						}
+						return FALSE;
+
 					}
 				}
 			}
@@ -398,6 +409,28 @@ class Users {
 		$last_name = $this->ci->session->userdata('last_name');
 
 		return ucfirst($last_name).' '.strtoupper($name[0]).'.'.strtoupper($middle_name[0]);
+	}
+
+	/**
+	*
+	*	Обновление сохранение данных о пользователе в сессии
+	*
+	*	@param object (user)	- объект таблицы users
+	*	@param object (user_as_org) - объект таблицы users_organizations
+	*/
+	public function save_user_session_data($user,$user_as_org){
+
+		// Login user
+		$this->ci->session->set_userdata(array(
+				'user_id'	=> $user->id,
+				'login'	    => $user->login,
+				'status'	=> M_User::USER_ACTIVE,
+				'role'		=> $user->role,
+				'name'      => $user->name,
+				'last_name' => $user->last_name,
+				'middle_name'=> $user->middle_name,
+				'org_id'	=> $user_as_org
+		));
 	}
 
 
