@@ -70,7 +70,10 @@ class Users {
 						'user_id'	=> $user->id,
 						'login'	    => $user->login,
 						'status'	=> ($user->activated == 1) ? M_User::USER_ACTIVE  : M_User::USER_NON_ACTIVE,
-						'role'		=>  $user->role
+						'role'		=>  $user->role,
+						'name'      => $user->name,
+						'last_name' => $user->last_name,
+						'middle_name'=> $user->middle_name
 					));
 
 					if ($user->activated == 0) {							// fail - not activated
@@ -234,9 +237,12 @@ class Users {
 						// Login user
 						$this->ci->session->set_userdata(array(
 								'user_id'	=> $user->id,
-								'username'	=> $user->username,
+								'login'	    => $user->login,
 								'status'	=> M_User::USER_ACTIVE,
-								'role'		=> $user->role
+								'role'		=> $user->role,
+								'name'      => $user->name,
+								'last_name' => $user->last_name,
+								'middle_name'=> $user->middle_name
 						));
 
 						// Renew users cookie to prevent it from expiring
@@ -377,6 +383,21 @@ class Users {
 
 		if($this->ci->session->userdata('role') == M_User::USER_ROLE_AGENT)return true;
 		return false;
+	}
+
+
+	/*
+	*
+	*	Составление полного оффициального имени
+	*
+	*/
+	public function get_official_name(){
+
+		$name = $this->ci->session->userdata('name');
+		$middle_name = $this->ci->session->userdata('middle_name');
+		$last_name = $this->ci->session->userdata('last_name');
+
+		return ucfirst($last_name).' '.strtoupper($name[0]).'.'.strtoupper($middle_name[0]);
 	}
 
 
