@@ -51,7 +51,12 @@ class M_Autologin_user extends MY_Model{
                 $this->db->select("users".'.id');
                 $this->db->select("users".'.login');
                 $this->db->select("users".'.role');
+                $this->db->select("users".'.name');
+                $this->db->select("users".'.middle_name');
+                $this->db->select("users".'.last_name');
+                $this->db->select("users".'.phone');
                 $this->db->from("users");
+
                 $this->db->join($this->table, $this->table.'.user_id = '."users".'.id');
                 $this->db->where($this->table.'.user_id', $user_id);
                 $this->db->where($this->table.'.key_id', $key);

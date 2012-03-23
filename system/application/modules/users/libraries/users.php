@@ -245,11 +245,20 @@ class Users {
 
 				if (isset($data['key']) AND isset($data['user_id'])) {
 
+					/*
+					*
+					*	Выдергиваем инфу о юзере из autologin
+					*
+					*/
 					if (!is_null($user = $this->ci->m_autologin_user->get($data['user_id'], md5($data['key'])))) {
 
 						
-						if( !is_null($user_as_org = $this->ci->m_user_organization->get(array('user_id' => $user->id)))){
 
+						/*
+						*
+						*	Выдергиваем инфу об организации юзера из user_as_org 
+						*/
+						if(!is_null($user_as_org = $this->ci->m_user_organization->get(array('user_id' => $user->id)))) {
 
 							$this->save_user_session_data($user,$user_as_org);
 							// Renew users cookie to prevent it from expiring
