@@ -33,6 +33,8 @@
 			<?php echo $template['body']; ?>
 		</div>
 		<div id="dashboard_foot">
+			<span id="stats"> Время выполнения <?php echo $this->benchmark->elapsed_time(); ?> </span>
+			<span id="copyright"> (c) copyright 2012 Flyweb inc. </span>
 		</div>
 	</body>
 </html>

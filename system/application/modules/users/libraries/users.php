@@ -211,7 +211,6 @@ class Users {
 		}
 		return FALSE;
 	}
-
 	/**
 	 * Удаление данных об Autologin
 	 *
@@ -406,7 +405,7 @@ class Users {
 	}
 
 
-	/*
+	/**
 	*
 	*	Составление полного оффициального имени
 	*
@@ -422,12 +421,21 @@ class Users {
 
 	/**
 	*
+	*
+	*	Выбор id организации
+	*
+	*/
+	public function get_org_id(){
+		return $this->ci->session->userdata('org_id');
+	}
+	/**
+	*
 	*	Обновление сохранение данных о пользователе в сессии
 	*
 	*	@param object (user)	- объект таблицы users
 	*	@param object (user_as_org) - объект таблицы users_organizations
 	*/
-	public function save_user_session_data($user,$user_as_org){
+	protected function save_user_session_data($user,$user_as_org){
 
 		// Login user
 		$this->ci->session->set_userdata(array(
@@ -438,7 +446,7 @@ class Users {
 				'name'      => $user->name,
 				'last_name' => $user->last_name,
 				'middle_name'=> $user->middle_name,
-				'org_id'	=> $user_as_org
+				'org_id'	=> $user_as_org->org_id
 		));
 	}
 
