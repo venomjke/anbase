@@ -18,7 +18,7 @@ class Admin extends MX_Controller
 		*
 		*	Загрузка либ.
 		*/
-		$this->load->library('admin_users');
+		$this->load->library('admin/Admin_Users');
 
 		if( !$this->admin_users->is_logged_in_as_admin() ){
 			redirect('');
@@ -34,7 +34,11 @@ class Admin extends MX_Controller
 
 
 	public function index(){
-		
-		$this->template->build('index');
+		/*
+		*
+		*	С индекса редиректим на orders/view
+		*/
+		redirect('admin/orders/view');
+		//$this->template->build('index');
 	}
 }
