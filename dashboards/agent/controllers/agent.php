@@ -28,7 +28,6 @@ class Agent extends MX_Controller{
 	}
 
 	public function index(){
-
-		echo "Hello world and my dear AGENT!";
+		redirect('agent/orders/view');
 	}
 }

@@ -170,7 +170,7 @@ class M_Order extends MY_Model{
 	 * @return array
 	 * @author Alex.strigin
 	 **/
-	public function get_all_orders_users($user_ids,$filter=array(),$limit=false,$limit = false)
+	public function get_all_orders_users($user_ids,$filter=array(),$limit=false,$offset = false)
 	{
 		/*
 		*
