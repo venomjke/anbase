@@ -22,7 +22,7 @@ ul{
 }
 ul#menu{
 	position: relative;
-	left: 40%;
+	left: 20%;
 	height: 30px;
 	width: 200px;
 	float: left;
@@ -101,5 +101,21 @@ ul#toolbar li a{
 
 }
 #dashboard_table tr td{
+
+}
+#org_box{
+	float: left;
+	margin-top: 30px;
+	margin-left: 20px;
+}
+#org_name{
+	width: 300px;
+	float:left;
+	margin-top: 35px;
+}
+#callmanager_box{
+
+}
+#manager_box{
 
 }
