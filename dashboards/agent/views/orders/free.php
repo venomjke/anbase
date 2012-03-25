@@ -26,7 +26,6 @@
 				<th>Метро</th>
 				<th>Цена</th>
 				<th>Описание</th>
-				<th>Контакты<th>
 				<th>Операции</th>
 			</tr>
 		</thead>
@@ -48,7 +47,6 @@
 						<td> <?php echo $order->price; ?></td>
 						<td> <?php echo $order->description; ?>
 						</td>
-						<td> <?php echo $order->phone; ?> </td>
 						<td> </td>
 				</tr>
 			<?php

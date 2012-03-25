@@ -52,13 +52,38 @@ class Orders extends MX_Controller
 
 
 	/**
+	 * Подконтроллер, выполняющий переадресацию на нужную функцию
+	 *
+	 * @return void
+	 * @author Alex.strigin
+	 **/
+	public function _remap()
+	{
+		$section = $this->input->get('s');
+
+		if(!empty($section)){
+
+			switch ($section) {
+				case 'free':
+					$this->_free_orders();
+					break;
+				default:
+					$this->_view();
+					break;
+			}
+		}else{
+
+			$this->_view();
+		}
+	}
+
+	/**
 	 * Отображение заявок агента
 	 *
 	 * @return void
 	 * @author 
 	 **/
-	public function view()
-	{
+	private function _view(){
 
 		/*
 		*
@@ -93,4 +118,39 @@ class Orders extends MX_Controller
 		$this->template->build('orders/view',array('orders' => $all_agent_orders));
 
 	}
+
+
+
+	private function _free_orders(){
+		/*
+		*
+		*	Установки шаблона
+		*
+		*/
+		$this->template->set_partial("dashboard_tabs","dashboard/dashboard_tabs");
+
+		/*
+		*
+		*	Установка фильтров
+		*
+		*/
+		$filter = array();
+		$limit  = false;
+		$offset = false;
+
+		/*
+		*
+		*	Выбор данных
+		*
+		*/
+		$all_free_orders = $this->m_agent_order->get_all_free_orders($this->agent_users->get_org_id());
+
+		/*
+		*
+		*	Вывод данных
+		*
+		*/
+		$this->template->build('orders/free',array('orders' => $all_free_orders));
+	}
+
 } // END class Orders extends MX_Controller
