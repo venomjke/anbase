@@ -149,11 +149,19 @@ class M_Order extends MY_Model{
 		*/
 		$this->set_filter($filter);
 
+
 		/*
 		*
 		*	Установка ограничений
 		*/
 		$this->limit($limit,$offset);
+
+		/*
+		*
+		*	Порядок сортировки
+		*
+		*/
+		$this->order_by('orders.id','DESC');
 		return $this->get_all(array('organizations.id' => $id));
 
 	}
@@ -189,7 +197,13 @@ class M_Order extends MY_Model{
 		*/
 		$this->limit($limit,$offset);
 
+		/*
+		*
+		* Установка порядка сортировки
+		*/
+		$this->order_by('orders.id','DESC');
 		$this->where_in('users.id',$user_ids);
+
 		return $this->get_all();
 	}
 
