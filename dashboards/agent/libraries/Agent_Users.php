@@ -50,4 +50,59 @@ class Agent_Users extends Users{
 		return FALSE;
 	}
 
+
+	/**
+	 * Метод, позволяющий получить телефон call manager
+	 *
+	 * @return string
+	 * @author 
+	 **/
+	public function get_callmanager_phone()
+	{
+		echo "#Телефон диспетчера#";
+	}
+
+	/**
+	 * Метод, определяющий, есть у пользователя менеджер или нет?
+	 *
+	 * @return bool
+	 * @author Alex.strigin
+	 **/
+	public function has_manager()
+	{
+		return $this->ci->m_agent->has_manager($this->get_user_id());
+	}
+
+
+	/**
+	 * Метод, возвращающий имя менеджера агента
+	 *
+	 * @return string
+	 * @author Alex.strigin
+	 **/
+	public function get_manager_name()
+	{
+		$manager = $this->ci->m_agent->get_manager_agent($this->get_user_id());
+		if(!empty($manager)){
+			return $manager->last_name.' '.$manager->name.' '.$manager->middle_name;
+		}
+		return "";
+	}
+
+
+	/**
+	 * Метод, возвращающий телефон агента
+	 *
+	 * @return string
+	 * @author Alex.strigin
+	 **/
+	public function get_manager_phone()
+	{
+		$manager = $this->ci->m_agent->get_manager_agent($this->get_user_id());
+		if(!empty($manager)){
+			return $manager->phone;
+		}
+		return "";
+	}
+
 }
