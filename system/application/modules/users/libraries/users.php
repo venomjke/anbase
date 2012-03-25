@@ -416,7 +416,18 @@ class Users {
 		$middle_name = $this->ci->session->userdata('middle_name');
 		$last_name = $this->ci->session->userdata('last_name');
 
-		return ucfirst($last_name).' '.strtoupper($name[0]).'.'.strtoupper($middle_name[0]);
+		return mb_strtoupper(mb_substr($last_name,0,1)).mb_substr($last_name,1).' '.mb_strtoupper(mb_substr($name,0,1)).'.'.mb_strtoupper(mb_substr($middle_name,0,1));
+	}
+
+	/**
+	 * Выбор id пользователя
+	 *
+	 * @return void
+	 * @author Alex.strigin
+	 **/
+	public function get_user_id()
+	{
+		return $this->ci->session->userdata('user_id');	
 	}
 
 	/**
