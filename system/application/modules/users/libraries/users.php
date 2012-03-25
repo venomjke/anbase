@@ -439,6 +439,19 @@ class Users {
 	public function get_org_id(){
 		return $this->ci->session->userdata('org_id');
 	}
+
+	/**
+	 * Метод, возвращающий имя организации
+	 *
+	 * @return string
+	 * @author Alex.strigin
+	 **/
+	public function get_org_name()
+	{
+		$org = $this->ci->m_organization->get($this->get_org_id());
+		return $org->name;
+	}
+
 	/**
 	*
 	*	Обновление сохранение данных о пользователе в сессии
