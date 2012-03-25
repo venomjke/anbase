@@ -91,6 +91,7 @@ class Site extends MX_Controller {
 	public function page404(){
 		$this->load->view('site/404');
 	}
+
 }
 
 /* End of file Site.php */

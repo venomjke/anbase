@@ -6,7 +6,7 @@
 *	@company Flyweb
 *
 */
-class Migration_drop_foreign_key extends CI_Migration{
+class Migration_Drop_foreign_key extends CI_Migration{
 
 
 	/*

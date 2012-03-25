@@ -6,7 +6,7 @@
 *	@company Flyweb
 *
 */
-class Migration_orders extends CI_Migration{
+class Migration_Orders extends CI_Migration{
 
 
 	/*
