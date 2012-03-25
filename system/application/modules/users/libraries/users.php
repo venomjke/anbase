@@ -448,6 +448,7 @@ class Users {
 	 **/
 	public function get_org_name()
 	{
+		$this->ci->load->model("users/m_organization");
 		$org = $this->ci->m_organization->get($this->get_org_id());
 		return $org->name;
 	}
