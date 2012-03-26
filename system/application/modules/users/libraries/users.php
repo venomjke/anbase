@@ -441,6 +441,70 @@ class Users {
 	}
 
 	/**
+	 * Выбор login пользователя
+	 *
+	 * @return string
+	 * @author Alex.strigin
+	 **/
+	public function get_user_login()
+	{
+		return $this->ci->session->userdata('login');
+	}
+
+	/**
+	 * Выбор email пользователя
+	 *
+	 * @return string
+	 * @author alex.strigin
+	 **/
+	public function get_user_email()
+	{
+		return $this->ci->session->userdata('email');
+	}
+	/**
+	 * Выбор имени пользователя
+	 *
+	 * @return string
+	 * @author Alex.strigin
+	 **/
+	public function get_user_name()
+	{
+		return $this->ci->session->userdata('name');
+	}
+
+	/**
+	 * Выбор отчества пользователя
+	 *
+	 * @return string
+	 * @author Alex.strigin
+	 **/
+	public function get_user_middle_name()
+	{
+		return $this->ci->session->userdata('middle_name');
+	}
+
+	/**
+	 * Выбор фамилии пользователя
+	 *
+	 * @return string
+	 * @author Alex.strigin
+	 **/
+	public function get_user_last_name()
+	{
+		return $this->ci->session->userdata('last_name');
+	}
+
+	/**
+	 * Выбор телефона пользователя
+	 *
+	 * @return string
+	 * @author Alex.strigin
+	 **/
+	public function get_user_phone()
+	{
+		return $this->ci->session->userdata('phone');
+	}
+	/**
 	 * Метод, возвращающий имя организации
 	 *
 	 * @return string
@@ -478,11 +542,13 @@ class Users {
 		$this->ci->session->set_userdata(array(
 				'user_id'	=> $user->id,
 				'login'	    => $user->login,
+				'email'     => $user->email,
 				'status'	=> M_User::USER_ACTIVE,
 				'role'		=> $user->role,
 				'name'      => $user->name,
 				'last_name' => $user->last_name,
 				'middle_name'=> $user->middle_name,
+				'phone' 	=> $user->phone,
 				'org_id'	=> $user_as_org->org_id
 		));
 	}
