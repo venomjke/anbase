@@ -3,27 +3,16 @@
 ?>
 <div id="wrap2">
 	<div id="profileWrap">
-		<?php echo form_open("agent/profile/view/?s=system"); ?>
+		<?php echo form_open("manager/profile/?s=personal"); ?>
 			<div class="profile_row">
 				<span class="profile_col profile_col_img">
-					<?php echo img("themes/dashboard/images/profile.png"); ?>
+					<?php echo img("themes/dashboard/images/label.png"); ?>
 				</span>
 				<span class="profile_col profile_col_label">
-					Профиль
+					Имя 
 				</span>
 				<span class="profile_col profile_col_text">
-					Агент
-				</span>
-			</div>
-			<div class="profile_row">
-				<span class="profile_col profile_col_img">
-					<?php echo img("themes/dashboard/images/password.png"); ?>
-				</span>
-				<span class="profile_col profile_col_label">
-					Пароль
-				</span>
-				<span class="profile_col profile_col_text">
-					******
+					<?php echo $this->manager_users->get_user_name(); ?>
 				</span>
 				<span class="profile_col profile_col_action">
 					Изменить
@@ -31,27 +20,46 @@
 			</div>
 			<div class="profile_row">
 				<span class="profile_col profile_col_img">
-					<?php echo img("themes/dashboard/images/login.png"); ?>
+						<?php echo img("themes/dashboard/images/label.png"); ?>
 				</span>
 				<span class="profile_col profile_col_label">
-					Логин
+					Отчество
 				</span>
 				<span class="profile_col profile_col_text">
-					<?php echo $this->agent_users->get_user_login(); ?>
+					<?php echo $this->manager_users->get_user_middle_name(); ?>
+				</span>
+				<span class="profile_col profile_col_action">
+					Изменить
 				</span>
 			</div>
 			<div class="profile_row">
-
 				<span class="profile_col profile_col_img">
-					<?php echo img("themes/dashboard/images/email.png"); ?>
+					<?php echo img("themes/dashboard/images/label.png"); ?>
 				</span>
 				<span class="profile_col profile_col_label">
-					Email
+					Фамилия
 				</span>
 				<span class="profile_col profile_col_text">
-					<?php echo $this->agent_users->get_user_email(); ?>
+					<?php echo $this->manager_users->get_user_last_name(); ?>
+				</span>
+				<span class="profile_col profile_col_action">
+					Изменить
 				</span>
 			</div>
-		 <?php echo form_close(); ?>
+			<div class="profile_row">
+				<span class="profile_col profile_col_img">
+					<?php echo img("themes/dashboard/images/phone.png"); ?>
+				</span>
+				<span class="profile_col profile_col_label">
+					Телефон
+				</span>
+				<span class="profile_col profile_col_text">
+					<?php echo $this->manager_users->get_user_phone(); ?>
+				</span>
+				<span class="profile_col profile_col_action">
+					Изменить
+				</span>
+			</div>
+		<?php echo form_close(); ?>
 	</div>
 </div>

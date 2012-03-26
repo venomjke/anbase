@@ -3,7 +3,7 @@
 ?>
 <div id="wrap2">
 	<div id="profileWrap">
-		<?php echo form_open("agent/profile/view/?s=system"); ?>
+		<?php echo form_open("manager/profile/view/?s=system"); ?>
 			<div class="profile_row">
 				<span class="profile_col profile_col_img">
 					<?php echo img("themes/dashboard/images/profile.png"); ?>
@@ -12,7 +12,7 @@
 					Профиль
 				</span>
 				<span class="profile_col profile_col_text">
-					Агент
+					Менеджер
 				</span>
 			</div>
 			<div class="profile_row">
@@ -37,7 +37,7 @@
 					Логин
 				</span>
 				<span class="profile_col profile_col_text">
-					<?php echo $this->agent_users->get_user_login(); ?>
+					<?php echo $this->manager_users->get_user_login(); ?>
 				</span>
 			</div>
 			<div class="profile_row">
@@ -49,7 +49,7 @@
 					Email
 				</span>
 				<span class="profile_col profile_col_text">
-					<?php echo $this->agent_users->get_user_email(); ?>
+					<?php echo $this->manager_users->get_user_email(); ?>
 				</span>
 			</div>
 		 <?php echo form_close(); ?>
