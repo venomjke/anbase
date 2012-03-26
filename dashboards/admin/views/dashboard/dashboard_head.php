@@ -1,3 +1,11 @@
+<div id="org_box">
+	<span id="org_name"> <?php echo $this->admin_users->get_org_name(); ?> </span>
+	<div style="margin-left: 300px;width: 300px;">
+		<div id="callmanager_box">
+			Диспетчер: <span> <?php echo $this->admin_users->get_callmanager_phone(); ?> </span>
+		</div>
+	</div>
+</div>
 <ul id="menu">
 	<li> <?php echo anchor("admin/orders","Заявки"); ?> </li>
 	<li> <?php echo anchor("admin/users","Пользователи"); ?> </li>
