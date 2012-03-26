@@ -15,7 +15,7 @@ ul{
 
 }
 #dashboard_foot{
-
+	border-top:1px #b4b4b4 solid;
 }
 #dashboard_head #menu{
 
@@ -118,4 +118,36 @@ ul#toolbar li a{
 }
 #manager_box{
 
+}
+#wrap2{
+	width: 700px;
+	margin: 0 auto;
+}
+#profileWrap{
+	border-left: 1px #B4B4B4 solid;
+	border-right: 1px #B4B4B4 solid;
+	padding: 15px 10px 0px 10px;
+}
+.profile_row{
+	font-size: 14pt;
+	margin-bottom: 15px;
+	height: 50px;
+}
+.profile_col{
+	display: inline-block;
+}
+.profile_col_img{
+	width: 32px;
+	height: 32px;
+}
+.profile_col_label{
+	width: 120px;
+	margin-left: 15px;
+	font-weight: bold;
+}
+.profile_col_text{
+	width: 390px;
+}
+.profile_col_action{
+	font-size: 11pt;
 }
