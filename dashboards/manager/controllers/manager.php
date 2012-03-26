@@ -28,7 +28,7 @@ class Manager extends MX_Controller
 
 
 	/**
-	 * undocumented function
+	 * redirect на manager/orders/views
 	 *
 	 * @return void
 	 * @author Alex.strigin
@@ -36,6 +36,6 @@ class Manager extends MX_Controller
 	 **/
 	public function index ()
 	{
-		echo "Hello world Manager";
+		redirect("manager/orders/view");
 	}
 }

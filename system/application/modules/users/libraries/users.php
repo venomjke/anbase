@@ -453,6 +453,18 @@ class Users {
 		return $org->name;
 	}
 
+
+	/**
+	 * Метод, позволяющий получить телефон call manager
+	 *
+	 * @return string
+	 * @author 
+	 **/
+	public function get_callmanager_phone()
+	{
+		echo "#Телефон диспетчера#";
+	}
+	
 	/**
 	*
 	*	Обновление сохранение данных о пользователе в сессии

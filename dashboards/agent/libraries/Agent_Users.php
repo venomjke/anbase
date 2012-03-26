@@ -50,18 +50,6 @@ class Agent_Users extends Users{
 		return FALSE;
 	}
 
-
-	/**
-	 * Метод, позволяющий получить телефон call manager
-	 *
-	 * @return string
-	 * @author 
-	 **/
-	public function get_callmanager_phone()
-	{
-		echo "#Телефон диспетчера#";
-	}
-
 	/**
 	 * Метод, определяющий, есть у пользователя менеджер или нет?
 	 *
