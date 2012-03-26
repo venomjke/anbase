@@ -2,10 +2,6 @@
 	load_partial_template($template,'dashboard_tabs');
 ?>
 <div id="wrap1">
-	<ul id="toolbar">
-		<li> <a href="#"> Добавить </a> </li>
-		<li> <a href="#"> Удалить </a> <li>
-	</ul>
 	<table cellspacing="0" cellpadding="0" id="dashboard_table">
 		<thead>
 			<tr>
