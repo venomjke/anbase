@@ -40,7 +40,12 @@ class Users {
 		$this->ci->load->model('users/m_autologin_user');
 		$this->ci->load->model('users/m_user_organization');
 
-
+		/*
+		*
+		* Загрузка языка
+		*
+		*/
+		$this->ci->load->language('users/users');
 		// Try to autologin
 		$this->autologin();
 	}

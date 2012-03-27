@@ -10,3 +10,18 @@ $lang['auth_message_logged_out'] = 'Вы вышли из системы';
 $lang['success_register']		 = 'Вы успешно зарегистрировались';
 $lang['register_org_error']		 = 'Возникла ошибка во время регистрации организации';
 $lang['register_user_error']	 = 'Возникла ошибка во время регистрации пользователя';
+
+
+
+/*
+*
+* Модель M_User
+*
+**/
+$lang['label_login']    = 'Логин';
+$lang['label_password'] = 'Пароль';
+$lang['label_name']     = 'Имя';
+$lang['label_middle_name'] = 'Отчество';
+$lang['label_last_name']= 'Фамилия';
+$lang['phone']			= 'Телефон';
+$lang['role']			= 'Роль';
