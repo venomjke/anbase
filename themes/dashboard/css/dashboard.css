@@ -145,8 +145,9 @@ ul#toolbar li a{
 	margin-left: 15px;
 	font-weight: bold;
 }
-.profile_col_text{
+.profile_col_text,.profile_col_input{
 	width: 390px;
+	font-size:14pt;
 }
 .profile_col_action{
 	font-size: 11pt;
