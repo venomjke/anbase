@@ -8,7 +8,7 @@
 			google.load("jquery","1.7.1");
 			google.load("jqueryui","1.8");
 		</script>
-
+		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/common.js"); ?>"> </script>
 		<?php echo $template['metadata']; ?>
 	</head>
 	<body>
