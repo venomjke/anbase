@@ -48,7 +48,15 @@ class M_User extends MY_Model{
 		*
 		*	Правила валидации
 		*/
-		$this->validate = array();
+		$this->validate = array(
+			array('field' => 'login', 'label' => 'lang:label_login', 'rules' => 'trim|xss_clean'),
+			array('field' => 'password', 'label' => 'lang:label_password','rules' => 'trim|xss_clean'),
+			array('field' => 'email', 'label' => 'lang:label_email', 'rules' => 'trim|xss_clean|valid_email'),
+			array('field' => 'name', 'label' => 'lang:label_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
+			array('field' => 'middle_name', 'label' => 'lang:label_middle_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
+			array('field' => 'last_name', 'label' => 'lang:label_last_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
+			array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'trim|xss_clean|min_length[9]|max_length[20]')
+		);
 
 		/*
 		*
