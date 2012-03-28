@@ -9,6 +9,10 @@
 			google.load("jqueryui","1.8");
 		</script>
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/common.js"); ?>"> </script>
+		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/jquery.noty.js"); ?>"> </script>
+		<?php echo link_tag("themes/dashboard/css/noty/jquery.noty.css"); ?>
+		<?php echo link_tag("themes/dashboard/css/noty/noty_theme_default.css"); ?>
+		<?php echo link_tag("themes/dashboard/css/noty/noty_theme_mitgux.css"); ?>
 		<?php echo $template['metadata']; ?>
 	</head>
 	<body>

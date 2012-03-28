@@ -25,5 +25,25 @@ var common = {
 		}
 
 		return params;
+	},
+
+	/**
+	*
+	* Методы уведомления о чем либо
+	*
+	**/
+	showMsg:function(text,options){
+		var def_options = {
+			text:'',
+			layout:'topRight',
+			animateOpen:{opacity:'show'},
+			animateClose:{opacity:'hide'},
+			type:'success',
+			theme:'noty_theme_mitgux'
+		}
+		options = $.extend(def_options,options);
+		if(text){
+			noty($.extend(options,{text:text}));
+		}
 	}
 }
