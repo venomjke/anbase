@@ -21,4 +21,15 @@ class M_Admin extends M_User{
 		parent::__construct();
 	}
 
+	/**
+	 * Метод возвращает правила валидации
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_validation_rules()
+	{
+		return $this->validate;
+	}
+
 }

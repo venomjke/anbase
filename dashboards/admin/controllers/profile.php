@@ -21,18 +21,34 @@ class Profile extends MX_Controller
 		*/
 
 		$this->load->library("admin/Admin_Users");
-
+		$this->load->library("Ajax");
 
 		if(!$this->admin_users->is_logged_in_as_admin()){
 			redirect("");
 		}
 
 		/*
+		*
+		* Загрузка языка
+		*
+		*/
+		$this->load->language("admin/messages");
+		/*
 		* 
 		* Загрузка моделей и настройка шаблона
 		*/
 		$this->template->set_theme("dashboard");
 		$this->template->set_partial("dashboard_head","dashboard/dashboard_head");
+	
+		/*
+		*
+		*	Загрузка скриптов и всякой другой мета инфы
+		*
+		*/
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/admin/js/admin.js").'"></script>');
+		$this->template->append_metadata('<script type="text/javascript">
+			admin.init({ baseUrl:"'.base_url().'"})
+		</script>');
 	}
 
 	/**
@@ -94,8 +110,8 @@ class Profile extends MX_Controller
 
 
 	/**
-	 * Вывод личной информации
-	 *
+	 * Вывод и изменение личной информации
+	 *  Ответ передается с использованием AJAX+JSON
 	 * @return void
 	 * @author Alex.strigin
 	 **/
@@ -103,7 +119,53 @@ class Profile extends MX_Controller
 	{
 		$this->template->set_partial("dashboard_tabs","dashboard/profile/tabs");
 
-		$this->template->build("profile/personal");
+
+		/*
+		* Контейнер результата
+		*
+		*/
+		$response = array();
+
+		/*
+		*
+		* Если данные переданы ajax'ом, то либо мы патаемся редактировать, либо хз..
+		* Во все остальных случаях мы просто выводим форму
+		*
+		*/
+		if($this->ajax->is_ajax_request()){
+
+			/*
+			*
+			*	Пытаемся отредактировать данные
+			*
+			*/
+			if($this->admin_users->edit_personal_profile()){
+
+				/*
+				*
+				* Ошибки валидации можно обнаружить только проверив errors
+				* после выполнения операции
+				*
+				*/
+				if ($errors = $this->admin_users->get_error_message()) {
+					$response['code'] = 'error_validation_edit_personal_profile';
+					$response['data'] = $errors;
+				} else {
+				
+					$response['code'] = 'success_edit_personal_profile';
+					$response['data'] = lang('success_edit_personal_profile');
+				
+				}	
+				$this->ajax->build_json($response);
+				return true;
+			}
+			$response['code'] = 'error_edit_personal_profile';
+			$response['data']['errors'] = $this->admin_users->get_error_message();
+
+			$this->ajax->build_json($response);
+			return TRUE;
+		}
+		$this->template->build('profile/personal');
 	}
 
 
@@ -116,7 +178,51 @@ class Profile extends MX_Controller
 	private function _organization_profile()
 	{
 		$this->template->set_partial("dashboard_tabs","dashboard/profile/tabs");
+		/*
+		* Контейнер результата
+		*
+		*/
+		$response = array();
 
+		/*
+		*
+		* Если данные переданы ajax'ом, то либо мы патаемся редактировать, либо хз..
+		* Во все остальных случаях мы просто выводим форму
+		*
+		*/
+		if($this->ajax->is_ajax_request()){
+
+			/*
+			*
+			*	Пытаемся отредактировать данные
+			*
+			*/
+			if($this->admin_users->edit_organization_profile()){
+
+				/*
+				*
+				* Ошибки валидации можно обнаружить только проверив errors
+				* после выполнения операции
+				*
+				*/
+				if ($errors = $this->admin_users->get_error_message()) {
+					$response['code'] = 'error_validation_edit_org_profile';
+					$response['data'] = $errors;
+				} else {
+				
+					$response['code'] = 'success_edit_org_profile';
+					$response['data'] = lang('success_edit_org_profile');
+				
+				}	
+				$this->ajax->build_json($response);
+				return true;
+			}
+			$response['code'] = 'error_edit_org_profile';
+			$response['data']['errors'] = $this->admin_users->get_error_message();
+
+			$this->ajax->build_json($response);
+			return TRUE;
+		}
 		$this->template->build("profile/organization");
 	}
 
@@ -130,7 +236,51 @@ class Profile extends MX_Controller
 	private function _system_info()
 	{
 		$this->template->set_partial("dashboard_tabs","dashboard/profile/tabs");
+		/*
+		* Контейнер результата
+		*
+		*/
+		$response = array();
 
+		/*
+		*
+		* Если данные переданы ajax'ом, то либо мы патаемся редактировать, либо хз..
+		* Во все остальных случаях мы просто выводим форму
+		*
+		*/
+		if($this->ajax->is_ajax_request()){
+
+			/*
+			*
+			*	Пытаемся отредактировать данные
+			*
+			*/
+			if($this->admin_users->edit_system_profile()){
+
+				/*
+				*
+				* Ошибки валидации можно обнаружить только проверив errors
+				* после выполнения операции
+				*
+				*/
+				if ($errors = $this->admin_users->get_error_message()) {
+					$response['code'] = 'error_validation_edit_system_profile';
+					$response['data'] = $errors;
+				} else {
+				
+					$response['code'] = 'success_edit_system_profile';
+					$response['data'] = lang('success_edit_system_profile');
+				
+				}	
+				$this->ajax->build_json($response);
+				return true;
+			}
+			$response['code'] = 'error_edit_system_profile';
+			$response['data']['errors'] = $this->admin_users->get_error_message();
+
+			$this->ajax->build_json($response);
+			return TRUE;
+		}
 		$this->template->build("profile/system_info");
 	}
 

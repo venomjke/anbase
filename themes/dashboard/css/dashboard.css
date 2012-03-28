@@ -127,6 +127,7 @@ ul#toolbar li a{
 	border-left: 1px #B4B4B4 solid;
 	border-right: 1px #B4B4B4 solid;
 	padding: 15px 10px 0px 10px;
+	border-bottom: 1px white solid;
 }
 .profile_row{
 	font-size: 14pt;
