@@ -11,11 +11,9 @@
 				<span class="profile_col profile_col_label">
 					Название
 				</span>
-				<span class="profile_col profile_col_text">
-					<?php echo $this->admin_users->get_org_name(); ?>
-				</span>
+				<span class="profile_col profile_col_text"><?php echo $this->admin_users->get_org_name(); ?></span>
 				<span class="profile_col profile_col_action">
-					Изменить
+					<a href="#" onclick="admin.profile.click_show_field({ jObjAct:$(this), name:'name', uri:'<?php echo "admin/profile/view/?s=org"; ?>' }); return false;"> Изменить </a>
 				</span>
 			</div>
 		 	<div class="profile_row">
@@ -29,7 +27,7 @@
 		 			<?php echo $this->admin_users->get_callmanager_phone(); ?>
 		 		</span>
  				<span class="profile_col profile_col_action">
-					Изменить
+					<a href="#" onclick="admin.profile.click_show_field({ jObjAct:$(this), name:'callmanager', uri:'<?php echo "admin/profile/view/?s=org"; ?>' }); return false;"> Изменить </a>
 				</span>
 		 	</div>	
 		 	<div class="profile_row">
@@ -41,7 +39,7 @@
 		 			<?php echo ""; ?>
 		 		</span>
  				<span class="profile_col profile_col_action">
-					Изменить
+					<a href="#" onclick="admin.profile.click_show_field({ jObjAct:$(this), name:'email', uri:'<?php echo "admin/profile/view/?s=org"; ?>' }); return false;"> Изменить </a>
 				</span>
 		 	</div>
 		 <?php echo form_close(); ?>

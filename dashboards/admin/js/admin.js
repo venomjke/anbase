@@ -128,8 +128,26 @@ var admin = {
 				url:admin.baseUrl+options.uri,
 				data:postData,
 				success:function(response){
-					profile_col_input.replaceWith("<span class=\"profile_col profile_col_text\">"+profile_col_input.attr('value')+"</span>");
-					profile_col_action.replaceWith("<span class=\"profile_col profile_col_action\"> <a href=\"#\" onclick=\"admin.profile.click_show_field({jObjAct:$(this),uri:'"+options.uri+"',name:'"+options.name+"', type:'"+options.type+"'});return false;\">Изменить</a></span>"); 	
+					/*
+					*
+					* проверка ответа и вывод результата
+					*/
+					if(response.code && response.data){
+
+						switch (response.code){
+							case "success_edit_profile":
+								profile_col_input.replaceWith("<span class=\"profile_col profile_col_text\">"+profile_col_input.attr('value')+"</span>");
+								profile_col_action.replaceWith("<span class=\"profile_col profile_col_action\"> <a href=\"#\" onclick=\"admin.profile.click_show_field({jObjAct:$(this),uri:'"+options.uri+"',name:'"+options.name+"', type:'"+options.type+"'});return false;\">Изменить</a></span>"); 	
+								common.showMsg(response.data);
+							break;
+							case "error_edit_profile":
+								for (var i in response.data.errors){
+									common.showMsg(response.data.errors[i],{type:"alert"});
+								}
+							break;
+						}
+					}
+					
 				},
 				beforeSend:function(){
 					options.jField.append('<span class="profile_col preloader"> <img src="'+admin.baseUrl+'themes/dashboard/images/preloader.gif" /> </span>')

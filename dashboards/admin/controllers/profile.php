@@ -148,18 +148,18 @@ class Profile extends MX_Controller
 				*
 				*/
 				if ($errors = $this->admin_users->get_error_message()) {
-					$response['code'] = 'error_validation_edit_personal_profile';
-					$response['data'] = $errors;
+					$response['code'] = 'error_edit_profile';
+					$response['data']['errors'] = $errors;
 				} else {
 				
-					$response['code'] = 'success_edit_personal_profile';
+					$response['code'] = 'success_edit_profile';
 					$response['data'] = lang('success_edit_personal_profile');
 				
 				}	
 				$this->ajax->build_json($response);
 				return true;
 			}
-			$response['code'] = 'error_edit_personal_profile';
+			$response['code'] = 'error_edit_profile';
 			$response['data']['errors'] = $this->admin_users->get_error_message();
 
 			$this->ajax->build_json($response);
@@ -206,18 +206,18 @@ class Profile extends MX_Controller
 				*
 				*/
 				if ($errors = $this->admin_users->get_error_message()) {
-					$response['code'] = 'error_validation_edit_org_profile';
-					$response['data'] = $errors;
+					$response['code'] = 'error_edit_profile';
+					$response['data']['errors'] = $errors;
 				} else {
 				
-					$response['code'] = 'success_edit_org_profile';
+					$response['code'] = 'success_edit_profile';
 					$response['data'] = lang('success_edit_org_profile');
 				
 				}	
 				$this->ajax->build_json($response);
 				return true;
 			}
-			$response['code'] = 'error_edit_org_profile';
+			$response['code'] = 'error_edit_profile';
 			$response['data']['errors'] = $this->admin_users->get_error_message();
 
 			$this->ajax->build_json($response);
@@ -264,18 +264,18 @@ class Profile extends MX_Controller
 				*
 				*/
 				if ($errors = $this->admin_users->get_error_message()) {
-					$response['code'] = 'error_validation_edit_system_profile';
-					$response['data'] = $errors;
+					$response['code'] = 'error_edit_profile';
+					$response['data']['errors'] = $errors;
 				} else {
 				
-					$response['code'] = 'success_edit_system_profile';
+					$response['code'] = 'success_edit_profile';
 					$response['data'] = lang('success_edit_system_profile');
 				
 				}	
 				$this->ajax->build_json($response);
 				return true;
 			}
-			$response['code'] = 'error_edit_system_profile';
+			$response['code'] = 'error_edit_profile';
 			$response['data']['errors'] = $this->admin_users->get_error_message();
 
 			$this->ajax->build_json($response);

@@ -31,7 +31,21 @@ class M_Organization extends MY_Model{
 		*	Правила валидации
 		*
 		*/
-		$this->validate    = array();
+		$this->validate    = array(
+			array('field'=>'name','label'=>'lang:label_org_name','rules'=>'trim|xss_clean|min_length[3]|max_length[150]')
+		);
+	}
+
+
+	/**
+	 * Метод возвращает правила валидации
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_validation_rules()
+	{
+		return $this->validate;
 	}
 
 }
