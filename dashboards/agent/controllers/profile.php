@@ -18,7 +18,7 @@ class Profile extends MX_Controller
 		*
 		*/
 		$this->load->library('agent/Agent_Users');
-
+		$this->load->library('Ajax');
 		/*
 		*
 		* Контроль входа	
@@ -28,8 +28,23 @@ class Profile extends MX_Controller
 			redirect('');
 		}
 
+		/*
+		*
+		* Загрузка пакета сообщений
+		*
+		*/
+		$this->load->language("agent/messages");
+
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial("dashboard_head","dashboard/dashboard_head");
+
+		/*
+		*
+		* Загрузка главного скрипта панели admin, а также
+		* его инициализация
+		*/
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"> </script>');
+		$this->template->append_metadata('<script type="text/javascript">agent.init({baseUrl:"'.base_url().'"});</script>');
 	}
 
 
@@ -113,8 +128,50 @@ class Profile extends MX_Controller
 	private function _personal_profile()
 	{	
 		$this->template->set_partial("dashboard_tabs","dashboard/profile/tabs");
+		/*
+		*  
+		* Если данные переданы с использованием ajax, 
+		* значит мы пытаемся редактировать поля, если нет
+		* то просто выводим список полей
+		*/
+		if($this->ajax->is_ajax_request()){
 
-		$this->template->build("profile/personal");
+			/*
+			*
+			* Попытаемся выполнить изменение личного профиля,
+			* в случае неудачи получим *Exception
+			*/
+			try{
+
+				$this->agent_users->edit_personal_profile();
+
+				$response['code'] = 'success_edit_profile';
+				$response['data'] = lang('success_edit_personal_profile');
+				$this->ajax->build_json($response);
+			
+
+			}catch(ValidationException $ve){
+				/*
+				*
+				* Обработка исключений валидации
+				*
+				*/
+				$response['code'] = 'error_edit_profile';
+				$response['data']['errors'] = $ve->get_error_messages();
+				$this->ajax->build_json($response);
+			}catch(RuntimeException $re){
+
+				/*
+				*
+				* Обработка исключений времени выполнения
+				*/
+				$response['code'] = 'error_edit_profile';
+				$response['data']['errors'] = $re->get_error_messages();
+			}
+
+		}else{
+			$this->template->build("profile/personal");
+		}
 	}
 
 	/**

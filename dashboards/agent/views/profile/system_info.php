@@ -25,9 +25,6 @@
 				<span class="profile_col profile_col_text">
 					******
 				</span>
-				<span class="profile_col profile_col_action">
-					Изменить
-				</span>
 			</div>
 			<div class="profile_row">
 				<span class="profile_col profile_col_img">

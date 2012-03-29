@@ -85,4 +85,15 @@ class M_Agent extends M_User{
 		}
 		return NULL;
 	}
+
+	/**
+	 * getter validate array
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_validation_rules()
+	{
+		return $this->validate;
+	}
 }
