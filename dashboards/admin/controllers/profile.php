@@ -17,7 +17,7 @@ class Profile extends MX_Controller
 		*
 		* Загрузка либ
 		*
-		*
+	*
 		*/
 
 		$this->load->library("admin/Admin_Users");
