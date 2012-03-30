@@ -32,4 +32,17 @@ class M_Admin extends M_User{
 		return $this->validate;
 	}
 
+
+	/**
+	 * Выбор списка сотрудников компании ( Менеджер | Админ )
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function get_list_staff($org_id)
+	{
+		$this->where("(users.role = '".M_User::USER_ROLE_MANAGER."' OR users.role = '".M_User::USER_ROLE_AGENT."')");
+		return $this->get_users_organization($org_id);
+	}
+
 }

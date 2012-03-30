@@ -41,6 +41,18 @@ class Admin_Users extends Users{
 		return false;
 	}
 
+	/**
+	 * Метод выбирает список сотрудников с ролью = Агент и Менеджер, и 
+	 * затем возвращает наверх
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_list_staff()
+	{
+		return $this->ci->m_admin->get_list_staff($this->get_org_id());
+	}
+
 
 	/**
 	 * Редактирование персонального профайла

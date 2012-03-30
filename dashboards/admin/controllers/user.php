@@ -63,47 +63,83 @@ class User extends MX_Controller
 	 **/
 	public function index()
 	{
-		redirect('admin/user/view/?s=admins');
+		redirect('admin/user/staff');
 	}
 
+
 	/**
-	 * Просмотр списка пользователей
+	 * Управление разделом сотрудники
 	 *
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	public function view()
+	public function staff()
 	{
-		/*
-		*
-		* 2 раздела:
-		*	1. admins
-		*	2. staff
-		*/
-		$section = $this->input->get('s');
-	
-		if (!empty($section)) {
-			switch ($section) {
-				case 'staff':
-					$this->_view_staff();
-					break;
-				case 'admins':
-					$this->_view_admins();
-					break;
-				default:
-					$this->_view_staff();
-					break;
-			}
-		} else {
-			/*
-			* 
-			* По умолчанию показать коллектив агенты/менеджеры
-			*/
-			$this->_view_staff();
+		$section = $this->input->get('act')?$this->input->get('act'):'view';
+
+		switch ($section) {
+			case 'view':
+				/*
+				* Отображение списка сотрудников
+				*
+				*/
+				$this->_view_staff();
+				break;
+			case 'del':
+				/*
+				*
+				* Удаление списка сотрудников
+				*/
+				$this->_del_staff();
+			break;
+			default:
+				/*
+				*
+				* По умолчанию вывод списка сотрудников
+				*
+				*/
+				$this->_view_staff();
+				break;
 		}
 		
 	}
 
+	/**
+	 * Управление разделом админы
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function admins()
+	{
+		$section = $this->input->get('act')?$this->input->get('act'):'view';
+
+		switch ($section) {
+			case 'view':
+				/*
+				* Отображение списка администраторов
+				*
+				*/
+				$this->_view_admins();
+				break;
+			case 'del':
+				/*
+				*
+				* Удаление списка администраторов
+				*/
+				$this->_del_admins();
+			break;
+			default:
+				/*
+				*
+				* По умолчанию вывод списка администраторов
+				*
+				*/
+				$this->_view_admins();
+				break;
+		}
+	
+	}
 
 	/**
 	 * Вывод списка администраторов
@@ -113,7 +149,11 @@ class User extends MX_Controller
 	 **/
 	private function _view_admins()
 	{
-		$this->template->build('user/admins');
+		$this->template->set_partial('sidebar','dashboard/user/sidebar');
+
+		$admins = $this->admin_users->get_list_admins();
+
+		$this->template->build('user/admins',array('admins' => $admins));
 	}
 
 	/**
@@ -124,7 +164,51 @@ class User extends MX_Controller
 	 **/
 	private function _view_staff()
 	{
-		$this->template->build('user/staff');
+		$this->template->set_partial('sidebar','dashboard/user/sidebar');
+
+		$staff = $this->admin_users->get_list_staff();
+		$this->template->build('user/staff',array('staff' => $staff));
+	}
+
+
+	/**
+	 * Удалить список сотрудников
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _del_staff()
+	{
+		$this->template->set_partial('sidebar','dashboard/user/sidebar');
+
+		/*
+		*
+		* Пытаемся удалить пользователей
+		*/
+		try{
+
+			$this->admin_users->del_staff();
+
+			/*
+			*
+			* В зависимости от способа передачи подготавливаем и возвращаем овтет.
+			*/
+			if($this->ajax->is_ajax_request()){
+				$response['code'] = 'success_delete';
+				$response['data'] = lang('success_delete_staff');
+			}else{
+				redirect('admin/user/staff');
+			}
+
+		}catch( RuntimeException $re ){
+
+			if($this->ajax->is_ajax_request()){
+				$response['code'] = 'error_delete_staff';
+				$response['data'] = lang('error_delete_staff');
+			}else{
+				redirect('admin/user/staff');
+			}
+		}
 	}
 
 
@@ -168,14 +252,14 @@ class User extends MX_Controller
 					$this->_admins_invites();
 				break;
 				default:
-					redirect('user/view');
+					redirect('admin/user/view');
 					break;
 			}
 		} else {
 			/*
 			*По умолчанию ничего нет, поэтому redirect на user/view 
 			*/
-			redirect('user/view');
+			redirect('admin/user/view');
 		}
 		
 	}

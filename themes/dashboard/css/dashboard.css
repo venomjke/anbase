@@ -153,3 +153,43 @@ ul#toolbar li a{
 .profile_col_action{
 	font-size: 11pt;
 }
+#wrap3{
+	width: 1000px;
+	margin: 0 auto;
+	overflow: auto;
+	border: 1px #B4B4B4 solid;
+}
+#wrap3 .sidebar{
+	width: 250px;
+	float: left;
+	border-right: 1px #B4B4B4 solid;
+}
+#wrap3 .sidebar .action_box{
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
+#wrap4{
+	width: 750px;
+	margin-left: 250px;
+	padding-top: 10px;
+}
+#wrap4 .toolbar{
+	border-bottom: 1px #B4B4B4 solid;
+}
+#wrap4 .user_table{
+	padding: 10px 10px 0px 10px;
+}
+#wrap4 .user_table table{
+	width: 100%;
+}
+#wrap4 .user_table table tr{
+
+}
+#wrap4 .user_table table tr td{
+
+}
+#wrap4 .user_table .checkbox{
+	text-align:center;
+}

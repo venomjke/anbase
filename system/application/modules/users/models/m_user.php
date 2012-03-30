@@ -172,4 +172,85 @@ class M_User extends MY_Model{
 		return $data;
 	}
 
+
+	/**
+	 * Метод проходит по списку полей применяя к каждому свой фильтр
+	 *
+	 * @param array
+	 * @return void
+	 * @author alex.strigin 
+	 **/
+	protected function set_filter($filter = array())
+	{
+
+		foreach($filter as $field => $value ){
+
+			$filter_name = "set_{$field}_filter";
+			if(method_exists($this,$filter_name)){
+				$this->$filter_name($value);
+			}else{
+				throw Exception("Undifned filter_name {$filter_name} in ".__CLASS__);
+			}
+		}
+	}
+
+	/**
+	 * Сборка select на выбор из трех таблиц.
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _build_select()
+	{
+		$this->select("users.id");
+		$this->select("users.login");
+		$this->select("users.email");
+		$this->select("users.name");
+		$this->select("users.middle_name");
+		$this->select("users.last_name");
+		$this->select("users.phone");
+		$this->select("users.role");
+		$this->select("managers_users.manager_id");
+		$this->select("organizations.ceo");
+
+		$this->from("users")
+		 	 ->join("managers_users","users.id = managers_users.user_id","LEFT")
+		 	 ->join("users_organizations","users.id = users_organizations.user_id")
+		 	 ->join("organizations","organizations.id = users_organizations.org_id");
+	}
+
+	/**
+	 * Выбор пользователей организации. Выбор происходит из трех таблиц: users,managers_users, organizations.
+	 *
+	 * @param int
+	 * @param array
+	 * @param int
+	 * @param int
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_users_organization($org_id,$filter=array(),$limit=false,$offset=false)
+	{
+		/*
+		*
+		* Выбор всех пользователей
+		*/
+		$this->_build_select();
+
+		/*
+		*
+		* Установка фильтров
+		*/
+		$this->set_filter($filter);
+
+		/*
+		*
+		* Установка пределов
+		*/
+		$this->limit($limit,$offset);
+
+		$this->db->where("organizations.id",$org_id);
+		return $this->db->get()->result();
+	}
+
 }
