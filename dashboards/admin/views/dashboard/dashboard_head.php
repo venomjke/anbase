@@ -8,7 +8,7 @@
 </div>
 <ul id="menu">
 	<li> <?php echo anchor("admin/orders","Заявки"); ?> </li>
-	<li> <?php echo anchor("admin/users","Пользователи"); ?> </li>
+	<li> <?php echo anchor("admin/user","Пользователи"); ?> </li>
 </ul>
 <div id="user_box">
 	<span id="greetings"> Здравствуйте <?php echo $this->admin_users->get_official_name(); ?> </span>
