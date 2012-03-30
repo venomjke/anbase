@@ -55,6 +55,18 @@ class Admin_Users extends Users{
 
 
 	/**
+	 * Метод возвращает список админов
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_list_admins()
+	{
+		return $this->ci->m_admin->get_list_admins($this->get_org_id());
+	}
+
+	
+	/**
 	 * Редактирование персонального профайла
 	 *
 	 * @return boolean

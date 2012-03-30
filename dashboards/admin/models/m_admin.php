@@ -36,12 +36,25 @@ class M_Admin extends M_User{
 	/**
 	 * Выбор списка сотрудников компании ( Менеджер | Админ )
 	 *
-	 * @return void
-	 * @author 
+	 * @return array
+	 * @author alex.strigin
 	 **/
 	public function get_list_staff($org_id)
 	{
 		$this->where("(users.role = '".M_User::USER_ROLE_MANAGER."' OR users.role = '".M_User::USER_ROLE_AGENT."')");
+		return $this->get_users_organization($org_id);
+	}
+
+
+	/**
+	 * Выбор списка администраторов
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_list_admins($org_id)
+	{
+		$this->where("users.role",M_User::USER_ROLE_ADMIN);
 		return $this->get_users_organization($org_id);
 	}
 
