@@ -22,6 +22,7 @@ class User extends MX_Controller
 		*/
 
 		$this->load->library('admin/Admin_Users');
+		$this->load->library('Ajax');
 
 		if(!$this->admin_users->is_logged_in_as_admin()){
 			redirect('');
@@ -29,11 +30,28 @@ class User extends MX_Controller
 
 		/*
 		*
+		* Загрузка пакета сообщений
+		*
+		*/
+		$this->load->language('admin/messages');
+		/*
+		*
 		* настройка шаблона
 		*
 		*/
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
+	
+		/*
+		*
+		*	Загрузка скриптов и всякой другой мета инфы
+		*
+		*/
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/admin/js/admin.js").'"></script>');
+		$this->template->append_metadata('<script type="text/javascript">
+			admin.init({ baseUrl:"'.base_url().'"})
+		</script>');
+
 	}
 
 
