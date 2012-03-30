@@ -20,14 +20,30 @@ class Profile extends MX_Controller
 		*
 		*/
 		$this->load->library("manager/manager_users");
-
+		$this->load->library("Ajax");
 
 		if(!$this->manager_users->is_logged_in_as_manager()){
 			redirect('');
 		}
+		/*
+		*
+		* Загрузка пакета сообщений
+		*
+		*/
+		$this->load->language("manager/messages");
 
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
+
+		/*
+		*
+		* Загрузка главного скрипта панели manager, а также его инициализация
+		*
+		*
+		*/
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/manager/js/manager.js").'"> </script>');
+
+		$this->template->append_metadata('<script type="text/javascript">manager.init({baseUrl:"'.base_url().'"});</script>');
 	}
 
 
@@ -115,8 +131,46 @@ class Profile extends MX_Controller
 	private function _personal_profile()
 	{
 		$this->template->set_partial('dashboard_tabs','dashboard/profile/tabs');
+		/*
+		*
+		*	Если данные переданы с использованием ajax, значи мы 
+		* пытаемся редактировать поля, если нет,  то просто 
+		*  выводим спсикок полей
+		*
+		*/
+		if($this->ajax->is_ajax_request()){
 
+			/*
+			*
+			* Пытаемся изменить личный профиль
+			*
+			*/
+			try{
 
+				$this->manager_users->edit_personal_profile();
+				
+				$response['code'] = 'success_edit_profile';
+				$response['data'] = lang('success_edit_personal_profile');
+				$this->ajax->build_json($response);			
+			}catch(ValidationException $ve){
+				/*
+				*
+				* Обработка исключений валидации
+				*
+				*/
+				$response['code'] = 'error_edit_profile';
+				$response['data']['errors'] = $ve->get_error_messages();
+				$this->ajax->build_json($response);
+			}catch(RuntimeException $re){
+				/*
+				*
+				* Обработка исключений времени выполнения
+				*/
+				$response['code'] = 'error_edit_profile';
+				$response['data']['errors'] = $re->get_error_messages();
+			}
+			return;
+		}
 		$this->template->build('profile/personal');
 	}
 
@@ -130,7 +184,6 @@ class Profile extends MX_Controller
 	private function _organization_profile()
 	{
 		$this->template->set_partial('dashboard_tabs','dashboard/profile/tabs');
-
 		$this->template->build('profile/organization');
 	}
 
@@ -144,7 +197,6 @@ class Profile extends MX_Controller
 	private function _system_info()
 	{
 		$this->template->set_partial('dashboard_tabs','dashboard/profile/tabs');
-
 		$this->template->build('profile/system_info');
 	}
 }// END Profile class

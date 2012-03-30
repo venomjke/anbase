@@ -20,5 +20,17 @@ class M_Manager extends M_User
 		parent::__construct();
 	}
 
+
+	/**
+	 * getter validation array
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_validation_rules()
+	{
+		return $this->validate;
+	}
+
 	
 }
