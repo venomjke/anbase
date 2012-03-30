@@ -531,7 +531,23 @@ class Users {
 	 **/
 	public function get_callmanager_phone()
 	{
-		echo "#Телефон диспетчера#";
+		$this->ci->load->model('users/m_organization');
+		$org = $this->ci->m_organization->get($this->get_org_id());
+		return $org->phone;
+	}
+
+
+	/**
+	 * Метод, возвращающий email организации
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function get_org_email()
+	{
+		$this->ci->load->model('users/m_organization');
+		$org = $this->ci->m_organization->get($this->get_org_id());
+		return $org->email;
 	}
 	
 	/**

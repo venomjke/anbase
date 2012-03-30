@@ -25,3 +25,9 @@ $lang['label_middle_name'] = 'Отчество';
 $lang['label_last_name']= 'Фамилия';
 $lang['label_phone']	= 'Телефон';
 $lang['label_role']		= 'Роль';
+
+
+
+$lang['label_org_name']  = 'Название организации';
+$lang['label_org_phone'] = 'Телефон организации';
+$lang['label_org_email'] = 'Email организации';

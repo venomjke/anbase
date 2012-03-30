@@ -31,7 +31,7 @@
 	 		</span>
 	 		<span class="profile_col profile_col_label">Email</span>
 	 		<span class="profile_col profile_col_text">
-	 			<?php echo ""; ?>
+	 			<?php echo $this->agent_users->get_org_email(); ?>
 	 		</span>
 	 	</div>
 	</div>

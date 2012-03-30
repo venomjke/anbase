@@ -95,6 +95,22 @@
 								<?php echo form_input("org_name",set_value("org_name"),'placeholder="Введите название организации"'); ?>			
 								</td>
 							</tr>
+							<tr>
+								<td><label for=""> Email организации </label>
+								</td>
+								<td>
+								<?php echo form_error("org_email"); ?>
+								<?php echo form_input("org_email",set_value("org_email"),'placeholder="Введите email организации"'); ?>			
+								</td>
+							</tr>
+							<tr>
+								<td><label for=""> Тел. организации ( диспетчера ) </label>
+								</td>
+								<td>
+								<?php echo form_error("org_phone"); ?>
+								<?php echo form_input("org_phone",set_value("org_phone"),'placeholder="Введите тел. организации"'); ?>			
+								</td>
+							</tr>
 						</table>
 				</div>
 			</div>

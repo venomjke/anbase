@@ -147,8 +147,11 @@ class Auth extends MX_Controller{
 					'middle_name' => $this->input->post('middle_name'),
 					'last_name'   => $this->input->post('last_name'),
 					'phone'		  => $this->input->post('phone'),
-					'org_name'    => $this->input->post('org_name') 
+					'org_name'    => $this->input->post('org_name'),
+					'org_phone'   => $this->input->post('org_phone'),
+					'org_email'   => $this->input->post('org_email')
 				);
+				
 				if ($this->users->register($register_data)) {
 					// success и отображение register_finish
 					//$data['success']['register'] = lang('sucess_register'); 

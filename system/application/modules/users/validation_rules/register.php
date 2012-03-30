@@ -28,6 +28,8 @@ $this->form_validation->set_rules('phone','Телефон','trim|required|xss_cl
 *
 */
 $this->form_validation->set_rules('org_name','Имя организации','trim|required|xss_clean|min_length[3]|max_length[150]');
+$this->form_validation->set_rules('org_email','Email организации','trim|required|xss_clean|min_length[5]|max_length[100]');
+$this->form_validation->set_rules('org_phone','Телефон Организации','trim|required|xss_clean|min_length[7]|max_length[20]');
 /*
 *
 *	Правила валидации капчи

@@ -104,6 +104,10 @@ class Admin_Users extends Users{
 			*/
 			if($this->ci->input->post('name')) $data['name'] = $this->ci->input->post('name');
 
+			if($this->ci->input->post('email')) $data['email'] = $this->ci->input->post('email');
+
+			if($this->ci->input->post('phone')) $data['phone'] = $this->ci->input->post('phone');
+
 			if(!empty($data)){
 				$this->ci->m_organization->update($this->get_org_id(),$data,true);
 				return TRUE;
@@ -115,6 +119,9 @@ class Admin_Users extends Users{
 			return TRUE;
 		}
 		$this->error += array( 'name' => $this->ci->form_validation->error('name'));
+		$this->error += array( 'email' => $this->ci->form_validation->error('email'));
+		$this->error += array( 'phone' => $this->ci->form_validation->error('phone'));
+		
 		return false;
 	}
 
