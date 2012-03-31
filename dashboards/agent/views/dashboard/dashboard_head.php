@@ -14,7 +14,7 @@
 </div>
 <ul id="menu">
 	<li> <?php echo anchor("agent/orders","Заявки"); ?> </li>
-	<li> <?php echo anchor("agent/users","Пользователи"); ?> </li>
+	<li> <?php echo anchor("agent/user","Пользователи"); ?> </li>
 </ul>
 <div id="user_box">
 	<span id="greetings"> Здравствуйте <?php echo $this->agent_users->get_official_name(); ?> </span>

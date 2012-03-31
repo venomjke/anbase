@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or die('No direct access to script file');
 
 /*
-*	Это джигурда для того, чтобы не возникло проблем во время Extends
+*	Эта джигурда для того, чтобы не возникло проблем во время Extends
 */
 if(!class_exists("Users"))
 	require_once APPPATH."modules/users/libraries/users.php";
@@ -105,6 +105,31 @@ class Agent_Users extends Users{
 			return $manager->phone;
 		}
 		return "";
+	}
+
+
+	/**
+	 * Метод выбирает список сотрудников с ролью = Агент и Менеджер, а
+	 * затем возвращает наверх
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_list_staff()
+	{
+		return $this->ci->m_agent->get_list_staff($this->get_org_id());
+	}
+
+
+	/**
+	 * Метод возвращает список админов
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_list_admins()
+	{
+		return $this->ci->m_agent->get_list_admins($this->get_org_id());
 	}
 
 	/**

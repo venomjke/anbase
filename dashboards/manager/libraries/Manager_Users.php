@@ -57,6 +57,30 @@ class Manager_Users extends Users
 
 
 	/**
+	 * Метод выбирает список сотрудников с ролью = Агент и Менеджер, а
+	 * затем возвращает наверх
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_list_staff()
+	{
+		return $this->ci->m_manager->get_list_staff($this->get_org_id());
+	}
+
+
+	/**
+	 * Метод возвращает список админов
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_list_admins()
+	{
+		return $this->ci->m_manager->get_list_admins($this->get_org_id());
+	}
+
+	/**
 	 * Редактирование персонального профиля
 	 *
 	 * @return void

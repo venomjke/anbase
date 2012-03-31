@@ -56,7 +56,7 @@ class User extends MX_Controller
 
 
 	/**
-	 * Редирект на user/view/?s=admins
+	 * Редирект на user/staff
 	 *
 	 * @return void
 	 * @author alex.strigin
