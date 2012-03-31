@@ -92,6 +92,23 @@ class User extends MX_Controller
 				*/
 				$this->_del_staff();
 			break;
+			case 'assign':
+				/*
+				*
+				*
+				* Назначить менеджера. 
+				*
+				*/
+				$this->_assign_manager_agent();
+			break;
+			case 'change_position':
+				/*
+				*
+				* Сменить должность
+				*
+				*/
+				$this->_change_position_employee();
+			break;
 			default:
 				/*
 				*
@@ -128,6 +145,14 @@ class User extends MX_Controller
 				* Удаление списка администраторов
 				*/
 				$this->_del_admins();
+			break;
+			case 'change_position':
+				/*
+				*
+				* Смена должности
+				*
+				*/
+				$this->_change_position_employee();
 			break;
 			default:
 				/*
@@ -211,6 +236,28 @@ class User extends MX_Controller
 		}
 	}
 
+	/**
+	 * Привязать агента к менеджеру.
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _assign_manager_agent()
+	{
+
+	}
+
+	/**
+	 * Смена должности сотрудника
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _change_position_employee()
+	{
+
+	}
+
 
 
 	/**
@@ -237,7 +284,7 @@ class User extends MX_Controller
 				case 'managers':
 					/*
 					*
-					*  Инвайты менеджера
+					*  Инвайты менеджерам
 					*
 					*/
 					$this->_managers_invites();
