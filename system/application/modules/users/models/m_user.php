@@ -49,6 +49,7 @@ class M_User extends MY_Model{
 		*	Правила валидации
 		*/
 		$this->validate = array(
+			array('field' => 'id', 'label' => 'lang:label_user_id', 'rules' => 'integer'),
 			array('field' => 'login', 'label' => 'lang:label_login', 'rules' => 'trim|xss_clean'),
 			array('field' => 'password', 'label' => 'lang:label_password','rules' => 'trim|xss_clean'),
 			array('field' => 'email', 'label' => 'lang:label_email', 'rules' => 'trim|xss_clean|valid_email'),

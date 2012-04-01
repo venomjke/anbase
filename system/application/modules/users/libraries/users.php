@@ -411,6 +411,18 @@ class Users {
 
 
 	/**
+	 * Определение того, является ли пользователь директором
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function is_ceo()
+	{
+		if($this->ci->session->userdata('user_id') == $this->ci->session->userdata('ceo')) return true;
+		return false;
+	}
+	
+	/**
 	*
 	*	Составление полного оффициального имени
 	*
@@ -570,7 +582,8 @@ class Users {
 				'last_name' => $user->last_name,
 				'middle_name'=> $user->middle_name,
 				'phone' 	=> $user->phone,
-				'org_id'	=> $user_as_org->org_id
+				'org_id'	=> $user_as_org->org_id,
+				'ceo'		=> $user_as_org->ceo
 		));
 	}
 

@@ -41,9 +41,9 @@ class M_User_organization extends MY_Model{
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	public function get($user_id)
+	public function get($where)
 	{
-		return $this->get_full_user_info($user_id);
+		return $this->get_full_user_info($where);
 	}
 
 
@@ -55,7 +55,7 @@ class M_User_organization extends MY_Model{
 	 * @return void
 	 * @author 
 	 **/
-	public function get_full_user_info($id)
+	public function get_full_user_info($where)
 	{
 		$this->select('
 			users_organizations.org_id,
@@ -69,6 +69,6 @@ class M_User_organization extends MY_Model{
 		')->join('users','users.id = users_organizations.user_id')
 		  ->join('organizations','users_organizations.org_id = organizations.id');
 
-		return parent::get(array('users_organizations.user_id' => $id));
+		return parent::get($where);
 	}
 }
