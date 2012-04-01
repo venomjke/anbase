@@ -167,7 +167,7 @@ class Profile extends MX_Controller
 				* Обработка исключений времени выполнения
 				*/
 				$response['code'] = 'error_edit_profile';
-				$response['data']['errors'] = $re->get_error_messages();
+				$response['data']['errors'] = array($re->get_error_message());
 			}
 			return;
 		}
