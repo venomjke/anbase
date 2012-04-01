@@ -36,6 +36,18 @@ class M_User_organization extends MY_Model{
 	}
 
 	/**
+	 * Обертка над get_full_user_info
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function get($user_id)
+	{
+		return $this->get_full_user_info($user_id);
+	}
+
+
+	/**
 	 * Метод выбирает инфу о юзере из таблицы users_organizations присоединяя также инфу
 	 * из users и orgs, а именно из users fio,role,phone а из orgs ceo
 	 * 
@@ -57,6 +69,6 @@ class M_User_organization extends MY_Model{
 		')->join('users','users.id = users_organizations.user_id')
 		  ->join('organizations','users_organizations.org_id = organizations.id');
 
-		return $this->get(array('users_organizations.user_id' => $id));
+		return parent::get(array('users_organizations.user_id' => $id));
 	}
 }

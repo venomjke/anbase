@@ -26,6 +26,7 @@ class M_Organization extends MY_Model{
 		$this->primary_key = 'id';
 		$this->fields      = array('id','name','ceo','email','phone');
 		$this->result_mode = 'object';
+		
 		/*
 		*
 		*	Правила валидации
