@@ -159,7 +159,7 @@ class Profile extends MX_Controller
 				$response['code'] = 'error_edit_profile';
 				$response['data']['errors'] = $ve->get_error_messages();
 				$this->ajax->build_json($response);
-			}catch(RuntimeException $re){
+			}catch(AnbaseRuntimeException $re){
 
 				/*
 				*

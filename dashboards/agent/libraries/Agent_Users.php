@@ -16,8 +16,8 @@ if(!class_exists("ValidationException")){
 	require_once APPPATH."exceptions/ValidationException.php";
 }
 
-if(!class_exists("RuntimeException")){
-	require_once APPPATH."exceptions/RuntimeException.php";
+if(!class_exists("AnbaseRuntimeException")){
+	require_once APPPATH."exceptions/AnbaseRuntimeException.php";
 }
 
 /**
@@ -157,7 +157,7 @@ class Agent_Users extends Users{
 				$this->ci->m_agent->update($this->get_user_id(),$data);
 				$this->update_agent_session_data($data);
 			} else {
-				throw new RuntimeException(lang('common.empty_data'),'no_recive_data');
+				throw new AnbaseRuntimeException(lang('common.empty_data'));
 			}
 			return;
 		}
