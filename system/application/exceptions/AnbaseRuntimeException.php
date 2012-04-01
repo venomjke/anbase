@@ -2,11 +2,11 @@
 
 /**
  * Класс, реализущию логику исключения времени выполнения
- *
+ *k
  * @package default
  * @author alex.strigin
  **/
-class RuntimeException extends Exception
+class AnbaseRuntimeException extends RuntimeException
 {
 	/**
 	 * Конструктор
@@ -14,7 +14,7 @@ class RuntimeException extends Exception
 	 * @return void
 	 * @author 
 	 **/
-	public function __construct($message='',$code='')
+	public function __construct($message='',$code=0)
 	{
 		parent::__construct($message,$code);
 	}
