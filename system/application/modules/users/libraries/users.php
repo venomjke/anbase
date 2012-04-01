@@ -416,9 +416,9 @@ class Users {
 	 * @return boolean
 	 * @author alex.strigin
 	 **/
-	public function is_ceo()
+	public function is_ceo($user_id)
 	{
-		if($this->ci->session->userdata('user_id') == $this->ci->session->userdata('ceo')) return true;
+		if($user_id == $this->ci->session->userdata('ceo')) return true;
 		return false;
 	}
 	
