@@ -1,4 +1,6 @@
-<?php
+<?php defined("BASEPATH") or die("No direct access to script");
+
+
 
 /**
 * Класс, реализующий логику контроллера, обеспечивающего выполнение различных операций над пользователями
@@ -225,7 +227,7 @@ class User extends MX_Controller
 				redirect('admin/user/staff');
 			}
 
-		}catch( RuntimeException $re ){
+		}catch( AnbaseRuntimeException $re ){
 
 			if($this->ajax->is_ajax_request()){
 				$response['code'] = 'error_delete_staff';
@@ -248,14 +250,39 @@ class User extends MX_Controller
 	}
 
 	/**
-	 * Смена должности сотрудника
+	 * Смена должности сотрудника. Получаем id сотрудника, для которого выполняется изменение, 
+	 * а также наименование 'Роли'
 	 *
 	 * @return void
 	 * @author alex.strigin
 	 **/
 	private function _change_position_employee()
 	{
-
+		/*
+		* Запрос может быть выполнен только с использованием ajax
+		*
+		*/
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			/*
+			* пытаемся изменить role у user, если изменение прокатывает без проблем, то 
+			* отправляем success_edit.
+			*/
+			try{
+				$this->admin_users->change_position_employee();
+				$response['code'] = 'success_change_position_employee';
+				$response['data'] = lang('success_change_position_employee');
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_change_position_employee';
+				$response['data']['errors'] = $ve->get_error_messages();
+			}catch( AnbaseRuntimeException $re){
+				$response['code'] = 'error_change_position_employee';
+				$response['data']['errors'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect($this->uri->uri_string());
+		}
 	}
 
 

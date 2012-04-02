@@ -1,10 +1,25 @@
 <?php defined("BASEPATH") or die("No direct access to script");
 
+
+
 /*
 *	Это джигурда для того, чтобы не возникло проблем во время Extends
 */
 if(!class_exists("Users"))
 	require_once APPPATH."modules/users/libraries/users.php";
+/*
+*
+* Подключение исключений
+*
+*/
+if(!class_exists("ValidationException")){
+	require_once APPPATH."exceptions/ValidationException.php";
+}
+
+if(!class_exists("AnbaseRuntimeException")){
+	require_once APPPATH."exceptions/AnbaseRuntimeException.php";
+}
+
 
 /**
 *
@@ -180,9 +195,77 @@ class Admin_Users extends Users{
 		}
 		$this->error += array( 'password' => $this->ci->form_validation->error('password'));
 		return false;
-		return false;
 	}
 
+	/**
+	 * Изменение должности сотрудника. Id user'a и role находятся в input->post.
+	 *
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function change_position_employee()
+	{
+		/*
+		*
+		*	Проверить данные, выполнить валидацию, если что не так, то ни чего не делать, и возвратить исключение.	
+		*	Если с данными все впорядке, то проверить права меняющего, если не ceo, то разрешено назначить  только агента или менеджера.
+		*/
+		$this->ci->form_validation->set_rules($this->ci->m_admin->get_validation_rules());
+
+		/*
+		*
+		*  Данные, которые понадобятся мне во время работы
+		*/
+		$data = array('id','role');
+		/*
+		*
+		* Во время проверки передаю также ответственного за правила, то есть m_admin_user, модуль валидации будет общаться только с ним.
+		*/
+		if($this->ci->form_validation->run($this->ci->m_admin)){
+
+			/*
+			* т.к 
+			*/
+			if($this->ci->input->post('id')&&$this->ci->input->post('role')){
+
+				/*
+				*
+				* директор может менять все, что ему пожелается
+				*/
+				if($this->is_ceo($this->get_user_id())){
+					/*
+					* Если мы дошли до сюда, то внезависимости от возвращенного результата мы возвращаем success
+					*/
+					$this->ci->m_admin->update($this->ci->input('id'),array('role'=>$this->ci->input->post('role')),true);
+				}else{
+					/*
+					* Обычный админ может поменять должность на любую отличную от админ.
+					*
+					*/
+					if($this->ci->input->post('role') != M_User::USER_ROLE_ADMIN){
+						$this->ci->m_admin->update($this->ci->input->post('id'),array('role'=>$this->ci->input->post('role')),true);
+					}else{
+						throw new AnbaseRuntimeException(lang("no_enough_right"));
+					}
+
+				}
+				return;
+			}
+			/*
+			*
+			* Ошибка, пустого Update_data быть не должно
+			*/
+			throw new AnbaseRuntimeException(lang("common.empty_data"));
+			return;
+		}
+
+		/*
+		*
+		* Если я попал сюда, то значит были обнаружены ошибки уровня валидации.
+		*/
+		throw new ValidationException(array('id' => $this->ci->form_validation->error('id'),'role'=>$this->ci->form_validation->error('role')));
+	}
 
 	/**
 	 * Метод, выполняющий обновление данных сессии

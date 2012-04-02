@@ -56,7 +56,8 @@ class M_User extends MY_Model{
 			array('field' => 'name', 'label' => 'lang:label_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
 			array('field' => 'middle_name', 'label' => 'lang:label_middle_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
 			array('field' => 'last_name', 'label' => 'lang:label_last_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
-			array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'trim|xss_clean|min_length[9]|max_length[20]')
+			array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'trim|xss_clean|min_length[9]|max_length[20]'),
+			array('field' => 'role', 'label' => 'lang:label_role', 'rules'=>'required|trim|xss_clean|callback_check_role')
 		);
 
 		/*
@@ -67,6 +68,22 @@ class M_User extends MY_Model{
 	}
 
 
+
+	/**
+	 * Проверка роли
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function check_role($role)
+	{
+		if(in_array($role,array(M_User::USER_ROLE_AGENT,M_User::USER_ROLE_MANAGER,M_User::USER_ROLE_ADMIN))){
+			return true;
+		}else{
+			$this->form_validation->set_message('check_role',lang('error_check_role'));
+			return false;
+		}
+	}
 
 	/**
 	 * Выбор пользователя по ID
