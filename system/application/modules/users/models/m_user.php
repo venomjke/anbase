@@ -229,12 +229,17 @@ class M_User extends MY_Model{
 		$this->select("users.phone");
 		$this->select("users.role");
 		$this->select("managers_users.manager_id");
+		$this->select("users2.name        as manager_name");
+		$this->select("users2.middle_name as manager_middle_name");
+		$this->select("users2.last_name   as manager_last_name");
 		$this->select("organizations.ceo");
 
 		$this->from("users")
 		 	 ->join("managers_users","users.id = managers_users.user_id","LEFT")
+		 	 ->join("users as users2","users2.id = managers_users.manager_id","LEFT")
 		 	 ->join("users_organizations","users.id = users_organizations.user_id")
 		 	 ->join("organizations","organizations.id = users_organizations.org_id");
+
 	}
 
 	/**
@@ -260,7 +265,6 @@ class M_User extends MY_Model{
 		* Установка фильтров
 		*/
 		$this->set_filter($filter);
-
 		/*
 		*
 		* Установка пределов

@@ -39,7 +39,7 @@ class Users {
 		$this->ci->load->model('users/m_attempt_login_user');
 		$this->ci->load->model('users/m_autologin_user');
 		$this->ci->load->model('users/m_user_organization');
-
+		$this->ci->load->helper("users/users");
 		/*
 		*
 		* Загрузка языка
@@ -444,13 +444,13 @@ class Users {
 	*
 	*/
 	public function get_official_name(){
-
 		$name = $this->ci->session->userdata('name');
 		$middle_name = $this->ci->session->userdata('middle_name');
 		$last_name = $this->ci->session->userdata('last_name');
 
-		return mb_strtoupper(mb_substr($last_name,0,1)).mb_substr($last_name,1).' '.mb_strtoupper(mb_substr($name,0,1)).'.'.mb_strtoupper(mb_substr($middle_name,0,1));
+		return make_official_name($name,$middle_name,$last_name);
 	}
+
 
 	/**
 	 * Выбор id пользователя
@@ -500,9 +500,14 @@ class Users {
 	 * @return string
 	 * @author Alex.strigin
 	 **/
-	public function get_user_name()
+	public function get_user_name($user_id='')
 	{
-		return $this->ci->session->userdata('name');
+		if(empty($user_id)){
+			return $this->ci->session->userdata('name');
+		}else{
+			$user = $this->ci->m_user->get($user_id);
+			return $user->name;
+		}
 	}
 
 	/**
@@ -536,6 +541,17 @@ class Users {
 	public function get_user_phone()
 	{
 		return $this->ci->session->userdata('phone');
+	}
+
+	/**
+	 * Выбор роли текущего пользователя
+	 *
+	 * @return string
+	 * @author alex.strigin
+	 **/
+	public function get_user_role()
+	{
+		return $this->ci->session->userdata('role');
 	}
 	/**
 	 * Метод, возвращающий имя организации
