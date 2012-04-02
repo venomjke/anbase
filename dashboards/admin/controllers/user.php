@@ -25,7 +25,7 @@ class User extends MX_Controller
 
 		$this->load->library('admin/Admin_Users');
 		$this->load->library('Ajax');
-
+		
 		if(!$this->admin_users->is_logged_in_as_admin()){
 			redirect('');
 		}

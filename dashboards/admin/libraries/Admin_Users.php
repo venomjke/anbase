@@ -243,7 +243,7 @@ class Admin_Users extends Users{
 						/*
 						* Если мы дошли до сюда, то внезависимости от возвращенного результата мы возвращаем success
 						*/
-						$this->ci->m_admin->update($this->ci->input->post('id'),array('role'=>$this->ci->input->post('role')),true);
+						$this->ci->m_admin->change_position($this->ci->input->post('id'),$this->get_user_role($this->ci->input->post('id')),$this->ci->input->post('role'));
 					}else{
 
 						/*
@@ -255,7 +255,7 @@ class Admin_Users extends Users{
 							*
 							*/
 							if($this->ci->input->post('role') != M_User::USER_ROLE_ADMIN){
-								$this->ci->m_admin->update($this->ci->input->post('id'),array('role'=>$this->ci->input->post('role')),true);
+								$this->ci->m_admin->change_position($this->ci->input->post('id'),$this->get_user_role($this->ci->input->post('id')),$this->ci->input->post('role'));
 							}else{
 								throw new AnbaseRuntimeException(lang("no_enough_right"));
 							}	

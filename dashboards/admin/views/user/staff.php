@@ -34,6 +34,9 @@
 							Должность
 						</th>
 						<th>
+							Менеджер
+						</th>
+						<th>
 							Операции
 						</th>
 					</tr>
@@ -67,6 +70,13 @@
 									</td>
 									<td ondblclick="admin.user.dblclick_show_col({ jObjAct:$(this), name:'role', uri:'admin/user/staff/?act=change_position', role:['Админ','Менеджер','Агент'],text:'<?php echo lang("confirm_change_position"); ?>'});">
 										<?php echo $employee->role; ?>
+									</td>
+									<td>
+										<?php if( ($employee->role == M_User::USER_ROLE_AGENT) and ($employee->manager_id)): ?>
+										<?php 	echo make_official_name($employee->manager_name,$employee->manager_middle_name,$employee->manager_last_name); ?>
+										<?php endif; ?>
+									</td>
+									<td>
 									</td>
 								</tr>
 							<?php

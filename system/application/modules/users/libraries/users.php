@@ -549,9 +549,14 @@ class Users {
 	 * @return string
 	 * @author alex.strigin
 	 **/
-	public function get_user_role()
+	public function get_user_role($user_id='')
 	{
-		return $this->ci->session->userdata('role');
+		if(empty($user_id)){
+			return $this->ci->session->userdata('role');
+		}else{
+			$user = $this->ci->m_user->get($user_id);
+			return $user->role;
+		}
 	}
 	/**
 	 * Метод, возвращающий имя организации
