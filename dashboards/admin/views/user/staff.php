@@ -48,6 +48,7 @@
 								<tr>
 									<td class="checkbox">
 										<?php echo form_checkbox("all"); ?>
+										<input type="hidden" id="user_id" value="<?php echo $employee->id; ?>" />
 									</td>
 									<td>
 										<?php echo	$employee->name; ?>
@@ -64,7 +65,7 @@
 									<td>
 										<?php echo $employee->email; ?>
 									</td>
-									<td>
+									<td ondblclick="admin.user.dblclick_show_col({ jObjAct:$(this), name:'role', uri:'admin/user/staff/?act=change_position', role:['Админ','Менеджер','Агент'],text:'<?php echo lang("confirm_change_position"); ?>'});">
 										<?php echo $employee->role; ?>
 									</td>
 								</tr>

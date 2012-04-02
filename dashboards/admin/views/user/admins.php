@@ -31,6 +31,9 @@
 							Email
 						</th>
 						<th>
+							Должность
+						</th>
+						<th>
 							Операции
 						</th>
 					</tr>
@@ -45,6 +48,7 @@
 								<tr>
 									<td class="checkbox">
 										<?php echo form_checkbox("all"); ?>
+										<input type="hidden" id="user_id" value="<?php echo $admin->id; ?>"/>
 									</td>
 									<td>
 										<?php echo	$admin->name; ?>
@@ -60,6 +64,13 @@
 									</td>
 									<td>
 										<?php echo $admin->email; ?>
+									</td>
+									<td ondblclick="admin.user.dblclick_show_col({ jObjAct:$(this), name:'role', uri:'admin/user/admins/?act=change_position', role:['Админ','Менеджер','Агент'],text:'<?php echo lang("confirm_change_position"); ?>'});">
+										<?php if($this->admin_users->is_ceo($admin->id)): ?>
+												Директор
+										<?php else: ?>
+											<?php echo $admin->role; ?>
+										<?php endif; ?>
 									</td>
 								</tr>
 							<?php

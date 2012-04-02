@@ -265,8 +265,7 @@ class Admin_Users extends Users{
 
 					}
 					return;
-				}
-				
+				}	
 				throw new AnbaseRuntimeException(lang("cant_apply_yourself"));
 			}
 			/*
