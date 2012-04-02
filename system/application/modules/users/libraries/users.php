@@ -379,9 +379,14 @@ class Users {
 	*
 	*/
 
-	public function is_admin(){
-
-		if($this->ci->session->userdata('role') == M_User::USER_ROLE_ADMIN)return true;
+	public function is_admin($user_id = ''){
+		if(empty($user_id)){
+			if($this->ci->session->userdata('role') == M_User::USER_ROLE_ADMIN)return true;
+		}else{
+			$user = $this->ci->m_user->get($user_id);
+			if($user && $user->role == M_User::USER_ROLE_ADMIN)return true;
+			return false;
+		}
 		return false;
 	}
 
@@ -391,10 +396,15 @@ class Users {
 	*
 	*/
 
-	public function is_manager(){
+	public function is_manager($user_id = ''){
 
-		if($this->ci->session->userdata('role') == M_User::USER_ROLE_MANAGER)return true;
-
+		if(empty($user_id)){
+			if($this->ci->session->userdata('role') == M_User::USER_ROLE_MANAGER)return true;
+		}else{
+			$user = $this->ci->m_user->get($user_id);
+			if($user && $user->role == M_User::USER_ROLE_MANAGER)return true;
+			return false;
+		}
 		return false;
 	}
 
@@ -403,9 +413,15 @@ class Users {
 	*	Определение роли пользователя, является ли агентом
 	*
 	*/
-	public function is_agent(){
+	public function is_agent($user_id = ''){
 
-		if($this->ci->session->userdata('role') == M_User::USER_ROLE_AGENT)return true;
+		if(empty($user_id)){
+			if($this->ci->session->userdata('role') == M_User::USER_ROLE_AGENT)return true;
+		}else{
+			$user = $this->ci->m_user->get($user_id);
+			if($user && $user->role == M_User::USER_ROLE_AGENT)return true;
+			return false;
+		}
 		return false;
 	}
 
