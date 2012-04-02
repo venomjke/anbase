@@ -225,32 +225,49 @@ class Admin_Users extends Users{
 		if($this->ci->form_validation->run($this->ci->m_admin)){
 
 			/*
-			* т.к 
+			* все данные должны быть переданы
 			*/
-			if($this->ci->input->post('id')&&$this->ci->input->post('role')){
+			if($this->ci->input->post('id')&&$this->ci->input->post('role') ){
 
 				/*
-				*
-				* директор может менять все, что ему пожелается
+				* user не может изменить себя
 				*/
-				if($this->is_ceo($this->get_user_id())){
+               if($this->ci->input->post('id') != $this->get_user_id())
+               {
+               	
 					/*
-					* Если мы дошли до сюда, то внезависимости от возвращенного результата мы возвращаем success
-					*/
-					$this->ci->m_admin->update($this->ci->input('id'),array('role'=>$this->ci->input->post('role')),true);
-				}else{
-					/*
-					* Обычный админ может поменять должность на любую отличную от админ.
 					*
+					* директор может менять все, что ему пожелается
 					*/
-					if($this->ci->input->post('role') != M_User::USER_ROLE_ADMIN){
+					if($this->is_ceo($this->get_user_id())){
+						/*
+						* Если мы дошли до сюда, то внезависимости от возвращенного результата мы возвращаем success
+						*/
 						$this->ci->m_admin->update($this->ci->input->post('id'),array('role'=>$this->ci->input->post('role')),true);
 					}else{
-						throw new AnbaseRuntimeException(lang("no_enough_right"));
-					}
 
+						/*
+	               		* админ может изменить любого, кроме админа
+	               		*/
+	               		if(!$this->is_admin($this->ci->input->post('id'))){
+							/*
+							* Обычный админ может поменять должность на любую отличную от админ.
+							*
+							*/
+							if($this->ci->input->post('role') != M_User::USER_ROLE_ADMIN){
+								$this->ci->m_admin->update($this->ci->input->post('id'),array('role'=>$this->ci->input->post('role')),true);
+							}else{
+								throw new AnbaseRuntimeException(lang("no_enough_right"));
+							}	
+							return;
+	               		}
+	               		throw new AnbaseRuntimeException(lang("no_enough_right"));
+
+					}
+					return;
 				}
-				return;
+				
+				throw new AnbaseRuntimeException(lang("cant_apply_yourself"));
 			}
 			/*
 			*
