@@ -6,5 +6,5 @@
 * Ошибки БД и валидации
 *
 */
-$lang['common.not_recive_data'] = 'Данные не получены';
+$lang['common.empty_data'] = 'Данные не получены';
 $lang['common.update_error']    = 'Не удалось выполнить обновление записи';
