@@ -68,7 +68,7 @@
 									<td>
 										<?php echo $employee->email; ?>
 									</td>
-									<td ondblclick="admin.user.dblclick_show_col({ jObjAct:$(this), name:'role', uri:'admin/user/staff/?act=change_position', role:['Админ','Менеджер','Агент'],text:'<?php echo lang("confirm_change_position"); ?>'});">
+									<td ondblclick="admin.user.dblclick_show_col({ jObjAct:$(this), name:'role', uri:'admin/user/staff/?act=change_position', role:['Админ','Менеджер','Агент'], user_id:'<?php echo $employee->id; ?>', text:'<?php echo lang("confirm_change_position"); ?>'});">
 										<?php echo $employee->role; ?>
 									</td>
 									<td>
