@@ -224,7 +224,7 @@ $config['cache_path'] = '';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = ' xR2lc4M5ei+QX1CX5VTj';
 
 /*
 |--------------------------------------------------------------------------
@@ -248,7 +248,7 @@ $config['sess_cookie_name']		= 'asid';
 $config['sess_expiration']		= 7200;
 $config['sess_expire_on_close']	= FALSE;
 $config['sess_encrypt_cookie']	= FALSE;
-$config['sess_use_database']	= FALSE;
+$config['sess_use_database']	= TRUE;
 $config['sess_table_name']		= 'ci_sessions';
 $config['sess_match_ip']		= FALSE;
 $config['sess_match_useragent']	= TRUE;
@@ -357,6 +357,13 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+
+
+$config['modules_locations'] = array(
+    APPPATH.'modules/'    => '../modules/',
+    /* controllers -> application -> system -> index.php -> dashboards */
+    FCPATH.'dashboards/'  => '../../../dashboards/'
+);
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
