@@ -25,7 +25,7 @@ class User extends MX_Controller
 
 		$this->load->library('admin/Admin_Users');
 		$this->load->library('Ajax');
-		
+
 		if(!$this->admin_users->is_logged_in_as_admin()){
 			redirect('');
 		}
@@ -51,7 +51,10 @@ class User extends MX_Controller
 		*/
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/admin/js/admin.js").'"></script>');
 		$this->template->append_metadata('<script type="text/javascript">
-			admin.init({ baseUrl:"'.base_url().'"})
+			$(function(){
+				admin.init({ baseUrl:"'.base_url().'"});
+				admin.user.init();
+			})
 		</script>');
 
 	}
@@ -94,7 +97,7 @@ class User extends MX_Controller
 				*/
 				$this->_del_staff();
 			break;
-			case 'assign':
+			case 'assign_manager':
 				/*
 				*
 				*
@@ -206,8 +209,6 @@ class User extends MX_Controller
 	 **/
 	private function _del_staff()
 	{
-		$this->template->set_partial('sidebar','dashboard/user/sidebar');
-
 		/*
 		*
 		* Пытаемся удалить пользователей
@@ -247,6 +248,28 @@ class User extends MX_Controller
 	private function _assign_manager_agent()
 	{
 
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			/*
+			*
+			* Попытаемся назначить должность сотруднику
+			*/
+			try{
+
+				$this->admin_users->assign_manager_agent();
+				$response['code']='success_assign_manager_agent';
+				$response['data']=lang('success_assign_manager_agent'); 
+			}catch(ValidationException $ve){
+				$response['code']='error_assign_manager_agent';
+				$response['data']['errors']=$ve->get_error_messages();
+			}catch(AnbaseRuntimeException $re){
+				$response['code']='error_assign_manager_agent';
+				$response['data']['errors']=array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect($this->uri->uri_string());
+		}
 	}
 
 	/**

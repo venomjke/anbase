@@ -299,4 +299,16 @@ class M_User extends MY_Model{
 		$this->where("users.role",M_User::USER_ROLE_ADMIN);
 		return $this->get_users_organization($org_id);
 	}
+
+	/**
+	 * Выбор всех менеджеров организации
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function get_all_managers($org_id)
+	{
+		$this->where("users.role",M_User::USER_ROLE_MANAGER);
+		return $this->get_users_organization($org_id);
+	}
 }

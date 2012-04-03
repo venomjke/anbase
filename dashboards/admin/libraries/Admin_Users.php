@@ -55,7 +55,6 @@ class Admin_Users extends Users{
 		}
 		return false;
 	}
-
 	/**
 	 * Метод выбирает список сотрудников с ролью = Агент и Менеджер, и 
 	 * затем возвращает наверх
@@ -80,6 +79,16 @@ class Admin_Users extends Users{
 		return $this->ci->m_admin->get_list_admins($this->get_org_id());
 	}
 
+	/**
+	 * Выбор всех менеджеров данной организации
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_all_managers()
+	{
+		return $this->ci->m_admin->get_all_managers($this->get_org_id());
+	}
 	
 	/**
 	 * Редактирование персонального профайла
@@ -283,6 +292,40 @@ class Admin_Users extends Users{
 		throw new ValidationException(array('id' => $this->ci->form_validation->error('id'),'role'=>$this->ci->form_validation->error('role')));
 	}
 
+	/**
+	 * Назначение менеджера агенту
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function assign_manager_agent()
+	{
+
+		$manager_id = $this->ci->input->post('manager_id');
+		$user_id    = $this->ci->input->post('user_id');
+		$this->ci->form_validation->set_rules($this->ci->m_manager_user->get_validation_rules());
+		/*
+		*	Проверить данные. Оба должны существовать, быть активными.
+		*/
+		if($this->ci->form_validation->run($this->ci->m_manager_user)){
+
+			/*
+			*
+			*	Один должен быть менеджер, а второй агент, также агент должен не иметь менеджера
+			*/
+			if($this->is_manager($manager_id) && $this->is_agent($user_id) && !$this->has_manager($user_id)){
+
+				$this->ci->m_manager_user->insert($this->ci->input->post(),true);
+				return;
+			}
+			throw new AnbaseRuntimeException(lang("not_legal_data"));
+		}
+
+		/*
+		* Валидацию не прошли, возвращаем исключение
+		*/
+		throw new ValidationException(array('manager_id'=>$this->ci->form_validation->error('manager_id'),'user_id'=>$this->ci->form_validation->error('user_id')));
+	}
 	/**
 	 * Метод, выполняющий обновление данных сессии
 	 *

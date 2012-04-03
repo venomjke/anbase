@@ -18,9 +18,7 @@ var admin = {
 		*	
 		*	Установка базового URL
 		*/
-		admin.baseUrl = params.baseUrl || '';
-
-
+		admin.baseUrl = params.baseUrl || admin.baseUrl;
 	},
 	/*
 	*
@@ -193,6 +191,14 @@ var admin = {
 	*/
 	user:{
 
+		/*
+		*
+		* Инициализация модуля init
+		*/
+		init:function(){
+
+			$('#assign_manager_dialog').dialog({ modal:true,autoOpen:false,draggable:false});
+		},
 		/**
 		*
 		*	Объект настроект по умолчанию
@@ -355,6 +361,60 @@ var admin = {
 				options.jCol = options.jObjAct;
 				this.edit_col(options);
 			}
+		},
+
+		/**
+		*
+		* Назначение менеджера клиенту.
+		*
+		* @param object
+		**/
+		assign_manager:function(options){
+			$("#assign_manager_dialog").dialog("option","buttons",{
+				'Назначить':function(){
+					/*
+					*
+					* Выцепить manager_id и user_id
+					* отправить запрос на назначение
+					* success? все ок
+					* error? еще не праздник
+					*/
+					var manager_id = $('#assign_manager_dialog select[name=~"manager_id"] option:selected').val();
+					var manager_name = $.trim($('#assign_manager_dialog select[name=~"manager_id"] option:selected').text());
+					var user_id	   = options.user_id;
+
+					$.ajax({
+						url:admin.baseUrl+options.uri,
+						type:"POST",
+						data:{'manager_id':manager_id,'user_id':user_id},
+						dataType:"JSON",
+						success:function(response){
+							if(response.code && response.data){
+								switch(response.code){
+									case 'success_assign_manager_agent':
+										common.showMsg(response.data);
+										$('#assign_manager_dialog').dialog('close');
+										options.jObjAct.replaceWith(manager_name);
+									break;
+									case 'error_assign_manager_agent':
+										for(var i in response.data.errors){
+											if(response.data.errors[i])
+												common.showMsg(response.data.errors[i],{type:'error'});
+										}
+									break;
+									default:
+										$('#assign_manager_dialog').dialog('close');
+								}
+							}
+						}
+					})
+
+				},
+				'Отмена':function(){
+					$(this).dialog("close");
+				}
+			});
+			$("#assign_manager_dialog").dialog("open");
 		}
 	}
 }

@@ -39,6 +39,7 @@ class Users {
 		$this->ci->load->model('users/m_attempt_login_user');
 		$this->ci->load->model('users/m_autologin_user');
 		$this->ci->load->model('users/m_user_organization');
+		$this->ci->load->model('users/m_manager_user');
 		$this->ci->load->helper("users/users");
 		/*
 		*
@@ -408,6 +409,16 @@ class Users {
 		return false;
 	}
 
+	/**
+	 * Проверка, есть ли у юзера manager
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function has_manager($user_id)
+	{
+		return $this->ci->m_manager_user->has_manager($user_id);
+	}
 	/*
 	*
 	*	Определение роли пользователя, является ли агентом

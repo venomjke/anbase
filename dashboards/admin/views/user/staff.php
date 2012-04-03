@@ -1,3 +1,11 @@
+<!-- Всякие нужные данные-->
+<div id="assign_manager_dialog"> 
+	<select name="manager_id" style="width:100%">
+		<?php foreach($this->admin_users->get_all_managers() as $manager): ?>
+		<option value="<?php echo $manager->id;?>"> <?php echo make_official_name($manager->name,$manager->middle_name,$manager->last_name); ?> </option>
+		<?php endforeach; ?>
+	</select>
+</div>
 <div id="wrap3">
 	<?php load_partial_template($template,'sidebar'); ?>
 	<div id="wrap4">
@@ -74,6 +82,8 @@
 									<td>
 										<?php if( ($employee->role == M_User::USER_ROLE_AGENT) and ($employee->manager_id)): ?>
 										<?php 	echo make_official_name($employee->manager_name,$employee->manager_middle_name,$employee->manager_last_name); ?>
+									    <?php elseif($employee->role == M_User::USER_ROLE_AGENT): ?>
+									    	<a href="#" onclick="admin.user.assign_manager({ user_id:'<?php echo $employee->id; ?>',uri:'admin/user/staff/?act=assign_manager' });return false;" > Назначить </a>
 										<?php endif; ?>
 									</td>
 									<td>
