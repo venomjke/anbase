@@ -197,7 +197,19 @@ var admin = {
 		*/
 		init:function(){
 
+			/*
+			* Подключение диалога "Назначить менеджера"
+			*
+			*/
 			$('#assign_manager_dialog').dialog({ modal:true,autoOpen:false,draggable:false});
+		
+			/*
+			* Подключение диалога "Отправить инвайт"
+			*
+			*/
+			$('#admin_invite_dialog').dialog({modal:true,autoOpen:false,draggable:false,title:'Инвайт для админа'});
+			$('#manager_invite_dialog').dialog({ modal:true,autoOpen:false,draggable:false,title:'Инвайт для менеджера'});
+			$('#agent_invite_dialog').dialog({modal:true,autoOpen:false,draggable:false,title:'Инвайт для агента'});
 		},
 		/**
 		*
@@ -415,6 +427,132 @@ var admin = {
 				}
 			});
 			$("#assign_manager_dialog").dialog("open");
+		},
+
+		admin_invite:function(){
+			admin.user.invite('#admin_invite_dialog');
+		},
+		manager_invite:function(){
+			admin.user.invite('#manager_invite_dialog');
+		},
+		agent_invite:function(){
+			admin.user.invite('#agent_invite_dialog');
+		},
+
+		/*
+		*
+		* Сериализация формы, отправка инвайта
+		*
+		*/
+		invite:function(dialog_id){
+			$(dialog_id).dialog('option','buttons',{
+
+				'Отправить':function(){
+
+					/*
+					* Сериализация формы
+					* Отправки формы
+					* Обработка ответа
+					*/
+					var post_data = $(dialog_id+' form').serialize();
+					$.ajax({
+						url:$(dialog_id+' form').attr('action'),
+						type:"POST",
+						data:post_data,
+						dataType:'json',
+						success:function(response){
+
+							if(response.code && response.data){
+								switch(response.code){
+
+									case 'success_send_invite':
+										$(dialog_id).dialog('close');
+										common.showMsg(response.data);
+									break;
+									case 'error_send_invite':
+										for(var i in response.data.errors)
+											if(response.data.errors[i])
+												common.showMsg(response.data.errors[i],{type:'error'});
+									break;
+								}
+							}
+						}
+					})
+				},
+				'Отмена':function(){
+					$(this).dialog('close');
+				}
+			});
+			$(dialog_id).dialog('open');
+		},
+		del_invite:function(options){
+
+			var def_options = {
+ 				jObjAct:{},
+ 				id:'',
+ 				uri:''
+			};
+			options = $.extend(true,def_options,options);
+			/*
+			* Упаковываем ID в массив и передаем del_invites со всем вытекающим
+			*/
+			var del_invites = [];
+			del_invites.push(options.id);
+			
+			 noty({
+			    text: options.text, 
+			    buttons: [
+			      {type: 'button green', text: 'Да', click: function($noty) {
+			      		$noty.close();
+						admin.user.del_invites({jObjTable:options.jObjAct.parent().parent().parent(),uri:options.uri,ids:del_invites});	
+			        }
+			      },
+			      {type: 'button pink', text: 'Нет', click: function($noty) {
+			          $noty.close();
+			        }
+			      }
+			      ],
+			    closable: false,
+			    timeout: false,
+			    layout:'center',
+			    theme:'noty_theme_mitgux'
+			  });
+		},
+		del_invites:function(options){
+			var def_options = {
+				jObjTable:{},
+				ids:[],
+				uri:''
+			};
+
+			options = $.extend(true,def_options,options);
+			var post_data = {};
+			post_data['ids_invites'] = options.ids; 
+			$.ajax({
+				url:admin.baseUrl+options.uri,
+				type:'POST',
+				data:post_data,
+				dataType:'json',
+				success:function(response){
+
+					if(response.code && response.data){
+						switch(response.code){
+							case 'success_del_user_invites':
+								for(i in options.ids){
+									$('#invite_'+options.ids[i]).remove();
+								}
+								common.showMsg(response.data);
+							break;
+							case 'error_del_user_invites':
+								for(var i in response.data.errors){
+									if(response.data.errors[i])
+										common.showMsg(response.data.errors[i],{type:'error'});
+								}
+							break;
+						}
+					}
+				}
+			});
 		}
 	}
 }

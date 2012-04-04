@@ -239,6 +239,18 @@ class User extends MX_Controller
 		}
 	}
 
+
+	/**
+	 * Удалить список админов
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _del_admins()
+	{
+
+	}
+
 	/**
 	 * Привязать агента к менеджеру.
 	 *
@@ -319,48 +331,131 @@ class User extends MX_Controller
 	 **/
 	public function invites()
 	{
-		$section = $this->input->get('s');
+		$act = $this->input->get('act');
 
-		if (!empty($section)) {
-			switch ($section) {
-				case 'agents':
+		if (!empty($act)) {
+			switch ($act) {
+
+				case 'add':
 					/*
-					*
-					*	Инвайты агентам
-					*	
+					*	Узнаем для кого
 					*/
-					$this->_agents_invites();
-					break;
-				case 'managers':
-					/*
-					*
-					*  Инвайты менеджерам
-					*
-					*/
-					$this->_managers_invites();
+					$for = $this->input->get('for');
+					switch($for){
+						case 'agents':
+							/*
+							*
+							*	Инвайты агентам
+							*	
+							*/
+							$this->_agents_invites();
+							break;
+						case 'managers':
+							/*
+							*
+							*  Инвайты менеджерам
+							*
+							*/
+							$this->_managers_invites();
+						break;
+						case 'admins':
+							/*
+							*
+							*
+							* Инвайты админам
+							*
+							*/
+							$this->_admins_invites();
+						break;
+						default:
+							redirect('admin/user');
+							break;
+					}
 				break;
-				case 'admins':
+				case 'del':
 					/*
-					*
-					*
-					* Инвайты админам
-					*
+					* Удаление списка инвайтов. Удаление одного является частным случаем
 					*/
-					$this->_admins_invites();
+					$this->_del_invites();
 				break;
+				case 'view':
 				default:
-					redirect('admin/user/view');
-					break;
+					$this->_view_invites();
+				break;
 			}
 		} else {
 			/*
-			*По умолчанию ничего нет, поэтому redirect на user/view 
+			*По умолчанию ничего нет, поэтому redirect на admin/user 
 			*/
-			redirect('admin/user/view');
+			redirect('admin/user/');
 		}
 		
 	}
 
+
+	/**
+	 * Удаление одного или нескольких инвайтов
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _del_invites()
+	{
+		/*
+		*
+		* Действие выполняется с использованием ajax
+		*/
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+
+				$this->admin_users->del_invites();
+				$response['code'] = 'success_del_user_invites';
+				$response['data'] = lang('success_del_user_invites');
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_del_user_invites';
+				$response['data']['errors'] = $ve->get_error_messages();
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_del_user_invites';
+				$response['data']['errors'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect($this->uri->uri_string());
+		}
+	}
+
+	/**
+	 * Просмотр всех инвайтов
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _view_invites()
+	{
+		/*
+		* Установки шаблона
+		*/
+		$this->template->set_partial('sidebar','dashboard/user/sidebar');
+
+		/*
+		*
+		* Загрузка моделей
+		*
+		*/
+		$this->load->model('m_invite_user');
+
+		/*
+		*
+		* Выбор данных
+		*/
+		$all_invites = $this->admin_users->get_all_invites();
+
+		/*
+		* Вывод данных
+		*/
+		$this->template->build('user/invites',array('invites' => $all_invites));
+	}
 
 	/**
 	 * Инвайты админам
@@ -371,6 +466,32 @@ class User extends MX_Controller
 	private function _admins_invites()
 	{
 
+		/*
+		*
+		* Т.к форма для добавления инвайта загружается во время загрузки sidebar, 
+		* то будем считать, что сюда попадаем только тогда, когда хотим уже инвайт отправить.
+		*/
+		if($this->ajax->is_ajax_request()){
+
+			$response = array();
+			try{
+
+				$this->admin_users->send_invite_admin();
+				$response['code'] = 'success_send_invite';
+				$response['data'] = lang('success_send_admin_invite');
+
+			}catch(ValidationException $ve){
+
+				$response['code'] = 'error_send_invite';
+				$response['data']['errors'] = $ve->get_error_messages();
+
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_send_invite';
+				$response['data']['errors'] = array($re->get_error_message());
+			}
+
+			$this->ajax->build_json($response);
+		}
 	}
 
 
@@ -383,6 +504,31 @@ class User extends MX_Controller
 	private function _managers_invites()
 	{
 
+		/*
+		*
+		* Т.к форма для добавления инвайта загружается во время загрузки sidebar, 
+		* то будем считать, что сюда попадаем только тогда, когда хотим уже инвайт отправить.
+		*/
+		if($this->ajax->is_ajax_request()){
+
+			$response = array();
+			try{
+
+				$this->admin_users->send_invite_manager();
+				$response['code'] = 'success_send_invite';
+				$response['data'] = lang('success_send_manager_invite');
+			}catch(ValidationException $ve){
+
+				$response['code'] = 'error_send_invite';
+				$response['data']['errors'] = $ve->get_error_messages();
+
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_send_invite';
+				$response['data']['errors'] = array($re->get_error_message());
+			}
+
+			$this->ajax->build_json($response);
+		}
 	}
 
 	/**
@@ -394,6 +540,32 @@ class User extends MX_Controller
 	private function _agents_invites()
 	{
 
+		/*
+		*
+		* Т.к форма для добавления инвайта загружается во время загрузки sidebar, 
+		* то будем считать, что сюда попадаем только тогда, когда хотим уже инвайт отправить.
+		*/
+		if($this->ajax->is_ajax_request()){
+
+			$response = array();
+			try{
+
+				$this->admin_users->send_invite_agent();
+				$response['code'] = 'success_send_invite';
+				$response['data'] = lang('success_send_agent_invite');
+
+			}catch(ValidationException $ve){
+
+				$response['code'] = 'error_send_invite';
+				$response['data']['errors'] = $ve->get_error_messages();
+
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_send_invite';
+				$response['data']['errors'] = array($re->get_error_message());
+			}
+
+			$this->ajax->build_json($response);
+		}
 	}
 
 }// END Users class

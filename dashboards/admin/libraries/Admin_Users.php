@@ -326,6 +326,157 @@ class Admin_Users extends Users{
 		*/
 		throw new ValidationException(array('manager_id'=>$this->ci->form_validation->error('manager_id'),'user_id'=>$this->ci->form_validation->error('user_id')));
 	}
+
+
+	/**
+	 * Удаление инвайтов
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function del_invites()
+	{
+		$this->ci->load->model('m_invite_user');
+		 /*
+		 * выбираем список ids на удаление
+		 */
+		 $ids_invites = $this->ci->input->post('ids_invites',array());
+
+		 /*
+		 *
+		 * Если есть, что удалять, то удаляем
+		 */ 
+		 if(!empty($ids_invites)){
+
+		 	foreach($ids_invites as $id_invite){
+
+		 		if(is_numeric($id_invite)){
+			 		/*
+			 		* Если удалить не удалось
+			 		*/
+			 		if(!$this->ci->m_invite_user->delete($id_invite)){
+			 			throw new AnbaseRuntimeException(lang('common.delete_error'));
+			 		}
+			 	}else{
+			 		throw new AnbaseRuntimeException(lang('common.not_legal_data'));
+			 	}
+
+		 	}
+		 	return;
+		 }
+		 throw new AnbaseRuntimeException(lang('common.not_legal_data'));
+	}
+
+	/**
+	 * Выбор всех инвайтов
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function get_all_invites()
+	{
+		$this->ci->load->model("m_invite_user");
+		return $this->ci->m_invite_user->get_all(array("org_id"=>$this->get_org_id()));
+	}
+
+	/**
+	 * Отправка инвайта для регистрации пользователя с правами администратор
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function send_invite_admin()
+	{
+		$this->send_invite('admin/register',M_User::USER_ROLE_ADMIN);
+	}
+
+	/**
+	 * Отправка инвайта для регистрации пользователя с правами менеджер
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function send_invite_manager()
+	{
+		$this->send_invite('manager/register',M_User::USER_ROLE_MANAGER);
+	}
+
+	/**
+	 * Оптравка инвайта для регистрации пользователя с правами агента
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function send_invite_agent()
+	{
+		$this->send_invite('agent/register',M_User::USER_ROLE_AGENT);
+	}
+
+
+	/**
+	 * Отправка инвайта. Валидация данных, создание ключа, запись в БД и отправка по mail уведомелния.
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function send_invite($uri = '',$role = '')
+	{
+		$this->ci->load->model('m_invite_user');
+
+		$data = array('manager_id','email');
+		/*
+		* задаем правила валидации
+		*/
+		$this->ci->form_validation->set_rules($this->ci->m_invite_user->get_validation_rules());
+
+		if($this->ci->form_validation->run($this->ci->m_invite_user)){
+
+			$insert_data = array();
+
+			/*
+			* сборка данных для добавления
+			*/
+			$insert_data['role']  = $role;
+			$insert_data['email'] = $this->ci->input->post('email');
+			$insert_data['manager_id'] = $this->ci->input->post('manager_id')?$this->ci->input->post('manager_id'):null;
+			$insert_data['key_id']   = substr(md5(uniqid(rand())), 0, 24); // generate key;
+			$insert_data['org_id']= $this->get_org_id();
+
+			/*
+			*
+			* При добавлении инвайта обязательно должен быть задан email, а manager_id может быть не задан, но если
+			* задан то обязательно должен быть нормальным id
+			*/
+			if(!empty($insert_data['email']) && (empty($insert_data['manager_id']) or $this->is_manager($insert_data['manager_id']))) {
+
+				if( ( $invite_id = $this->ci->m_invite_user->insert($insert_data,true)) )
+				{
+					/*
+					*
+					*	отправка почтой
+					*/
+					/*
+					$this->ci->load->library('email');
+
+					$this->ci->email->to('mail');
+					$this->ci->email->from('mail');
+					$this->ci->email->subject('blabla');
+					$this->ci->email->message('messages');
+					$this->ci->email->send();
+					*/
+					return; 
+				}
+
+				throw new AnbaseRuntimeException(lang("common.insert_error"));		
+			}
+
+			throw new AnbaseRuntimeException(lang("common.not_legal_data"));
+		}
+		/*
+		* Валидация не пройдена, генерим исключение
+		*/
+		throw new ValidationException(array('manager_id' => $this->ci->form_validation->error('manager_id'), 'email'=>$this->ci->form_validation->error('email')));
+	}
 	/**
 	 * Метод, выполняющий обновление данных сессии
 	 *
