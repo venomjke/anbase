@@ -175,6 +175,36 @@ class Users {
 		return NULL;
 
 	}
+
+	/**
+	 * Простая регистрация пользователя
+	 *
+	 * @return 
+	 * @author alex.strigin
+	 **/
+	protected function simple_register($register_data =array())
+	{
+
+		$hasher = new PasswordHash(
+				$this->ci->config->item('phpass_hash_strength', 'users'),
+				$this->ci->config->item('phpass_hash_portable', 'users'));
+
+		/*
+		*
+		*	Составляем пачку данных для регистрации пользователя
+		*
+		*/
+
+		$register_data['password'] = $hasher->HashPassword($register_data['password']);
+
+		if (!is_null(($res = $this->ci->m_user->insert($register_data)))) {
+			$this->ci->m_user_organization->insert(array('user_id'=>$res, 'org_id' => $register_data['org_id']));
+			return $res;
+		}
+
+		$this->error = array('register_user_error');
+		return NULL;
+	}
 	/**
 	 * Logout user from the site
 	 *
