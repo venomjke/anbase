@@ -20,6 +20,7 @@ $lang['register_user_error']	 = 'Возникла ошибка во время �
 **/
 $lang['label_user_id']  = 'Идентификатор пользователя';
 $lang['label_login']    = 'Логин';
+$lang['label_email']	= 'Email';
 $lang['label_password'] = 'Пароль';
 $lang['label_name']     = 'Имя';
 $lang['label_middle_name'] = 'Отчество';

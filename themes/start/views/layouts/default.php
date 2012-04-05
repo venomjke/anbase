@@ -4,6 +4,7 @@
 		<?php
 			echo meta('Content-type','text/html; charset=utf-8','equiv');
 			echo link_tag('themes/start/css/site.css');
+			echo $template['metadata'];
 		?>
 	</head>
 	<body>

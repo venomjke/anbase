@@ -50,9 +50,10 @@ class M_User extends MY_Model{
 		*/
 		$this->validate = array(
 			array('field' => 'id', 'label' => 'lang:label_user_id', 'rules' => 'integer'),
-			array('field' => 'login', 'label' => 'lang:label_login', 'rules' => 'trim|xss_clean'),
-			array('field' => 'password', 'label' => 'lang:label_password','rules' => 'trim|xss_clean'),
-			array('field' => 'email', 'label' => 'lang:label_email', 'rules' => 'trim|xss_clean|valid_email'),
+			array('field' => 'login', 'label' => 'lang:label_login', 'rules' => 'trim|xss_clean|min_length[3]|max_length[50]|alpha_dash|is_unique[users.login]'),
+			array('field' => 'password', 'label' => 'lang:label_password','rules' => 'trim|xss_clean|min_length[6]|max_length[200]|alpha_dash'),
+			array('field' => 're_password', 'label' => 'lang:label_password','rules'=>'trim|xss_clean|matches[password]'),
+			array('field' => 'email', 'label' => 'lang:label_email', 'rules' => 'trim|xss_clean|valid_email|is_unique[users.email]'),
 			array('field' => 'name', 'label' => 'lang:label_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
 			array('field' => 'middle_name', 'label' => 'lang:label_middle_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
 			array('field' => 'last_name', 'label' => 'lang:label_last_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
