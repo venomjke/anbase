@@ -447,7 +447,7 @@ class Admin_Users extends Users{
 			* При добавлении инвайта обязательно должен быть задан email и быть уникальным, а manager_id может быть не задан, но если
 			* задан то обязательно должен быть нормальным id
 			*/
-			if((!empty($insert_data['email']) and $this->ci->m_agent->is_available_email($insert_data['email'])) && (empty($insert_data['manager_id']) or $this->is_manager($insert_data['manager_id']))) {
+			if((!empty($insert_data['email']) and $this->ci->m_admin->is_email_available($insert_data['email'])) && (empty($insert_data['manager_id']) or $this->is_manager($insert_data['manager_id']))) {
 
 				if( ( $invite_id = $this->ci->m_invite_user->insert($insert_data,true)) )
 				{
