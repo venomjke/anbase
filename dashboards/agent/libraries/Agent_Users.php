@@ -261,7 +261,8 @@ class Agent_Users extends Users{
 				* Если задан id manager
 				*/
 				if($invite->manager_id){
-					$this->ci->m_manager_user->insert(array('manager_id'=>$invite->manager_id,'user_id'=>$res));
+					log_message('debug','Try to assign manager to agent, manager_id:'.$invite->manager_id.' user_id:'.$res);
+					$this->ci->m_manager_user->insert(array('manager_id'=>$invite->manager_id,'user_id'=>$res),true);
 				}
 				return true;
 			}
@@ -277,6 +278,10 @@ class Agent_Users extends Users{
 		if(has_errors_validation($fields,$errors_validation)){
 			throw new ValidationException($errors_validation);
 		}	
+		/*
+		* 
+		*  Ничего не произошло... ничего не делаем
+		*/
 		return false;
 	}
 
