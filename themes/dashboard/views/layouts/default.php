@@ -1,6 +1,7 @@
 <?php echo doctype('html5');  ?>
 <html>
 	<head>
+		<?php echo meta('Content-type','text/html; charset=utf-8','equiv'); ?>
 		<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/cupertino/jquery-ui.css"); ?>
 		<?php echo link_tag("themes/dashboard/css/dashboard.css"); ?>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>

@@ -64,6 +64,18 @@ class Agent_Users extends Users{
 		return FALSE;
 	}
 
+
+	/**
+	 * Метод возвращает uri домашней страницы агента
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function get_home_page()
+	{
+		return "agent/orders/?s=my";
+	}
+
 	/**
 	 * Метод, определяющий, есть у пользователя менеджер или нет?
 	 *
@@ -76,6 +88,36 @@ class Agent_Users extends Users{
 	}
 
 
+	/**
+	 * Метод проверяет, есть ли у пользователя invite на вход
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function has_invite()
+	{
+		$this->ci->load->model('m_invite_user');
+		/*
+		* Для инвайта нужно обязательно передавать key_id, email
+		*/
+		$key_id = $this->ci->input->get('key','');
+		$email  = $this->ci->input->get('email','');
+		if(!empty($key_id) && !empty($email)){
+			return $this->ci->m_invite_user->is_exists_invite($key_id,$email,M_User::USER_ROLE_AGENT);
+		}
+		return false;
+	}
+
+	/**
+	 * Загрузка инвайта. Выбор информации об инвайте, а также обо всем, что с ним связано.
+	 *
+	 * @return object
+	 * @author alex.strigin
+	 **/
+	public function load_invite($key,$email)
+	{
+		return $this->ci->m_invite_user->load_invite($key,$email);
+	}
 	/**
 	 * Метод, возвращающий имя менеджера агента
 	 *
@@ -106,7 +148,6 @@ class Agent_Users extends Users{
 		}
 		return "";
 	}
-
 
 	/**
 	 * Метод выбирает список сотрудников с ролью = Агент и Менеджер, а
@@ -169,7 +210,7 @@ class Agent_Users extends Users{
 		$validation_errors = array();
 		foreach($fields as $field){
 			$validation_errors[$field] = $this->ci->form_validation->error($field);
-			if(empty($validation_errors[$field]))
+			if(!empty($validation_errors[$field]))
 				$has_validation_error = true;
 		}
 
@@ -177,6 +218,66 @@ class Agent_Users extends Users{
 		if($has_validation_error){
 			throw new ValidationException($validation_errors);
 		}
+	}
+
+	/**
+	 * Регистрация пользователя в качестве агента в системе.
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function register($invite)
+	{
+		$this->ci->load->model('m_invite_user');
+		/*
+		* Наши данные
+		*/
+		$fields = array('login','password','name','middle_name','last_name','phone');
+
+		/*
+		* Валидация данных
+		*/
+		$this->ci->form_validation->set_rules($this->ci->m_agent->register_validation_rules);
+		$register_data = array();
+
+		if($this->ci->form_validation->run($this->ci->m_agent)){
+
+			/*
+			*
+			* Выбираем наши данные
+			*/
+			$register_data = array_intersect_key($this->ci->input->post(), array_flip($fields));
+			
+			$register_data['email']  = $invite->email;
+			$register_data['org_id'] = $invite->org_id;
+			$register_data['role']   = $invite->role;
+
+			if( ($res = $this->simple_register($register_data)) ){
+				/*
+				* Если регистрация пройдена успешно, то удалить инвайт, и присобачить агента к менеджеру
+				*/
+				$this->ci->m_invite_user->delete($invite->id);
+				/*
+				* Если задан id manager
+				*/
+				if($invite->manager_id){
+					$this->ci->m_manager_user->insert(array('manager_id'=>$invite->manager_id,'user_id'=>$res));
+				}
+				return true;
+			}
+			throw new AnbaseRuntimeException(lang("common.insert_error"));
+		
+		}
+
+		$errors_validation = array();
+		/*
+		* Из-за того, что form_validation не имеет методов, позволяющих проверить, были ли ошибки, приходится вот так изгалаться
+		*
+		*/
+		if(has_errors_validation($fields,$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}	
+		return false;
 	}
 
 

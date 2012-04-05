@@ -142,7 +142,7 @@ class Users {
 		$register_data['password'] = $hasher->HashPassword($register_data['password']);
 		$register_data['role']	   = M_User::USER_ROLE_ADMIN; // делаем его админом
 
-		if (!is_null(($res = $this->ci->m_user->insert($register_data)))) {
+		if (($res = $this->ci->m_user->insert($register_data,true))) {
 
 			/*
 			*
@@ -154,7 +154,7 @@ class Users {
 			$org_data['name'] = $register_data['org_name'];
 			$org_data['ceo']  = $register_data['user_id'];
 
-			if(!is_null($res = $this->ci->m_organization->insert($org_data))){
+			if(($res = $this->ci->m_organization->insert($org_data,true))) {
 
 				/**
 				*
@@ -162,7 +162,7 @@ class Users {
 				*	будем думать, что это пройдет без проблем...
 				*
 				*/
-				$this->ci->m_user_organization->insert(array('user_id'=>$register_data['user_id'], 'org_id' => $res));
+				$this->ci->m_user_organization->insert(array('user_id'=>$register_data['user_id'], 'org_id' => $res),true);
 				return $register_data;
 			}
 			$this->ci->m_user->delete($register_data['user_id']);
@@ -197,7 +197,7 @@ class Users {
 
 		$register_data['password'] = $hasher->HashPassword($register_data['password']);
 
-		if (!is_null(($res = $this->ci->m_user->insert($register_data)))) {
+		if (($res = $this->ci->m_user->insert($register_data,true))) {
 			$this->ci->m_user_organization->insert(array('user_id'=>$res, 'org_id' => $register_data['org_id']));
 			return $res;
 		}
