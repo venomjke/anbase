@@ -57,6 +57,41 @@ class Manager_Users extends Users
 
 
 	/**
+	 * Метод проверяет, есть ли у пользователя invite на вход
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function has_invite()
+	{
+		$this->ci->load->model("m_invite_user");
+
+		/*
+		* Для инвайта нужно обязательно передавать key_id, email
+		*/
+		$key_id = $this->ci->input->get('key','');
+		$email  = $this->ci->input->get('email','');
+		if(!empty($key_id) and !empty($email)){
+			return $this->ci->m_invite_user->is_exists_invite($key_id,$email,M_User::USER_ROLE_MANAGER);
+		}
+
+	}
+
+
+	/**
+	 * Загрузка инвайта. Выбор информации об инвайте, а также обо всем, что с ним связано
+	 *
+	 * @return object
+	 * @author alex.strigin
+	 **/
+	public function load_invite($key,$email)
+	{
+		$this->ci->load->model("m_invite_user");
+		return $this->ci->m_invite_user->load_invite($key,$email);
+	}
+
+
+	/**
 	 * Метод выбирает список сотрудников с ролью = Агент и Менеджер, а
 	 * затем возвращает наверх
 	 *
@@ -128,6 +163,64 @@ class Manager_Users extends Users
 		}
 	}
 
+	/**
+	 * Регистрация менеджера в системе
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function register($invite)
+	{
+		$this->ci->load->model('m_invite_user');
+
+		/*
+		*
+		* Наши данные
+		*/
+		$fields = array('login','name','password','middle_name','last_name','phone');
+
+		/*
+		* Валидация данных
+		*/
+		$this->ci->form_validation->set_rules($this->ci->m_manager->register_validation_rules);
+
+		$register_data = array();
+
+		/*
+		* Выполняем валидацию
+		*/
+		if($this->ci->form_validation->run($this->ci->m_manager)){
+
+			/*
+			* Выбираем наши данные путем пересечения "наших" и "общих"
+			*/
+			$register_data = array_intersect_key($this->ci->input->post(),array_flip($fields));
+
+			$register_data['email']  = $invite->email;
+			$register_data['org_id'] = $invite->org_id;
+			$register_data['role']   = $invite->role;
+
+			if (($user_id = $this->simple_register($register_data))) {
+				
+				/*
+				*
+				*	Если регистрация прошла успешно, то удаляем инвайт
+				*/
+				$this->ci->m_invite_user->delete($invite->id);
+				return true;
+			}
+			/*
+			* если по какой-то жопеной причине не удалось зарегаться, то возвращаем исключение
+			*/	
+			throw new AnbaseRuntimeException(lang("common.insert_error"));
+		}
+		$errors_validation = array();
+
+		if(has_errors_validation($fields,$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
+		return false;
+	}
 	/**
 	 * Обновление данных сессии агента
 	 *
