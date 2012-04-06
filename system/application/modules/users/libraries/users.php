@@ -162,8 +162,14 @@ class Users {
 				*	будем думать, что это пройдет без проблем...
 				*
 				*/
-				$this->ci->m_user_organization->insert(array('user_id'=>$register_data['user_id'], 'org_id' => $res),true);
-				return $register_data;
+				if($this->ci->m_user_organization->insert(array('user_id'=>$register_data['user_id'], 'org_id' => $res),true)){
+
+					return $register_data;
+				}
+				/*
+				* достаточно удалить пользователя, к нему привязана организация, и она будет автоматом удалена
+				*/
+				$this->ci->m_user->delete($register_data['user_id']);
 			}
 			$this->ci->m_user->delete($register_data['user_id']);
 
@@ -198,8 +204,10 @@ class Users {
 		$register_data['password'] = $hasher->HashPassword($register_data['password']);
 
 		if (($res = $this->ci->m_user->insert($register_data,true))) {
-			$this->ci->m_user_organization->insert(array('user_id'=>$res, 'org_id' => $register_data['org_id']));
-			return $res;
+			if(	$this->ci->m_user_organization->insert(array('user_id'=>$res, 'org_id' => $register_data['org_id'])) ){
+				return $res;
+			}
+			$this->ci->m_user->delete($res);
 		}
 
 		$this->error = array('register_user_error');

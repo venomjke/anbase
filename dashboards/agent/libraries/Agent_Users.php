@@ -116,6 +116,7 @@ class Agent_Users extends Users{
 	 **/
 	public function load_invite($key,$email)
 	{
+		$this->ci->load->model('m_invite_user');
 		return $this->ci->m_invite_user->load_invite($key,$email);
 	}
 	/**

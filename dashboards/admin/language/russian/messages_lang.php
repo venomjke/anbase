@@ -45,3 +45,10 @@ $lang['success_send_admin_invite']   = 'Инвайт создан, и отпра
 
 $lang['success_del_user_invites'] = 'Инвайт(ы) успешно удалены';
 $lang['confirm_delete_invite'] = 'Удалить запись инвайта?';
+
+
+
+/*
+* Регистрация админа
+*/
+$lang['success_register_admin'] = 'Поздравляем, Вы успешно зарегистрировались как администратор';
