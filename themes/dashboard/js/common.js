@@ -45,5 +45,49 @@ var common = {
 		if(text){
 			noty($.extend(options,{text:text}));
 		}
+	},
+
+	/*
+	*  
+	* Показать статусное сообщение
+	* 
+	*/
+	showStatusMsg:function(options){
+
+
+		var def_options = {
+			id:'status_msg',
+			type:'msg',
+			msg:'Загрузка...',
+			timeout:0
+		};
+
+		/*
+		* Сначала закрываем, если был открыт другой индикатор
+		*/
+		common.hideStatusMsg(options);
+
+		options = $.extend(true,def_options,options);
+		$('body').prepend('<div id="'+options.id+'" style="position:fixed;top: -20px;left: 50%;background-color: #B4B4B4;" ><span style="padding: 3px;">'+options.msg+'</span></div>');
+		$('#'+options.id).animate({"top":"+=20px"},"fast");
+
+		/*
+		* если был задан timeout, то закрываем наше сообщение через определенный timeout
+		*/
+		if(options.timeout){
+			setTimeout(function(){common.hideStatusMsg(options);},options.timeout);
+		}
+	},
+
+	/*
+	* Отключить Ajax индикатор загрузки
+	*/
+	hideStatusMsg:function(options){
+		var def_options = {
+			id:'status_msg'
+		}
+		options = $.extend(true,def_options,options);
+		$('#'+options.id).animate({"top":"-=20px"},"fast",function(){$(this).remove();})
 	}
+
 }

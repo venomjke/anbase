@@ -101,7 +101,7 @@ ul#toolbar li a{
 
 }
 #dashboard_table tr td{
-
+	border:1px #b4b4b4 solid;
 }
 #org_box{
 	float: left;
