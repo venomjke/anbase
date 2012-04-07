@@ -15,13 +15,16 @@ if (!function_exists("has_errors_validation")) {
 	 * @return boolean
 	 * @author alex.strigin
 	 **/
-	function has_errors_validation($fields,&$errors_validation)
+	function has_errors_validation($fields,&$errors_validation,$error_delimiters=false)
 	{
 		$ci = get_instance();
 
 		$has_errors_validation = false;
 		foreach($fields as $field){
-			$errors_validation[$field] = $ci->form_validation->error($field);
+			if($error_delimiters)
+				$errors_validation[$field] = $ci->form_validation->error($field);
+			else
+				$errors_validation[$field] = $ci->form_validation->error($field,'<span>','</span>');
 			if(!empty($errors_validation[$field]))
 				$has_errors_validation = true;
 		}

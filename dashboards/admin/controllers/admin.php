@@ -24,21 +24,10 @@ class Admin extends MX_Controller
 			redirect('');
 		}
 
-		/*
-		*
-		*	Настройки темы
-		*/
-		$this->template->set_theme('dashboard');
-		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
+		redirect($this->admin_users->get_home_page());
 	}
 
 
 	public function index(){
-		/*
-		*
-		*	С индекса редиректим на orders/view
-		*/
-		redirect('admin/orders/view');
-		//$this->template->build('index');
 	}
 }
