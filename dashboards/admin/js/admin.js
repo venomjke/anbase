@@ -664,7 +664,7 @@ var admin = {
 			* 3. все ок? удаляем их из таблицы
 			*/
 			var orders_ids = [];
-			var all_checkbox = $('#dashboard_table td input[type="checkbox"]');
+			var all_checkbox = $('#dashboard_table td input:checked');
 			all_checkbox.each(function(){
 				orders_ids.push($(this).attr('value'));
 			});
@@ -683,7 +683,7 @@ var admin = {
 							case 'success_del_order':
 								common.showResultMsg(response.data);
 								all_checkbox.each(function(){
-									$(this).remove();
+									$('#order_'+$(this).val()).remove();
 								});
 							break;
 							case 'error_del_order':
