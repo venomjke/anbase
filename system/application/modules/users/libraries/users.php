@@ -153,6 +153,9 @@ class Users {
 
 			$org_data['name'] = $register_data['org_name'];
 			$org_data['ceo']  = $register_data['user_id'];
+			$org_data['email'] = $register_data['org_email'];
+			$org_data['phone'] = $register_data['org_phone'];
+
 
 			if(($res = $this->ci->m_organization->insert($org_data,true))) {
 
