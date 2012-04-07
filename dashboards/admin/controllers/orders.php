@@ -242,7 +242,8 @@ class Orders extends MX_Controller
 			try{
 				if($order_id = $this->admin_users->add_order()){
 					$response['code'] = 'success_add_order';
-					$response['data'] = lang('success_add_order');	
+					$response['data']['id'] = $order_id;
+					$response['data']['msg'] = lang('success_add_order');	
 				}else{
 					$response['code'] = 'error_add_order';
 					$response['data']['errors'] = array(lang('common.insert_error')); 
@@ -250,7 +251,11 @@ class Orders extends MX_Controller
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_add_order';
 				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_add_order';
+				$response['data']['errors'] = $ve->get_error_messages();
 			}
+
 			$this->ajax->build_json($response);
 		}else{
 			redirect($this->admin_users->get_home_page());

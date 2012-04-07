@@ -99,7 +99,6 @@ class M_Order extends MY_Model{
 		$this->validate = array();
 
 		/*
-		*
 		* Хуки
 		*/
 		$this->before_insert = array('fill_empty_fields');

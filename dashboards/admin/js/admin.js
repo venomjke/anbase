@@ -567,6 +567,7 @@ var admin = {
 			draggable:false
 		},
 		init:function(){
+			$('#dialog_add_order').dialog(admin.orders.dialog_options);
 			$('#dialog_edit_number').dialog(admin.orders.dialog_options);
 			$('#dialog_edit_create_date').dialog(admin.orders.dialog_options);
 			$('#dialog_edit_category').dialog(admin.orders.dialog_options);
@@ -579,10 +580,73 @@ var admin = {
 			$('#dialog_edit_phone').dialog(admin.orders.dialog_options);
 		},
 		add:function(options){
-			/*
-			* 1. отправляем запрос на сервер, там создаем заявку
-			* 2. получаем ответ, все ок, тогда выводим "пустую заявку"
-			*/
+			var dialog=$('#dialog_add_order');
+			dialog.dialog('option','buttons',{
+				'Добавить':function(){
+					var form = dialog.find('form');
+					var form_data = form.serialize();
+					$.ajax({
+						url:admin.baseUrl+options.uri,
+						type:'POST',
+						dataType:'json',
+						data:form_data,
+						success:function(response){
+							if(response.code && response.data){
+								switch(response.code){
+									case 'success_add_order':
+										common.showResultMsg(response.data.msg);
+										/*
+										* добавить строку в таблицу
+										*/
+										var row = $('<tr>');
+										var checkbox_td = $('<td><input type="checkbox" name="orders_ids" value="'+response.data.id+'"/></td>');
+										var number   = $('<td>'+form.find('input[name="number"]').val()+'</td>');
+										var create_date = $('<td>'+form.find('input[name="create_date"]').val()+'</td>');
+										var category    = $('<td>'+form.find('select[name="category"] option:selected').val()+'</td>');
+										var deal_type   = $('<td>'+form.find('select[name="deal_type"] option:selected').val()+'</td>');
+										var region      = $('<td>'+form.find('select[name="region_id"] option:selected').val()+'</td>');
+										var metro       = $('<td>'+form.find('select[name="metro_id"] option:selected').val()+'</td>');  
+										var price       = $('<td>'+form.find('input[name="price"]').val()+'</td>');
+										var description = $('<td>'+form.find('textarea[name="description"]').val()+'</td>');
+										var user = $('<td></td>');
+										var delegate_date = $('<td></td>');
+										var phone = $('<td>'+form.find('input[name="phone"]').val()+'</td>');
+										row.append(checkbox_td)
+										   .append(number)
+										   .append(create_date)
+										   .append(category)
+										   .append(deal_type)
+										   .append(region)
+										   .append(metro)
+										   .append(price)
+										   .append(description)
+										   .append(user)
+										   .append(delegate_date)
+										   .append(phone);
+										 $('#dashboard_table tbody').prepend(row);
+										 dialog.dialog('close');
+									break;
+									case 'error_add_order':
+										common.showResultMsg("Не удалось сохранить");
+										dialog.dialog('close');
+									break;
+								}
+							}
+						},
+						beforeSend:function(){
+							common.showAjaxIndicator();
+						},
+						complete:function(){
+							common.hideAjaxIndicator();
+						}
+					})
+				},
+				'Отмена':function(){
+
+				}
+			});
+
+			dialog.dialog('open');
 		},
 		check_all:function(options){
 
