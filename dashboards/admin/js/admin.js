@@ -554,5 +554,151 @@ var admin = {
 				}
 			});
 		}
+	},
+
+	orders:{
+		def_options:{
+			jObjAction:{},
+			name:''
+		},
+		dialog_options:{
+			autoOpen:false,
+			modal:true,
+			draggable:false
+		},
+		init:function(){
+			$('#dialog_edit_number').dialog(admin.orders.dialog_options);
+			$('#dialog_edit_create_date').dialog(admin.orders.dialog_options);
+			$('#dialog_edit_category').dialog(admin.orders.dialog_options);
+			$('#dialog_edit_deal_type').dialog(admin.orders.dialog_options);
+			$('#dialog_edit_region_id').dialog(admin.orders.dialog_options);
+			$('#dialog_edit_metro_id').dialog(admin.orders.dialog_options);
+			$('#dialog_edit_price').dialog(admin.orders.dialog_options);
+			$('#dialog_edit_description').dialog(admin.orders.dialog_options);
+			$('#dialog_edit_delegate_date').dialog(admin.orders.dialog_options);
+			$('#dialog_edit_phone').dialog(admin.orders.dialog_options);
+		},
+		add:function(options){
+			/*
+			* 1. отправляем запрос на сервер, там создаем заявку
+			* 2. получаем ответ, все ок, тогда выводим "пустую заявку"
+			*/
+		},
+		del:function(options){
+			/*
+			* 1. формируем пачку id для отправки
+			* 2. отправляем
+			* 3. все ок? удаляем их из таблицы
+			*/
+		},
+		edit:function(options){
+			/*
+			* 1. выдергиваем поле
+			* 2. отправлялем изменение
+			* 3. все в поряде
+			*/
+			var form_data = options.form.serialize();
+			form_data += "&id="+options.id;
+			$.ajax({
+				url:admin.baseUrl+options.uri,
+				type:'POST',
+				dataType:'json',
+				data:form_data,
+				success:function(response){
+					if(response.code && response.data){
+						switch(response.code){
+							case 'success_edit_order':
+								options.callback();
+								common.showStatusMsg({id:'response_msg',msg:response.data,timeout:5000});
+							break;
+							case 'error_edit_order':
+								common.showStatusMsg({id:'response_msg',msg:'Сохранить не удалось...',timeout:5000});
+							break;
+						}
+					}
+				},
+				beforeSend:function(){
+					common.showStatusMsg();
+				},
+				complete:function(){
+					common.hideStatusMsg();
+				}
+			});
+			return true;
+		},
+		edit_text:function(options){
+			/*
+			* выцепить из формы текст
+			* прицепить его соотв. диалогу
+			* создать соотв. диалог
+			*/
+			var txt = $.trim(options.jObjAction.text());
+			var dialog = $('#dialog_edit_'+options.name);
+			var form = dialog.find('form');
+			form.find('input[type="text"]').val(txt);
+			dialog.dialog('option','buttons',{
+				'Сохранить':function(event){
+					options['form'] = form;
+					// callback нужна для того, чтобы после отправки запроса можно было сохранить результат в таблице пользователя
+					options['callback'] = function(){
+						options.jObjAction.text(form.find('input').val());
+					};
+					admin.orders.edit(options);
+					dialog.dialog('close');
+				},
+				'Отмена':function(event){
+					dialog.dialog('close');
+				}
+			});
+			dialog.dialog('open');
+		},
+		edit_bigtext:function(options){
+			
+			var txt = $.trim(options.jObjAction.text());
+			var dialog = $('#dialog_edit_'+options.name);
+			var form = dialog.find('form');
+			form.find('textarea').val(txt);
+			dialog.dialog('option','buttons',{
+				'Сохранить':function(event){
+					options['form'] = form;
+					// callback нужна для того, чтобы после отправки запроса можно было сохранить результат в таблице пользователя
+					options['callback'] = function(){
+						options.jObjAction.text(form.find('textarea').val());
+					};
+					admin.orders.edit(options);
+					dialog.dialog('close');
+				},
+				'Отмена':function(event){
+					dialog.dialog('close');
+				}
+			});
+			dialog.dialog('open');
+		},
+		edit_select:function(options){
+			var text   = $.trim(options.jObjAction.text());
+			var dialog = $('#dialog_edit_'+options.name);
+			var form = dialog.find('form');
+			form.find('option').each(function(){
+				if($.trim($(this).text()) == text){
+					$(this).attr('selected','selected');
+				}
+			});
+
+			dialog.dialog('option','buttons',{
+				'Сохранить':function(event){
+					options['form'] = form;
+					// callback нужна для того, чтобы после отправки запроса можно было сохранить результат в таблице пользователя
+					options['callback'] = function(){
+						options.jObjAction.text(form.find('option:selected').text());
+					};
+					admin.orders.edit(options);
+					dialog.dialog('close');
+				},
+				'Отмена':function(event){
+					dialog.dialog('close');
+				}
+			});
+			dialog.dialog('open');
+		}
 	}
 }

@@ -18,3 +18,35 @@ $lang['cant_apply_yourself'] = 'Собственную должность изм
 
 
 $lang['common.not_legal_data'] = 'Переданные данные недопустимы';
+
+
+/*
+*
+* Заявки ( orders )
+*/
+$lang['order.label_number'] = 'Номер заявки';
+$lang['order.label_create_date'] = 'Дата создания';
+$lang['order.label_category'] = 'Категория';
+$lang['order.label_valid_dealtype'] = 'Тип сделки';
+$lang['order.label_region_id'] = 'Район';
+$lang['order.label_metro_id'] = 'Метро';
+$lang['order.label_price'] = 'Цена';
+$lang['order.label_description'] = 'Описание';
+$lang['order.label_delegate_date'] = 'Дата делегирования';
+$lang['order.label_finish_date'] = 'Дата закрытия';
+$lang['order.label_phone'] = 'Телефон';
+$lang['order.label_state'] = 'Состояние';
+
+$lang['order.validation.valid_state'] = 'Поле "%s" содержит неверное состояние';
+$lang['order.validation.valid_dealtype'] = 'Поле "%s" содержит неверный вид сделки';
+$lang['order.validation.valid_category'] = 'Поле "%s" содержит неверную категорию';
+
+/*
+*
+* Валидация
+*
+*/
+$lang['common.validation.valid_date'] = 'Поле "%s" должно содержать дату правильного формата';
+$lang['common.validation.valid_datetime'] = 'Поле "%s" должно содержать дату и время правильного формата';
+$lang['common.validation.valid_region_id'] = 'Поле "%s" должно содержать id существующего района';
+$lang['common.validation.valid_metro_id'] = 'Поле "%s" должно содержать id существующего метро';

@@ -52,3 +52,10 @@ $lang['confirm_delete_invite'] = 'Удалить запись инвайта?';
 * Регистрация админа
 */
 $lang['success_register_admin'] = 'Поздравляем, Вы успешно зарегистрировались как администратор';
+/*
+*
+* Заявки
+*/
+$lang['success_add_order'] = 'Заявка добавлена';
+$lang['success_edit_order'] = 'Изменения сохранены';
+$lang['success_del_order'] = 'Заявки успешно удалены';

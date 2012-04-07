@@ -39,8 +39,19 @@ class Admin_Users extends Users{
 		*
 		*/
 		$this->ci->load->model('admin/m_admin');
+		$this->ci->load->model('m_order');
 	}
 
+	/**
+	 * Возврат uri на домашнюю страницу админа
+	 *
+	 * @return string
+	 * @author alex.strigin
+	 **/
+	public function get_home_page()
+	{
+		return "admin/orders";
+	}
 
 	/**
 	 * Залогинен ли пользователь как админ, а?
@@ -124,6 +135,52 @@ class Admin_Users extends Users{
 		return $this->ci->m_admin->get_all_managers($this->get_org_id());
 	}
 	
+	/**
+	 * Получить список категорий заявок
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_category_list()
+	{
+		return $this->ci->m_order->get_category_list();
+	}
+
+	/**
+	 * Получить список сделок
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_dealtype_list()
+	{
+		return $this->ci->m_order->get_dealtype_list();
+	}
+
+	/**
+	 * Получить список районов
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_region_list()
+	{
+		$this->ci->load->model('m_region');
+		return $this->ci->m_region->get_region_list();
+	}
+
+	/**
+	 * Получить список метро
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_metro_list()
+	{
+		$this->ci->load->model('m_metro');
+		return $this->ci->m_metro->get_metro_list();
+	}
+
 	/**
 	 * Редактирование персонального профайла
 	 *
@@ -510,6 +567,103 @@ class Admin_Users extends Users{
 		* Валидация не пройдена, генерим исключение
 		*/
 		throw new ValidationException(array('manager_id' => $this->ci->form_validation->error('manager_id'), 'email'=>$this->ci->form_validation->error('email')));
+	}
+
+	/**
+	 * Добавление заявки.
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function add_order()
+	{
+		/*
+		* Устанавливаем правила валидации	
+		*/
+		$insert_fields = array('number','create_date','category','deal_type','region_id','metro_id','price','description','delegate_date','finish_date','phone','state');
+
+		$this->ci->form_validation->set_rules($this->ci->m_order->insert_validation_rules);
+
+		if($this->ci->form_validation->run($this->ci->m_order)){
+
+			/*
+			* Валидацию прошли, теперь можем наши данные собрать воедино вместе с пред. определенными
+			*/
+			$insert_data = array_intersect_key($this->ci->input->post(),array_flip($insert_fields));
+			$insert_data['org_id'] = $this->get_org_id();
+
+			if( ($org_id = $this->ci->m_order->insert($insert_data,true))){
+				return $org_id;
+			}
+
+			throw new AnbaseRuntimeException(lang('common.insert_error'));
+		}
+
+		$errors_validation = array();
+
+		if(has_errors_validation($insert_fields,$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
+		return false;
+	}
+
+	/**
+	 * Редактирование заявки.
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function edit_order()
+	{
+		/*
+		* Устанавливаем правила валидации
+		*/
+		$update_fields =  array('number','create_date','category','deal_type','region_id','metro_id','price','description','delegate_date','finish_date','phone','state');
+
+		$this->ci->form_validation->set_rules($this->ci->m_order->update_validation_rules);
+
+		if($this->ci->form_validation->run($this->ci->m_order)){
+
+			/*
+			* Выцепляем наши данные из post контейнера
+			*/
+			$update_data = array_intersect_key(($this->ci->input->post()), array_flip($update_fields));
+
+			$this->ci->m_order->update($this->ci->input->post('id'),$update_data,true);
+			return;
+		}
+
+		$errors_validation = array();
+
+		if(has_errors_validation($update_fields,$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
+	}
+
+	/**
+	 * Удаление заказов
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function del_orders()
+	{
+		$orders_ids = $this->ci->input->post('orders_ids');
+
+		if(is_array($orders_ids)){
+			foreach($orders_ids as $order_id){
+
+				if(is_numeric($order_id)){
+					/*
+					* Будем просто удалять, а получилось или нет, это уже не наша забота. 
+					* P.S Если пользователь не хакер, то все получится.
+					*/
+					$this->ci->m_order->delete($order_id);
+				}
+			}
+			return;
+		}
+		throw new AnbaseRuntimeException(lang('common.not_legal_data'));
 	}
 	/**
 	 * Метод, выполняющий обновление данных сессии
