@@ -584,12 +584,57 @@ var admin = {
 			* 2. получаем ответ, все ок, тогда выводим "пустую заявку"
 			*/
 		},
+		check_all:function(options){
+
+			var i_checked = options.jObjAction.attr('checked');
+			if(i_checked == "checked"){
+				$('#dashboard_table input[type="checkbox"]').attr('checked','checked');
+			}else{
+				$('#dashboard_table input[type="checkbox"]').removeAttr('checked','checked');
+			}
+		},
 		del:function(options){
 			/*
 			* 1. формируем пачку id для отправки
 			* 2. отправляем
 			* 3. все ок? удаляем их из таблицы
 			*/
+			var orders_ids = [];
+			var all_checkbox = $('#dashboard_table td input[type="checkbox"]');
+			all_checkbox.each(function(){
+				orders_ids.push($(this).attr('value'));
+			});
+
+			var post_data = {};
+			post_data['orders_ids'] = orders_ids;
+
+			$.ajax({
+				url:admin.baseUrl+options.uri,
+				type:'POST',
+				dataType:'json',
+				data:post_data,
+				success:function(response){
+					if(response.code && response.data){
+						switch(response.code){
+							case 'success_del_order':
+								common.showResultMsg(response.data);
+								all_checkbox.each(function(){
+									$(this).remove();
+								});
+							break;
+							case 'error_del_order':
+								common.showResultMsg('Удалить не удалось');
+							break;
+						}
+					}
+				},
+				beforeSend:function(){
+					common.showStatusMsg();
+				},
+				complete:function(){
+					common.hideStatusMsg();
+				}
+			})
 		},
 		edit:function(options){
 			/*

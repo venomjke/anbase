@@ -78,7 +78,7 @@
 		<thead>
 			<tr>
 				<th>
-					<?php echo form_checkbox("orders_ids"); ?>
+					<input type="checkbox" onclick="admin.orders.check_all({jObjAction:$(this)});" />
 				</th>
 				<th>
 					№

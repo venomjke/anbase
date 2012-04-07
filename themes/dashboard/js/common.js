@@ -46,7 +46,15 @@ var common = {
 			noty($.extend(options,{text:text}));
 		}
 	},
-
+	showAjaxIndicator:function(){
+		common.showStatusMsg();
+	},
+	hideAjaxIndicator:function(){
+		common.hideStatusMsg();
+	},
+	showResultMsg:function(msg){
+		common.showStatusMsg({id:'result_msg',msg:msg,timeout:3000});
+	},
 	/*
 	*  
 	* Показать статусное сообщение
