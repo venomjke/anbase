@@ -99,6 +99,12 @@ class Orders extends MX_Controller
 				*/
 				$this->_del_orders();
 			break;
+			case 'delegate':
+				/*
+				* Назначить члену персонала ( Агенту или Менеджеру )
+				*/
+				$this->_delegate_order();
+			break;
 		}
 	}
 
@@ -318,6 +324,38 @@ class Orders extends MX_Controller
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_edit_order';
 				$response['data']['errors'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect($this->admin_users->get_home_page());
+		}
+	}
+
+	/**
+	 * Назначить заявку члену персонала
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _delegate_order()
+	{
+		/*
+		* Если не ajax, то redirect
+		*/
+		if($this->ajax->is_ajax_request()){
+			/*
+			* Пытаемся назначить
+			*/
+			try{
+				$this->admin_users->delegate_order();
+				$response['code'] = 'success_delegate_order';
+				$response['data'] = lang('success_delegate_order');
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_delegate_order';
+				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_delegate_order';
+				$response['data']['errors'] = array($ve->get_error_messages());
 			}
 			$this->ajax->build_json($response);
 		}else{

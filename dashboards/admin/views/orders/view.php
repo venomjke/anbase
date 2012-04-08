@@ -51,7 +51,13 @@
 						<td ondblclick="admin.orders.edit_text({jObjAction:$(this), name:'price', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->price; ?></td>
 						<td ondblclick="admin.orders.edit_bigtext({jObjAction:$(this), name:'description', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->description; ?>
 						</td>
-						<td> <?php echo $order->user_name.' '.$order->user_middle_name.' '.$order->user_last_name; ?></td>
+						<td> 
+							<?php if(empty($order->user_id)): ?>
+								<a href="#" onclick="admin.orders.delegate_order({jObjAction:$(this),id:<?php echo $order->id; ?>,uri:'<?php echo "admin/orders/?act=delegate"; ?>' }); return false;"> Передать агенту </a>
+							<?php else: ?>
+								<a href="#" onclick="admin.orders.delegate_order({jObjAction:$(this),id:<?php echo $order->id; ?>,uri:'<?php echo "admin/orders/?act=delegate"; ?>',user_id:<?php echo $order->user_id; ?>});return false;"><?php echo make_official_name($order->user_name,$order->user_middle_name,$order->user_last_name); ?></a>
+							<?php endif; ?>
+						</td>
 						<td ondblclick="admin.orders.edit_text({jObjAction:$(this), name:'delegate_date', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->delegate_date; ?> </td>
 						<td ondblclick="admin.orders.edit_text({jObjAction:$(this), name:'phone', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->phone; ?> </td>
 				</tr>
@@ -67,6 +73,19 @@
 </div>
 <noscript> У вас отключен javascript, из-за этого могут не работать некоторые инструменты сайта </noscript>
 <!-- диалоги для редактирования таблицы -->
+<div id="dialog_delegate_order">
+	<form onsubmit="return false">
+		<div>
+			<label for="user"> Агенты - Менеджеры </label>
+			<select name="user_id">
+				<option value="-1"> - Ни кто </option>
+				<?php foreach($this->admin_users->get_list_staff() as $staff): ?>
+					<option value="<?php echo $staff->id; ?>"> <?php echo make_official_name($staff->name,$staff->middle_name,$staff->last_name); ?> </option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+	</form>
+</div>
 <div id="dialog_add_order">
 	<form onsubmit="return false;">
 		<div>

@@ -578,6 +578,7 @@ var admin = {
 			$('#dialog_edit_description').dialog(admin.orders.dialog_options);
 			$('#dialog_edit_delegate_date').dialog(admin.orders.dialog_options);
 			$('#dialog_edit_phone').dialog(admin.orders.dialog_options);
+			$('#dialog_delegate_order').dialog(admin.orders.dialog_options);
 		},
 		add:function(options){
 			var dialog=$('#dialog_add_order');
@@ -808,6 +809,66 @@ var admin = {
 				}
 			});
 			dialog.dialog('open');
-		}
+		},
+		/*
+		*
+		* Передать заявку под управление агента
+		* структура options:
+		* 	jObjAction - dom елемент, который мы использовали для вызова функции
+		*   uri - ссылка на операцию
+		*   id  - id Заявки
+		*   user_id - id пользователя, владеющего заявкой
+		*/
+		delegate_order:function(options){
+			/*
+			* Загружаем диалог со списком агентов - менеджеров
+			*/
+			var dialog = $('#dialog_delegate_order');
+			var form   = dialog.find('form');
+			if(options.user_id){
+				form.find('option').each(function(){
+					if($(this).val() == options.user_id){
+						$(this).attr('selected','selected');
+					}
+				})
+			}
+			dialog.dialog('option','buttons',{
+				'Назначить':function(){
+
+					var post_data = form.serialize();
+					post_data += '&order_id='+options.id;
+					$.ajax({
+						url:admin.baseUrl+options.uri,
+						type:'POST',
+						data:post_data,
+						dataType:'json',
+						success:function(response){
+							if(response.code && response.data){
+								switch(response.code){
+									case 'success_delegate_order':
+										options.jObjAction.parent().html($.trim(form.find('option:selected').text()));
+										common.showResultMsg(response.data);
+									break;
+									case 'error_delegate_order':
+										common.showResultMsg('Не удалось делегировать заявку');
+									break;
+								}
+							}
+						},
+						beforeSend:function(){
+							common.showAjaxIndicator();
+						},
+						complete:function(){
+							common.hideAjaxIndicator();
+						}
+					})
+					dialog.dialog('close');
+				},
+				'Отмена':function(){
+					dialog.dialog('close');
+				}
+			});
+			dialog.dialog('open');
+		}	
 	}
 }

@@ -40,6 +40,7 @@ class Admin_Users extends Users{
 		*/
 		$this->ci->load->model('admin/m_admin');
 		$this->ci->load->model('m_order');
+		$this->ci->load->model('m_order_user');
 	}
 
 	/**
@@ -648,6 +649,9 @@ class Admin_Users extends Users{
 	 **/
 	public function del_orders()
 	{
+		/*
+		* БЛЯ! Так же можно все заявки удалить!!
+		*/
 		$orders_ids = $this->ci->input->post('orders_ids');
 
 		if(is_array($orders_ids)){
@@ -665,6 +669,42 @@ class Admin_Users extends Users{
 		}
 		throw new AnbaseRuntimeException(lang('common.not_legal_data'));
 	}
+
+	/**
+	 * Назначение заявки члену персонала
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function delegate_order()
+	{
+		/*
+		* Правила валидации прикрепляем
+		*/
+		$this->ci->form_validation->set_rules($this->ci->m_order_user->delegate_validation_rules);
+
+		if($this->ci->form_validation->run($this->ci->m_order_user)){
+
+			/*
+			*
+			* Т.к к одной заявке может быть привязан только один человек, то для удаления записи в таблице orders_users
+			* достаточно знать order_id
+			*/
+			$order_id = $this->ci->input->post('order_id');
+			$user_id  = $this->ci->input->post('user_id');
+			if($this->ci->m_order_user->delegate_order($order_id,$user_id)){
+				return true;
+			}
+			throw new AnbaseRuntimeException(lang("common.insert_error"));
+		}
+
+		$errors_validation = array();
+
+		if(has_errors_validation(array('order_id','user_id'),$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
+	}
+
 	/**
 	 * Метод, выполняющий обновление данных сессии
 	 *
