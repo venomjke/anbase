@@ -49,7 +49,7 @@
 						<td ondblclick="admin.orders.edit_select({jObjAction:$(this),name:'region_id',id:<?php echo $order->id; ?>,uri:'<?php echo "admin/orders/?act=edit"; ?>'}); " > <?php echo $order->region_name; ?></td>
 						<td ondblclick="admin.orders.edit_select({jObjAction:$(this),name:'metro_id',id:<?php echo $order->id; ?>,uri:'<?php echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->metro_name; ?></td>
 						<td ondblclick="admin.orders.edit_text({jObjAction:$(this), name:'price', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->price; ?></td>
-						<td ondblclick="admin.orders.edit_bigtext({jObjAction:$(this), name:'description', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->description; ?>
+						<td ondblclick="admin.orders.edit_bigtext({jObjAction:$(this), name:'description', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo nl2br($order->description); ?>
 						</td>
 						<td> 
 							<?php if(empty($order->user_id)): ?>

@@ -29,7 +29,6 @@
 				<th>Ф.И.О агента </th>
 				<th>Дата делегирования </th>
 				<th>Контакты<th>
-				<th>Операции</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -48,9 +47,9 @@
 						<td> <?php echo $order->region_name; ?></td>
 						<td> <?php echo $order->metro_name; ?></td>
 						<td> <?php echo $order->price; ?></td>
-						<td> <?php echo $order->description; ?>
+						<td> <?php echo nl2br($order->description); ?>
 						</td>
-						<td> <?php echo $order->user_last_name.' '.$order->user_name.' '.$order->user_middle_name; ?> </td>
+						<td> <?php echo make_official_name($order->user_name,$order->user_middle_name,$order->user_last_name); ?> </td>
 						<td> <?php echo $order->delegate_date; ?> </td>
 						<td> <?php echo $order->phone; ?> </td>
 						<td> </td>
