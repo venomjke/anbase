@@ -30,6 +30,15 @@ class M_Admin extends M_User{
 		array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'required|trim|xss_clean|min_length[9]|max_length[20]')
 	);
 
+	/*
+	*
+	* Правила валидации при смене должности
+	*/
+	public $change_position_employee_validation_rules = array(
+		array('field'=>'id', 'label'=>'USER ID', 'rules'=>'required|is_valid_user_id'),
+		array('field'=>'role', 'label'=>'USER ROLE', 'rules'=>'required|is_valid_user_role')
+	);
+
 	function __construct(){
 
 		parent::__construct();

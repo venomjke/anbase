@@ -37,7 +37,7 @@ class M_Order_user extends MY_Model
 	}
 
 	/**
-	 * Проверка user_id. Т.к с user_id передается еще -1, то просто проверку выполнить нелья
+	 * Проверка user_id. Т.к с user_id передается еще -1, то просто is_valid_user_id использовать нельзя
 	 *
 	 * @return boolean
 	 * @author alex.strigin

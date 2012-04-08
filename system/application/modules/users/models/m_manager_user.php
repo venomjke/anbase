@@ -35,8 +35,8 @@ class M_Manager_user extends MY_Model
 		* Правила валидации
 		*/
 		$this->validate = array(
-			array('field'=>'manager_id', 'label'=>'Manager Id', 'rules' => 'required|is_natural'),
-			array('field'=>'user_id','label'=>'User Id','rules'=>'required|is_natural')
+			array('field'=>'manager_id', 'label'=>'Manager Id', 'rules' => 'required|is_natural|is_manager_org'),
+			array('field'=>'user_id','label'=>'User Id','rules'=>'required|is_natural|is_valid_user_id')
 		);
 	}
 
@@ -51,8 +51,6 @@ class M_Manager_user extends MY_Model
 	{
 		return $this->count_all_results(array('user_id'=>$user_id)) == 0?false:true;	
 	}
-	
-
 	/**
 	 * Возвращаем правила валидации
 	 *

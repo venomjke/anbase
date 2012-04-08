@@ -59,7 +59,7 @@ class M_Order extends MY_Model{
 	* Правила валидации "изменение записи
 	*/
 	public $update_validation_rules = array(
-		array('field'=>'id','label'=>'ORDER_ID','rules'=>'required|is_natural_no_zero'),
+		array('field'=>'id','label'=>'ORDER_ID','rules'=>'required|is_natural_no_zero|valid_order_id'),
 		array('field'=>'number','label'=>'lang:order.label_number', 'rules'=>'is_natural|max_length[9]'),
 		array('field'=>'create_date','label'=>'lang:order.label_create_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
 		array('field'=>'category','label'=>'lang:order.label_category','rules'=>'callback_valid_category'),

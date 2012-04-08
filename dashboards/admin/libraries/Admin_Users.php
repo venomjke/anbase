@@ -285,7 +285,7 @@ class Admin_Users extends Users{
 			if($this->ci->input->post('password')) $data['password'] = $this->ci->input->post('password');
 
 			if(!empty($data)){
-				$this->ci->m_organization->update($this->get_org_id(),$data,true);
+				$this->ci->m_user->update($this->get_org_id(),$data,true);
 				return TRUE;
 			}else{
 
@@ -312,7 +312,7 @@ class Admin_Users extends Users{
 		*	Проверить данные, выполнить валидацию, если что не так, то ни чего не делать, и возвратить исключение.	
 		*	Если с данными все впорядке, то проверить права меняющего, если не ceo, то разрешено назначить  только агента или менеджера.
 		*/
-		$this->ci->form_validation->set_rules($this->ci->m_admin->get_validation_rules());
+		$this->ci->form_validation->set_rules($this->ci->m_admin->change_position_employee_validation_rules);
 
 		/*
 		*
@@ -321,67 +321,63 @@ class Admin_Users extends Users{
 		$data = array('id','role');
 		/*
 		*
-		* Во время проверки передаю также ответственного за правила, то есть m_admin_user, модуль валидации будет общаться только с ним.
+		* Во время проверки передаю также ответственного за правила, то есть m_admin, модуль валидации будет общаться только с ним.
 		*/
 		if($this->ci->form_validation->run($this->ci->m_admin)){
 
-			/*
-			* все данные должны быть переданы
-			*/
-			if($this->ci->input->post('id')&&$this->ci->input->post('role') ){
+			$employee_id = $this->ci->input->post('id');
+			$role    = $this->ci->input->post('role');
 
+			/*
+			* user не может изменить себя
+			*/
+           if($employee_id != $this->get_user_id())
+           {
+           	
 				/*
-				* user не может изменить себя
+				*
+				* директор может менять все, что ему пожелается
 				*/
-               if($this->ci->input->post('id') != $this->get_user_id())
-               {
-               	
+				if($this->is_ceo($this->get_user_id())){
 					/*
-					*
-					* директор может менять все, что ему пожелается
+					* Если мы дошли до сюда, то внезависимости от возвращенного результата мы возвращаем success
 					*/
-					if($this->is_ceo($this->get_user_id())){
+					$this->ci->m_admin->change_position($employee_id,$this->get_user_role($employee_id),$this->ci->input->post('role'));
+				}else{
+
+					/*
+               		* админ может изменить любого, кроме админа
+               		*/
+               		if(!$this->is_admin($employee_id)){
 						/*
-						* Если мы дошли до сюда, то внезависимости от возвращенного результата мы возвращаем success
+						* Обычный админ может поменять должность на любую отличную от админ.
+						*
 						*/
-						$this->ci->m_admin->change_position($this->ci->input->post('id'),$this->get_user_role($this->ci->input->post('id')),$this->ci->input->post('role'));
-					}else{
+						if($role != M_User::USER_ROLE_ADMIN){
+							$this->ci->m_admin->change_position($employee_id,$this->get_user_role($employee_id),$role);
+						}else{
+							throw new AnbaseRuntimeException(lang("no_enough_right"));
+						}	
+						return;
+               		}
+               		throw new AnbaseRuntimeException(lang("no_enough_right"));
 
-						/*
-	               		* админ может изменить любого, кроме админа
-	               		*/
-	               		if(!$this->is_admin($this->ci->input->post('id'))){
-							/*
-							* Обычный админ может поменять должность на любую отличную от админ.
-							*
-							*/
-							if($this->ci->input->post('role') != M_User::USER_ROLE_ADMIN){
-								$this->ci->m_admin->change_position($this->ci->input->post('id'),$this->get_user_role($this->ci->input->post('id')),$this->ci->input->post('role'));
-							}else{
-								throw new AnbaseRuntimeException(lang("no_enough_right"));
-							}	
-							return;
-	               		}
-	               		throw new AnbaseRuntimeException(lang("no_enough_right"));
-
-					}
-					return;
-				}	
-				throw new AnbaseRuntimeException(lang("cant_apply_yourself"));
-			}
-			/*
-			*
-			* Ошибка, пустого Update_data быть не должно
-			*/
-			throw new AnbaseRuntimeException(lang("common.empty_data"));
-			return;
+				}
+				return;
+			}	
+			throw new AnbaseRuntimeException(lang("cant_apply_yourself"));
 		}
 
-		/*
-		*
-		* Если я попал сюда, то значит были обнаружены ошибки уровня валидации.
-		*/
-		throw new ValidationException(array('id' => $this->ci->form_validation->error('id'),'role'=>$this->ci->form_validation->error('role')));
+		$errors_validation = array();
+
+		if(has_errors_validation($data,$errors_validation)){
+			/*
+			*
+			* Если я попал сюда, то значит были обнаружены ошибки уровня валидации.
+			*/
+			throw new ValidationException($errors_validation);
+		}
+		return false;
 	}
 
 	/**
@@ -405,7 +401,7 @@ class Admin_Users extends Users{
 			*
 			*	Один должен быть менеджер, а второй агент, также агент должен не иметь менеджера
 			*/
-			if($this->is_manager($manager_id) && $this->is_agent($user_id) && !$this->has_manager($user_id)){
+			if($this->is_agent($user_id) && !$this->has_manager($user_id)){
 
 				$this->ci->m_manager_user->insert($this->ci->input->post(),true);
 				return;
@@ -429,6 +425,7 @@ class Admin_Users extends Users{
 	public function del_invites()
 	{
 		$this->ci->load->model('m_invite_user');
+
 		 /*
 		 * выбираем список ids на удаление
 		 */
@@ -442,7 +439,10 @@ class Admin_Users extends Users{
 
 		 	foreach($ids_invites as $id_invite){
 
-		 		if(is_numeric($id_invite)){
+		 		/*
+		 		* Инвайт должен быть numeric, а также принадлежать к опр. организации
+		 		*/
+		 		if(is_numeric($id_invite) && $this->ci->m_invite_user->belongs_org($id_invite,$this->get_org_id())) {
 			 		/*
 			 		* Если удалить не удалось
 			 		*/
@@ -456,7 +456,9 @@ class Admin_Users extends Users{
 		 	}
 		 	return;
 		 }
-		 throw new AnbaseRuntimeException(lang('common.not_legal_data'));
+		 throw new AnbaseRuntimeException(lang('common.not_legal_data'));	
+
+
 	}
 
 	/**
@@ -518,6 +520,9 @@ class Admin_Users extends Users{
 		$data = array('manager_id','email');
 		/*
 		* задаем правила валидации
+		*
+		* При добавлении инвайта обязательно должен быть задан email и быть уникальным, а manager_id может быть не задан, но если
+		* задан то обязательно должен быть нормальным id и принадлежать к текущей организации
 		*/
 		$this->ci->form_validation->set_rules($this->ci->m_invite_user->get_validation_rules());
 
@@ -533,36 +538,25 @@ class Admin_Users extends Users{
 			$insert_data['manager_id'] = $this->ci->input->post('manager_id')?$this->ci->input->post('manager_id'):null;
 			$insert_data['key_id']   = substr(md5(uniqid(rand())), 0, 24); // generate key;
 			$insert_data['org_id']= $this->get_org_id();
+			if( ( $invite_id = $this->ci->m_invite_user->insert($insert_data,true)) )
+			{
+				/*
+				*
+				*	отправка почтой
+				*/
+				/*
+				$this->ci->load->library('email');
 
-			/*
-			*
-			* При добавлении инвайта обязательно должен быть задан email и быть уникальным, а manager_id может быть не задан, но если
-			* задан то обязательно должен быть нормальным id
-			*/
-			if((!empty($insert_data['email']) and $this->ci->m_admin->is_email_available($insert_data['email'])) && (empty($insert_data['manager_id']) or $this->is_manager($insert_data['manager_id']))) {
-
-				if( ( $invite_id = $this->ci->m_invite_user->insert($insert_data,true)) )
-				{
-					/*
-					*
-					*	отправка почтой
-					*/
-					/*
-					$this->ci->load->library('email');
-
-					$this->ci->email->to('mail');
-					$this->ci->email->from('mail');
-					$this->ci->email->subject('blabla');
-					$this->ci->email->message('messages');
-					$this->ci->email->send();
-					*/
-					return; 
-				}
-
-				throw new AnbaseRuntimeException(lang("common.insert_error"));		
+				$this->ci->email->to('mail');
+				$this->ci->email->from('mail');
+				$this->ci->email->subject('blabla');
+				$this->ci->email->message('messages');
+				$this->ci->email->send();
+				*/
+				return; 
 			}
 
-			throw new AnbaseRuntimeException(lang("common.not_legal_data"));
+			throw new AnbaseRuntimeException(lang("common.insert_error"));		
 		}
 		/*
 		* Валидация не пройдена, генерим исключение
@@ -649,15 +643,12 @@ class Admin_Users extends Users{
 	 **/
 	public function del_orders()
 	{
-		/*
-		* БЛЯ! Так же можно все заявки удалить!!
-		*/
 		$orders_ids = $this->ci->input->post('orders_ids');
 
 		if(is_array($orders_ids)){
 			foreach($orders_ids as $order_id){
 
-				if(is_numeric($order_id)){
+				if(is_numeric($order_id) && $this->ci->m_order->is_exists($order_id,$this->get_org_id())) {
 					/*
 					* Будем просто удалять, а получилось или нет, это уже не наша забота. 
 					* P.S Если пользователь не хакер, то все получится.

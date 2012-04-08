@@ -138,6 +138,81 @@ class MY_Form_validation extends CI_Form_validation
 		return false;
 
 	}
+
+	/**
+	 * Проверка, доступен ли email
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function is_email_available($email)
+	{
+		$this->CI->load->model('users/m_user');
+		if(!empty($email)){
+			if($this->CI->m_user->is_email_available($email)){
+				return true;
+			}
+		}
+		$this->set_message('is_email_available',lang('user.validation.is_email_available'));
+		return false;
+	}
+
+	/**
+	 * Проверка является ли указанный id, id менеджера принадлежащего текущей организации
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function is_manager_org($manager_id)
+	{
+		$this->CI->load->library('users/users');
+		$this->CI->load->model('users/m_user');
+		if(!empty($manager_id)){
+			if($this->CI->m_user->is_manager_org($manager_id,$this->CI->users->get_org_id())){
+				return true;
+			}
+		}
+		$this->set_message('is_manager_org',lang('user.validation.is_manager_org'));
+		return false;
+	}
+
+	/**
+	 * Проверка, является ли указанный id, id пользователя принадлежащего текущей  организации
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function is_valid_user_id($user_id)
+	{
+		$this->CI->load->library('users/users');
+		$this->CI->load->model('users/m_user');
+		if(!empty($user_id)){
+			if($this->CI->m_user->is_exists($user_id,$this->CI->users->get_org_id())){
+				return true;
+			}
+		}
+		$this->set_message('is_valid_user_id',lang('user.validation.is_valid_user_id'));
+		return false;
+	}
+
+	/**
+	 * Проверка, валидная ли роль пользователя
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function is_valid_user_role($user_role)
+	{
+		$this->CI->load->model('users/m_user');
+		if(!empty($user_role)){
+			if($this->CI->m_user->is_valid_role($user_role)){
+				return true;
+			}
+		}
+		$this->set_message('is_valid_user_role',lang('user.validation.is_valid_user_role'));
+		return false;
+	}
+
     function run($module = NULL, $group = '') {        
         if (is_object($module)) $this->CI =& $module;
         return parent::run($group);

@@ -58,7 +58,7 @@ class M_User extends MY_Model{
 			array('field' => 'middle_name', 'label' => 'lang:label_middle_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
 			array('field' => 'last_name', 'label' => 'lang:label_last_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
 			array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'trim|xss_clean|min_length[9]|max_length[20]'),
-			array('field' => 'role', 'label' => 'lang:label_role', 'rules'=>'trim|xss_clean|callback_check_role')
+			array('field' => 'role', 'label' => 'lang:label_role', 'rules'=>'trim|xss_clean|is_valid_user_role')
 		);
 
 		/*
@@ -87,6 +87,25 @@ class M_User extends MY_Model{
 
 		return $this->db->count_all_results("users")==0?false:true;
 	}
+
+
+	/**
+	 * Проверка, является ли указанный id - id manager принадлежащего опр. организации
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function is_manager_org($manager_id,$org_id)
+	{
+		$this->join("users_organizations","users.id = users_organizations.user_id");
+		$this->db->where("users.id",$manager_id);
+		$this->db->where("users.role",M_User::USER_ROLE_MANAGER);
+		$this->db->where("users_organizations.org_id",$org_id);
+		$this->db->limit(1);
+
+		return $this->count_all_results() == 0?false:true;
+	}
+
 	/**
 	 * Проверка роли
 	 *
@@ -103,6 +122,16 @@ class M_User extends MY_Model{
 		}
 	}
 
+	/**
+	 * Проверка роли, не callback как в случае с check_role.
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function is_valid_role($role)
+	{
+		return in_array($role,array(M_User::USER_ROLE_AGENT,M_User::USER_ROLE_MANAGER,M_User::USER_ROLE_ADMIN));
+	}
 
 	/**
 	 * Выбор пользователя по ID
