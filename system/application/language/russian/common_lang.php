@@ -40,7 +40,7 @@ $lang['order.label_state'] = 'Состояние';
 $lang['order.validation.valid_state'] = 'Поле "%s" содержит неверное состояние';
 $lang['order.validation.valid_dealtype'] = 'Поле "%s" содержит неверный вид сделки';
 $lang['order.validation.valid_category'] = 'Поле "%s" содержит неверную категорию';
-
+$lang['order.validation.valid_order_id'] = 'Поле "%s" содержит неправильный id заявки';
 /*
 *
 * Валидация

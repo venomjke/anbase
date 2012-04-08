@@ -30,11 +30,11 @@ $lang['label_role']		= 'Роль';
 
 /*
 *
-* M_User:callbacks
+* M_User:callbacks и правила валидации для user
 *
 */
-$lang['error_check_role'] = 'В поле %s указана неверная должность';
-
+$lang['error_check_role'] = 'В поле "%s" указана неверная должность';
+$lang['user.validation.valid_user_id'] = 'В поле "%s" указан не верный идентификатор пользователя';
 /*
 *
 * Модель M_Organization

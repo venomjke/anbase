@@ -117,6 +117,27 @@ class MY_Form_validation extends CI_Form_validation
 		return false;
 	}
 
+	/**
+	 * Проверка id заявки.
+	 * - заявка должна существовать
+	 * - заявка должна принадлежать текущей организации
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function valid_order_id($order_id)
+	{
+		$this->CI->load->library('users/users');
+		$this->CI->load->model('m_order');
+		if(!empty($order_id)){
+			if($this->CI->m_order->is_exists($order_id,$this->CI->users->get_org_id())){
+				return true;
+			}
+		}
+		$this->set_message('valid_order_id',lang('order.validation.valid_order_id'));
+		return false;
+
+	}
     function run($module = NULL, $group = '') {        
         if (is_object($module)) $this->CI =& $module;
         return parent::run($group);

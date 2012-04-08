@@ -69,7 +69,24 @@ class M_User extends MY_Model{
 	}
 
 
+	/**
+	 * Проверка того, что данный пользователь существует и принадлежит к текущей орг.
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function is_exists($user_id,$org_id)
+	{
+		$this->select("users.id");
+		$this->select("users_organizations.id as user_org_id");
 
+		$this->join("users_organizations","users.id = users_organizations.user_id");
+
+		$this->where("users.id",$user_id);
+		$this->where("users_organizations.org_id",$org_id);
+
+		return $this->db->count_all_results("users")==0?false:true;
+	}
 	/**
 	 * Проверка роли
 	 *
@@ -85,6 +102,7 @@ class M_User extends MY_Model{
 			return false;
 		}
 	}
+
 
 	/**
 	 * Выбор пользователя по ID

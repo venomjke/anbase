@@ -104,7 +104,16 @@ class M_Order extends MY_Model{
 		$this->before_insert = array('fill_empty_fields');
 	}
 
-
+	/**
+	 * Проверка заявки на существование
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function is_exists($order_id,$org_id)
+	{
+	 	return $this->count_all_results(array('id'=>$order_id,'org_id'=>$org_id))==0?false:true;
+	}
 	/**
 	 * Получить список категорий
 	 *
@@ -199,6 +208,7 @@ class M_Order extends MY_Model{
 			}
 		}
 	}
+
 	/**
 	 * Проверка категории
 	 *
