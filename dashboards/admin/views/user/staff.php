@@ -81,7 +81,7 @@
 									</td>
 									<td>
 										<?php if( ($employee->role == M_User::USER_ROLE_AGENT) and ($employee->manager_id)): ?>
-										<?php 	echo make_official_name($employee->manager_name,$employee->manager_middle_name,$employee->manager_last_name); ?>
+										 <a href="#" onclick="admin.user.unbind_manager({jObjAct:$(this),uri:'admin/user/staff/?act=unbind_manager',user_id:<?php echo $employee->id; ?>,text:'<?php echo lang('unbind_manager'); ?>'});return false;"> <?php echo make_official_name($employee->manager_name,$employee->manager_middle_name,$employee->manager_last_name); ?> </a>
 									    <?php elseif($employee->role == M_User::USER_ROLE_AGENT): ?>
 									    	<a href="#" onclick="admin.user.assign_manager({ user_id:'<?php echo $employee->id; ?>',uri:'admin/user/staff/?act=assign_manager' });return false;" > Назначить </a>
 										<?php endif; ?>

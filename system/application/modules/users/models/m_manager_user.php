@@ -8,6 +8,14 @@
  **/
 class M_Manager_user extends MY_Model
 {
+
+	/*
+	*
+	* Правила валидации во время unbind manager от agent
+	*/
+	public $unbind_manager_validation_rules = array(
+		array('field'=>'user_id','label'=>'USER ID','rules'=>'required|is_natural|is_valid_user_id')
+	);
 	/**
 	 * Конструктор
 	 *
@@ -50,6 +58,17 @@ class M_Manager_user extends MY_Model
 	public function has_manager($user_id)		
 	{
 		return $this->count_all_results(array('user_id'=>$user_id)) == 0?false:true;	
+	}
+
+	/**
+	 * Отвязать менеджера от агента
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function unbind_manager($user_id)
+	{
+		return $this->delete(array('user_id'=>$user_id));
 	}
 	/**
 	 * Возвращаем правила валидации

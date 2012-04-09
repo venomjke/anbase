@@ -428,7 +428,64 @@ var admin = {
 			});
 			$("#assign_manager_dialog").dialog("open");
 		},
+		/*
+		*
+		* Отсоединяем агента от менеджера
+		*/
+		unbind_manager:function(options){
 
+			 noty({
+			    text: options.text, 
+			    buttons: [
+			      {type: 'button green', text: 'Да', click: function($noty) {
+
+			          // this = button element
+			          // $noty = $noty element
+			          $noty.close();
+			          var post_data = {};
+			          post_data['user_id'] = options.user_id;
+
+			          $.ajax({
+			          	url:admin.baseUrl+options.uri,
+			          	type:'POST',
+			          	dataType:'json',
+			          	data:post_data,
+			          	success:function(response){
+			          		if(response.code && response.data){
+
+			          			switch(response.code){
+			          				case 'success_unbind_manager':
+			          					common.showMsg(response.data);
+			          				break;
+			          				case 'error_unbind_manager':
+			          					for(var i in response.data.errors){
+			          						common.showMsg(response.data.errors[i],{type:'error'});
+			          					}
+			          				break;
+			          			}
+			          		}
+			          	},
+			          	beforeSend:function(){
+			          		common.showAjaxIndicator();
+			          	},
+			          	complete:function(){
+			          		common.hideAjaxIndicator();
+			          	}
+			          })
+
+			        }
+			      },
+			      {type: 'button pink', text: 'Нет', click: function($noty) {
+			          $noty.close();
+			        }
+			      }
+			      ],
+			    closable: false,
+			    timeout: false,
+			    layout:'center',
+			    theme:'noty_theme_mitgux'
+			  });
+		},
 		admin_invite:function(){
 			admin.user.invite('#admin_invite_dialog');
 		},

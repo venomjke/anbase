@@ -415,6 +415,40 @@ class Admin_Users extends Users{
 		throw new ValidationException(array('manager_id'=>$this->ci->form_validation->error('manager_id'),'user_id'=>$this->ci->form_validation->error('user_id')));
 	}
 
+	/**
+	 * Отвязываем агента от менеджера.
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function unbind_manager()
+	{
+		$this->ci->form_validation->set_rules($this->ci->m_manager_user->unbind_manager_validation_rules);
+
+		/*
+		* Проверяем данные
+		*/
+		if($this->ci->form_validation->run($this->ci->m_manager_user)){
+
+			/*
+			* Выдергиваем user_id. Чел должен быть агент, и иметь менеджера.
+			*/
+			$agent_id = $this->ci->input->post('user_id');
+			if($this->is_agent($agent_id) && $this->has_manager($agent_id)){
+				$this->ci->m_manager_user->unbind_manager($agent_id);
+				return;
+			}
+			throw new AnbaseRuntimeException(lang("common.not_legal_data"));
+		}
+
+		$errors_validation = array();
+
+		if(has_errors_validation(array('user_id'),$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
+		return false;
+	}
+
 
 	/**
 	 * Удаление инвайтов

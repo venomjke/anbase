@@ -102,9 +102,16 @@ class User extends MX_Controller
 				*
 				*
 				* Назначить менеджера. 
-				*
+				* [поменять дурацское assign_manager на bind_manager]
 				*/
 				$this->_assign_manager_agent();
+			break;
+			case 'unbind_manager':
+				/*
+				*
+				* Отвязать менеджера
+				*/
+				$this->_unbind_manager();
 			break;
 			case 'change_position':
 				/*
@@ -284,6 +291,32 @@ class User extends MX_Controller
 		}
 	}
 
+	/**
+	 * Отвязать менеджера от агента, точнее сделать агента свободным от надзирательства менеджером
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _unbind_manager()
+	{
+		if($this->ajax->is_ajax_request()){
+			try{
+
+				$this->admin_users->unbind_manager();
+				$response['code'] = 'success_unbind_manager';
+				$response['data'] = lang('success_unbind_manager');
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_unbind_manager';
+				$response['data']['errors'] = $ve->get_error_messages();
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_unbind_manager';
+				$response['data']['errors'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect($this->admin_users->get_home_page());
+		}
+	}
 	/**
 	 * Смена должности сотрудника. Получаем id сотрудника, для которого выполняется изменение, 
 	 * а также наименование 'Роли'
