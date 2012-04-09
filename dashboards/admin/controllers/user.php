@@ -81,9 +81,9 @@ class User extends MX_Controller
 	public function staff()
 	{
 		$section = $this->input->get('act')?$this->input->get('act'):'view';
-
 		switch ($section) {
 			case 'view':
+			default:
 				/*
 				* Отображение списка сотрудников
 				*
@@ -121,14 +121,6 @@ class User extends MX_Controller
 				*/
 				$this->_change_position_employee();
 			break;
-			default:
-				/*
-				*
-				* По умолчанию вывод списка сотрудников
-				*
-				*/
-				$this->_view_staff();
-				break;
 		}
 		
 	}

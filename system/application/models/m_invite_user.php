@@ -10,6 +10,16 @@
  **/
 class M_Invite_user extends MY_Model
 {
+
+	/*
+	* Верятность вызова сборщика мусора ( устаревших инвайтов )
+	*/
+	private $_gc_probability = 30;
+	/*
+	* Время жизни инвайта
+	* ( 7 дней )
+	*/
+	private $_expiration_time  = 604800;
 	/**
 	 * Конструктор
 	 *
@@ -36,6 +46,28 @@ class M_Invite_user extends MY_Model
 			array('field'=>'email', 'label'=>'lang:label_email', 'rules'=>'required|xss_clean|valid_email|max_length[100]|is_email_available'),
 			array('field'=>'manager_id', 'label'=>'Manager Id', 'rules'=>'is_natural|is_manager_org')
 		);
+	}
+
+	/**
+	 * Сборщик устаревших инвайтов
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _gc_invites()
+	{
+
+		$now = time();
+
+		srand(time());
+		if ((rand() % 100) < $this->_gc_probability)
+		{
+			$expire = $now - $this->_expiration_time;
+			$this->delete(array('UNIX_TIMESTAMP(created) <'=>$expire));
+
+			log_message('debug', 'Invite garbage collection performed.');
+		}
+
 	}
 
 	/**
@@ -67,9 +99,27 @@ class M_Invite_user extends MY_Model
 	 **/
 	public function is_exists_invite($key_id,$email,$role)
 	{
-		return $this->count_all_results(array('key_id'=>$key_id,'email'=>$email,'role'=>$role)) == 0?false:true;
+		$this->_gc_invites();
+
+		$now = time();
+		$expire = $now - $this->_expiration_time;
+		/*
+		* invite должен быть действительным по времени
+		*/
+		return $this->count_all_results(array('key_id'=>$key_id,'email'=>$email,'role'=>$role, 'UNIX_TIMESTAMP(created) >'=> $expire )) == 0?false:true;
 	}
 
+	/**
+	 * Выбор всех инвайтов
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_all($where)
+	{
+		$this->_gc_invites();
+		return parent::get_all($where);
+	}
 
 	/**
 	 * Загрузка инвайта
