@@ -2,7 +2,7 @@
 	<?php load_partial_template($template,'sidebar'); ?>
 	<div id="wrap4">
 		<div class="toolbar">
-			<button> Удалить </button>
+			<a href="#" onclick="admin.user.del_users({uri:'admin/user/admins/?act=del'});return false;"> Удалить </a>
 			Поиск
 			<span> 
 				<?php echo form_input("search"); ?>
@@ -13,7 +13,7 @@
 				<thead>
 					<tr>
 						<th>
-							<?php echo form_checkbox("all"); ?>
+							<input type="checkbox" name="users_ids" onclick="admin.user.check_all({jObjAction:$(this)});" />
 						</th>
 						<th>
 							Имя
@@ -45,9 +45,9 @@
 							<?php if(!empty($admins)): 
 										foreach($admins as $admin):
 							?>
-								<tr>
+								<tr id="user_<?php echo $admin->id; ?>" >
 									<td class="checkbox">
-										<?php echo form_checkbox("all"); ?>
+										<?php echo form_checkbox("ids_users",$admin->id); ?>
 										<input type="hidden" id="user_id" value="<?php echo $admin->id; ?>"/>
 									</td>
 									<td>

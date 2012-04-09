@@ -496,6 +496,97 @@ class Admin_Users extends Users{
 	}
 
 	/**
+	 * Удаление членов организации
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function del_staff()
+	{
+		$this->del_users();
+	}
+
+	/**
+	 * Удаление админов
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function del_admins()
+	{
+		$this->del_users();
+	}
+
+	/**
+	 * Удаление пользователей
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function del_users()
+	{
+
+		/*
+		* выбираем список ids на удаление
+		*/
+		$ids_users = $this->ci->input->post('ids_users');
+		/*
+		* Если есть, что удалять.
+		*/
+		if(!empty($ids_users)){
+
+			foreach($ids_users as $id_user){
+
+				/*
+				*
+				* User не может удалить сам себя
+				*/
+				if($id_user == $this->get_user_id()){
+					throw new AnbaseRuntimeException(lang('no_enough_right'));
+				};
+
+				/*
+				*
+				* ceo может удалять всех без вопросов
+				*/
+				if($this->is_ceo($this->get_user_id())){
+					/*
+					*
+					* Юзер должен относиться к текущей организации
+					*/
+					if(is_numeric($id_user) && $this->ci->m_user->is_exists($id_user,$this->get_org_id())){
+						/*
+						* Если удалить не удалось
+						*/
+						if(!$this->ci->m_user->delete($id_user)){
+							throw new AnbaseRuntimeException(lang('common.delete_error'));
+						}
+						return;
+					}
+					throw new AnbaseRuntimeException(lang('no_enough_right'));
+				}else{
+
+					/*
+					* Админ может удалять всех кроме админов
+					*/
+					if(is_numeric($id_user) && $this->ci->m_user->is_exists($id_user,$this->get_org_id()) && !$this->is_admin($id_user)){
+						/*
+						* Если удалить не удалось
+						*/
+						if(!$this->ci->m_user->delete($id_user)){
+							throw new AnbaseRuntimeException(lang('common.delete_error'));
+						}
+						return;	
+					}
+					throw new AnbaseRuntimeException(lang('no_enough_right'));
+				}
+			}
+			return;
+		}
+		throw new AnbaseRuntimeException(lang('common.delete_error'));
+	}
+
+	/**
 	 * Выбор всех инвайтов
 	 *
 	 * @return void

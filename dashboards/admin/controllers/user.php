@@ -216,33 +216,22 @@ class User extends MX_Controller
 	 **/
 	private function _del_staff()
 	{
-		/*
-		*
-		* Пытаемся удалить пользователей
-		*/
-		try{
+		if($this->ajax->is_ajax_request()){
 
-			$this->admin_users->del_staff();
-
-			/*
-			*
-			* В зависимости от способа передачи подготавливаем и возвращаем овтет.
-			*/
-			if($this->ajax->is_ajax_request()){
-				$response['code'] = 'success_delete';
-				$response['data'] = lang('success_delete_staff');
-			}else{
-				redirect('admin/user/staff');
+			try{
+				$this->admin_users->del_staff();
+				$response['code'] = 'success_del_users';
+				$response['data'] = lang('success_del_staff');
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_del_users';
+				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_del_users';
+				$response['data']['errors'] = $re->get_error_messages();
 			}
-
-		}catch( AnbaseRuntimeException $re ){
-
-			if($this->ajax->is_ajax_request()){
-				$response['code'] = 'error_delete_staff';
-				$response['data'] = lang('error_delete_staff');
-			}else{
-				redirect('admin/user/staff');
-			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect($this->admin_users->get_home_page());
 		}
 	}
 
@@ -255,7 +244,24 @@ class User extends MX_Controller
 	 **/
 	private function _del_admins()
 	{
+		if($this->ajax->is_ajax_request()){
 
+			try{
+
+				$this->admin_users->del_admins();
+				$response['code'] = 'success_del_users';
+				$response['data'] = lang('success_del_admins');
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_del_users';
+				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_del_users';
+				$response['data']['errors'] = $re->get_error_messages();
+			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect($this->admin_users->get_home_page());
+		}	
 	}
 
 	/**

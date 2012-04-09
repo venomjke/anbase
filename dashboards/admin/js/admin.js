@@ -610,6 +610,61 @@ var admin = {
 					}
 				}
 			});
+		},
+		check_all:function(options){
+
+			var i_checked = options.jObjAction.attr('checked');
+			if(i_checked == "checked"){
+				$('.user_table input[type="checkbox"]').attr('checked','checked');
+			}else{
+				$('.user_table input[type="checkbox"]').removeAttr('checked','checked');
+			}
+		},
+		del_user:function(options){
+
+		},
+		del_users:function(options){
+			/*
+			* 1. формируем пачку id для отправки
+			* 2. отправляем
+			* 3. все ок? удаляем их из таблицы
+			*/
+			var users_ids = [];
+			var all_checkbox = $('.user_table td input:checked');
+			all_checkbox.each(function(){
+				users_ids.push($(this).attr('value'));
+			});
+
+			var post_data = {};
+			post_data['ids_users'] = users_ids;
+
+			$.ajax({
+				url:admin.baseUrl+options.uri,
+				type:'POST',
+				dataType:'json',
+				data:post_data,
+				success:function(response){
+					if(response.code && response.data){
+						switch(response.code){
+							case 'success_del_users':
+								common.showResultMsg(response.data);
+								all_checkbox.each(function(){
+									$('#user_'+$(this).val()).remove();
+								});
+							break;
+							case 'error_del_users':
+								common.showResultMsg('Удалить не удалось');
+							break;
+						}
+					}
+				},
+				beforeSend:function(){
+					common.showAjaxIndicator();
+				},
+				complete:function(){
+					common.hideAjaxIndicator();
+				}
+			})
 		}
 	},
 
