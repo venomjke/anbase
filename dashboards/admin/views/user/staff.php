@@ -65,10 +65,10 @@
 										<?php echo	$employee->name; ?>
 									</td>
 									<td>
-										<?php echo $employee->middle_name; ?>
+										<?php echo $employee->last_name; ?>
 									</td>
 									<td>
-										<?php echo $employee->last_name; ?>
+										<?php echo $employee->middle_name; ?>
 									</td>
 									<td>
 										<?php echo $employee->phone; ?>
