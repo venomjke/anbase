@@ -20,6 +20,7 @@
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.core.js");?>"> </script>
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.grid.js"); ?>"> </script>
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.formatters.js"); ?>"> </script>
+		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.fw_formatters.js");?>"> </script>
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.editors.js"); ?>"> </script>
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/jquery.ui.datepicker-ru.js"); ?>"> </script>
 		<?php echo $template['metadata']; ?>

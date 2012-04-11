@@ -59,7 +59,6 @@ ul#menu li a{
 	background-color:#cbb;
 }
 #dashboard_tabs{
-	height: 35px;
 	overflow: auto;
 	border-bottom: 1px #B4B4B4 solid;
 }
@@ -68,6 +67,7 @@ ul#menu li a{
 	left: 10%;
 	height: 30px;
 	width: 400px;
+	float: left;
 }
 #dashboard_tabs ul li{
 	float: left;
@@ -199,11 +199,49 @@ ul#toolbar li a{
 	font-family:Calibri;
 }
 .cell_tooltip{
-	background-color: #b4b4b4;
+	background-color: #fff;
+	border:1px #b4b4b4 solid;
 	padding: 10px;
 	z-index:999;
-	opacity:.9;
+	opacity:.95;
+	text-align:justify;
+	font-family:Calibri;
 }
 .hasDatepicker{
 	width:150px;
+}
+#dashboard_filter{
+	overflow: auto;
+	border-bottom: 1px #B4B4B4 solid;
+	padding-bottom:10px;
+}
+#filter_header{
+	margin-top: 3px;
+	overflow: auto;
+	width: 800px;
+}
+#filter_body{
+}
+ul#filter_controls{
+	width:650px;
+}
+ul#filter_controls li{
+
+}
+a#filter_toggle{
+
+	display:inline !important;
+	margin-right:0px !important;
+	padding:0px !important;
+	margin-left:20px !important;
+}
+.filter_section{
+	float:left;
+	margin-left: 25px;
+}
+.filter_section h4{
+
+}
+.filter_section table{
+
 }
