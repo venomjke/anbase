@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<?php echo meta('Content-type','text/html; charset=utf-8','equiv'); ?>
-		<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/cupertino/jquery-ui.css"); ?>
+		<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/smoothness/jquery-ui.css"); ?>
 		<?php echo link_tag("themes/dashboard/css/dashboard.css"); ?>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script language="javascript">
@@ -14,6 +14,14 @@
 		<?php echo link_tag("themes/dashboard/css/noty/jquery.noty.css"); ?>
 		<?php echo link_tag("themes/dashboard/css/noty/noty_theme_default.css"); ?>
 		<?php echo link_tag("themes/dashboard/css/noty/noty_theme_mitgux.css"); ?>
+
+		<?php echo link_tag("themes/dashboard/css/slick.grid.css"); ?>
+		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/jquery.event.drag-2.0.min.js"); ?>"> </script>
+		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.core.js");?>"> </script>
+		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.grid.js"); ?>"> </script>
+		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.formatters.js"); ?>"> </script>
+		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.editors.js"); ?>"> </script>
+		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/jquery.ui.datepicker-ru.js"); ?>"> </script>
 		<?php echo $template['metadata']; ?>
 	</head>
 	<body>

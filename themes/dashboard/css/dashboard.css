@@ -59,14 +59,13 @@ ul#menu li a{
 	background-color:#cbb;
 }
 #dashboard_tabs{
-	height: 80px;
+	height: 35px;
 	overflow: auto;
 	border-bottom: 1px #B4B4B4 solid;
 }
 #dashboard_tabs ul{
 	position: relative;
 	left: 10%;
-	margin-top: 50px;
 	height: 30px;
 	width: 400px;
 }
@@ -192,4 +191,19 @@ ul#toolbar li a{
 }
 #wrap4 .user_table .checkbox{
 	text-align:center;
+}
+#wrap1 #orders_grid .active{
+	border:1px #000 solid;
+}
+#wrap1 #orders_grid{
+	font-family:Calibri;
+}
+.cell_tooltip{
+	background-color: #b4b4b4;
+	padding: 10px;
+	z-index:999;
+	opacity:.9;
+}
+.hasDatepicker{
+	width:150px;
 }
