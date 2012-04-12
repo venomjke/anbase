@@ -178,5 +178,12 @@ var agent = {
 				this.edit_field(options);	
 			}
 		}
+	},
+	/*
+	* JS модуль для реализации интерфейса заявок
+	*/
+	orders:{
+		init:function(options){
+		}
 	}
 }

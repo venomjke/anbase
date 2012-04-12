@@ -65,15 +65,15 @@ class Orders extends MX_Controller
 				/*
 				* обработка действия view
 				*/
-				$section = $this->input->get('s')?$this->input->get('s'):'view';
+				$section = $this->input->get('s')?$this->input->get('s'):'all';
 				switch ($section) {
 					case 'free':
 						$this->_view_free_orders();
 						break;
 					case 'delegate':
-
 						$this->_view_delegate_orders();
 						break;
+					case 'all':
 					default:
 						$this->_view_all();
 				}

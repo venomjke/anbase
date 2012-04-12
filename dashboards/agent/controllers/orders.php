@@ -24,6 +24,8 @@ class Orders extends MX_Controller
 		*
 		*/
 		$this->load->library("agent/Agent_Users");
+		$this->load->library("Ajax");
+
 
 		if(!$this->agent_users->is_logged_in_as_agent()){
 			redirect('');
@@ -37,6 +39,14 @@ class Orders extends MX_Controller
 
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
+
+		/*
+		* Подключение скриптов
+		*/
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"> 
+			agent.init({baseUrl:"'.base_url().'"});
+			agent.orders.init(); 
+		</script>');
 	}
 
 
@@ -48,33 +58,53 @@ class Orders extends MX_Controller
 	 **/
 	public function index()
 	{
-		redirect('agent/orders/view');
+		redirect('agent/orders');
 	}
 
 
 	/**
-	 * Подконтроллер, выполняющий переадресацию на нужную функцию
+	 * Маленьки маршрутизатор
 	 *
 	 * @return void
 	 * @author Alex.strigin
 	 **/
 	public function _remap()
 	{
-		$section = $this->input->get('s');
+		$action = $this->input->get('act')?$this->input->get('act'):'view';
 
-		if(!empty($section)){
+		/*
+		* Обрабатываем действие
+		*/
+		switch ($action) {
+			case 'view':
+			default:
 
-			switch ($section) {
-				case 'free':
-					$this->_free_orders();
-					break;
-				default:
-					$this->_view();
-					break;
-			}
-		}else{
+				/*
+				* Обработка действия view: выбираем section, и отображаем её
+				*/
+				$section = $this->input->get('s')?$this->input->get('s'):'my';
 
-			$this->_view();
+				switch ($section) {
+					case 'my':
+					default:
+						/*
+						* Отображение заявок агента
+						*/
+						$this->_view();
+						break;
+					case 'free':
+						/*
+						* Отображение свободных
+						*/
+						$this->_free_orders();
+						break;		
+				}
+				break;
+			case 'edit':
+			/*
+			* Редактирование заявок
+			*/
+				break;
 		}
 	}
 

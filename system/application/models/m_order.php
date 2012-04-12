@@ -15,9 +15,9 @@ class M_Order extends MY_Model{
 	*
 	*  Категории
 	*/
-	const ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE = 'Коммерческая недвижимость';
-	const ORDER_CATEGORY_COUNTRY_REAL_ESTATE    = 'Загородная недвижимость';
-	const ORDER_CATEGORY_LIVING_REAL_ESTATE		= 'Жилая недвижимость';
+	const ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE = 'Коммерческая';
+	const ORDER_CATEGORY_COUNTRY_REAL_ESTATE    = 'Загородная';
+	const ORDER_CATEGORY_LIVING_REAL_ESTATE		= 'Жилая';
 
 	/*
 	*
