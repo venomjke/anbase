@@ -46,7 +46,7 @@
 						<td ondblclick="admin.orders.edit_text({jObjAction:$(this), name:'create_date', id:<?php echo $order->id;?>, uri:'<?php echo "admin/orders/?act=edit";?>'});"> <?php echo $order->create_date; ?></td>
 						<td ondblclick="admin.orders.edit_select({jObjAction:$(this),name:'category',id:<?php echo $order->id;?>, uri:'<?php echo "admin/orders/?act=edit";?>' });"> <?php echo $order->category; ?> </td>
 						<td ondblclick="admin.orders.edit_select({jObjAction:$(this),name:'deal_type',id:<?php echo $order->id; ?>,uri:'<?php echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->deal_type; ?></td>
-						<td ondblclick="admin.orders.edit_select({jObjAction:$(this),name:'region_id',id:<?php echo $order->id; ?>,uri:'<?php echo "admin/orders/?act=edit"; ?>'}); " > <?php echo $order->region_name; ?></td>
+						<td>  </td>
 						<td ondblclick="admin.orders.edit_select({jObjAction:$(this),name:'metro_id',id:<?php echo $order->id; ?>,uri:'<?php echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->metro_name; ?></td>
 						<td ondblclick="admin.orders.edit_text({jObjAction:$(this), name:'price', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->price; ?></td>
 						<td ondblclick="admin.orders.edit_bigtext({jObjAction:$(this), name:'description', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo nl2br($order->description); ?>
@@ -113,14 +113,6 @@
 			</select>
 		</div>
 		<div>
-			<label for="region_id"> Регион </label> <br/>
-			<select name="region_id">
-			<?php foreach($this->admin_users->get_region_list() as $region ): ?>
-				<option value="<?php echo $region->id; ?>"> <?php echo $region->name; ?> </option>
-			<?php endforeach; ?>
-			</select>	
-		</div>
-		<div>
 			<label for="metro_id"> Метро </label>  <br/>
 			<select name="metro_id">
 				<?php foreach($this->admin_users->get_metro_list() as $metro): ?>
@@ -166,15 +158,6 @@
 		<select name="deal_type">
 		<?php foreach($this->admin_users->get_dealtype_list() as $deal_type): ?>
 		<option value="<?php echo $deal_type; ?>"> <?php echo $deal_type; ?> </option>
-		<?php endforeach; ?>
-		</select>
-	</form>
-</div>
-<div id="dialog_edit_region_id">
-	<form onsubmit="return false;">
-		<select name="region_id">
-		<?php foreach($this->admin_users->get_region_list() as $region ): ?>
-			<option value="<?php echo $region->id; ?>"> <?php echo $region->name; ?> </option>
 		<?php endforeach; ?>
 		</select>
 	</form>

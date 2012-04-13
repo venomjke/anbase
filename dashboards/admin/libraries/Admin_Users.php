@@ -160,7 +160,7 @@ class Admin_Users extends Users{
 
 	/**
 	 * Получить список районов
-	 *
+	 * [ my_notice: мне кажется, что расположение get_region_list здесь неправильное ]
 	 * @return array
 	 * @author alex.strigin
 	 **/
@@ -691,7 +691,7 @@ class Admin_Users extends Users{
 
 	/**
 	 * Добавление заявки.
-	 *
+	 * [ my_notice: видимо с дуру запихал методы работы с заявкой в admin_users... надо бы перенести в admin_order ]
 	 * @return void
 	 * @author alex.strigin
 	 **/
@@ -700,7 +700,7 @@ class Admin_Users extends Users{
 		/*
 		* Устанавливаем правила валидации	
 		*/
-		$insert_fields = array('number','create_date','category','deal_type','region_id','metro_id','price','description','delegate_date','finish_date','phone','state');
+		$insert_fields = array('number','create_date','category','deal_type','metro_id','price','description','delegate_date','finish_date','phone','state');
 
 		$this->ci->form_validation->set_rules($this->ci->m_order->insert_validation_rules);
 
@@ -738,7 +738,7 @@ class Admin_Users extends Users{
 		/*
 		* Устанавливаем правила валидации
 		*/
-		$update_fields =  array('number','create_date','category','deal_type','region_id','metro_id','price','description','delegate_date','finish_date','phone','state');
+		$update_fields =  array('number','create_date','category','deal_type','metro_id','price','description','delegate_date','finish_date','phone','state');
 
 		$this->ci->form_validation->set_rules($this->ci->m_order->update_validation_rules);
 
