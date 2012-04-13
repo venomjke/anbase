@@ -4,7 +4,6 @@
 * @author alex.strigin
 */
 var common = {
-	metros:{},
 	/**
 	*
 	* Методы уведомления о чем либо

@@ -44,7 +44,6 @@ class M_Order extends MY_Model{
 		array('field'=>'create_date','label'=>'lang:order.label_create_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
 		array('field'=>'category','label'=>'lang:order.label_category','rules'=>'callback_valid_category'),
 		array('field'=>'deal_type','label'=>'lang:order.label_deal_type','rules'=>'callback_valid_dealtype'),
-		array('field'=>'metro_id','label'=>'lang:order.label_metro_id','rules'=>'is_natural|valid_metro_id'),
 		array('field'=>'price','label'=>'lang:order.label_price','rules'=>'greater_than[0]|max_length[12]'),
 		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'xss_clean'),
 		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
@@ -63,7 +62,6 @@ class M_Order extends MY_Model{
 		array('field'=>'create_date','label'=>'lang:order.label_create_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
 		array('field'=>'category','label'=>'lang:order.label_category','rules'=>'callback_valid_category'),
 		array('field'=>'deal_type','label'=>'lang:order.label_deal_type','rules'=>'callback_valid_dealtype'),
-		array('field'=>'metro_id','label'=>'lang:order.label_metro_id','rules'=>'is_natural|valid_metro_id'),
 		array('field'=>'price','label'=>'lang:order.label_price','rules'=>'greater_than[0]|max_length[12]'),
 		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'xss_clean'),
 		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
@@ -88,7 +86,7 @@ class M_Order extends MY_Model{
 		*/
 		$this->table       = 'orders';
 		$this->primary_key = 'id';
-		$this->fileds      = array('number','create_date','category','deal_type','metro_id','price','description','delegate_date','finish_date','phone','state','org_id');
+		$this->fileds      = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id');
 		$this->result_mode = 'object';
 		/*
 		*
@@ -144,15 +142,6 @@ class M_Order extends MY_Model{
 		if(empty($data['create_date'])){
 			$data['create_date'] = date('Y/m/d H:i:s');
 		}
-
-		/*
-		*
-		* Можно задать по умолчанию id метро и как-то по другому
-		*/
-		if(empty($data['metro_id'])){
-			$data['metro_id'] = 1;
-		}
-
 	}
 	/**
 	 * Проверка состояния
@@ -298,12 +287,9 @@ class M_Order extends MY_Model{
 		$this->select('users.middle_name as user_middle_name');
 		$this->select('users.last_name as user_last_name');
 
-		$this->select('metros.name as metro_name');
-
 		$this->join('orders_users','orders_users.order_id = orders.id','LEFT')
 			 ->join('users','orders_users.user_id = users.id','LEFT')
-			 ->join('organizations','orders.org_id = organizations.id')
-			 ->join('metros','metros.id = orders.metro_id');
+			 ->join('organizations','orders.org_id = organizations.id');
 	}
 
 

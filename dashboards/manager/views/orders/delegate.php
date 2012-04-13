@@ -45,7 +45,7 @@
 						<td> <?php echo $order->category; ?> </td>
 						<td> <?php echo $order->deal_type; ?></td>
 						<td> </td>
-						<td> <?php echo $order->metro_name; ?></td>
+						<td> </td>
 						<td> <?php echo $order->price; ?></td>
 						<td> <?php echo nl2br($order->description); ?>
 						</td>

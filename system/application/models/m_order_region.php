@@ -51,7 +51,7 @@ class M_Order_region extends MY_Model
 		if($in_array){
 			$regions_ids = array();
 			foreach($regions as $region){
-				$regions_ids[] = $region->id;
+				$regions_ids[] = $region->region_id;
 			}
 			return $regions_ids;
 		}

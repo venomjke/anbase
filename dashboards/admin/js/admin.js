@@ -684,7 +684,6 @@ var admin = {
 			$('#dialog_edit_create_date').dialog(admin.orders.dialog_options);
 			$('#dialog_edit_category').dialog(admin.orders.dialog_options);
 			$('#dialog_edit_deal_type').dialog(admin.orders.dialog_options);
-			$('#dialog_edit_metro_id').dialog(admin.orders.dialog_options);
 			$('#dialog_edit_price').dialog(admin.orders.dialog_options);
 			$('#dialog_edit_description').dialog(admin.orders.dialog_options);
 			$('#dialog_edit_delegate_date').dialog(admin.orders.dialog_options);
@@ -717,7 +716,7 @@ var admin = {
 										var category    = $('<td>'+form.find('select[name="category"] option:selected').val()+'</td>');
 										var deal_type   = $('<td>'+form.find('select[name="deal_type"] option:selected').val()+'</td>');
 										var region      = $('<td></td>');
-										var metro       = $('<td>'+form.find('select[name="metro_id"] option:selected').val()+'</td>');  
+										var metro       = $('<td></td>');  
 										var price       = $('<td>'+form.find('input[name="price"]').val()+'</td>');
 										var description = $('<td>'+form.find('textarea[name="description"]').val()+'</td>');
 										var user = $('<td></td>');

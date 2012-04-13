@@ -47,7 +47,7 @@
 						<td ondblclick="admin.orders.edit_select({jObjAction:$(this),name:'category',id:<?php echo $order->id;?>, uri:'<?php echo "admin/orders/?act=edit";?>' });"> <?php echo $order->category; ?> </td>
 						<td ondblclick="admin.orders.edit_select({jObjAction:$(this),name:'deal_type',id:<?php echo $order->id; ?>,uri:'<?php echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->deal_type; ?></td>
 						<td>  </td>
-						<td ondblclick="admin.orders.edit_select({jObjAction:$(this),name:'metro_id',id:<?php echo $order->id; ?>,uri:'<?php echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->metro_name; ?></td>
+						<td> </td>
 						<td ondblclick="admin.orders.edit_text({jObjAction:$(this), name:'price', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo $order->price; ?></td>
 						<td ondblclick="admin.orders.edit_bigtext({jObjAction:$(this), name:'description', id:<?php echo $order->id; ?>, uri:'<?php  echo "admin/orders/?act=edit"; ?>'});"> <?php echo nl2br($order->description); ?>
 						</td>
@@ -113,14 +113,6 @@
 			</select>
 		</div>
 		<div>
-			<label for="metro_id"> Метро </label>  <br/>
-			<select name="metro_id">
-				<?php foreach($this->admin_users->get_metro_list() as $metro): ?>
-				<option value="<?php echo $metro->id;?>"> <?php echo $metro->name; ?> </option>
-				<?php endforeach;?>
-			</select>
-		</div>
-		<div>
 			<label for="price"> Цена </label> <br/>
 			<input type="text" name="price" value="" />
 		</div>	
@@ -159,15 +151,6 @@
 		<?php foreach($this->admin_users->get_dealtype_list() as $deal_type): ?>
 		<option value="<?php echo $deal_type; ?>"> <?php echo $deal_type; ?> </option>
 		<?php endforeach; ?>
-		</select>
-	</form>
-</div>
-<div id="dialog_edit_metro_id">
-	<form onsubmi="return false;">
-		<select name="metro_id">
-			<?php foreach($this->admin_users->get_metro_list() as $metro): ?>
-			<option value="<?php echo $metro->id;?>"> <?php echo $metro->name; ?> </option>
-			<?php endforeach;?>
 		</select>
 	</form>
 </div>

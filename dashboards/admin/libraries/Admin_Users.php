@@ -172,7 +172,7 @@ class Admin_Users extends Users{
 
 	/**
 	 * Получить список метро
-	 *
+	 * [ my_notice: аналогично get_region_list мне не нравится расположение здесь get_metro_list]
 	 * @return array
 	 * @author alex.strigin
 	 **/
@@ -700,7 +700,7 @@ class Admin_Users extends Users{
 		/*
 		* Устанавливаем правила валидации	
 		*/
-		$insert_fields = array('number','create_date','category','deal_type','metro_id','price','description','delegate_date','finish_date','phone','state');
+		$insert_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state');
 
 		$this->ci->form_validation->set_rules($this->ci->m_order->insert_validation_rules);
 
@@ -738,7 +738,7 @@ class Admin_Users extends Users{
 		/*
 		* Устанавливаем правила валидации
 		*/
-		$update_fields =  array('number','create_date','category','deal_type','metro_id','price','description','delegate_date','finish_date','phone','state');
+		$update_fields =  array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state');
 
 		$this->ci->form_validation->set_rules($this->ci->m_order->update_validation_rules);
 
