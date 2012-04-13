@@ -37,13 +37,29 @@ class M_Metro extends MY_Model
 	}
 
 	/**
-	 * Получить список метро
+	 * Получить список метро. Получить список метро можно в двух форматах.
+	 * 1. Нормальный - возвращаем результат запроса
+	 * 2. Json - парсим массив, выдергиваем записи и вставляем их в другой массив.
 	 *
 	 * @return array
 	 * @author alex.strigin
 	 **/
-	public function get_metro_list()
+	public function get_metro_list($format = "normal")
 	{
-		return $this->get_all();
+
+		$metros = $this->get_all();
+		switch ($format) {
+			case 'normal':
+			default:
+				return $metros;
+				break;
+			case 'json':
+				$metros_json = array();
+				foreach($metros as $metro){
+					$metros_json[$metro->line][$metro->id] = $metro->name;
+				}
+				return json_encode($metros_json);
+			break;
+		}
 	}
 }// END M_Region class

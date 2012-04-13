@@ -11,7 +11,7 @@
 				"AnbaseCategory":AnbaseCategoryEditor,
 				"AnbaseDealType":AnbaseDealTypeEditor,
 				"AnbaseRegions":AnbaseRegionsEditor,
-				"AnbaseMetro":AnbaseMetroEditor
+				"AnbaseMetros":AnbaseMetrosEditor
 			}
 		}
 	});
@@ -108,32 +108,36 @@
 		this.init();	
 	};
 
-	function AnbaseMetroEditor(args){
-		var $wrapper
+	function AnbaseMetrosEditor(args){
+		var $wrapper;
+
 		var defaultValue;
 		var scope = this;
 		var metro = common.metros;
+
 		this.init = function(){
 			var $container = $('body');
-			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'>").appendTo($container);
-			var $first_line  = scope.buildMetroLineWrap(metro["first_line"]);
-			var $second_line = scope.buildMetroLineWrap(metro["second_line"]);
-			var $third_line  = scope.buildMetroLineWrap(metro["third_line"]);
-			var $fourth_line = scope.buildMetroLineWrap(metro["fourth_line"]);
-			var $fith_line   = scope.buildMetroLineWrap(metro["fith_line"]);
+			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'><button id=\"save_metros\">Сохранить</button><button id=\"cancel_metros\">Отмена</button>").appendTo($container);
+			var $first_line  = scope.buildMetroLineWrap(metro["1"],1);
+			var $second_line = scope.buildMetroLineWrap(metro["2"],2);
+			var $third_line  = scope.buildMetroLineWrap(metro["3"],3);
+			var $fourth_line = scope.buildMetroLineWrap(metro["4"],4);
+			var $fith_line   = scope.buildMetroLineWrap(metro["5"],5);
 
-			$container.append($first_line);
+			var $second_row = $('<div style="overflow:auto; margin:5px" />');
+			$second_row.append($fourth_line);
+			$second_row.append($fith_line);
+	
 			var $first_row = $('<div style="overflow:auto; margin:5px" />');
 			$first_row.append($first_line);
 			$first_row.append($second_line);
 			$first_row.append($third_line);
-			var $second_row = $('<div style="overflow:auto; margin:5px" />');
-			$second_row.append($fourth_line);
-			$second_row.append($fith_line);
-			$wrapper.append($first_row);
-			$wrapper.append($second_row);
-			$wrapper.find('button:first').on('click',scope.save);
-			$wrapper.find('button:last').on('click',scope.cancel);
+		
+			$wrapper.prepend($second_row);
+			$wrapper.prepend($first_row);
+
+			$wrapper.find('#save_metros').on('click',scope.save);
+			$wrapper.find('#cancel_metros').on('click',scope.cancel);
 
 			scope.position(args.position);
 		};
@@ -163,25 +167,50 @@
 		}
 
 		this.loadValue = function(item){
-			defaultValue = item.metro;
-			for(var i in item.metro){
-				$wrapper.find('input:checkbox').each(function(){
-					if(item.metro[i] == $(this).val()){
-						$(this).attr('checked','checked');
-					}
-				});
+			defaultValue = item.metros;
+
+			for(var i in item.metros){
+				for(var j in item.metros[i]){	
+					$wrapper.find('input:checkbox').each(function(){
+						if(item.metros[i][j] == $(this).val()){
+							$(this).attr('checked','checked');
+						}
+					});	
+				}
 			}	
 		};
 
 		this.serializeValue = function(){
-			var region
+			var all_checked_metros = {};
+			$wrapper.find('input:checkbox:checked').each(function(){
+				var line = $(this).attr('rel');	
+
+				if(!all_checked_metros[line])
+					all_checked_metros[line] = [];
+
+				all_checked_metros[line].push($(this).val());
+					
+			});
+			return all_checked_metros;
 		};
 
 		this.applyValue = function(item,state){
-
+			item.metros = state;
 		};
 
 		this.isValueChanged = function(){
+			var all_checked_metros = scope.serializeValue();
+			for(var i in all_checked_metros){
+				if(defaultValue.hasOwnProperty(i)){	
+					for(var j in all_checked_metros[i]){
+						if(defaultValue[i].indexOf(all_checked_metros[i][j]) == -1){
+							return true;
+						}
+					}
+				}else{
+					return true;
+				}
+			}
 			return false;
 		};
 
@@ -197,12 +226,12 @@
 				.css("left",position.left+15);
 		};
 
-		this.buildMetroLineWrap = function(Line){
+		this.buildMetroLineWrap = function(Line,LineNumber){
 			var $metro_line_wrap = $('<div class="metro-line" style="float:left;oveflow:auto;margin:5px"/>');
 			for(var i in Line){
 				var $line_point_wrap = $('<div>');
-				var $line_point = $('<input type="checkbox" value="'+Line[i]+'">');
-				var $line_point_label = $('<label for="">'+i+'</label>');
+				var $line_point = $('<input type="checkbox" value="'+i+'" rel="'+LineNumber+'">');
+				var $line_point_label = $('<label for="">'+Line[i]+'</label>');
 				$line_point_wrap.append($line_point);
 				$line_point_wrap.append($line_point_label);
 				$line_point_wrap.appendTo($metro_line_wrap);

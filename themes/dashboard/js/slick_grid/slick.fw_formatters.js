@@ -8,7 +8,7 @@
       "Formatters": {
         "Rubbles":RubblesFormatter,
         "RegionsList":RegionsListFormatter,
-        "MetroList":MetroListFormatter
+        "MetrosList":MetrosListFormatter
       }
     }
   });
@@ -61,14 +61,20 @@
 
       var list_string = "";
       for(var i in list){
-        list_string = common.regions[i]+"/";
+        list_string += common.regions[list[i]]+"/";
       };
       return list_string.substr(0,list_string.length-1);
   }
 
-  function MetroListFormatter(row,cell,list,columnDef,dataContext){
+  function MetrosListFormatter(row,cell,list,columnDef,dataContext){
     if(!list || !(list instanceof Object))
       return "";
-  }
 
+      var list_string = "";
+      for(var i in list){
+        for(var j in list[i])
+          list_string += common.metros[i][list[i][j]]+"/";
+      };
+      return list_string.substr(0,list_string.length-1);
+  }
 })(jQuery);
