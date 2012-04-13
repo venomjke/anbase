@@ -37,13 +37,36 @@ class M_Region extends MY_Model
 	}
 
 	/**
-	 * Получить список районов
+	 * Получить список районов. Получить список районов можно в двух различных видах
+	 * 1. Нормальный, будет возвращен список строк в виде объектов
+	 * 2. Один большой json объект, который удобно передавать исп. ajax, или просто сувать в js код.
 	 *
+	 * @param string
 	 * @return array
 	 * @author alex.strigin
 	 **/
-	public function get_region_list()
+	public function get_region_list($format = "normal")
 	{
-		return $this->get_all();
+		$regions = $this->get_all();
+		switch ($format) {
+			case 'normal':
+			default:
+				/*
+				* Просто возвращаем список районов
+				*/
+				return $regions;
+				break;
+			case 'json':
+				/*
+				* Пересобираем массив, и возвращаем json_encode
+				*/
+				$json_regions = array();
+				foreach($regions as $region){
+					$json_regions[$region->id] = $region->name;
+				}
+				return json_encode($json_regions);
+				break;
+		}
 	}
+
 }// END M_Region class

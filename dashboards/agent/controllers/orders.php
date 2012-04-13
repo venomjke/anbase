@@ -24,8 +24,8 @@ class Orders extends MX_Controller
 		*
 		*/
 		$this->load->library("agent/Agent_Users");
+		$this->load->library("agent/Agent_Orders");
 		$this->load->library("Ajax");
-
 
 		if(!$this->agent_users->is_logged_in_as_agent()){
 			redirect('');
@@ -33,20 +33,27 @@ class Orders extends MX_Controller
 
 		/*
 		*
-		*	Загрузка основной модели
+		*	Загрузка доп. моделей
 		*/
-		$this->load->model("agent/m_agent_order");
+		$this->load->model('m_region');
 
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
 
 		/*
+		* Не знаю, как лучше обыграть эту задачу, но пока так.
+		*/
+		$regions = $this->m_region->get_region_list("json");
+		/*
 		* Подключение скриптов
 		*/
+		$this->template->append_metadata('<script type="text/javascript"> common.regions = '.$regions.'</script>');
+
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"> 
 			agent.init({baseUrl:"'.base_url().'"});
 			agent.orders.init(); 
 		</script>');
+
 	}
 
 

@@ -17,7 +17,6 @@ class Site extends MX_Controller {
 		$this->template->set_theme('start');
 		$this->template->set_partial('menu','common/menu',array("current" => $this->router->fetch_method()));
 	}
-
 	/*
 	*
 	*	Главная страница:
