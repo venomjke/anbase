@@ -219,6 +219,8 @@ ul#toolbar li a{
 	margin-top: 3px;
 	overflow: auto;
 	width: 800px;
+	position:relative;
+	left:5%;
 }
 #filter_body{
 }
