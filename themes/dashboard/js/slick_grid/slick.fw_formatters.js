@@ -64,7 +64,7 @@
         list_string += common.regions[list[i]]+"/";
       };
       return list_string.substr(0,list_string.length-1);
-  }
+  };
 
   function MetrosListFormatter(row,cell,list,columnDef,dataContext){
     if(!list || !(list instanceof Object))
@@ -76,5 +76,6 @@
           list_string += common.metros[i][list[i][j]]+"/";
       };
       return list_string.substr(0,list_string.length-1);
-  }
+  };
+
 })(jQuery);

@@ -393,4 +393,40 @@ class M_Order extends MY_Model{
 	}
 
 
+	/**
+	 * Выбор всех свободных заявок организации
+	 *
+	 * @param int
+	 * @param array
+	 * @param bool
+	 * @param bool
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_all_free_orders($org_id,$filter = array(),$limit = false,$offset = false)
+	{
+		/*
+		* Т.к при присоединении oders_users к orders используется LEFT JOIN, то свободные заявки мы
+		* выбираем просто проверяя user_id на NULL
+		*/
+		$this->db->where("orders_users.user_id IS NULL");
+		return $this->get_all_orders_org($org_id,$filter,$limit,$offset);
+	}
+
+	/**
+	 * Выбор всех занятых заявок
+	 *
+	 * @param int
+	 * @param array
+	 * @param bool
+	 * @param bool
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_all_delegate_orders($org_id,$filter=array(),$limit=false,$offset=false)
+	{
+		$this->db->where("orders_users.user_id IS NOT NULL");
+		return $this->get_all_orders_org($org_id,$filter,$limit,$offset);
+	}
+
 }

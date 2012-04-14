@@ -46,6 +46,7 @@ class Orders extends MX_Controller
 		*/
 		$regions = $this->m_region->get_region_list("json");
 		$metros  = $this->m_metro->get_metro_list("json");
+
 		/*
 		* Подключение скриптов
 		*/
@@ -126,37 +127,31 @@ class Orders extends MX_Controller
 	private function _view(){
 
 		/*
-		*
-		*	Установка шаблона
-		*
+		* Загрузка данных происходит после загрузки страницы, поэтому если ajax, то загрузка.
 		*/
-		$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$orders = $this->agent_orders->get_all_agent_orders();
+				$response['code'] = 'success_view_order';
+				$response['data'] = $orders;
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_view_order';
+				$response['data'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{
 
+			/*
+			*	Установка шаблона
+			*/
+			$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
 
-		/*
-		*
-		*	Установки фильтров
-		*
-		*/
-		$filter = array();
-		$limit  = false;
-		$offset = false;
-
-
-		/*
-		*
-		*	Выбор данных
-		*
-		*/
-		$all_agent_orders = $this->m_agent_order->get_all_orders_agent($this->agent_users->get_user_id(),$filter,$limit,$offset);
-
-		/*
-		*
-		*	Вывод данных
-		*
-		*/
-		$this->template->build('orders/view',array('orders' => $all_agent_orders));
-
+			/*
+			*	Вывод данных
+			*/
+			$this->template->build('orders/view');
+		}
 	}
 
 
@@ -168,22 +163,12 @@ class Orders extends MX_Controller
 		*
 		*/
 		$this->template->set_partial("dashboard_tabs","dashboard/dashboard_tabs");
-
-		/*
-		*
-		*	Установка фильтров
-		*
-		*/
-		$filter = array();
-		$limit  = false;
-		$offset = false;
-
 		/*
 		*
 		*	Выбор данных
 		*
 		*/
-		$all_free_orders = $this->m_agent_order->get_all_free_orders($this->agent_users->get_org_id());
+		$all_free_orders = $this->agent_orders->get_all_free_orders();
 
 		/*
 		*

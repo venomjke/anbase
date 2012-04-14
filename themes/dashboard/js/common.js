@@ -90,5 +90,23 @@ var common = {
 			}
 		}
 		return true;
+	},
+
+	show_full_text:function(event,row,cell,value){
+		var tooltip_id = '#tooltip_'+row+'_'+cell;
+		if($(tooltip_id).length>0){
+		  $(tooltip_id).css('top',event.pageY-$(tooltip_id).outerHeight(true)-20);
+		  $(tooltip_id).css('left',event.pageX-$(tooltip_id).outerWidth()-20);
+		}else{
+		  var tooltip = $('<div id="tooltip_'+row+'_'+cell+'" class="cell_tooltip" style="display:none;width:450">').html(value.replace(/(\n|\r\n)/g,'<br\/>'));
+		  $('body').append(tooltip);  
+		  tooltip.css('position','absolute');
+		  tooltip.css('top',event.pageY-tooltip.outerHeight(true)-20);
+		  tooltip.css('left',event.pageX-tooltip.outerWidth()-20);
+		  tooltip.css('display','block');
+		}
+	},
+	hide_full_text:function(event,row,cell){
+	  $('#tooltip_'+row+'_'+cell).remove();
 	}
 }
