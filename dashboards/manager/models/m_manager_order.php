@@ -25,33 +25,6 @@ class M_Manager_order extends M_Order
 	{
 		parent::__construct();
 	}
-
-
-	/**
-	 * Выбор всех заявок менеджера
-	 *
-	 * @return array
-	 * @author Alex.strigin
-	 **/
-	public function get_all_orders_manager($manager_id,$filter=array(),$limit=false,$offset=false)
-	{
-		return $this->get_all_orders_user($manager_id,$filter,$limit,$offset);
-	}
-
-
-	/**
-	 * Выбор всех свободных заявок
-	 *
-	 * @return array
-	 * @author Alex.strigin
-	 **/
-	public function get_all_free_orders($org_id,$filter=array(),$limit=false,$offset=false)
-	{
-		$this->where("orders_users.user_id IS NULL");
-		return $this->get_all_orders_org($org_id,$filter,$limit,$offset);
-	}
-
-
 	/**
 	 * Выбор всех заявок агентов, которых курирует данный менеджер
 	 *
@@ -63,14 +36,14 @@ class M_Manager_order extends M_Order
 	 * @return array
 	 * @author Alex.strigin
 	 **/
-	public function get_all_delegate_orders($user_id,$filter=array(),$limit=false,$offset=false)
+	public function get_all_delegate_orders($user_id,$filter=array(),$limit=false,$offset=false,$fields=array())
 	{
 		/*
 		*
 		* метод build_select для  формирования селекта на выбор всех заявок
 		* + join на выбор заявок из managers_users
 		*/
-		$this->build_select();
+		$this->build_select($fields);
 		$this->join("managers_users","managers_users.user_id = orders_users.user_id");
 		/*
 		*
@@ -87,10 +60,8 @@ class M_Manager_order extends M_Order
 		$this->limit($limit,$offset);
 
 		/*
-		*
-		*	Выборка
-		*
-		*
+		*	Выборка.
+		*	Указываем только manager_id, т.к org_id подразумевается верным потому, что manager_id не может быть связан с теми user_id, которые не принадлежат к текущей организации.
 		*/
 		return $this->get_all(array("managers_users.manager_id" => $user_id));
 	}

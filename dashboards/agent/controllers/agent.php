@@ -28,6 +28,6 @@ class Agent extends MX_Controller{
 	}
 
 	public function index(){
-		redirect('agent/orders/view');
+		redirect('agent/orders');
 	}
 }

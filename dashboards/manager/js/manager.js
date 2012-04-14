@@ -178,5 +178,10 @@ var manager = {
 				this.edit_field(options);	
 			}
 		}
+	},
+	orders:{
+		init:function(){
+			
+		}
 	}
 }

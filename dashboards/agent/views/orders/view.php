@@ -49,7 +49,7 @@
 		* Загрузка и инициализация грида
 		*/
 	    $.ajax({
-	    	url:agent.baseUrl+'orders/?act=view&s=my',
+	    	url:agent.baseUrl+'?act=view&s=my',
 	    	type:'POST',
 	    	dataType:'json',
 	    	success:function(response){

@@ -46,7 +46,7 @@
 		* Загрузка и инициализация грида
 		*/
 	    $.ajax({
-	    	url:agent.baseUrl+'orders/?act=view&s=free',
+	    	url:agent.baseUrl+'?act=view&s=free',
 	    	type:'POST',
 	    	dataType:'json',
 	    	success:function(response){

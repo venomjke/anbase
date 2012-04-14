@@ -25,10 +25,8 @@ class Manager extends MX_Controller
 			redirect('');
 		}
 	}
-
-
 	/**
-	 * redirect на manager/orders/views
+	 * redirect на manager/orders
 	 *
 	 * @return void
 	 * @author Alex.strigin
@@ -36,6 +34,6 @@ class Manager extends MX_Controller
 	 **/
 	public function index ()
 	{
-		redirect("manager/orders/view");
+		redirect("manager/orders");
 	}
 }

@@ -42,7 +42,7 @@ class Orders extends MX_Controller
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
 
 		/*
-		* Не знаю, как лучше обыграть эту задачу, но пока так.
+		* [my_notice: Не знаю, как лучше обыграть эту задачу, но пока так.]
 		*/
 		$regions = $this->m_region->get_region_list("json");
 		$metros  = $this->m_metro->get_metro_list("json");
@@ -53,24 +53,11 @@ class Orders extends MX_Controller
 		$this->template->append_metadata('<script type="text/javascript"> common.regions='.$regions.'; common.metros='.$metros.'</script>');
 
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"> 
-			agent.init({baseUrl:"'.base_url().'"});
+			agent.init({baseUrl:"'.site_url("agent/orders").'"});
 			agent.orders.init(); 
 		</script>');
 
 	}
-
-
-	/**
-	 * Редирект на orders/view
-	 *
-	 * @return void
-	 * @author Alex.strigin
-	 **/
-	public function index()
-	{
-		redirect('agent/orders');
-	}
-
 
 	/**
 	 * Маленьки маршрутизатор
@@ -112,7 +99,7 @@ class Orders extends MX_Controller
 				break;
 			case 'edit':
 			/*
-			* Редактирование заявок
+			* Редактирование cвоих заявок
 			*/
 				break;
 		}
@@ -137,7 +124,7 @@ class Orders extends MX_Controller
 				$response['data'] = $orders;
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_view_order';
-				$response['data'] = array($re->get_error_message());
+				$response['data']['errors'] = array($re->get_error_message());
 			}
 			$this->ajax->build_json($response);
 		}else{
@@ -170,7 +157,7 @@ class Orders extends MX_Controller
 				$response['data'] = $orders;
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_view_order';
-				$response['data'] = array($re->get_error_message());
+				$response['data']['errors'] = array($re->get_error_message());
 			}
 			$this->ajax->build_json($response);
 		}else{
