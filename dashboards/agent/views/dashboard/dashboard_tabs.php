@@ -1,8 +1,8 @@
 <div id="dashboard_tabs">
 	<?php
 		$tabs = array(
-			anchor("agent/orders/view","Мои заявки"),
-			anchor("agent/orders/view/?s=free","Свободные заявки")
+			anchor("agent/orders/?act=view&s=my","Мои заявки"),
+			anchor("agent/orders/?act=view&s=free","Свободные заявки")
 		);
 		echo ul($tabs);
 	?>

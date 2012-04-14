@@ -63,7 +63,7 @@ class Orders_Organization
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	public function get_all_free_orders($org_id)
+	public function get_all_free_orders($org_id,$fields=array())
 	{
 		/*
 		* 1. Выбор свободных заявок
@@ -75,7 +75,7 @@ class Orders_Organization
 		$limit  = false;
 		$offset = false;
 
-		$orders = $this->ci->m_order->get_all_free_orders($org_id,$filter,$limit,$offset);
+		$orders = $this->ci->m_order->get_all_free_orders($org_id,$filter,$limit,$offset,$fields);
 
 		$this->bind_regions($orders);
 
@@ -89,7 +89,7 @@ class Orders_Organization
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	public function get_all_delegate_orders($org_id)
+	public function get_all_delegate_orders($org_id,$fields=array())
 	{
 		/*
 		* 1. Выбор всех свободных заявок
@@ -100,11 +100,11 @@ class Orders_Organization
 		$limit  = false;
 		$offset = false;
 
-		$orders = $this->ci->m_order->get_all_delegate_orders($org_id,$filter,$limit,$offset);
+		$orders = $this->ci->m_order->get_all_delegate_orders($org_id,$filter,$limit,$offset,$fields);
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);
-		
+
 		return $orders;
 	}
 
@@ -114,7 +114,7 @@ class Orders_Organization
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	public function get_all_user_orders($user_id)
+	public function get_all_user_orders($user_id,$fields=array())
 	{
 		/*
 		* 0. Установка фильтров
@@ -126,7 +126,7 @@ class Orders_Organization
 		$limit   = false;
 		$offset  = false;
 
-		$orders = $this->ci->m_order->get_all_orders_user($user_id,$filters,$limit,$offset);
+		$orders = $this->ci->m_order->get_all_orders_user($user_id,$filters,$limit,$offset,$fields);
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);

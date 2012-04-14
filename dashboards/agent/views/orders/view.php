@@ -18,7 +18,7 @@
 				if(!value)
 					return;
 			  var cell_content = $('<div id="cell_description" style="height:40px;overflow:hidden;">').html(value);
-			  cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',agent.orders.grid_data['+row+'].description);');
+			  cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',agent.orders.grid.getDataItem('+row+').description);');
 			  cell_content.attr('onmouseout','common.hide_full_text(event,'+row+','+cell+');');
 			  var wrap = $('<div>').html(cell_content);
 			  return wrap.html();
@@ -27,24 +27,22 @@
 			/*
 			* Настройки грида
 			*/
-			var options = {enableCellNavigation: true,editable:true,autoEdit:false,rowHeight:33,enableAddRow:true};
+			var options = {enableCellNavigation: true,editable:true,autoEdit:false,rowHeight:35,forceFitColumns:true};
 			var columns = [
-				{id: "number", name:"Номер", field:"number", width:70, height:100, editor:Slick.Editors.Text },
-				{id: "create_date", name:"Дата создания", field:"create_date", width:118, editor:Slick.Editors.Date},
-				{id: "category", name:"Объект", field:"category", width:75, editor:Slick.Editors.AnbaseCategory},
-				{id: "deal_type", name:"Сделка", field:"deal_type", width:80, editor:Slick.Editors.AnbaseDealType},
-				{id: "regions",  name:"Район", field:"regions", width:141, editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
-				{id: "metros", name:"Метро", field:"metros", width:140, editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
-				{id: "price", name:"Цена", field:"price", width:100, formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Text},	
-				{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:400, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
-				{id: "phone", name:"Телефон", field:"phone", width:160, editor:Slick.Editors.Text}
+				{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Text },
+				{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date},
+				{id: "category", name:"Объект", field:"category", editor:Slick.Editors.AnbaseCategory},
+				{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
+				{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
+				{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
+				{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Text},	
+				{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
+				{id: "phone", name:"Телефон", field:"phone",  editor:Slick.Editors.Text}
 			];	
 			/*
 			* Создание грида
 			*/
 			agent.orders.grid = new Slick.Grid("#orders_grid",data,columns,options);
-			agent.orders.grid_data = data;
-
 		}
 
 		/*

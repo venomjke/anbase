@@ -54,7 +54,11 @@ class Agent_Orders
 	 **/
 	public function get_all_agent_orders()
 	{
-		return $this->ci->orders_organization->get_all_user_orders($this->ci->agent_users->get_user_id());
+		/*
+		* Поля, которые нужно выбрать
+		*/
+		$order_fields = array('number','create_date','category','deal_type','description','price','phone');
+		return $this->ci->orders_organization->get_all_user_orders($this->ci->agent_users->get_user_id(),$order_fields);
 	}
 
 	/**
@@ -65,7 +69,8 @@ class Agent_Orders
 	 **/
 	public function get_all_free_orders()
 	{
-		return $this->ci->orders_organization->get_all_free_orders($this->ci->agent_users->get_org_id());
+		$order_fields = array('number','create_date','category','deal_type','description','price');
+		return $this->ci->orders_organization->get_all_free_orders($this->ci->agent_users->get_org_id(),$order_fields);
 	}
 
 } // END class Agent_Orders

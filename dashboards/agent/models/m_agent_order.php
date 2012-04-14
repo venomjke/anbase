@@ -23,20 +23,5 @@ class M_Agent_order extends M_Order
 	{
 		parent::__construct();
 	}
-	/**
-	 * Выбор всех свободных полей
-	 *
-	 * @param int
-	 * @param array
-	 * @param int
-	 * @param int
-	 * @return void
-	 * @author Alex.strigin
-	 **/
-	public function get_all_free_orders($org_id,$filter=array(),$limit=false,$offset=false)
-	{
-		$this->db->where('orders_users.user_id IS NULL');
-		return $this->get_all_orders_org($org_id,$filter,$limit,$offset);
-	}
 
 } // END class M_Agent_order extends M_Order

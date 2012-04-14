@@ -157,25 +157,36 @@ class Orders extends MX_Controller
 
 
 	private function _free_orders(){
-		/*
-		*
-		*	Установки шаблона
-		*
-		*/
-		$this->template->set_partial("dashboard_tabs","dashboard/dashboard_tabs");
-		/*
-		*
-		*	Выбор данных
-		*
-		*/
-		$all_free_orders = $this->agent_orders->get_all_free_orders();
 
 		/*
-		*
-		*	Вывод данных
-		*
+		* Загрузка данных происходит после загрузки страницы, поэтому если не ajax, просто загружаем страницу.
 		*/
-		$this->template->build('orders/free',array('orders' => $all_free_orders));
+
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$orders = $this->agent_orders->get_all_free_orders();
+				$response['code'] = 'success_view_order';
+				$response['data'] = $orders;
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_view_order';
+				$response['data'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{
+			/*
+			*
+			*	Установки шаблона
+			*
+			*/
+			$this->template->set_partial("dashboard_tabs","dashboard/dashboard_tabs");
+			/*
+			*
+			*	Вывод данных
+			*
+			*/
+			$this->template->build('orders/free');
+		}
 	}
 
 } // END class Orders extends MX_Controller

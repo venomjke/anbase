@@ -86,7 +86,7 @@ class M_Order extends MY_Model{
 		*/
 		$this->table       = 'orders';
 		$this->primary_key = 'id';
-		$this->fileds      = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id');
+		$this->fileds      = array('id','number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id');
 		$this->result_mode = 'object';
 		/*
 		*
@@ -268,19 +268,21 @@ class M_Order extends MY_Model{
 	* @author - Alex.strigin
 	*
 	*/
-	protected function build_select(){
+	protected function build_select($fields = array()){
+
+		/*
+		* Можно указывать какие поля нужно выбрать. По умолчанию выбираются все.
+		*/
+		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state');
+		$fields = array_flip(array_intersect_key(array_flip($fields),array_flip($allow_fields)));
+
+		if(empty($fields)) $fields = $allow_fields;
+
 
 		$this->select('orders.id');
-		$this->select('orders.number');
-		$this->select('orders.create_date');
-		$this->select('orders.category');
-		$this->select('orders.deal_type');
-		$this->select('orders.price');
-		$this->select('orders.description');
-		$this->select('orders.delegate_date');
-		$this->select('orders.finish_date');
-		$this->select('orders.phone');
-		$this->select('orders.state');
+		foreach($fields as $field){
+			$this->select("orders.$field");
+		}
 
 		$this->select('users.id as user_id');
 		$this->select('users.name as user_name');
@@ -306,13 +308,13 @@ class M_Order extends MY_Model{
 	*
 	*
 	*/
-	public function get_all_orders_org($id,$filter = array(),$limit = false,$offset = false){
+	public function get_all_orders_org($id,$filter = array(),$limit = false,$offset = false,$fields=array()){
 
 		/*
 		*	
 		* Выбор данных
 		*/
-		$this->build_select();
+		$this->build_select($fields);
 
 		/*
 		*
@@ -349,13 +351,13 @@ class M_Order extends MY_Model{
 	 * @return array
 	 * @author Alex.strigin
 	 **/
-	public function get_all_orders_users($user_ids,$filter=array(),$limit=false,$offset = false)
+	public function get_all_orders_users($user_ids,$filter=array(),$limit=false,$offset = false,$fields=array())
 	{
 		/*
 		*
 		*	Выбор данных
 		*/
-		$this->build_select();
+		$this->build_select($fields);
 
 		/*
 		*	Применение фильтров
@@ -387,9 +389,9 @@ class M_Order extends MY_Model{
 	 * @return array
 	 * @author Alex.strigin
 	 **/
-	public function get_all_orders_user ($user_id,$filter = array(),$limit = false,$offset = false)
+	public function get_all_orders_user ($user_id,$filter = array(),$limit = false,$offset = false,$fields = array())
 	{
-		return $this->get_all_orders_users(array($user_id),$filter,$limit,$offset);
+		return $this->get_all_orders_users(array($user_id),$filter,$limit,$offset,$fields);
 	}
 
 
@@ -403,14 +405,14 @@ class M_Order extends MY_Model{
 	 * @return array
 	 * @author alex.strigin
 	 **/
-	public function get_all_free_orders($org_id,$filter = array(),$limit = false,$offset = false)
+	public function get_all_free_orders($org_id,$filter = array(),$limit = false,$offset = false,$fields=array())
 	{
 		/*
 		* Т.к при присоединении oders_users к orders используется LEFT JOIN, то свободные заявки мы
 		* выбираем просто проверяя user_id на NULL
 		*/
 		$this->db->where("orders_users.user_id IS NULL");
-		return $this->get_all_orders_org($org_id,$filter,$limit,$offset);
+		return $this->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
 	}
 
 	/**
@@ -423,10 +425,10 @@ class M_Order extends MY_Model{
 	 * @return array
 	 * @author alex.strigin
 	 **/
-	public function get_all_delegate_orders($org_id,$filter=array(),$limit=false,$offset=false)
+	public function get_all_delegate_orders($org_id,$filter=array(),$limit=false,$offset=false,$fields=array())
 	{
 		$this->db->where("orders_users.user_id IS NOT NULL");
-		return $this->get_all_orders_org($org_id,$filter,$limit,$offset);
+		return $this->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
 	}
 
 }
