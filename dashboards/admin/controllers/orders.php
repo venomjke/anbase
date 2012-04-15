@@ -16,17 +16,18 @@ class Orders extends MX_Controller
 		parent::__construct();
 
 		$this->load->library("admin/Admin_Users");
+		$this->load->library("admin/Admin_Orders");
 		$this->load->library("Ajax");
+
 		if( !$this->admin_users->is_logged_in_as_admin() ){
 			redirect("");
 		}
 
 		/*
-		*
 		*	загрузка моделей
-		*
 		*/
-		$this->load->model("admin/m_admin_order");
+		$this->load->model('m_region');
+		$this->load->model('m_metro');
 
 		/*
 		*
@@ -43,9 +44,11 @@ class Orders extends MX_Controller
 		/*
 		* Загружаем другую метаинфу
 		*/
-		$this->template->append_metadata('<script type="text/javascript" src="'.site_url('dashboards/admin/js/admin.js').'"></script>');
-		$this->template->append_metadata('<script type="text/javascript"> $(function(){admin.init({baseUrl:"'.base_url().'"});}); </script>');
-		$this->template->append_metadata('<script type="text/javascript"> $(function(){admin.orders.init();}); </script>');
+		$regions = $this->m_region->get_region_list("json");
+		$metros  = $this->m_metro->get_metro_list("json");
+
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url('dashboards/admin/js/admin.js').'">$(function(){admin.init({baseUrl:"'.base_url().'"}); admin.orders.init();});</script>');
+		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.';common.metros='.$metros.'</script>');
 	}
 
 
@@ -117,38 +120,29 @@ class Orders extends MX_Controller
 	*
 	*/
 	private function _view_all(){
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$orders = $this->admin_orders->get_all_orders_org();
+				$response['code'] = 'success_view_orders';
+				$response['data'] = $orders;
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_view_orders';
+				$response['data']['errors']= array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{	
+			/*	
+			*	Базовые установки шаблона
+			*/
+			$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
+			$this->template->set_partial('orders_toolbar','orders/partials/toolbar');
+			/*
+			* Вывод
+			*/
+			$this->template->build('orders/view',array('section'=>'all'));
 
-		/*
-		*	
-		*	Базовые установки шаблона
-		*/
-		$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
-		$this->template->set_partial('orders_toolbar','orders/partials/toolbar');
-
-		/* 
-		*
-		*	Установки фильтров
-		*
-		*/
-
-		$filter = array();
-
-		$limit = FALSE;
-		$offset = FALSE;
-		/**
-		*
-		*
-		*	Выбор и подготовка данных
-		*
-		*/
-		$all_orders_org = $this->m_admin_order->get_all_orders_org($this->admin_users->get_org_id(),$filter,$limit,$offset);
-
-		/*
-		*
-		* Вывод
-		*
-		*/
-		$this->template->build('orders/view',array('orders'=>$all_orders_org));
+		}
 	}
 
 
@@ -160,35 +154,29 @@ class Orders extends MX_Controller
 	*	@company Flyweb
 	*/
 	private function _view_free_orders(){
+		if($this->ajax->is_ajax_request()){
+			$response = array();
 
-		/*
-		*
-		*	Базовые установки шаблона
-		*/
-		$this->template->set_partial('dashboard_tabs','dashboard_tabs');
-		$this->template->set_partial('orders_toolbar','orders/partials/toolbar');
-		/*
-		*
-		*	Установка фильтров
-		*
-		*/
-		$filter = array();
-		$limit  = FALSE;
-		$offset = FALSE;
+			try{
+				$orders = $this->admin_orders->get_all_free_orders();
+				$response['code'] = 'success_view_orders';
+				$response['data'] = $orders;
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_view_orders';
+				$response['data'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{		
+			/*
+			*	Базовые установки шаблона
+			*/
+			$this->template->set_partial('dashboard_tabs','dashboard_tabs');
 
-		/*
-		*
-		*	Выбор данных их подготовка для вывода
-		*
-		*/
-		$all_free_orders = $this->m_admin_order->get_all_free_orders($this->admin_users->get_org_id(),$filter,$limit,$offset);
-
-		/*
-		*
-		*	Вывод данных
-		*
-		*/
-		$this->template->build('orders/view',array('orders' => $all_free_orders));
+			/*
+			*	Вывод данных
+			*/
+			$this->template->build('orders/view',array('section'=>'free'));
+		}
 	}
 
 	/**
@@ -198,35 +186,26 @@ class Orders extends MX_Controller
 	*	@company Flyweb
 	*/
 	public function _view_delegate_orders(){
-		/*
-		*	Базовые установки шаблона
-		*/
-		$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
-		$this->template->set_partial('orders_toolbar','orders/partials/toolbar');
-
-		/*
-		*
-		*	Установка фильтра
-		*
-		*/
-
-		$filter = array();
-
-		$limit = FALSE;
-		$offset = FALSE;
-		/*
-		*
-		*	Выбор данных и их подгтовка для вывода
-		*
-		*/
-		$all_delegate_orders = $this->m_admin_order->get_all_delegate_orders($this->admin_users->get_org_id());
-		/*
-		*
-		*	Вывод данных
-		*
-		*/
-		$this->template->build('orders/view',array('orders' => $all_delegate_orders));
-
+		if($this->ajax->is_ajax_request()){
+			try{
+				$orders = $this->admin_orders->get_all_delegate_orders();
+				$response['code'] = 'success_view_orders';
+				$response['data'] = $orders;
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_view_orders';
+				$response['data']['errors'] = array($re->get_error_message()); 
+			}
+			$this->ajax->build_json($response);
+		}else{
+			/*
+			*	Базовые установки шаблона
+			*/
+			$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
+			/*
+			*	Вывод данных
+			*/
+			$this->template->build('orders/view',array('section'=>'delegate'));
+		}
 	}
 
 	/**

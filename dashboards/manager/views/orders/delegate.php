@@ -45,7 +45,7 @@
 				{id: "metros", name:"Метро", field:"metros",formatter:Slick.Formatters.MetrosList},
 				{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles},	
 				{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter},
-				{id: "agent", name:"Агент", field:"user_name",formatter:AgentFormatter},
+				{id: "agent", name:"Агент", field:"user_id",formatter:AgentFormatter},
 				{id: "phone", name:"Телефон", field:"phone"}
 			];	
 			/*

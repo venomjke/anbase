@@ -45,17 +45,4 @@ class M_Admin_order extends M_Order
 		$this->where('orders_users.user_id IS NOT NULL');
 		return $this->get_all_orders_org($org_id,$filter,$limit,$offset);
 	}
-
-
-	/**
-	 * Метод выбирает все свободные заявки обращаясь к методу get_all_orders_org для выбора
-	 *
-	 * @return void
-	 * @author 
-	 **/
-	public function get_all_free_orders($org_id,$filter=array(),$limit=FALSE,$offset=FALSE)
-	{
-		$this->where('orders_users.user_id IS NULL');
-		return $this->get_all_orders_org($org_id,$filter,$limit,$offset);
-	}
 } // END class M_Admin_order extends M_Order

@@ -107,7 +107,27 @@ class Orders_Organization
 
 		return $orders;
 	}
+	/**
+	 * Выбор всех заявок организации
+	 *
+	 * @param int
+	 * @param array
+	 * @return array
+	 * @author alex.trigin
+	 **/
+	public function get_all_orders_org($org_id,$fields=array())
+	{
+		$filter = array();
+		$limit  = false;
+		$offset = false;
 
+		$orders = $this->ci->m_order->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
+
+		$this->bind_regions($orders);
+		$this->bind_metros($orders);
+
+		return $orders;
+	}
 	/**
 	 * Выбор всех заявок определенного пользователя
 	 *
