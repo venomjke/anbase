@@ -18,7 +18,7 @@ class Manager extends MX_Controller
 		*	Загрузка основных либ
 		*
 		*/
-		$this->load->library('manager/manager_users');
+		$this->load->library('manager/Manager_Users');
 
 
 		if(!$this->manager_users->is_logged_in_as_manager()){

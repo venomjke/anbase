@@ -19,7 +19,7 @@ class Profile extends MX_Controller
 		*	загрузка либ
 		*
 		*/
-		$this->load->library("manager/manager_users");
+		$this->load->library("manager/Manager_Users");
 		$this->load->library("Ajax");
 
 		if(!$this->manager_users->is_logged_in_as_manager()){
