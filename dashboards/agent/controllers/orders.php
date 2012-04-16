@@ -32,7 +32,10 @@ class Orders extends MX_Controller
 		}
 
 		/*
-		*
+		* Загрузка пакета языковых сообщений
+		*/
+		$this->load->language('agent/messages');
+		/*
 		*	Загрузка доп. моделей
 		*/
 		$this->load->model('m_region');
@@ -101,6 +104,7 @@ class Orders extends MX_Controller
 			/*
 			* Редактирование cвоих заявок
 			*/
+				$this->_edit_order();
 				break;
 		}
 	}
@@ -173,6 +177,31 @@ class Orders extends MX_Controller
 			*
 			*/
 			$this->template->build('orders/free');
+		}
+	}
+
+	/**
+	 * Редактирование заявки
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _edit_order()
+	{
+		/*
+		* Редактирование возможно только с использованием ajax
+		*/
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$this->agent_orders->edit_order();
+				$response['code'] = 'success_edit_order';
+				$response['data'] = lang('success_edit_order');
+			}catch(AnbaseRuntimeException $re){
+				
+			}
+		}else{
+			redirect($this->agent_users->get_home_page());
 		}
 	}
 

@@ -312,7 +312,8 @@ class Migration_Add_user extends CI_Migration{
 			'manager_id' => array(
 				'type' => 'INT',
 				'default' => '0',
-				'unsigned' => true
+				'unsigned' => true,
+				'null'  => true
 			)
 		));
 

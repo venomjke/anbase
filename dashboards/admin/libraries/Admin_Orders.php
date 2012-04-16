@@ -30,8 +30,8 @@ class Admin_Orders
 	{
 		$this->ci = get_instance();
 
-		$this->ci->load->library("admin/admin_users");
-		$this->ci->load->library("orders_organization");
+		$this->ci->load->library("admin/Admin_Users");
+		$this->ci->load->library("Orders_Organization");
 		$this->ci->load->model("m_admin_order");
 	}
 

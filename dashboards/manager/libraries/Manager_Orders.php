@@ -31,8 +31,8 @@ class Manager_Orders
 	{
 		$this->ci = get_instance();
 
-		$this->ci->load->library('manager/manager_users');
-		$this->ci->load->library('orders_organization');
+		$this->ci->load->library('manager/Manager_Users');
+		$this->ci->load->library('Orders_Organization');
 
 		$this->ci->load->model('m_manager_order');	
 	}

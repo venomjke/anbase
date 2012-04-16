@@ -17,7 +17,7 @@ class Agent extends MX_Controller{
 		/*
 		*	Загрузка основных либ
 		*/
-		$this->load->library('agent/agent_users');
+		$this->load->library('agent/Agent_Users');
 		/*
 		*	доступ есть только у агентов
 		*/

@@ -39,8 +39,8 @@ class Agent_Orders
 	{	
 		$this->ci = get_instance();
 
-		$this->ci->load->library('agent/agent_users');
-		$this->ci->load->library('orders_organization');
+		$this->ci->load->library('agent/Agent_Users');
+		$this->ci->load->library('Orders_Organization');
 
 		$this->ci->load->model('m_agent_order');
 	}

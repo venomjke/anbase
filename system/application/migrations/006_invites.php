@@ -28,9 +28,6 @@ class Migration_Invites extends CI_Migration
 			)
 		));
 
-	
-		$this->db->query('ALTER TABLE `invites_users` ADD PRIMARY KEY (id)');
-
 		$this->db->query('CREATE INDEX idx_manager_id ON `invites_users`(manager_id)');
 		$this->db->query('ALTER TABLE `invites_users` ADD FOREIGN KEY (`manager_id`) REFERENCES `users`(id) ON DELETE SET NULL ON UPDATE SET NULL');
 	}
