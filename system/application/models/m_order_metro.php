@@ -35,6 +35,19 @@ class M_Order_metro extends MY_Model
 		$this->validate = array();
 	}
 
+
+	/**
+	 * Проверка того, что metro_id является реальным
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function exists($metro_id)
+	{
+		$this->db->where('id',$metro_id);
+		return $this->db->count_all_results('metros') == 0?false:true;
+	}
+
 	/**
 	 * Выбор все метро, относящихся к заявке
 	 *
@@ -56,10 +69,31 @@ class M_Order_metro extends MY_Model
 		if($in_array){
 			$metros_ids = array();
 			foreach($metros as $metro){
-				$metros_ids[$metro->id][] = $metro->metro_id;
+				$metros_ids[$metro->line][] = $metro->metro_id;
 			}
 			return $metros_ids;
 		}
 		return $metros;
+	}
+
+	/**
+	 * Связать с заяку с новыми метро
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function bind_order_metros($order_id,$metros)
+	{
+		/*
+		* Удаляем старую связь
+		*/
+		$this->delete(array('order_id'=>$order_id));
+
+		foreach($metros as $k=>$metro_line){
+			foreach($metro_line as $metro){
+				if(is_numeric($metro) && $this->exists($metro))
+					$this->insert(array('order_id'=>$order_id,'metro_id'=>$metro));
+			}
+		}
 	}
 } // END class M_Order_metro 

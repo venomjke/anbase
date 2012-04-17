@@ -143,6 +143,32 @@ class M_Order extends MY_Model{
 			$data['create_date'] = date('Y/m/d H:i:s');
 		}
 	}
+
+	public function check_state($state)	
+	{
+		if(in_array($state,array(M_Order::ORDER_STATE_ON,M_Order::ORDER_STATE_OFF))){
+			return true;
+		}
+		return false;
+			
+	}
+
+	public function check_category($category)
+	{
+		if(in_array($category,array(M_Order::ORDER_CATEGORY_LIVING_REAL_ESTATE,M_Order::ORDER_CATEGORY_COUNTRY_REAL_ESTATE,M_Order::ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE))){
+			return true;
+		}
+		return false;
+	}
+
+	public function check_deal_type($deal_type)
+	{
+		if(in_array($deal_type,array(M_Order::ORDER_DEAL_TYPE_SELL,M_Order::ORDER_DEAL_TYPE_BUY,M_Order::ORDER_DEAL_TYPE_TAKEOFF,M_Order::ORDER_DEAL_TYPE_RENT))){
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Проверка состояния
 	 *
@@ -157,7 +183,7 @@ class M_Order extends MY_Model{
 		if(empty($state)){
 			return true;
 		}else{
-			if(in_array($state,array(M_Order::ORDER_STATE_ON,M_Order::ORDER_STATE_OFF))){
+			if($this->check_state($state)) {
 				return true;
 			}else{
 				$this->form_validation->set_message('valid_state',lang('order.validation.valid_state'));
@@ -180,7 +206,7 @@ class M_Order extends MY_Model{
 		if(empty($deal_type)){
 			return true;
 		}else{
-			if(in_array($deal_type,array(M_Order::ORDER_DEAL_TYPE_SELL,M_Order::ORDER_DEAL_TYPE_BUY,M_Order::ORDER_DEAL_TYPE_TAKEOFF,M_Order::ORDER_DEAL_TYPE_RENT))){
+			if($this->check_deal_type($deal_type)){
 				return true;
 			}else{
 				$this->form_validation->set_message('valid_dealtype',lang('order.validation.valid_dealtype'));
@@ -203,7 +229,7 @@ class M_Order extends MY_Model{
 		if(empty($category)){
 			return true;
 		}else{
-			if(in_array($category,array(M_Order::ORDER_CATEGORY_LIVING_REAL_ESTATE,M_Order::ORDER_CATEGORY_COUNTRY_REAL_ESTATE,M_Order::ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE))){
+			if($this->check_category($category)){
 				return true;
 			}else{
 				$this->form_validation->set_message('valid_category',lang('order.validation.valid_category'));

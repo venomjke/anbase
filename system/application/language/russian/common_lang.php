@@ -50,3 +50,6 @@ $lang['common.validation.valid_date'] = 'Поле "%s" должно содерж
 $lang['common.validation.valid_datetime'] = 'Поле "%s" должно содержать дату и время правильного формата';
 $lang['common.validation.valid_region_id'] = 'Поле "%s" должно содержать id существующего района';
 $lang['common.validation.valid_metro_id'] = 'Поле "%s" должно содержать id существующего метро';
+$lang['common.validation.valid_agent_order_id'] = 'Поле "%s" должно содержать верный id заявки';
+$lang['common.validation.valid_order_category'] = $lang['order.validation.valid_category'];
+$lang['common.validation.valid_order_deal_type'] = $lang['order.validation.valid_dealtype'];

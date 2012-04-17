@@ -37,7 +37,7 @@
 			$select.focus();
 		};
 		this.loadValue = function(item){
-			$select.val((defaulValue = item[args.column.field]));
+			$select.val((defaultValue = item[args.column.field]));
 			$select.select();
 		};
 

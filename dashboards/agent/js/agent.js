@@ -19,8 +19,6 @@ var agent = {
 		*	Установка базового URL
 		*/
 		agent.baseUrl = params.baseUrl || '';
-
-
 	},
 
 	profile:{

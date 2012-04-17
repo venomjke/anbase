@@ -55,10 +55,8 @@ class Orders extends MX_Controller
 		*/
 		$this->template->append_metadata('<script type="text/javascript"> common.regions='.$regions.'; common.metros='.$metros.'</script>');
 
-		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"> 
-			agent.init({baseUrl:"'.site_url("agent/orders").'"});
-			agent.orders.init(); 
-		</script>');
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"></script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){agent.init({baseUrl:"'.site_url("agent/orders").'"});agent.orders.init();});</script>');
 
 	}
 
@@ -198,8 +196,13 @@ class Orders extends MX_Controller
 				$response['code'] = 'success_edit_order';
 				$response['data'] = lang('success_edit_order');
 			}catch(AnbaseRuntimeException $re){
-				
+				$response['code'] = 'error_edit_order';
+				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_edit_order';
+				$response['data']['errors'] = $ve->get_error_messages();
 			}
+			$this->ajax->build_json($response);
 		}else{
 			redirect($this->agent_users->get_home_page());
 		}

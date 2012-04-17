@@ -21,19 +21,19 @@ class MY_Form_validation extends CI_Form_validation
 	        {
 
 	            case 'yyyy/mm/dd':
-	                if(preg_match("/^(19\d\d|2\d\d\d)[\/|-](0?[1-9]|1[012])[\/|-](0?[1-9]|[12][0-9]|3[01])$/", $str,$match) && checkdate($match[2],$match[3],$match[1]))
+	                if(preg_match("/^(19\d\d|2\d\d\d)[\/|-|\.](0?[1-9]|1[012])[\/|-\.](0?[1-9]|[12][0-9]|3[01])$/", $str,$match) && checkdate($match[2],$match[3],$match[1]))
 	                {
 	                    return TRUE;
 	                }
 	            break;
 	            case 'mm/dd/yyyy':
-	                if(preg_match("/^(0?[1-9]|1[012])[\/|-](0?[1-9]|[12][0-9]|3[01])[\/|-](19\d\d|2\d\d\d)$/", $str,$match) && checkdate($match[1],$match[2],$match[3]))
+	                if(preg_match("/^(0?[1-9]|1[012])[\/|-|\.](0?[1-9]|[12][0-9]|3[01])[\/|-|\.](19\d\d|2\d\d\d)$/", $str,$match) && checkdate($match[1],$match[2],$match[3]))
 	                {
 	                    return TRUE;
 	                }
 	            break;
 	            default: // 'dd/mm/yyyy'
-	                if(preg_match("/^(0?[1-9]|[12][0-9]|3[01])[\/|-](0?[1-9]|1[012])[\/|-](19\d\d|2\d\d\d)$/", $str,$match) && checkdate($match[2],$match[1],$match[3]))
+	                if(preg_match("/^(0?[1-9]|[12][0-9]|3[01])[\/|-|\.](0?[1-9]|1[012])[\/|-|\.](19\d\d|2\d\d\d)$/", $str,$match) && checkdate($match[2],$match[1],$match[3]))
 	                {
 	                return TRUE;
 	                }
@@ -62,19 +62,19 @@ class MY_Form_validation extends CI_Form_validation
 	        {
 
 	            case 'yyyy/mm/dd h:m:s':
-	                if(preg_match("/^(19\d\d|2\d\d\d)[\/|-](0?[1-9]|1[012])[\/|-](0?[1-9]|[12][0-9]|3[01]) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[2],$match[3],$match[1]))
+	                if(preg_match("/^(19\d\d|2\d\d\d)[\/|-|\.](0?[1-9]|1[012])[\/|-|\.](0?[1-9]|[12][0-9]|3[01]) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[2],$match[3],$match[1]))
 	                {
 	                    return TRUE;
 	                }
 	            break;
 	            case 'mm/dd/yyyy h:m:s':
-	                if(preg_match("/^(0?[1-9]|1[012])[\/|-](0?[1-9]|[12][0-9]|3[01])[\/|-](19\d\d|2\d\d\d) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[1],$match[2],$match[3]))
+	                if(preg_match("/^(0?[1-9]|1[012])[\/|-|\.](0?[1-9]|[12][0-9]|3[01])[\/|-|\.](19\d\d|2\d\d\d) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[1],$match[2],$match[3]))
 	                {
 	                    return TRUE;
 	                }
 	            break;
 	            default: // 'dd/mm/yyyy h:m:s'
-	                if(preg_match("/^(0?[1-9]|[12][0-9]|3[01])[\/|-](0?[1-9]|1[012])[\/|-](19\d\d|2\d\d\d) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[2],$match[1],$match[3]))
+	                if(preg_match("/^(0?[1-9]|[12][0-9]|3[01])[\/|-|\.](0?[1-9]|1[012])[\/|-|\.](19\d\d|2\d\d\d) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[2],$match[1],$match[3]))
 	                {
 	                return TRUE;
 	                }
@@ -213,8 +213,55 @@ class MY_Form_validation extends CI_Form_validation
 		return false;
 	}
 
-    function run($module = NULL, $group = '') {        
-        if (is_object($module)) $this->CI =& $module;
-        return parent::run($group);
-    }
+	/**
+	 * Проверка, валидный ли order_id
+	 * - Заявка должна существовать, принадлежать агенты
+	 *
+	 * @return boolean
+	 * @author 
+	 **/
+	public function valid_agent_order_id($order_id)
+	{
+		$this->CI->load->library('users/users');
+		$this->CI->load->model('m_order_user');
+		if(!empty($order_id)){
+			if($this->CI->m_order_user->does_order_belong_user($order_id,$this->CI->users->get_user_id())){
+				return true;
+			}
+		}
+		$this->set_message('valid_agent_order_id',lang('common.validation.valid_agent_order_id'));
+		return false;
+	}
+
+	/**
+	* Проверка, валидная ли категория заявки
+	* @return boolean
+	* @author alex.strigin
+	*/
+	public function valid_order_category($category){
+		$this->CI->load->model('m_order');
+		if(!empty($category)){
+			if($this->CI->m_order->check_category($category)){
+				return true;
+			}
+		}
+		$this->set_message('valid_order_category',lang('common.validation.valid_order_category'));
+		return false;
+	}
+
+	/**
+	* Проверка, валидный ли тип сделки
+	* @return boolean
+	* @author alex.strigin
+	*/
+	public function valid_order_deal_type($deal_type){
+		$this->CI->load->model('m_order');
+		if(!empty($deal_type)){
+			if($this->CI->m_order->check_deal_type($deal_type)){
+				return true;
+			}
+		}
+		$this->set_message('valid_order_deal_type',lang('common.validation.valid_order_deal_type'));
+		return false;
+	}
 }

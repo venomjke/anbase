@@ -37,6 +37,17 @@ class M_Order_region extends MY_Model
 	}
 
 	/**
+	 * Поверка того, что region_id является настоящим
+	 *
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function exists($region_id)
+	{
+		$this->db->where('id',$region_id);
+		return $this->db->count_all_results('regions') == 0 ? false:true;
+	}
+	/**
 	 * Выбрать все районы заданной order_id
 	 *
 	 * @param int 
@@ -56,5 +67,24 @@ class M_Order_region extends MY_Model
 			return $regions_ids;
 		}
 		return $regions;
+	}
+
+	/**
+	 * Привязываем к заявке районы
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function bind_order_regions($order_id,$regions)
+	{
+		/*
+		* Перед тем, как привязать новые районы к заявке, нужно удалить старые связи.
+		*/
+		$this->delete(array('order_id'=>$order_id));
+
+		foreach($regions as $region){
+			if(is_numeric($region) && $this->exists($region))
+				$this->insert(array('order_id'=>$order_id,'region_id'=>$region),true);
+		}
 	}
 } // END class M_Order_region extends MY_Model

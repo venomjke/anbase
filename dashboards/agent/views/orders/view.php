@@ -7,8 +7,6 @@
 </div>
 <script type="text/javascript">
 	$(function(){
-
-
 		function load_grid(data){		
 
 			/*
@@ -42,14 +40,52 @@
 			/*
 			* Создание грида
 			*/
-			agent.orders.grid = new Slick.Grid("#orders_grid",data,columns,options);
+			var grid = new Slick.Grid("#orders_grid",data,columns,options);
+
+			 grid.onCellChange.subscribe(function(e,handle){
+
+				var data = {};
+				var item = handle.item;
+				var cell = handle.cell;
+
+				data['id'] = item.id;
+				data[grid.getColumns()[cell].field] = item[grid.getColumns()[cell].field];
+
+				$.ajax({
+					url:agent.baseUrl+'/?act=edit',
+					type:'POST',
+					dataType:'json',
+					data:data,
+					success:function(response){
+						if(response.code && response.data){
+							switch(response.code){
+								case 'success_edit_order':
+									common.showResultMsg(response.data);
+								break;
+								case 'error_edit_order':
+									common.showResultMsg('Возникла ошибка во время сохранения');
+									return false;
+								break;
+							}
+						}
+					},
+					beforeSend:function(){
+						common.showAjaxIndicator();
+					},
+					complete:function(){
+						common.hideAjaxIndicator();
+					}
+				});
+			});
+
+			agent.orders.grid = grid;
 		}
 
 		/*
 		* Загрузка и инициализация грида
 		*/
 	    $.ajax({
-	    	url:agent.baseUrl+'?act=view&s=my',
+	    	url:agent.baseUrl+'/?act=view&s=my',
 	    	type:'POST',
 	    	dataType:'json',
 	    	success:function(response){
