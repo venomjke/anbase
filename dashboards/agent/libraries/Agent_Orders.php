@@ -111,7 +111,10 @@ class Agent_Orders
 				* стандартное редактирование
 				*/
 				$data = array_intersect_key($this->ci->input->post(), array_flip($order_field));
-				$this->ci->m_agent_order->update($this->ci->input->post('id'),$data,true);
+				if(!empty($data))
+					$this->ci->m_agent_order->update($this->ci->input->post('id'),$data,true);
+				else
+					throw new AnbaseRuntimeException(lang('common.not_legal_data'));
 			}
 			return;
 		}

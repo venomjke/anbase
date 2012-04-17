@@ -41,14 +41,14 @@ class M_Order extends MY_Model{
 	*/
 	public $insert_validation_rules = array(
 		array('field'=>'number','label'=>'lang:order.label_number', 'rules'=>'is_natural|max_length[9]'),
-		array('field'=>'create_date','label'=>'lang:order.label_create_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
+		array('field'=>'create_date','label'=>'lang:order.label_create_date','rules'=>'valid_date[dd/mm/yyyy]'),
 		array('field'=>'category','label'=>'lang:order.label_category','rules'=>'callback_valid_category'),
 		array('field'=>'deal_type','label'=>'lang:order.label_deal_type','rules'=>'callback_valid_dealtype'),
 		array('field'=>'price','label'=>'lang:order.label_price','rules'=>'greater_than[0]|max_length[12]'),
-		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'xss_clean'),
-		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
-		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
-		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'max_length[20]'),
+		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean|html_escape'),
+		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]'),
+		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_date[dd/mm/yyyy]'),
+		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|max_length[20]'),
 		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state')
 	);
 
@@ -59,13 +59,13 @@ class M_Order extends MY_Model{
 	public $update_validation_rules = array(
 		array('field'=>'id','label'=>'ORDER_ID','rules'=>'required|is_natural_no_zero|valid_order_id'),
 		array('field'=>'number','label'=>'lang:order.label_number', 'rules'=>'is_natural|max_length[9]'),
-		array('field'=>'create_date','label'=>'lang:order.label_create_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
+		array('field'=>'create_date','label'=>'lang:order.label_create_date','rules'=>'valid_date[dd/mm/yyyy]'),
 		array('field'=>'category','label'=>'lang:order.label_category','rules'=>'callback_valid_category'),
 		array('field'=>'deal_type','label'=>'lang:order.label_deal_type','rules'=>'callback_valid_dealtype'),
 		array('field'=>'price','label'=>'lang:order.label_price','rules'=>'greater_than[0]|max_length[12]'),
-		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'xss_clean'),
-		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
-		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_datetime[yyyy/mm/dd h:m:s]'),
+		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean|html_escape'),
+		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]'),
+		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_date[dd/mm/yyyy]'),
 		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'max_length[20]'),
 		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state')
 	);
@@ -140,7 +140,7 @@ class M_Order extends MY_Model{
 	protected function fill_empty_fields($data = array())
 	{
 		if(empty($data['create_date'])){
-			$data['create_date'] = date('Y/m/d H:i:s');
+			$data['create_date'] = date('Y/m/d');
 		}
 	}
 
@@ -302,13 +302,17 @@ class M_Order extends MY_Model{
 		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state');
 		$fields = array_flip(array_intersect_key(array_flip($fields),array_flip($allow_fields)));
 
-		if(empty($fields)) $fields = $allow_fields;
-
+		if(empty($fields)) $fields = array_flip($allow_fields);
 
 		$this->select('orders.id');
 		foreach($fields as $field){
-			$this->select("orders.$field");
+			if($field == 'create_date' or $field == 'delegate_date' or $field == 'finish_date'){
+				$this->select("DATE_FORMAT(orders.$field,'%d.%m.%y') as $field",FALSE);	
+			}else{
+				$this->select("orders.$field");
+			}
 		}
+
 
 		$this->select('users.id as user_id');
 		$this->select('users.name as user_name');
