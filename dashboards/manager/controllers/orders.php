@@ -37,6 +37,10 @@ class Orders extends MX_Controller
 		$this->load->model('m_metro');
 
 		/*
+		* Подключение сообщений
+		*/
+		$this->load->language('manager/messages');
+		/*
 		*	
 		* Настройка шаблона
 		*/
@@ -51,10 +55,8 @@ class Orders extends MX_Controller
 
 		$this->template->append_metadata('<script type="text/javascript"> common.regions='.$regions.'; common.metros='.$metros.'</script>');
 
-		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/manager/js/manager.js").'"> 
-			manager.init({baseUrl:"'.site_url('manager/orders').'"});
-			manager.orders.init(); 
-		</script>');
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/manager/js/manager.js").'"></script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){	manager.init({baseUrl:"'.site_url('manager/orders').'"});manager.orders.init(); });</script>');
 	}
 
 
@@ -92,6 +94,7 @@ class Orders extends MX_Controller
 				/*
 				* редактирование своих заявок
 				*/
+				$this->_edit_order();
 				break;
 		}
 	}
@@ -184,7 +187,7 @@ class Orders extends MX_Controller
 				$response['data'] = $orders;
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_view_orders';
-				$response['data']['errors'] = array($orders);
+				$response['data']['errors'] = array($re->get_error_message());
 			}
 			$this->ajax->build_json($response);
 		}else{
@@ -196,6 +199,36 @@ class Orders extends MX_Controller
 			*	Вывод данных
 			*/
 			$this->template->build("orders/delegate");
+		}
+	}
+
+	/**
+	 * Редактирование своих заявок
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _edit_order()
+	{
+		/*
+		* Редактирование возможно только с использованием ajax
+		*/
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$this->manager_orders->edit_order();
+				$response['code'] = 'success_edit_order';
+				$response['data'] = lang('success_edit_order');
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_edit_order';
+				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_edit_order';
+				$response['data']['errors'] = $ve->get_error_messages();
+			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect($this->manager_users->get_home_page());
 		}
 	}
 } // END class Orders extends MX_Controller

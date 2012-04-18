@@ -23,3 +23,9 @@ $lang['success_edit_sys_profile']	   = 'Учетная запись успешн
 * Register
 */
 $lang['success_register_manager'] = 'Менеджер успешно зарегистрирован';
+
+
+/*
+* Orders
+*/
+$lang['success_edit_order'] = 'Заявка отредактирована';
