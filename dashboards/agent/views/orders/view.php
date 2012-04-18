@@ -29,7 +29,7 @@
 			var columns = [
 				{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Integer },
 				{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date},
-				{id: "category", name:"Объект", field:"category", editor:Slick.Editors.AnbaseCategory},
+				{id: "category", name:"Тип объекта", field:"category", editor:Slick.Editors.AnbaseCategory},
 				{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
 				{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
 				{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
@@ -43,16 +43,22 @@
 			var grid = new Slick.Grid("#orders_grid",data,columns,options);
 
 			/*
+			* Сохраняем backup значение
+			*/
+			grid.onBeforeEditCell.subscribe(function(e,handle){
+				handle.item.backupFieldValue = handle.item[handle.column.field]; 
+			});
+			/*
 			* Обработка события изменения ячейки
 			*/
 			grid.onCellChange.subscribe(function(e,handle){
-
 				var data = {};
 				var item = handle.item;
 				var cell = handle.cell;
+				var field = grid.getColumns()[cell].field;
 
-				data['id'] = item.id;
-				data[grid.getColumns()[cell].field] = item[grid.getColumns()[cell].field];
+				data['id']  = item.id;
+				data[field] = item[field];
 
 				$.ajax({
 					url:agent.baseUrl+'/?act=edit',
@@ -66,7 +72,21 @@
 									common.showResultMsg(response.data);
 								break;
 								case 'error_edit_order':
-									common.showResultMsg('Возникла ошибка во время сохранения');
+									/*
+									* Восстанавливаем старое значение
+									*/
+									item[field] = item.backupFieldValue;
+									grid.updateRow(handle.row);
+									
+									/*
+									* Выводим сообщение об ошибке.
+									* Если ошибка уровня валидации, то дя поля выводим ошибку. Если ошибка уровня системы, то просто выводим ошибку
+									*/
+									if(response.data.errors[field] && typeof response.data.errors[field] == "string"){
+										common.showResultMsg(response.data.errors[field]);
+									}else{
+										common.showResultMsg(response.data.errors[0]);
+									}
 									return false;
 								break;
 							}
