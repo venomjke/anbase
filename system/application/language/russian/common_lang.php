@@ -53,3 +53,4 @@ $lang['common.validation.valid_metro_id'] = 'Поле "%s" должно соде
 $lang['common.validation.valid_agent_order_id'] = 'Поле "%s" должно содержать верный id заявки';
 $lang['common.validation.valid_order_category'] = $lang['order.validation.valid_category'];
 $lang['common.validation.valid_order_deal_type'] = $lang['order.validation.valid_dealtype'];
+$lang['common.validation.convert_valid_date'] = 'Поле "%s" содержит не валидную дату';

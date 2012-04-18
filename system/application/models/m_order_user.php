@@ -89,7 +89,7 @@ class M_Order_user extends MY_Model
 		}else{
 			$this->delete(array('order_id'=>$order_id));
 			if($insert_id = $this->insert(array('order_id'=>$order_id,'user_id'=>$user_id))){
-				$this->db->update('orders',array('delegate_date'=>date('Y-m-d H:i:s')));
+				$this->db->update('orders',array('delegate_date'=>date('Y-m-d'),'delegated'=>date('Y-m-d H:i:s')));
 				return $insert_id;
 			}
 		}

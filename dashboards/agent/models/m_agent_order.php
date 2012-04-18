@@ -18,7 +18,7 @@ class M_Agent_order extends M_Order
 
 		array('field'=>'id', 'label'=>'ORDER ID','rules'=>'required|valid_agent_order_id'),
 		array('field'=>'number', 'label'=>'lang:order.label_number','rules'=>'is_natural|less_than[4294967295]'),
-		array('field'=>'create_date', 'label'=>'lang:order.label_create_date', 'rules'=>'valid_date[dd/mm/yyyy]'),
+		array('field'=>'create_date', 'label'=>'lang:order.label_create_date', 'rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'category', 'label'=>'lang:order.label_category','rules'=>'valid_order_category'),
 		array('field'=>'deal_type', 'label'=>'lang:order.label_deal_type', 'rules'=>'valid_order_deal_type'),
 		array('field'=>'price', 'label'=>'lang:order.label_price','rules'=>'numeric|max_length[15]'),

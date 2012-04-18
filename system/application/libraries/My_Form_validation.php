@@ -5,6 +5,37 @@ class MY_Form_validation extends CI_Form_validation
 
 
 	/**
+	 * Конвертирование валидной даты для mysql
+	 *
+	 * @return string
+	 * @author alex.strigin
+	 **/
+	public function convert_valid_date($valid_date,$format = 'dd/mm/yyyy')
+	{
+		$delimiter = "@[/\.-]@";
+		switch($format){
+			default:
+				$date_set = preg_split($delimiter,$valid_date);
+				if(count($date_set) == 3){
+					$mysql_date = $date_set[2]."-".$date_set[1]."-".$date_set[0];
+					return $mysql_date;
+				}
+			break;
+			case 'yyyy/mm/dd':
+				return $valid_date;
+			break;
+			case 'mm/dd/yyyy':
+				$date_set = preg_split($delimiter,$valid_date);
+				if(count($date_set) == 3){
+
+					return $date_set[2]."-".$date_set[0]."-".$date_set[1];
+				}
+			break;
+		}
+		$this->set_message('convert_valid_date',lang('common.validation.convert_valid_date'));
+		return FALSE;
+	}
+	/**
 	 * valid_date
 	 *
 	 * check if a date is valid
@@ -21,19 +52,19 @@ class MY_Form_validation extends CI_Form_validation
 	        {
 
 	            case 'yyyy/mm/dd':
-	                if(preg_match("/^(19\d\d|2\d\d\d)[\/|-|\.](0?[1-9]|1[012])[\/|-\.](0?[1-9]|[12][0-9]|3[01])$/", $str,$match) && checkdate($match[2],$match[3],$match[1]))
+	                if(preg_match("/^(19\d\d|2\d\d\d|\d\d)[\/|-|\.](0?[1-9]|1[012])[\/|-\.](0?[1-9]|[12][0-9]|3[01])$/", $str,$match) && checkdate($match[2],$match[3],$match[1]))
 	                {
 	                    return TRUE;
 	                }
 	            break;
 	            case 'mm/dd/yyyy':
-	                if(preg_match("/^(0?[1-9]|1[012])[\/|-|\.](0?[1-9]|[12][0-9]|3[01])[\/|-|\.](19\d\d|2\d\d\d)$/", $str,$match) && checkdate($match[1],$match[2],$match[3]))
+	                if(preg_match("/^(0?[1-9]|1[012])[\/|-|\.](0?[1-9]|[12][0-9]|3[01])[\/|-|\.](19\d\d|2\d\d\d|\d\d)$/", $str,$match) && checkdate($match[1],$match[2],$match[3]))
 	                {
 	                    return TRUE;
 	                }
 	            break;
 	            default: // 'dd/mm/yyyy'
-	                if(preg_match("/^(0?[1-9]|[12][0-9]|3[01])[\/|-|\.](0?[1-9]|1[012])[\/|-|\.](19\d\d|2\d\d\d)$/", $str,$match) && checkdate($match[2],$match[1],$match[3]))
+	                if(preg_match("/^(0?[1-9]|[12][0-9]|3[01])[\/|-|\.](0?[1-9]|1[012])[\/|-|\.](19\d\d|2\d\d\d|\d\d)$/", $str,$match) && checkdate($match[2],$match[1],$match[3]))
 	                {
 	                return TRUE;
 	                }
@@ -62,19 +93,19 @@ class MY_Form_validation extends CI_Form_validation
 	        {
 
 	            case 'yyyy/mm/dd h:m:s':
-	                if(preg_match("/^(19\d\d|2\d\d\d)[\/|-|\.](0?[1-9]|1[012])[\/|-|\.](0?[1-9]|[12][0-9]|3[01]) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[2],$match[3],$match[1]))
+	                if(preg_match("/^(19\d\d|2\d\d\d|\d\d)[\/|-|\.](0?[1-9]|1[012])[\/|-|\.](0?[1-9]|[12][0-9]|3[01]) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[2],$match[3],$match[1]))
 	                {
 	                    return TRUE;
 	                }
 	            break;
 	            case 'mm/dd/yyyy h:m:s':
-	                if(preg_match("/^(0?[1-9]|1[012])[\/|-|\.](0?[1-9]|[12][0-9]|3[01])[\/|-|\.](19\d\d|2\d\d\d) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[1],$match[2],$match[3]))
+	                if(preg_match("/^(0?[1-9]|1[012])[\/|-|\.](0?[1-9]|[12][0-9]|3[01])[\/|-|\.](19\d\d|2\d\d\d|\d\d) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[1],$match[2],$match[3]))
 	                {
 	                    return TRUE;
 	                }
 	            break;
 	            default: // 'dd/mm/yyyy h:m:s'
-	                if(preg_match("/^(0?[1-9]|[12][0-9]|3[01])[\/|-|\.](0?[1-9]|1[012])[\/|-|\.](19\d\d|2\d\d\d) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[2],$match[1],$match[3]))
+	                if(preg_match("/^(0?[1-9]|[12][0-9]|3[01])[\/|-|\.](0?[1-9]|1[012])[\/|-|\.](19\d\d|2\d\d\d|\d\d) (0?[0-9]|1[0-9]|2[0-4]):([0-5]?[0-9]):([0-5]?[0-9])$/", $str,$match) && checkdate($match[2],$match[1],$match[3]))
 	                {
 	                return TRUE;
 	                }
