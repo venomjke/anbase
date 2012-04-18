@@ -54,3 +54,4 @@ $lang['common.validation.valid_agent_order_id'] = 'Поле "%s" должно с
 $lang['common.validation.valid_order_category'] = $lang['order.validation.valid_category'];
 $lang['common.validation.valid_order_deal_type'] = $lang['order.validation.valid_dealtype'];
 $lang['common.validation.convert_valid_date'] = 'Поле "%s" содержит не валидную дату';
+$lang['common.validation.valid_phone'] = 'Поле "%s" содержит неправильный номер телефона';

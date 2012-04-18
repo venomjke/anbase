@@ -35,7 +35,7 @@ class M_Organization extends MY_Model{
 		$this->validate    = array(
 			array('field'=>'name','label'=>'lang:label_org_name','rules'=>'trim|xss_clean|min_length[3]|max_length[150]'),
 			array('field'=>'email','label'=>'lang:label_org_email','rules'=>'trim|xss_clean|min_length[5]|max_length[100]'),
-			array('field'=>'phone','label'=>'lang:label_org_phone','rules'=>'trim|xss_clean|min_length[9]|max_length[20]')
+			array('field'=>'phone','label'=>'lang:label_org_phone','rules'=>'trim|valid_phone')
 		);
 	}
 

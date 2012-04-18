@@ -48,7 +48,7 @@ class M_Order extends MY_Model{
 		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean|html_escape'),
 		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
-		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|max_length[20]'),
+		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|valid_phone'),
 		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state')
 	);
 
@@ -66,7 +66,7 @@ class M_Order extends MY_Model{
 		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean|html_escape'),
 		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
-		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'max_length[20]'),
+		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|valid_phone'),
 		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state')
 	);
 

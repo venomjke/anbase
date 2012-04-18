@@ -27,22 +27,25 @@
 			*/
 			var options = {enableCellNavigation: true,editable:true,autoEdit:false,rowHeight:35,forceFitColumns:true};
 			var columns = [
-				{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Text },
+				{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Integer },
 				{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date},
 				{id: "category", name:"Объект", field:"category", editor:Slick.Editors.AnbaseCategory},
 				{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
 				{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
 				{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
-				{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Text},	
+				{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer},	
 				{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
-				{id: "phone", name:"Телефон", field:"phone",  editor:Slick.Editors.Text}
+				{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer}
 			];	
 			/*
 			* Создание грида
 			*/
 			var grid = new Slick.Grid("#orders_grid",data,columns,options);
 
-			 grid.onCellChange.subscribe(function(e,handle){
+			/*
+			* Обработка события изменения ячейки
+			*/
+			grid.onCellChange.subscribe(function(e,handle){
 
 				var data = {};
 				var item = handle.item;
@@ -78,6 +81,14 @@
 				});
 			});
 
+			/*
+			* Обработка события неверного редактирования ячейки
+			*/
+			grid.onValidationError.subscribe(function(e,handle){
+				var column = handle.column;
+				var validationResults = handle.validationResults;
+				common.showResultMsg(validationResults.msg);
+			});
 			agent.orders.grid = grid;
 		}
 

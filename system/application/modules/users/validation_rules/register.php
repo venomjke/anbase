@@ -20,7 +20,7 @@ $this->form_validation->set_rules('re_password', 'Копия пароля', 'tri
 $this->form_validation->set_rules('name','Имя','trim|required|xss_clean|min_length[3]|max_length[15]');
 $this->form_validation->set_rules('middle_name','Отчество','trim|required|xss_clean|min_length[3]|max_length[15]');
 $this->form_validation->set_rules('last_name','Фамилия','trim|required|xss_clean|min_length[3]|max_length[15]');
-$this->form_validation->set_rules('phone','Телефон','trim|required|xss_clean|min_length[9]|max_length[20]');
+$this->form_validation->set_rules('phone','Телефон','required|trim|valid_phone');
 
 /*
 *
@@ -29,7 +29,7 @@ $this->form_validation->set_rules('phone','Телефон','trim|required|xss_cl
 */
 $this->form_validation->set_rules('org_name','Имя организации','trim|required|xss_clean|min_length[3]|max_length[150]');
 $this->form_validation->set_rules('org_email','Email организации','trim|required|xss_clean|min_length[5]|max_length[100]');
-$this->form_validation->set_rules('org_phone','Телефон Организации','trim|required|xss_clean|min_length[7]|max_length[20]');
+$this->form_validation->set_rules('org_phone','Телефон Организации','required|trim|valid_phone');
 /*
 *
 *	Правила валидации капчи

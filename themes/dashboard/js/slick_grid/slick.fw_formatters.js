@@ -8,7 +8,8 @@
       "Formatters": {
         "Rubbles":RubblesFormatter,
         "RegionsList":RegionsListFormatter,
-        "MetrosList":MetrosListFormatter
+        "MetrosList":MetrosListFormatter,
+        "Phone":PhoneFormatter
       }
     }
   });
@@ -77,5 +78,26 @@
       };
       return list_string.substr(0,list_string.length-1);
   };
+
+    /*
+    * Форматирование телефонного номера.
+    */
+  function PhoneFormatter(row,cell,phone,columnDef,dataContext){
+    if(!phone && phone.length < 7)
+      return "";
+  
+    /*
+    * Если длина номера == 7
+    */  
+    if(phone.length == 7){
+      return phone.substr(0,3)+"-"+phone.substr(3,2)+"-"+phone.substr(5,2);
+    }else if(phone.length <= 10){
+      var len_code = phone.length-7;
+      return "+7"+" ("+phone.substr(0,len_code)+") "+phone.substr(len_code,3)+"-"+phone.substr(len_code+3,2)+"-"+phone.substr(len_code+5,2);
+    }else if(phone.length > 10){
+      var len_code = phone.length-10;
+      return phone.substr(0,len_code)+" ("+phone.substr(len_code,3)+") "+phone.substr(len_code+3,3)+"-"+phone.substr(len_code+6,2)+"-"+phone.substr(len_code+8,2);
+    }
+  }
 
 })(jQuery);

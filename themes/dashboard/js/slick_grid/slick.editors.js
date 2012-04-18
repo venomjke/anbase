@@ -138,7 +138,7 @@
       if (isNaN($input.val())) {
         return {
           valid: false,
-          msg: "Please enter a valid integer"
+          msg: "Пожалуйста, введите числовое значение"
         };
       }
 

@@ -5,6 +5,23 @@ class MY_Form_validation extends CI_Form_validation
 
 
 	/**
+	 * Валидный номер телефона.
+	 * Мнимальная длина номера - 7 цифр.
+	 * Максимальная длица 13 цифр.
+	 * 
+	 * Допускаяются только цифры
+	 * @return boolean
+	 * @author alex.strigin
+	 **/
+	public function valid_phone($phone)
+	{
+		if(is_numeric($phone) && (strlen($phone)>= 7 and strlen($phone)<=13)){
+			return true;
+		}
+		$this->set_message('valid_phone',lang('common.validation.valid_phone'));
+		return false;
+	}
+	/**
 	 * Конвертирование валидной даты для mysql
 	 *
 	 * @return string

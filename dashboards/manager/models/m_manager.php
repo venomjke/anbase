@@ -27,7 +27,7 @@ class M_Manager extends M_User
 		array('field' => 'name', 'label' => 'lang:label_name', 'rules' => 'required|min_length[3]|max_length[15]|trim|xss_clean'),
 		array('field' => 'middle_name', 'label' => 'lang:label_middle_name', 'rules' => 'required|min_length[3]|max_length[15]|trim|xss_clean'),
 		array('field' => 'last_name', 'label' => 'lang:label_last_name', 'rules' => 'required|min_length[3]|max_length[15]|trim|xss_clean'),
-		array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'required|trim|xss_clean|min_length[9]|max_length[20]')
+		array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'required|trim|valid_phone')
 	);
 		
 	function __construct()
