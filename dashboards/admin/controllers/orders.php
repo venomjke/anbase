@@ -47,7 +47,8 @@ class Orders extends MX_Controller
 		$regions = $this->m_region->get_region_list("json");
 		$metros  = $this->m_metro->get_metro_list("json");
 
-		$this->template->append_metadata('<script type="text/javascript" src="'.site_url('dashboards/admin/js/admin.js').'">$(function(){admin.init({baseUrl:"'.base_url().'"}); admin.orders.init();});</script>');
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url('dashboards/admin/js/admin.js').'"></script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){admin.init({baseUrl:"'.site_url("admin/orders").'"}); admin.orders.init();}); </script>');
 		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.';common.metros='.$metros.'</script>');
 	}
 
@@ -264,7 +265,7 @@ class Orders extends MX_Controller
 			*	Пытаемся изменить запись
 			*/
 			try{
-				$this->admin_users->edit_order();
+				$this->admin_orders->edit_order();
 				$response['code'] = 'success_edit_order';
 				$response['data'] =  lang('success_edit_order');
 			}catch(ValidationException $ve){

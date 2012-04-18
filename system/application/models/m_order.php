@@ -296,14 +296,13 @@ class M_Order extends MY_Model{
 	*
 	*/
 	protected function build_select($fields = array()){
-
 		/*
 		* Можно указывать какие поля нужно выбрать. По умолчанию выбираются все.
 		*/
 		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state');
 		$fields = array_flip(array_intersect_key(array_flip($fields),array_flip($allow_fields)));
 
-		if(empty($fields)) $fields = array_flip($allow_fields);
+		if(empty($fields)) $fields = $allow_fields;
 
 		$this->select('orders.id');
 		foreach($fields as $field){

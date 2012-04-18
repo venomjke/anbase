@@ -46,9 +46,7 @@ class Profile extends MX_Controller
 		*
 		*/
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/admin/js/admin.js").'"></script>');
-		$this->template->append_metadata('<script type="text/javascript">
-			admin.init({ baseUrl:"'.base_url().'"})
-		</script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){admin.init({ baseUrl:"'.base_url().'"})});</script>');
 	}
 
 	/**

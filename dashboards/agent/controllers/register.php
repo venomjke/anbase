@@ -42,7 +42,7 @@ class Register extends MX_Controller
 		*
 		*/		
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/register.js").'"> </script>');
-		$this->template->append_metadata('<script type="text/javascript">register.init({baseUrl:"'.base_url().'"});</script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){register.init({baseUrl:"'.base_url().'"});});</script>');
 
 	}
 

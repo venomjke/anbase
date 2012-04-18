@@ -47,9 +47,7 @@ class User extends MX_Controller
 		*
 		*/
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"></script>');
-		$this->template->append_metadata('<script type="text/javascript">
-			agent.init({ baseUrl:"'.base_url().'"})
-		</script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){agent.init({ baseUrl:"'.base_url().'"})});</script>');
 
 	}
 
