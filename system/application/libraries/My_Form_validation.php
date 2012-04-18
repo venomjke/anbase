@@ -15,7 +15,7 @@ class MY_Form_validation extends CI_Form_validation
 	 **/
 	public function valid_phone($phone)
 	{
-		if(is_numeric($phone) && (strlen($phone)>= 7 and strlen($phone)<=13)){
+		if(is_numeric($phone) && ($phone > 0 ) && (strlen($phone)>= 7 and strlen($phone)<=13)){
 			return true;
 		}
 		$this->set_message('valid_phone',lang('common.validation.valid_phone'));

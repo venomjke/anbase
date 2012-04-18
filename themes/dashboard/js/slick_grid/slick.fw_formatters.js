@@ -83,7 +83,9 @@
     * Форматирование телефонного номера.
     */
   function PhoneFormatter(row,cell,phone,columnDef,dataContext){
-    if(!phone && phone.length < 7)
+    if( (typeof(phone) == "number") && phone > 0) phone = phone.toString();
+
+    if(!phone || (typeof phone != "string") || phone.length < 7)
       return "";
   
     /*
@@ -96,7 +98,9 @@
       return "+7"+" ("+phone.substr(0,len_code)+") "+phone.substr(len_code,3)+"-"+phone.substr(len_code+3,2)+"-"+phone.substr(len_code+5,2);
     }else if(phone.length > 10){
       var len_code = phone.length-10;
-      return phone.substr(0,len_code)+" ("+phone.substr(len_code,3)+") "+phone.substr(len_code+3,3)+"-"+phone.substr(len_code+6,2)+"-"+phone.substr(len_code+8,2);
+      var code = phone.substr(0,len_code);
+      if(code == "7") code = "+"+code;
+      return code+" ("+phone.substr(len_code,3)+") "+phone.substr(len_code+3,3)+"-"+phone.substr(len_code+6,2)+"-"+phone.substr(len_code+8,2);
     }
   }
 
