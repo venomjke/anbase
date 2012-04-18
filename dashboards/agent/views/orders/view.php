@@ -14,7 +14,7 @@
 			*/
 			function DescriptionFormatter(row,cell,value,columnDef,dataContext){
 				if(!value)
-					return;
+					return "";
 			  var cell_content = $('<div id="cell_description" style="height:40px;overflow:hidden;">').html(value);
 			  cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',agent.orders.grid.getDataItem('+row+').description);');
 			  cell_content.attr('onmouseout','common.hide_full_text(event,'+row+','+cell+');');

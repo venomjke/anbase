@@ -18,7 +18,9 @@
   * Форматтер цена
   */
   function RubblesFormatter(row,cell,price,columnDef,dataContext){
-    if( price == null || price === "")
+    if( price && typeof(price) == "number" ) price = price.toString();
+
+    if( price == null || typeof(price) != "string" || !price.length)
         return "0.0 р";
 
     //Копейки. Если они встретятся - мы их переопределим
