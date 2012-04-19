@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<?php echo meta('Content-type','text/html; charset=utf-8','equiv'); ?>
+		<?php echo link_tag('themes/start/images/an.ico', 'shortcut icon', 'image/ico'); ?>
 		<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/cupertino/jquery-ui.css"); ?>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script language="javascript">

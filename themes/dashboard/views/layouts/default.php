@@ -2,8 +2,9 @@
 <html>
 	<head>
 		<?php echo meta('Content-type','text/html; charset=utf-8','equiv'); ?>
+		<?php echo link_tag('themes/dashboard/images/an.ico', 'shortcut icon', 'image/ico'); ?>
 		<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/smoothness/jquery-ui.css"); ?>
-		<?php echo link_tag("themes/dashboard/css/dashboard.css"); ?>
+		<?php echo link_tag("themes/dashboard/css/style.css"); ?>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script language="javascript">
 			google.load("jquery","1.7.1");
@@ -27,29 +28,6 @@
 		<?php echo $template['metadata']; ?>
 	</head>
 	<body>
-		<?php
-			/*
-			*
-			*
-			*	Можно сказать, что вид панели управления состоит из соствных частей:
-			*	
-			*	Шапка
-			*
-			*	Тело
-			*
-			*	Футер
-			*
-			*/
-		?>
-		<div id="dashboard_head">
-			<?php load_partial_template($template,"dashboard_head"); ?>
-		</div>
-		<div id="dashboard_content">
-			<?php echo $template['body']; ?>
-		</div>
-		<div id="dashboard_foot">
-			<span id="stats"> Время выполнения <?php echo $this->benchmark->elapsed_time(); ?> </span>
-			<span id="copyright"> (c) copyright 2012 Flyweb inc. </span>
-		</div>
+		<?php echo $template['body']; ?>
 	</body>
 </html>

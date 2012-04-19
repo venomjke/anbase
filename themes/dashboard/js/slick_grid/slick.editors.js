@@ -173,7 +173,7 @@
           calendarOpen = false
         }
       });
-      $input.width($input.width() - 30);
+      $input.width($input.width() - 60);
     };
 
     this.destroy = function () {

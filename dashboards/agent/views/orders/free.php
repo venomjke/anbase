@@ -1,10 +1,19 @@
 <?php
-	load_partial_template($template,'dashboard_tabs');
+	load_partial_template($template,'dashboard_head');
 ?>
-<div id="wrap1">
-	<div id="orders_grid" style="height:550px;border:1px #555 solid">
-	</div>
+<div class="conteiner">
+	<?php load_partial_template($template,'dashboard_user'); ?>
+	<?php load_partial_template($template,'dashboard_menu') ?>
+	<?php load_partial_template($template,'dashboard_filter'); ?>
+	<div class="content">
+		<?php load_partial_template($template,'dashboard_tabs'); ?>
+	    <div class="tablica" id="orders_grid" style="height:550px; border:1px #555 solid;">
+	    </div>
+	    <div class="nastroiki"><a href="111">Настройки таблицы</a></div>
+  	</div>
+  	<div class="podval">© <a href="111">copyright 2012 Flyweb inc.</a>	</div>
 </div>
+
 <script type="text/javascript">
 	$(function(){
 		function load_grid(data){		
@@ -25,7 +34,7 @@
 			/*
 			* Настройки грида
 			*/
-			var options = {enableCellNavigation: true,rowHeight:35,forceFitColumns:true};
+			var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
 			var columns = [
 				{id: "number", name:"Номер", field:"number"},
 				{id: "create_date", name:"Дата создания", field:"create_date"},

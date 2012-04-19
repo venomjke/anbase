@@ -43,6 +43,9 @@ class Orders extends MX_Controller
 
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
+		$this->template->set_partial('dashboard_user','dashboard/dashboard_user');
+		$this->template->set_partial('dashboard_menu','dashboard/dashboard_menu');
+		$this->template->set_partial('dashboard_filter','dashboard/dashboard_filter');
 
 		/*
 		* [my_notice: Не знаю, как лучше обыграть эту задачу, но пока так.]
@@ -81,7 +84,11 @@ class Orders extends MX_Controller
 				* Обработка действия view: выбираем section, и отображаем её
 				*/
 				$section = $this->input->get('s')?$this->input->get('s'):'my';
-
+				/*
+				* задаем текущую секцию, и загружаем вкладки.
+				*/
+				$this->template->set('current',$section);
+				$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
 				switch ($section) {
 					case 'my':
 					default:
@@ -99,9 +106,9 @@ class Orders extends MX_Controller
 				}
 				break;
 			case 'edit':
-			/*
-			* Редактирование cвоих заявок
-			*/
+				/*
+				* Редактирование cвоих заявок
+				*/
 				$this->_edit_order();
 				break;
 		}
@@ -130,12 +137,6 @@ class Orders extends MX_Controller
 			}
 			$this->ajax->build_json($response);
 		}else{
-
-			/*
-			*	Установка шаблона
-			*/
-			$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
-
 			/*
 			*	Вывод данных
 			*/
@@ -164,15 +165,7 @@ class Orders extends MX_Controller
 			$this->ajax->build_json($response);
 		}else{
 			/*
-			*
-			*	Установки шаблона
-			*
-			*/
-			$this->template->set_partial("dashboard_tabs","dashboard/dashboard_tabs");
-			/*
-			*
 			*	Вывод данных
-			*
 			*/
 			$this->template->build('orders/free');
 		}
