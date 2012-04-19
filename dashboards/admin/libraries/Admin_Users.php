@@ -726,40 +726,7 @@ class Admin_Users extends Users{
 		}
 		return false;
 	}
-
-	/**
-	 * Редактирование заявки.
-	 *
-	 * @return void
-	 * @author alex.strigin
-	 **/
-	public function edit_order()
-	{
-		/*
-		* Устанавливаем правила валидации
-		*/
-		$update_fields =  array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state');
-
-		$this->ci->form_validation->set_rules($this->ci->m_order->update_validation_rules);
-
-		if($this->ci->form_validation->run($this->ci->m_order)){
-
-			/*
-			* Выцепляем наши данные из post контейнера
-			*/
-			$update_data = array_intersect_key(($this->ci->input->post()), array_flip($update_fields));
-
-			$this->ci->m_order->update($this->ci->input->post('id'),$update_data,true);
-			return;
-		}
-
-		$errors_validation = array();
-
-		if(has_errors_validation($update_fields,$errors_validation)){
-			throw new ValidationException($errors_validation);
-		}
-	}
-
+	
 	/**
 	 * Удаление заказов
 	 *

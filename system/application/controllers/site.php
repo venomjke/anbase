@@ -16,6 +16,14 @@ class Site extends MX_Controller {
 
 		$this->template->set_theme('start');
 		$this->template->set_partial('menu','common/menu',array("current" => $this->router->fetch_method()));
+
+		$this->load->library('users/users');
+		if($this->users->is_logged_in()){
+			redirect($this->users->resolve_user_redirect_uri());
+		}else{
+			$loginBox = Modules::run('users/auth/login');
+			$this->template->set('loginBox',$loginBox);
+		}
 	}
 	/*
 	*	Главная страница:
@@ -25,18 +33,8 @@ class Site extends MX_Controller {
 	public function index(){
 
 		$this->load->library('users/users');
-		/*
-		*	
-		*	Если User залоггинен, то redirect на свою панель, нечего на главной ошиваться;
-		*	пусть работет=)
-		*/
-		if($this->users->is_logged_in()){
-			redirect($this->users->resolve_user_redirect_uri());
-		}else{
-			$loginBox = Modules::run('users/auth/login'); 
-			$this->template->set('loginBox',$loginBox);
-			$this->template->build('site/index');
-		}
+	
+		$this->template->build('site/index');
 	}
 
 	/*
@@ -45,6 +43,8 @@ class Site extends MX_Controller {
 	*
 	*/
 	public function company(){
+
+		$this->load->library('users/users');
 		$this->template->build('site/company');
 	}
 
@@ -54,7 +54,8 @@ class Site extends MX_Controller {
 	*
 	*/
 	public function prices(){
-		$this->template->build('site/prices');
+		$this->load->library('users/users');
+		$this->template->build('site/prices');			
 	}
 
 	/*

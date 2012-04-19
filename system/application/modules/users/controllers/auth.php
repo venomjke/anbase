@@ -140,9 +140,9 @@ class Auth extends MX_Controller{
 			if ($this->form_validation->run($this)) {	// validation ok
 
 				$register_data = array(
-					'login'       => $this->input->post('login'),
-					'password'    => $this->input->post('password'),
-					'email'    	  => $this->input->post('email'),
+					'login'       => $this->input->post('r_login'),
+					'password'    => $this->input->post('r_password'),
+					'email'    	  => $this->input->post('r_email'),
 					'name'        => $this->input->post('name'),
 					'middle_name' => $this->input->post('middle_name'),
 					'last_name'   => $this->input->post('last_name'),
@@ -171,6 +171,7 @@ class Auth extends MX_Controller{
 			*/
 			$this->template->set_theme('start');
 			$this->template->set_partial('menu','common/menu');
+			$this->template->set('loginBox',$this->load->view('users/login',array(),true));
 			$this->template->set('recaptcha_html',$this->_create_recaptcha());
 			$this->template->build('register',$data);
 		}

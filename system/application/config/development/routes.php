@@ -53,7 +53,7 @@ $route['faq']     = 'site/faq';
 
 $route['logout(.*)']       = 'users/auth/logout$1';
 $route['register(.*)']     = 'users/auth/register$1';
-
+$route['login(.*)']        = 'site/index$1';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

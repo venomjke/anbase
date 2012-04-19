@@ -6,10 +6,10 @@
 *
 *
 */
-$this->form_validation->set_rules('login', 'Логин', 'trim|required|xss_clean|min_length[3]|max_length[50]|alpha_dash|is_unique[users.login]');
-$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email|is_unique[users.email]');
-$this->form_validation->set_rules('password', 'Пароль', 'trim|required|xss_clean|min_length[6]|max_length[200]|alpha_dash');
-$this->form_validation->set_rules('re_password', 'Копия пароля', 'trim|required|xss_clean|matches[password]');
+$this->form_validation->set_rules('r_login', 'Логин', 'trim|required|xss_clean|min_length[3]|max_length[50]|alpha_dash|is_unique[users.login]');
+$this->form_validation->set_rules('r_email', 'Email', 'trim|required|xss_clean|valid_email|is_unique[users.email]');
+$this->form_validation->set_rules('r_password', 'Пароль', 'trim|required|xss_clean|min_length[6]|max_length[200]|alpha_dash');
+$this->form_validation->set_rules('r_re_password', 'Копия пароля', 'trim|required|xss_clean|matches[r_password]');
 /*
 *
 *

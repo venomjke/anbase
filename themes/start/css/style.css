@@ -1,0 +1,311 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	background-image: url(../images/bg1.png);
+	background-repeat: repeat;
+	font-size: 14px;
+	color: #333333;
+}
+a {
+	color: #0066cc;
+}
+
+div.clear {
+	clear: both;
+}
+
+.bg {
+	background-image: url(../images/bg2.png);
+	background-repeat: repeat-x;
+	background-position: top;
+}
+
+.shapka {
+	width: 920px;
+	margin-right: auto;
+	margin-left: auto;
+	height: 154px;
+}
+.shapka img {
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+	margin-top: 34px;
+	float: left;
+}
+.shapka .slogan {
+	float: right;
+	font-size: 23px;
+	margin-top: 70px;
+}
+.menu {
+	width: 978px;
+	margin-right: auto;
+	margin-left: auto;
+	background-image: url(../images/bg_menu1.png);
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	padding-bottom: 1px;
+}
+.bg  .menu  ul {
+	background-image: url(../images/bg_menu2.png);
+	background-repeat: repeat-x;
+	background-position: top;
+	height: 58px;
+	width: 930px;
+	margin-right: auto;
+	margin-left: auto;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #8aa1bc;
+	border-right-color: #8aa1bc;
+	border-bottom-color: #227795;
+	border-left-color: #8aa1bc;
+	-moz-border-radius: 16px 16px 0 0;
+	-webkit-border-radius: 16px 16px 0 0;
+	border-radius: 16px 16px 0 0;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	list-style: none;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 16px;
+}
+
+.bg .menu li {
+	float: left;
+}
+.bg .menu a {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	height: 58px;
+	font-size: 18px;
+	text-transform: uppercase;
+	color: #FFFFFF;
+	padding-right: 27px;
+	padding-left: 27px;
+	text-decoration: none;
+}
+.bg .menu a:hover {
+	background-image: url(../images/bg_menu3.png);
+	background-repeat: repeat-x;
+	background-position: top;
+}
+.bg .content {
+	width: 978px;
+	margin-right: auto;
+	margin-left: auto;
+	background-image: url(../images/bg3.png);
+	background-repeat: no-repeat;
+	background-position: center top;
+	padding-top: 16px;
+}
+.bg .content .left, .bg .content .right {
+	padding-top: 16px;
+	padding-right: 16px;
+	padding-bottom: 26px;
+	border: 1px solid #a9c4d1;
+	-moz-border-radius: 16px 16px 16px 16px;
+	-webkit-border-radius: 16px 16px 16px 16px;
+	border-radius: 16px 16px 16px 16px;
+	margin-bottom: 32px;
+	background-image: url(../images/bg_left.png);
+	background-repeat: repeat-x;
+	background-position: top;
+	background-color: #f4fafb;
+	display: inline;
+
+}
+.bg .content .left {
+	float: left;
+	width: 554px;
+	margin-left: 16px;
+	padding-left: 40px;
+
+	
+}
+.bg .content .left a {
+	text-decoration: none;
+}
+.bg .content .left a:hover {
+	text-decoration: underline;
+}
+.bg .content .left p a {
+	color: #333333;
+}
+.bg .content .left .zagolovok h1 {
+	font-size: 18px;
+	margin: 0px;
+	font-style: normal;
+	font-weight: normal;
+}
+.bg .content .left .zagolovok {
+	font-size: 12px;
+	color: #666666;
+	font-style: italic;
+	line-height: 16px;
+	position: relative;
+	margin-top: 32px;
+	
+}
+.bg .content .left .zagolovok .date {
+	position: absolute;
+	z-index: 1000;
+	height: 79px;
+	width: 46px;
+	background-image: url(../images/bg_date.png);
+	background-repeat: no-repeat;
+	left: -60px;
+	top: -26px;
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	color: #FFFFFF;
+	font-style: normal;
+	font-size: 9px;
+	padding-right: 4px;
+	line-height: 12px;
+}
+div.date  div {
+	font-size: 16px;
+	margin-top: 30px;
+}
+.bg .content .left .koment {
+	background-image: url(../images/koment.png);
+	background-repeat: no-repeat;
+	height: 21px;
+	background-position: left top;
+	padding-left: 26px;
+	font-size: 12px;
+	line-height: 20px;
+	padding-bottom: 6px;
+}
+.bg .content .left .koment a {
+	color: #666666;
+}
+.bg .content .left .navi {
+	text-align: right;
+}
+.bg .content .left .navi a {
+	background-color: #ededf0;
+	border: 1px solid #999999;
+	padding-top: 1px;
+	padding-right: 4px;
+	padding-bottom: 1px;
+	padding-left: 4px;
+}
+.bg .content .left .navi a:hover {
+	text-decoration: none;
+	border-top-color: #1189B8;
+	border-right-color: #1189B8;
+	border-bottom-color: #1189B8;
+	border-left-color: #1189B8;
+	background-color: #FFFFFF;
+}
+
+.bg .content .left .navi a.curent {
+	color: #FFFFFF;
+	background-color: #1189B8;
+	border-top-color: #1189B8;
+	border-right-color: #1189B8;
+	border-bottom-color: #1189B8;
+	border-left-color: #1189B8;
+}
+
+.bg .content .right {
+	float: right;
+	width: 284px;
+	margin-right: 16px;
+	padding-left: 16px;
+}
+.bg .content .right .zagolovok h3 {
+	font-size: 18px;
+	font-weight: normal;
+	text-transform: uppercase;
+	color: #0066DD;
+	text-align: center;
+	margin-bottom: 6px;
+}
+input.text               {
+	color: #666666;
+	-moz-border-radius: 10px 10px 10px 10px;
+	-webkit-border-radius: 10px 10px 10px 10px;
+	border-radius: 10px 10px 10px 10px;
+	border: 1px solid #999999;
+	width: 100%;
+	height: 26px;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	text-indent: 10px;
+}
+h3.reg {
+	font-size: 16px;
+	border-bottom-width: 1px;
+	border-bottom-style: dashed;
+	border-bottom-color: #999999;
+	margin-bottom: 0px;
+	padding-bottom: 6px;
+	font-weight: normal;
+	font-style: italic;
+}
+input.button    {
+	background-image: url(../images/bg_button1.png);
+	background-repeat: repeat-x;
+	height: 31px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+	-moz-border-radius: 10px 10px 10px 10px;
+	-webkit-border-radius: 10px 10px 10px 10px;
+	border-radius: 10px 10px 10px 10px;
+	padding-right: 16px;
+	padding-left: 16px;
+	color: #FFFFFF;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+input.button:hover    {
+	background-image: url(../images/bg_button2.png);
+}.bg .content .right a {
+	text-decoration: none;
+}
+.bg .content .right a:hover {
+	text-decoration: underline;
+}
+.podval {
+	background-image: url(../images/bg_podval.png);
+	background-repeat: repeat-x;
+	background-position: top;
+	height: 113px;
+	font-size: 12px;
+	color: #FFFFFF;
+}
+.podval div {
+	width: 878px;
+	margin-right: auto;
+	margin-left: auto;
+	padding-top: 16px;
+}
+.podval a {
+	color: #FFFFFF;
+	text-decoration: none;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+.podval a:hover {
+	text-decoration: underline;
+}
