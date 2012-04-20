@@ -96,11 +96,15 @@ span.plus a:hover {
 }
 .shapka .phone .menedger {
 	background-image: url(../images/manager.png);
-	padding-top: 6px;
+	padding-top: 4px;
 }
 
 .shapka .phone .dispetcher {
 	background-image: url(../images/dispetcher.png);
+}
+
+.shapka .dispetcher .strong{
+	padding-top:1px;
 }
 
 .shapka .phone span {

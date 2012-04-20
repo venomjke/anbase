@@ -4,7 +4,7 @@
     <div class="dispetcher">Диспетчер:<br /><strong><?php echo $this->agent_users->get_callmanager_phone(); ?></strong>
     </div>
     <?php if($this->agent_users->has_manager()): ?>
-	<div class="menedger"><span>Ваш менеджер:</span><br /><?php echo $this->agent_users->get_manager_name(); ?><br /><strong><?php  echo $this->agent_users->get_manager_phone(); ?></strong>
+	<div class="menedger">Ваш менеджер:<br /><strong><?php  echo $this->agent_users->get_manager_phone(); ?></strong><br /><?php echo $this->agent_users->get_manager_name(); ?>
     </div>
 	<?php endif; ?>
     <div class="clier"></div>

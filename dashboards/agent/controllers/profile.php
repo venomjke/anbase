@@ -37,6 +37,8 @@ class Profile extends MX_Controller
 
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial("dashboard_head","dashboard/dashboard_head");
+		$this->template->set_partial('dashboard_user','dashboard/dashboard_user');
+		$this->template->set_partial('dashboard_menu','dashboard/dashboard_menu');
 
 		/*
 		*
@@ -68,53 +70,45 @@ class Profile extends MX_Controller
 	 **/
 	public function view()
 	{
-		$section = $this->input->get('s');
+		$section = $this->input->get('s')?$this->input->get('s'):'';
 
-		if (!empty($section)) {
-			/*
-			*
-			*  Запуск действия
-			*/
-			switch ($section) {
-				case 'personal':
-					/*
-					*
-					* Персональная информация
-					*
-					*/
-					$this->_personal_profile();
-					break;
-				case 'org':
-
-					/*
-					*
-					*	Организационная информация
-					*/
-					$this->_organization_profile();
+		/*
+		*
+		*  Запуск действия
+		*/
+		switch ($section) {
+			case 'personal':
+				/*
+				*
+				* Персональная информация
+				*
+				*/
+				$this->_personal_profile();
 				break;
-				case 'system':
-					/*
-					*
-					*	Системная информация
-					*
-					*/
-					$this->_system_info();
-				break;
-				default:
-					/*
-					*
-					* действие по умолчанию
-					*/
+			case 'org':
 
-					$this->_personal_profile();
-					break;
-			}
-		} else {
-			/*
-			*
-			* Запуск действия по умолчанию
-			*/
-			$this->_personal_profile();
+				/*
+				*
+				*	Организационная информация
+				*/
+				$this->_organization_profile();
+			break;
+			case 'system':
+				/*
+				*
+				*	Системная информация
+				*
+				*/
+				$this->_system_info();
+			break;
+			default:
+				/*
+				*
+				* действие по умолчанию
+				*/
+
+				$this->_personal_profile();
+				break;
 		}
 		
 	}
@@ -170,7 +164,7 @@ class Profile extends MX_Controller
 			}
 
 		}else{
-			$this->template->build("profile/personal");
+			$this->template->build("profile/info");
 		}
 	}
 
@@ -182,9 +176,7 @@ class Profile extends MX_Controller
 	 **/
 	private function _organization_profile()
 	{
-		$this->template->set_partial("dashboard_tabs","dashboard/profile/tabs");
-
-		$this->template->build("profile/organization");
+		$this->template->build("profile/info");
 	}
 
 	/**
@@ -195,8 +187,6 @@ class Profile extends MX_Controller
 	 **/
 	private function _system_info()
 	{
-		$this->template->set_partial("dashboard_tabs","dashboard/profile/tabs");
-
-		$this->template->build("profile/system_info");
+		$this->template->build("profile/info");
 	}
 }// END Profile class
