@@ -43,7 +43,7 @@ var common = {
 		var def_options = {
 			id:'status_msg',
 			type:'msg',
-			msg:'Загрузка...',
+			msg:'<img src="/themes/dashboard/images/load.gif"/> Загрузка...',
 			timeout:0
 		};
 		/*
@@ -52,7 +52,7 @@ var common = {
 		common.hideStatusMsg(options);
 
 		options = $.extend(true,def_options,options);
-		$('body').prepend('<div id="'+options.id+'" style="position:fixed;top: -20px;left: 45%;background-color: #333;z-index:99999999;padding:10px;-webkit-border-bottom-right-radius: 15px;-webkit-border-bottom-left-radius: 15px;-moz-border-radius-bottomright: 15px;-moz-border-radius-bottomleft: 15px;border-bottom-right-radius: 15px;border-bottom-left-radius: 15px;color:#fff" ><span><img src="/themes/dashboard/images/load.gif"/></span><span style="padding: 3px;">'+options.msg+'</span></div>');
+		$('body').prepend('<div id="'+options.id+'" style="position:fixed;top: -20px;left: 45%;background-color: #333;z-index:99999999;padding:10px;-webkit-border-bottom-right-radius: 15px;-webkit-border-bottom-left-radius: 15px;-moz-border-radius-bottomright: 15px;-moz-border-radius-bottomleft: 15px;border-bottom-right-radius: 15px;border-bottom-left-radius: 15px;color:#fff" ><span style="padding: 3px;">'+options.msg+'</span></div>');
 		$('#'+options.id).animate({"top":"+=20px"},"fast");
 
 		/*

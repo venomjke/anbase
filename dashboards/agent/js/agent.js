@@ -183,5 +183,10 @@ var agent = {
 	orders:{
 		init:function(options){
 		}
+	},
+	user:{
+		init:function(options){
+			
+		}
 	}
 }

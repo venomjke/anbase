@@ -92,7 +92,7 @@
 					      <input class="button" name="button" type="submit" value="Сохранить изменения" />
 					    </span></td>
 					    <td colspan="2" class="l"><input class="button" name="button2" type="submit" value="Сохранить изменения" /></td>
-					    <td colspan="2" class="l"><input class="button" name="button3" type="submit" value="Сохранить изменения" /></td>
+					    <td colspan="2" class="l"></td>
 					    </tr>
 					</table>
 		      </div>
