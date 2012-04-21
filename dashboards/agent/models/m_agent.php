@@ -40,6 +40,12 @@ class M_Agent extends M_User{
 		array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'trim|valid_phone')
 	);
 
+	public $system_profile_validation_rules  = array(
+		array( 'field' => 'password', 'label' => 'Пароль', 'rules' => 'required|min_length[6]|max_length[20]'),
+		array( 'field' => 'new_password', 'label' => 'Новый пароль', 'rules'=>'required|min_length[6]|max_length[20]'),
+		array( 'field' => 're_new_password', 'label' => 'Копия пароля','rules' => 'required|matches[new_password]|min_length[6]|max_length[20]')
+	);
+
 	public function __construct(){
 		parent::__construct();
 

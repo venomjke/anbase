@@ -13,11 +13,11 @@ if(!class_exists("Users"))
 *
 */
 if(!class_exists("ValidationException")){
-	require_once APPPATH."exceptions/ValidationException.php";
+	include APPPATH."exceptions/ValidationException.php";
 }
 
 if(!class_exists("AnbaseRuntimeException")){
-	require_once APPPATH."exceptions/AnbaseRuntimeException.php";
+	include APPPATH."exceptions/AnbaseRuntimeException.php";
 }
 
 /**
@@ -215,6 +215,32 @@ class Agent_Users extends Users{
 		}
 	}
 
+	/**
+	 * Редактирование системной информации
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function edit_system_profile()
+	{
+		$fields = array('password','new_password','re_new_password');
+		$this->ci->form_validation->set_rules($this->ci->m_agent->system_profile_validation_rules);
+
+		if($this->ci->form_validation->run($this->ci->m_agent)){
+
+			$data = array_intersect_key($this->ci->input->post(),array_flip($fields));
+
+			$this->change_password($this->get_user_id(),$data);
+
+			return;
+		}
+
+		$error_validation = array();
+
+		if(has_errors_validation($fields,$error_validation)){
+			throw new ValidationException($error_validation);
+		}
+	}
 	/**
 	 * Регистрация пользователя в качестве агента в системе.
 	 *

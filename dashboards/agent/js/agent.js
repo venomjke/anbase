@@ -25,6 +25,7 @@ var agent = {
 		init:function(){
 			agent.profile.hash_form = {};
 			agent.profile.load_form('personal');
+			agent.profile.load_form('system');
 		},
 		/*
 		* Загрузка формы
@@ -35,7 +36,7 @@ var agent = {
 			agent.profile.hash_form[form] = {};
 
 			$('#'+form+' input').each(function(){
-				if($(this).attr('type') != 'text')
+				if($(this).attr('type') != 'text' && $(this).attr('type') != 'password')
 					return false;
 				/*
 				* Т.к все элементы формы у нас либо просто text,либо password, 
@@ -55,7 +56,7 @@ var agent = {
 			var data = {};
 			var cnt  = 0; // кол-во полей для изменения.
 			$('#'+form+' input').each(function(){
-				if($(this).attr('type') != 'text')
+				if($(this).attr('type') != 'text' && $(this).attr('type') != 'password')
 					return false;
 
 				var name = $(this).attr('name');
@@ -93,7 +94,7 @@ var agent = {
 					if(response.code && response.data){
 						switch(response.code){
 							case 'success_edit_profile':
-								common.showResultMsg(response.data);
+								common.showSuccessMsg(response.data);
 								for(var i in data){
 									agent.profile.hash_form[form][i] = data[i];
 								}
@@ -105,7 +106,7 @@ var agent = {
 											$('#profile').find('input[name="'+i+'"]').parent().prepend(response.data.errors[i])
 										}
 									}else{
-										common.showResultMsg(response.data.errors[0]);
+										common.showErrorMsg(response.data.errors[0]);
 									}
 								}
 							break;

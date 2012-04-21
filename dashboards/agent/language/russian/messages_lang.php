@@ -14,8 +14,8 @@
 * Сообщения profile
 *
 */
-$lang['success_edit_personal_profile'] = 'Личные данные отредактированы';
-$lang['success_edit_sys_profile']	   = 'Учетная запись успешно отредактирована';
+$lang['success_edit_personal_profile'] = 'Изменения сохранены';
+$lang['success_edit_system_profile']   = 'Изменения сохранены';
 
 
 $lang['success_register_agent']        = 'Вы зарегистрированы, через 5 сек. вы будете перенаправлены на главную страницу';

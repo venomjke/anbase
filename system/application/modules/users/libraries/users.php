@@ -2,6 +2,14 @@
 
 require_once('phpass-0.1/PasswordHash.php');
 
+if(!class_exists("ValidationException")){
+	include APPPATH."exceptions/ValidationException.php";
+}
+
+if(!class_exists("AnbaseRuntimeException")){
+	include APPPATH."exceptions/AnbaseRuntimeException.php";
+}
+
 
 /**
 *
@@ -376,7 +384,28 @@ class Users {
 		}
 	}
 
+	/**
+	 * Смена пароля
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function change_password($user_id,$data=array())
+	{
+		// Does password match hash in database?
+		$hasher = new PasswordHash(
+				$this->ci->config->item('phpass_hash_strength', 'users'),
+				$this->ci->config->item('phpass_hash_portable', 'users'));
 
+		$user = $this->ci->m_user->get($this->get_user_id());
+		if ($hasher->CheckPassword($data['password'], $user->password)) {		// password ok
+				
+			$data['new_password'] = $hasher->HashPassword($data['new_password']);
+			$this->ci->m_user->update($user_id,array('password'=>$data['new_password']),true);
+			return true;
+		}
+		throw new AnbaseRuntimeException(lang('users.error_change_password'));
+	}
 	/**
 	*	Проверка залогинен ли пользователь
 	*
@@ -385,6 +414,8 @@ class Users {
 	public function is_logged_in($activated = M_User::USER_ACTIVE){
 		return $this->ci->session->userdata('status') === ($activated ? M_User::USER_ACTIVE : M_User::USER_NON_ACTIVE);
 	}
+
+
 
 	/**
 	 * Получить сообщение об ошибке

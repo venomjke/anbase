@@ -39,7 +39,7 @@
 									    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 									       	 <tr>
 									          <td width="150px">Текущий пароль:&nbsp;</td>
-									          <td><input class="text" type="text" name="password" required/></td>
+									          <td><input class="text" type="password" name="password" required/></td>
 									       	 </tr>
 									        </table>      
 								  		</td>
@@ -49,7 +49,7 @@
 									    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 									       	 <tr>
 									          <td width="150px">Новый пароль:&nbsp;</td>
-									          <td><input class="text" type="text" name="new_password" required/></td>
+									          <td><input class="text" type="password" name="new_password" required/></td>
 									       	 </tr>
 									        </table>      
 								  		</td>
@@ -57,9 +57,9 @@
 									<tr>
 									    <td colspan="2">
 									    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-									       	 <tr>
+									       	 <tr> 
 									          <td width="150px">Повторите пароль:&nbsp;</td>
-									          <td><input class="text" type="text" name="re_new_password" required/></td>
+									          <td><input class="text" type="password" name="re_new_password" required/></td>
 									       	 </tr>
 									        </table>
 									        <input type="submit" style="position:absolute; top:9999999px;left:999999999px"/>      
