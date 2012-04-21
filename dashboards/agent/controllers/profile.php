@@ -46,82 +46,62 @@ class Profile extends MX_Controller
 		* его инициализация
 		*/
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"> </script>');
-		$this->template->append_metadata('<script type="text/javascript">$(function(){agent.init({baseUrl:"'.base_url().'"});});</script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){agent.init({baseUrl:"'.site_url('agent/profile').'"}); agent.profile.init();});</script>');
 	}
 
 
 	/**
-	 * Редирект на маршрутизатор profile/view
-	 *
+	 *	Отображение профиля
+	 * 
 	 * @return void
 	 * @author Alex.strigin
 	 **/
 	public function index()
 	{
-		redirect('agent/profile/view');
+		$this->template->build("profile/info");
 	}
 
 
 	/**
-	 * Маршрутизатор профиля
+	 * Редактирование разделов профиля
 	 *
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	public function view()
+	public function edit()
 	{
-		$section = $this->input->get('s')?$this->input->get('s'):'';
-
 		/*
-		*
-		*  Запуск действия
+		* Редактирование доступно только с использованием ajax
 		*/
-		switch ($section) {
-			case 'personal':
-				/*
-				*
-				* Персональная информация
-				*
-				*/
-				$this->_personal_profile();
-				break;
-			case 'org':
+		if($this->ajax->is_ajax_request()){
+			$section = $this->input->get('sct')?$this->input->get('sct'):'';
 
-				/*
-				*
-				*	Организационная информация
-				*/
-				$this->_organization_profile();
-			break;
-			case 'system':
-				/*
-				*
-				*	Системная информация
-				*
-				*/
-				$this->_system_info();
-			break;
-			default:
-				/*
-				*
-				* действие по умолчанию
-				*/
-
-				$this->_personal_profile();
-				break;
+			switch ($section) {
+				case 'personal':
+					$this->_edit_personal_profile();
+					break;
+				case 'system':
+					$this->_edit_system_profile();
+					break;
+				default:
+					/*
+					* Ничего не делаем, пускай помучаются
+					*/
+					return;
+					break;
+			}
+		}else{
+			redirect('agent/profile');
 		}
-		
 	}
-
 	/**
 	 * Личная информация
 	 *
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	private function _personal_profile()
+	private function _edit_personal_profile()
 	{	
-		$this->template->set_partial("dashboard_tabs","dashboard/profile/tabs");
 		/*
 		*  
 		* Если данные переданы с использованием ajax, 
@@ -129,64 +109,53 @@ class Profile extends MX_Controller
 		* то просто выводим список полей
 		*/
 		if($this->ajax->is_ajax_request()){
-
-			/*
-			*
-			* Попытаемся выполнить изменение личного профиля,
-			* в случае неудачи получим *Exception
-			*/
 			try{
-
 				$this->agent_users->edit_personal_profile();
-
 				$response['code'] = 'success_edit_profile';
 				$response['data'] = lang('success_edit_personal_profile');
-				$this->ajax->build_json($response);
-			
-
 			}catch(ValidationException $ve){
-				/*
-				*
-				* Обработка исключений валидации
-				*
-				*/
 				$response['code'] = 'error_edit_profile';
+				$response['data']['errorType'] = 'validation';
 				$response['data']['errors'] = $ve->get_error_messages();
-				$this->ajax->build_json($response);
 			}catch(AnbaseRuntimeException $re){
-
-				/*
-				*
-				* Обработка исключений времени выполнения
-				*/
 				$response['code'] = 'error_edit_profile';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
 			}
-
+			$this->ajax->build_json($response);
 		}else{
-			$this->template->build("profile/info");
+			redirect("agent/profile");
 		}
 	}
 
+
 	/**
-	 * Организационная информация
+	 * Редактирование системный инфы 
 	 *
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	private function _organization_profile()
+	private function _edit_system_profile()
 	{
-		$this->template->build("profile/info");
-	}
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$this->agent_users->edit_system_profile();
+				$response['code'] = 'success_edit_profile';
+				$response['data'] = lang('success_edit_system_profile');
+			}catch(ValidationException $ve){
 
-	/**
-	 * Информация об аккаунте
-	 *
-	 * @return void
-	 * @author 
-	 **/
-	private function _system_info()
-	{
-		$this->template->build("profile/info");
+				$response['code'] = 'error_edit_profile';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_edit_profile';
+				$response['data']['errorType'] = 'runtime';
+				$response['data']['errors'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect("agent/profile");
+		}
 	}
 }// END Profile class

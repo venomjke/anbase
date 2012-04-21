@@ -218,10 +218,12 @@ span.plus a:hover {
 	font-size: 12px;
 }
 
-td.l {
+td.left{
 	border-left-width: 1px;
 	border-left-style: solid;
 	border-left-color: #999999;
+}
+td.l {
 	padding-left: 10px;
 }
 a.svernut {

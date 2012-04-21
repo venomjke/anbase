@@ -312,4 +312,10 @@ class MY_Form_validation extends CI_Form_validation
 		$this->set_message('valid_order_deal_type',lang('common.validation.valid_order_deal_type'));
 		return false;
 	}
+	
+    function run($module = NULL, $group = '') {        
+        if (is_object($module)) $this->CI =& $module;
+        return parent::run($group);
+    }
+
 }

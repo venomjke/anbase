@@ -14,8 +14,8 @@ if(!class_exists("M_Order")){
 class M_Agent_order extends M_Order
 {
 
+	
 	public $edit_validation_rules = array(
-
 		array('field'=>'id', 'label'=>'ORDER ID','rules'=>'required|valid_agent_order_id'),
 		array('field'=>'number', 'label'=>'lang:order.label_number','rules'=>'is_natural|less_than[4294967295]'),
 		array('field'=>'create_date', 'label'=>'lang:order.label_create_date', 'rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),

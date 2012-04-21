@@ -33,13 +33,17 @@ class M_Agent extends M_User{
 		array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'required|trim|xss_clean|min_length[9]|max_length[20]')
 	);
 
-	public function __construct(){
+	public $personal_profile_validation_rules = array(
+		array('field' => 'name', 'label' => 'lang:label_name', 'rules' => 'trim|xss_clean|min_length[3]|max_length[15]'),
+		array('field' => 'middle_name', 'label' => 'lang:label_middle_name', 'rules' => 'trim|xss_clean|min_length[3]|max_length[15]'),
+		array('field' => 'last_name', 'label' => 'lang:label_last_name', 'rules' => 'trim|xss_clean|min_length[3]|max_length[15]'),
+		array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'trim|valid_phone')
+	);
 
+	public function __construct(){
 		parent::__construct();
 
 	}
-
-
 	/**
 	 * Подготовка запроса к выбору данных об менеджере
 	 *
@@ -57,17 +61,6 @@ class M_Agent extends M_User{
 
 		$this->from("managers_users");
 		$this->join("users","managers_users.manager_id = users.id");
-	}
-
-	/**
-	 * Метод, возвращающий телефон диспетчера
-	 *
-	 * @return string
-	 * @author Alex.strigin
-	 **/
-	public function get_callmanager_phone()
-	{
-
 	}
 
 	/**
@@ -100,16 +93,5 @@ class M_Agent extends M_User{
 			return $manager->row();
 		}
 		return NULL;
-	}
-
-	/**
-	 * getter validate array
-	 *
-	 * @return array
-	 * @author alex.strigin
-	 **/
-	public function get_validation_rules()
-	{
-		return $this->validate;
 	}
 }

@@ -183,41 +183,35 @@ class Agent_Users extends Users{
 	public function edit_personal_profile()
 	{
 		$fields = array('name','middle_name','last_name','phone');
-		$this->ci->form_validation->set_rules($this->ci->m_agent->get_validation_rules());
-		if($this->ci->form_validation->run()){
+		$this->ci->form_validation->set_rules($this->ci->m_agent->personal_profile_validation_rules);
+		if($this->ci->form_validation->run($this->ci->m_agent)){
 			$data=array();
 			/*
-			*
 			* консервируем необходимые для изменения данные
-			*
 			*/
-			foreach($fields as $field){
-				if($this->ci->input->post($field)) $data[$field] = $this->ci->input->post($field);
-			}
+			$data = array_intersect_key($this->ci->input->post(), array_flip($fields));
 
+			/*
+			* Воизбежание пустых полей делаем следующее.
+			* Validation rules этого отловить не может, required тут не помогает, т.к необязательно передавать все поля
+			* [my_notice]: не очень нравится такое решение, но пока так.
+			*/
+			foreach($data as $k=>$item){
+				if(empty($data[$k])) unset($data[$k]);
+			}
 			if (!empty($data)) {
-				$this->ci->m_agent->update($this->get_user_id(),$data);
+				$this->ci->m_agent->update($this->get_user_id(),$data,true);
 				$this->update_agent_session_data($data);
 			} else {
 				throw new AnbaseRuntimeException(lang('common.empty_data'));
 			}
 			return;
 		}
-		/*
-		* Из-за того, что form_validation не имеет методов, позволяющих проверить, были ли ошибки, приходится вот так изгалаться
-		*
-		*/
-		$has_validation_error = false;
-		$validation_errors = array();
-		foreach($fields as $field){
-			$validation_errors[$field] = $this->ci->form_validation->error($field);
-			if(!empty($validation_errors[$field]))
-				$has_validation_error = true;
-		}
 
+		$errors_validation = array();
 
-		if($has_validation_error){
-			throw new ValidationException($validation_errors);
+		if(has_errors_validation($fields,$errors_validation)){
+			throw new ValidationException($errors_validation);
 		}
 	}
 
