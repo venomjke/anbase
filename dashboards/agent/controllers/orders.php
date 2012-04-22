@@ -129,10 +129,10 @@ class Orders extends MX_Controller
 			$response = array();
 			try{
 				$orders = $this->agent_orders->get_all_agent_orders();
-				$response['code'] = 'success_view_order';
+				$response['code'] = 'success_load_data';
 				$response['data'] = $orders;
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_view_order';
+				$response['code'] = 'error_load_data';
 				$response['data']['errors'] = array($re->get_error_message());
 			}
 			$this->ajax->build_json($response);

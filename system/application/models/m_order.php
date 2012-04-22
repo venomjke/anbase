@@ -374,7 +374,11 @@ class M_Order extends MY_Model{
 
 	}
 
-
+	public function count_all_orders_org($org_id)
+	{
+		$this->build_select();
+		return $this->count_all_results(array('organizations.id'=>$org_id));
+	}
 
 	/**
 	 * Метод, позволяющий выбрать заявки всех пользователей или одного
@@ -429,6 +433,12 @@ class M_Order extends MY_Model{
 		return $this->get_all_orders_users(array($user_id),$filter,$limit,$offset,$fields);
 	}
 
+	public function count_all_user_orders($user_id)	
+	{
+		$this->build_select();
+		$this->where_in('users.id',array($user_id));
+		return $this->count_all_results();	
+	}
 
 	/**
 	 * Выбор всех свободных заявок организации
@@ -478,6 +488,13 @@ class M_Order extends MY_Model{
 	{
 		$this->db->where("orders_users.user_id IS NOT NULL");
 		return $this->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
+	}
+
+	public function count_all_delegate_orders($org_id)	
+	{
+		$this->build_select();
+		$this->db->where('orders_users.user_id IS NOT NULL');
+		return $this->count_all_results(array('orders.org_id'=>$org_id));
 	}
 
 }

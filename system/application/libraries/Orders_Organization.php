@@ -36,6 +36,23 @@ class Orders_Organization
 	}
 
 	/**
+	 * Извлечение параметров предела и смещения
+	 *
+	 * @param ref
+	 * @param ref
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function fetch_limit(&$limit,&$offset)
+	{
+		$limit  = $this->ci->input->get('limit')?$this->ci->input->get('limit'):Orders_Organization::def_orders_limit;
+		$offset = $this->ci->input->get('offset')?$this->ci->input->get('offset'):0;
+
+		if(!is_numeric($limit) or !is_numeric($offset) or $limit < 0 or $offset < 0){
+			throw new AnbaseRuntimeException(lang('common.not_legal_data'));
+		}
+	}
+	/**
 	 * Привязать к заявкам регионы
 	 *
 	 * @return void
@@ -77,14 +94,10 @@ class Orders_Organization
 
 		$filter = array();
 
-
-		$limit  = $this->ci->input->get('limit')?$this->ci->input->get('limit'):Orders_Organization::def_orders_limit;
-		$offset = $this->ci->input->get('offset')?$this->ci->input->get('offset'):0;
-
-		if(!is_numeric($limit) or !is_numeric($offset) or $limit < 0 or $offset < 0){
-			throw new AnbaseRuntimeException(lang('common.not_legal_data'));
-		}
-
+		$limit = false;
+		$offset = false;
+		$this->fetch_limit($limit,$offset);
+		
 		$orders = $this->ci->m_order->get_all_free_orders($org_id,$filter,$limit,$offset,$fields);
 		$this->bind_regions($orders);
 
@@ -118,8 +131,10 @@ class Orders_Organization
 		*/
 		$filter = array();
 
-		$limit  = $this->ci->input->get('limit')?$this->ci->input->get('limit'):Orders_Organization::def_orders_limit;
-		$offset = $this->ci->input->get('offset')?$this->ci->input->get('offset'):0;
+		$limit = false;
+		$offset= false;
+
+		$this->fetch_limit($limit,$offset);
 
 		$orders = $this->ci->m_order->get_all_delegate_orders($org_id,$filter,$limit,$offset,$fields);
 
@@ -128,6 +143,19 @@ class Orders_Organization
 
 		return $orders;
 	}
+
+	/**
+	 * Подсчет всех делегированных заявок
+	 *
+	 * @param  int
+	 * @return int
+	 * @author alex.strigin
+	 **/
+	public function count_all_delegate_orders($org_id)
+	{
+		return $this->ci->m_order->count_all_delegate_orders($org_id);
+	}
+
 	/**
 	 * Выбор всех заявок организации
 	 *
@@ -140,8 +168,10 @@ class Orders_Organization
 	{
 		$filter = array();
 		
-		$limit  = $this->ci->input->get('limit')?$this->ci->input->get('limit'):Orders_Organization::def_orders_limit;
-		$offset = $this->ci->input->get('offset')?$this->ci->input->get('offset'):0;
+		$limit = false;
+		$offset = false;
+
+		$this->fetch_limit($limit,$offset);
 
 		$orders = $this->ci->m_order->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
 
@@ -150,6 +180,19 @@ class Orders_Organization
 
 		return $orders;
 	}
+
+	/**
+	 * Подсчет всех заявок агентства
+	 *
+	 * @param  int
+	 * @return int
+	 * @author alex.strigin
+	 **/
+	public function count_all_orders_org($org_id)
+	{
+		return $this->ci->m_order->count_all_orders_org($org_id);
+	}
+
 	/**
 	 * Выбор всех заявок определенного пользователя
 	 *
@@ -166,14 +209,27 @@ class Orders_Organization
 		*/
 		$filters = array();
 		
-		$limit  = $this->ci->input->get('limit')?$this->ci->input->get('limit'):Orders_Organization::def_orders_limit;
-		$offset = $this->ci->input->get('offset')?$this->ci->input->get('offset'):0;
+		$limit  = false;
+		$offset = false;
+		$this->fetch_limit($limit,$offset);
+
 
 		$orders = $this->ci->m_order->get_all_orders_user($user_id,$filters,$limit,$offset,$fields);
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);
 		return $orders;
+	}
+
+	/**
+	 * Подсчет всех заявок пользователя
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function count_all_user_orders($user_id)
+	{
+		return $this->ci->m_order->count_all_user_orders($user_id);
 	}
 	
 } // END class OrdersOrganization

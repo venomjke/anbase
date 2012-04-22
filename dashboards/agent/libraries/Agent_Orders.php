@@ -60,7 +60,8 @@ class Agent_Orders
 		* Поля, которые нужно выбрать
 		*/
 		$order_fields = array('number','create_date','category','deal_type','description','price','phone');
-		return $this->ci->orders_organization->get_all_user_orders($this->ci->agent_users->get_user_id(),$order_fields);
+		$items        = $this->ci->orders_organization->get_all_user_orders($this->ci->agent_users->get_user_id(),$order_fields);
+		return array('count'=>count($items),'total'=>$this->ci->orders_organization->count_all_user_orders($this->ci->agent_users->get_user_id()),'items'=>$items);
 	}
 
 	/**
