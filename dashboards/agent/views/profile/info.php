@@ -62,7 +62,7 @@
 									          <td><input class="text" type="password" name="re_new_password" required/></td>
 									       	 </tr>
 									        </table>
-									        <input type="submit" style="position:absolute; top:9999999px;left:999999999px"/>      
+									        <input type="submit" style="position:absolute; top:-9999999px;left:-999999999px"/>      
 								  		</td>
 									</tr>
 								</table>
@@ -86,7 +86,7 @@
 									<tr>
 										 <td class="l">Телефон:</td>
 						    			 <td><input class="text personal" type="text" name="phone" value="<?php echo $this->agent_users->get_user_phone(); ?>" required/>
-									        <input type="submit" style="position:absolute; top:9999999px;left:999999999px"/>      
+									        <input type="submit" style="position:absolute; top:-9999999px;left:-999999999px"/>      
 						    			 </td>
 									</tr>
 								</table>

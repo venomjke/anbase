@@ -26,10 +26,10 @@
         <td>Объект:</td>
         <td><select style="width:120px"></select></td>
         <td class="l">От:</td>
-        <td><input style="width:50px" type="text" /></td>
+        <td><input style="width:100px" type="text" /></td>
         <td class="l">С:</td>
-        <td><input style="width:80px" type="text" /></td>
-        <td width="50%" rowspan="3" valign="top" class="l"><textarea style="width:98%" rows="5"></textarea></td>
+        <td><input style="width:130px" type="text" /></td>
+        <td width="50%" rowspan="3" valign="top" class="l"><textarea style="width:90%" rows="5"></textarea></td>
         <td width="20%" rowspan="3" valign="top" class="l"><select size="4" multiple="" style="width:98%">
         </select><span class="plus" style="margin-top:5px"><a href="111">Добавить</a></span></td>
         <td width="20%" rowspan="3" valign="top" class="l"><select size="4" multiple="" style="width:98%">
@@ -39,9 +39,9 @@
         <td>Вид&nbsp;сделки:</td>
         <td><select style="width:120px"></select></td>
         <td class="l">До:</td>
-        <td><input type="text" style="width:50px" /></td>
+        <td><input type="text" style="width:100px" /></td>
         <td class="l">До:</td>
-        <td><input style="width:80px" type="text" /></td>
+        <td><input style="width:130px" type="text" /></td>
       </tr>
       <tr>
         <td colspan="2"><input type="button"  style="cursor:pointer; padding:5px" value="подобрать" /></td>
