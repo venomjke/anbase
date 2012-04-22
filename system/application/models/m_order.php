@@ -306,12 +306,17 @@ class M_Order extends MY_Model{
 
 		$this->select('orders.id');
 		foreach($fields as $field){
+			if($field == 'number'){
+				$this->select('orders.id as number');
+				continue;
+			}
 			if($field == 'create_date' or $field == 'delegate_date' or $field == 'finish_date'){
 				$this->select("DATE_FORMAT(orders.$field,'%d.%m.%y') as $field",FALSE);	
 			}else{
 				$this->select("orders.$field");
 			}
 		}
+
 
 
 		$this->select('users.id as user_id');
@@ -443,6 +448,20 @@ class M_Order extends MY_Model{
 		*/
 		$this->db->where("orders_users.user_id IS NULL");
 		return $this->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
+	}
+
+	/**
+	 * Подсчет всех пустых заявок
+	 *
+	 * @param  int
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function count_all_free_orders($org_id)
+	{
+		$this->build_select();
+		$this->db->where("orders_users.user_id IS NULL");
+		return $this->count_all_results(array("orders.org_id"=>$org_id));
 	}
 
 	/**

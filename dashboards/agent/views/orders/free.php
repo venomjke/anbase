@@ -15,68 +15,56 @@
 </div>
 
 <script type="text/javascript">
-	$(function(){
-		function load_grid(data){		
-
-			/*
-			* Мои форматтеры
-			*/
-			function DescriptionFormatter(row,cell,value,columnDef,dataContext){
-				if(!value)
-					return;
-			  var cell_content = $('<div id="cell_description" style="height:40px;overflow:hidden;">').html(value);
-			  cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',agent.orders.grid.getDataItem('+row+').description);');
-			  cell_content.attr('onmouseout','common.hide_full_text(event,'+row+','+cell+');');
-			  var wrap = $('<div>').html(cell_content);
-			  return wrap.html();
-			};
-
-			/*
-			* Настройки грида
-			*/
-			var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
-			var columns = [
-				{id: "number", name:"Номер", field:"number"},
-				{id: "create_date", name:"Дата создания", field:"create_date"},
-				{id: "category", name:"Объект", field:"category"},
-				{id: "deal_type", name:"Сделка", field:"deal_type"},
-				{id: "regions",  name:"Район", field:"regions", formatter:Slick.Formatters.RegionsList},
-				{id: "metros", name:"Метро", field:"metros",  formatter:Slick.Formatters.MetrosList},
-				{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles},	
-				{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter},
-			];	
-			/*
-			* Создание грида
-			*/
-			agent.orders.grid = new Slick.Grid("#orders_grid",data,columns,options);
-		}
-
+	$(function(){	
 		/*
-		* Загрузка и инициализация грида
+		* Мои форматтеры
 		*/
-	    $.ajax({
-	    	url:agent.baseUrl+'?act=view&s=free',
-	    	type:'POST',
-	    	dataType:'json',
-	    	success:function(response){
-	    		if(response.code && response.data){
-	    			agent.orders.grid_data = response.data;
-	    			switch(response.code){
-	    				case 'success_view_order':
-	    					load_grid(response.data);
-	    				break;
-	    				case 'error_view_order':
-	    					common.showResultMsg("Загрузка не удалась")
-	    				break;
-	    			}
-	    		}
-	    	},
-	    	beforeSend:function(){
-	    		common.showAjaxIndicator();
-	    	},
-	    	complete:function(){
-	    		common.hideAjaxIndicator();
-	    	}
-	    });
+		function DescriptionFormatter(row,cell,value,columnDef,dataContext){
+			if(!value)
+				return;
+		  var cell_content = $('<div id="cell_description" style="height:40px;overflow:hidden;">').html(value);
+		  cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',agent.orders.grid.getDataItem('+row+').description);');
+		  cell_content.attr('onmouseout','common.hide_full_text(event,'+row+','+cell+');');
+		  var wrap = $('<div>').html(cell_content);
+		  return wrap.html();
+		};
+		/*
+		* Настройки грида
+		*/
+		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
+		var columns = [
+			{id: "number", name:"Номер", field:"number"},
+			{id: "create_date", name:"Дата создания", field:"create_date"},
+			{id: "category", name:"Объект", field:"category"},
+			{id: "deal_type", name:"Сделка", field:"deal_type"},
+			{id: "regions",  name:"Район", field:"regions", formatter:Slick.Formatters.RegionsList},
+			{id: "metros", name:"Метро", field:"metros",  formatter:Slick.Formatters.MetrosList},
+			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles},	
+			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter},
+		];
+
+		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=free',PageSize:200});	
+		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
+
+		grid.onViewportChanged.subscribe(function(e,args){
+			var vp = grid.getViewport();
+			model.ensureData(vp.top,vp.bottom);
+		});
+
+		model.onDataLoading.subscribe(function(){
+			common.showAjaxIndicator();
+		});
+
+		model.onDataLoaded.subscribe(function(e,args){
+			for (var i = args.from; i <= args.to; i++) {
+		    	grid.invalidateRow(i);
+		  	}
+		  	grid.updateRowCount();
+		  	grid.render();
+			common.hideAjaxIndicator();
+		});
+		agent.orders.grid = grid;
+		grid.onViewportChanged.notify();
+
 	});
 </script>

@@ -72,7 +72,8 @@ class Agent_Orders
 	public function get_all_free_orders()
 	{
 		$order_fields = array('number','create_date','category','deal_type','description','price');
-		return $this->ci->orders_organization->get_all_free_orders($this->ci->agent_users->get_org_id(),$order_fields);
+		$items        = $this->ci->orders_organization->get_all_free_orders($this->ci->agent_users->get_org_id(),$order_fields);
+		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_free_orders($this->ci->agent_users->get_org_id()),'items' =>$items );
 	}
 
 	/**

@@ -20,6 +20,7 @@
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/jquery.event.drag-2.0.min.js"); ?>"> </script>
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.core.js");?>"> </script>
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.grid.js"); ?>"> </script>
+		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.remotemodel.js"); ?>"> </script>
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.formatters.js"); ?>"> </script>
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.fw_formatters.js");?>"> </script>
 		<script language="javascript" src="<?php echo site_url("themes/dashboard/js/slick_grid/slick.editors.js"); ?>"> </script>

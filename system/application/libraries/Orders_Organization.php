@@ -10,6 +10,10 @@
  **/
 class Orders_Organization
 {
+	/*
+	* Лимит записей по умолчанию
+	*/
+	const def_orders_limit = 200;
 
 	private $ci;
 	/**
@@ -72,15 +76,31 @@ class Orders_Organization
 		*/
 
 		$filter = array();
-		$limit  = false;
-		$offset = false;
+
+
+		$limit  = $this->ci->input->get('limit')?$this->ci->input->get('limit'):Orders_Organization::def_orders_limit;
+		$offset = $this->ci->input->get('offset')?$this->ci->input->get('offset'):0;
+
+		if(!is_numeric($limit) or !is_numeric($offset) or $limit < 0 or $offset < 0){
+			throw new AnbaseRuntimeException(lang('common.not_legal_data'));
+		}
 
 		$orders = $this->ci->m_order->get_all_free_orders($org_id,$filter,$limit,$offset,$fields);
-
 		$this->bind_regions($orders);
 
 		$this->bind_metros($orders);
 		return $orders;
+	}
+
+	/**
+	 * Подсчет всех свободных заявок агентства
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function count_all_free_orders($org_id)
+	{
+		return $this->ci->m_order->count_all_free_orders($org_id);
 	}
 
 	/**
@@ -97,8 +117,9 @@ class Orders_Organization
 		* 3. Привязывание metros
 		*/
 		$filter = array();
-		$limit  = false;
-		$offset = false;
+
+		$limit  = $this->ci->input->get('limit')?$this->ci->input->get('limit'):Orders_Organization::def_orders_limit;
+		$offset = $this->ci->input->get('offset')?$this->ci->input->get('offset'):0;
 
 		$orders = $this->ci->m_order->get_all_delegate_orders($org_id,$filter,$limit,$offset,$fields);
 
@@ -118,8 +139,9 @@ class Orders_Organization
 	public function get_all_orders_org($org_id,$fields=array())
 	{
 		$filter = array();
-		$limit  = false;
-		$offset = false;
+		
+		$limit  = $this->ci->input->get('limit')?$this->ci->input->get('limit'):Orders_Organization::def_orders_limit;
+		$offset = $this->ci->input->get('offset')?$this->ci->input->get('offset'):0;
 
 		$orders = $this->ci->m_order->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
 
@@ -143,8 +165,9 @@ class Orders_Organization
 		* 3. Привязывание metros
 		*/
 		$filters = array();
-		$limit   = false;
-		$offset  = false;
+		
+		$limit  = $this->ci->input->get('limit')?$this->ci->input->get('limit'):Orders_Organization::def_orders_limit;
+		$offset = $this->ci->input->get('offset')?$this->ci->input->get('offset'):0;
 
 		$orders = $this->ci->m_order->get_all_orders_user($user_id,$filters,$limit,$offset,$fields);
 
