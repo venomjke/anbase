@@ -177,7 +177,7 @@ class Orders_Organization
 		* 2. Привязывание regions
 		* 3. Привязывание metros
 		*/
-		$filter = array();
+		$filter = $this->fetch_filter();;
 
 		$limit = false;
 		$offset= false;
@@ -201,7 +201,8 @@ class Orders_Organization
 	 **/
 	public function count_all_delegate_orders($org_id)
 	{
-		return $this->ci->m_order->count_all_delegate_orders($org_id);
+		$filter = $this->fetch_filter();
+		return $this->ci->m_order->count_all_delegate_orders($org_id,$filter);
 	}
 
 	/**
@@ -214,7 +215,7 @@ class Orders_Organization
 	 **/
 	public function get_all_orders_org($org_id,$fields=array())
 	{
-		$filter = array();
+		$filter = $this->fetch_filter();
 		
 		$limit = false;
 		$offset = false;
@@ -238,7 +239,8 @@ class Orders_Organization
 	 **/
 	public function count_all_orders_org($org_id)
 	{
-		return $this->ci->m_order->count_all_orders_org($org_id);
+		$filter = $this->fetch_filter();
+		return $this->ci->m_order->count_all_orders_org($org_id,$filter);
 	}
 
 	/**
@@ -255,7 +257,7 @@ class Orders_Organization
 		* 2. Привязывание regions
 		* 3. Привязывание metros
 		*/
-		$filters = array();
+		$filters = $this->fetch_filter();
 		
 		$limit  = false;
 		$offset = false;
@@ -277,7 +279,8 @@ class Orders_Organization
 	 **/
 	public function count_all_user_orders($user_id)
 	{
-		return $this->ci->m_order->count_all_user_orders($user_id);
+		$filter = $this->fetch_filter();
+		return $this->ci->m_order->count_all_user_orders($user_id,$filter);
 	}
 	
 } // END class OrdersOrganization

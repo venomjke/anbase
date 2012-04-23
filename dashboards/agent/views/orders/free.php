@@ -143,6 +143,7 @@
 		$('#description').keydown(function(event){
 
 		});
+
 		agent.orders.grid = grid;
 		grid.onViewportChanged.notify();
 

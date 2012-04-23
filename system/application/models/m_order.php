@@ -453,9 +453,10 @@ class M_Order extends MY_Model{
 
 	}
 
-	public function count_all_orders_org($org_id)
+	public function count_all_orders_org($org_id,$filter)
 	{
 		$this->build_select();
+		$this->set_filter($filter);
 		return $this->count_all_results(array('organizations.id'=>$org_id));
 	}
 
@@ -512,9 +513,10 @@ class M_Order extends MY_Model{
 		return $this->get_all_orders_users(array($user_id),$filter,$limit,$offset,$fields);
 	}
 
-	public function count_all_user_orders($user_id)	
+	public function count_all_user_orders($user_id,$filter=array())	
 	{
 		$this->build_select();
+		$this->set_filter($filter);
 		$this->where_in('users.id',array($user_id));
 		return $this->count_all_results();	
 	}
@@ -570,9 +572,10 @@ class M_Order extends MY_Model{
 		return $this->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
 	}
 
-	public function count_all_delegate_orders($org_id)	
+	public function count_all_delegate_orders($org_id,$filter=array())	
 	{
 		$this->build_select();
+		$this->set_filter($filter);
 		$this->db->where('orders_users.user_id IS NOT NULL');
 		return $this->count_all_results(array('orders.org_id'=>$org_id));
 	}
