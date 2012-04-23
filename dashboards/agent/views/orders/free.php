@@ -63,6 +63,86 @@
 		  	grid.render();
 			common.hideAjaxIndicator();
 		});
+
+		/*
+		* Обработчики фильтра
+		*/
+		$('#f_category').change(function(){
+			model.setCategory($(this).val());
+			vp = grid.getViewport();
+			model.applyFilter(vp.top,vp.bottom);
+		});
+
+		$('#f_dealtype').change(function(){
+			model.setDealtype($(this).val());
+			vp = grid.getViewport();
+			model.applyFilter(vp.top,vp.bottom)
+		});
+
+		$('#f_number').keydown(function(event){
+			if(event.which == 13){
+				event.preventDefault();
+				vp = grid.getViewport();
+				model.setNumber($(this).val());
+				model.applyFilter(vp.top,vp.bottom);
+			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
+				event.preventDefault();
+			}
+		});
+
+		$('#f_phone').keydown(function(event){
+			if(event.which == 13){
+				event.preventDefault();
+				vp = grid.getViewport();
+				model.setPhone($(this).val());
+				model.applyFilter(vp.top,vp.bottom);
+			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
+				event.preventDefault();
+			}
+		});
+
+		$('#f_price_to').keydown(function(event){
+			if(event.which == 13){
+				event.preventDefault();
+				vp = grid.getViewport();
+				model.setPriceTo($(this).val());
+				model.setPriceFrom($('#f_price_from').val());
+				model.applyFilter(vp.top,vp.bottom);
+			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
+				event.preventDefault();
+			}
+		});
+
+
+		$('#f_price_from').keydown(function(event){
+			if(event.which == 13){
+				event.preventDefault();
+				vp = grid.getViewport();
+				model.setPriceFrom($(this).val());
+				model.setPriceTo($('#f_price_to').val())
+				model.applyFilter(vp.top,vp.bottom);
+			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
+				event.preventDefault();
+			}
+		});
+
+
+		$('#f_createdate_to').change(function(event){
+			vp = grid.getViewport();
+			model.setCreateDateTo($(this).val());
+			model.setCreateDateFrom($('#f_createdate_from').val());
+			model.applyFilter(vp.top,vp.bottom);
+		});
+		$('#f_createdate_from').change(function(event){
+			vp = grid.getViewport();
+			model.setCreateDateFrom($(this).val());
+			model.setCreateDateTo($('#f_createdate_to').val());
+			model.applyFilter(vp.top,vp.bottom);
+		});
+
+		$('#description').keydown(function(event){
+
+		});
 		agent.orders.grid = grid;
 		grid.onViewportChanged.notify();
 

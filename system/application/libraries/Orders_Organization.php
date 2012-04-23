@@ -52,6 +52,53 @@ class Orders_Organization
 			throw new AnbaseRuntimeException(lang('common.not_legal_data'));
 		}
 	}
+
+	/**
+	 * Извлечение параметров фильтра
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function fetch_filter()
+	{
+		/*
+		* Извлекаем параметры фильтра, валидируем их, а потом засовываем в массив
+		*/
+		$filter_fields = array('number','phone','category','dealtype','createdate_from','createdate_to','price_from','price_to','description');
+
+		/*
+		* [my_notice] Не самый лучший способ проверить данные фильтра, но другого не придумал.
+		*/
+		$_POST = array_merge($_POST,array_intersect_key($this->ci->input->get(), array_flip($filter_fields)));
+
+		$this->ci->form_validation->set_rules($this->ci->m_order->filter_validation_rules);
+
+		if($this->ci->form_validation->run($this->ci->m_order)){
+			/*
+			* собираем фильтр и возвращаем
+			*/
+			return array(
+				'number' => $this->ci->input->post('number'),
+				'phone'  => $this->ci->input->post('phone'),
+				'category' => $this->ci->input->post('category'),
+				'dealtype' => $this->ci->input->post('dealtype'),
+				'createdate' => array('createdate_from'=>$this->ci->input->post('createdate_from'),'createdate_to'=>$this->ci->input->post('createdate_to')),
+				'price' => array('price_from'=>$this->ci->input->post('price_from'),'price_to'=>$this->ci->input->post('price_to')),
+				'description' => $this->ci->input->post('description')
+			);
+		}
+
+		$errors_validation = array();
+
+		if(has_errors_validation($filter_fields,$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
+
+		/*
+		* сюда попадаем только в том случае, если фильтр задан
+		*/
+		return array();
+	}
 	/**
 	 * Привязать к заявкам регионы
 	 *
@@ -92,7 +139,7 @@ class Orders_Organization
 		* 3. Привязывание metros
 		*/
 
-		$filter = array();
+		$filter = $this->fetch_filter();
 
 		$limit = false;
 		$offset = false;
@@ -113,7 +160,8 @@ class Orders_Organization
 	 **/
 	public function count_all_free_orders($org_id)
 	{
-		return $this->ci->m_order->count_all_free_orders($org_id);
+		$filter = $this->fetch_filter();
+		return $this->ci->m_order->count_all_free_orders($org_id,$filter);
 	}
 
 	/**

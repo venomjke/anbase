@@ -44,7 +44,7 @@ class M_Order extends MY_Model{
 		array('field'=>'create_date','label'=>'lang:order.label_create_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'category','label'=>'lang:order.label_category','rules'=>'callback_valid_category'),
 		array('field'=>'deal_type','label'=>'lang:order.label_deal_type','rules'=>'callback_valid_dealtype'),
-		array('field'=>'price','label'=>'lang:order.label_price','rules'=>'greater_than[0]|max_length[12]'),
+		array('field'=>'price','label'=>'lang:order.label_price','rules'=>'greater_than[-1]|max_length[12]'),
 		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean|html_escape'),
 		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
@@ -62,12 +62,27 @@ class M_Order extends MY_Model{
 		array('field'=>'create_date','label'=>'lang:order.label_create_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'category','label'=>'lang:order.label_category','rules'=>'callback_valid_category'),
 		array('field'=>'deal_type','label'=>'lang:order.label_deal_type','rules'=>'callback_valid_dealtype'),
-		array('field'=>'price','label'=>'lang:order.label_price','rules'=>'greater_than[0]|max_length[12]'),
+		array('field'=>'price','label'=>'lang:order.label_price','rules'=>'greater_than[-1]|max_length[12]'),
 		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean|html_escape'),
 		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|valid_phone'),
 		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state')
+	);
+	
+	/*
+	* Правила валидации фильтра
+	*/
+	public $filter_validation_rules = array(
+		array('field'=>'number','label'=>'lang:order.label_number','rules'=>'is_natural|max_length[9]'),
+		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|valid_phone'),
+		array('field'=>'category','label'=>'lang:order.label_category','rules'=>'valid_order_category'),
+		array('field'=>'dealtype','label'=>'lang:order.label_deal_type','rules'=>'valid_order_deal_type'),
+		array('field'=>'createdate_from','label'=>'lang:order.label_create_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
+		array('field'=>'createdate_to','label'=>'lang:order.label_create_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
+		array('field'=>'price_from','label'=>'lang:order.label_price','rules'=>'greater_than[-1]|max_length[12]'),
+		array('field'=>'price_to','label'=>'lang:order.label_price','rules'=>'greater_than[-1]|max_length[12]'),
+		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean')
 	);
 
 	/**
@@ -240,34 +255,99 @@ class M_Order extends MY_Model{
 	}
 
 	/**
-	*
+	 * Фильтр для поля номер
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	protected function set_number_filter($value)
+	{
+		if(is_numeric($value) && $value >= 0)
+		{
+			$this->db->where('orders.number',$value);
+		}
+	}
+
+	/**
+	 * Фильтр для поля телефон
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	protected function set_phone_filter($value)
+	{
+		if(!empty($value))
+			$this->db->where('orders.phone',$value);
+	}
+	/**
 	*	Фильтр для поля Price
-	*
 	*/
 	protected function set_price_filter($value = array()){
 
 		$price_from = $value['price_from'];
 		$price_to   = $value['price_to'];
-
-		if(is_numeric($price_from)){
+		if(is_numeric($price_from) && $price_from >= 0 ){
 			$this->db->where('orders.price >=',$price_from);
 		}
 
-		if(is_numeric($price_to)){
+		if(is_numeric($price_to) && $price_to >= 0){
 			$this->db->where('orders.price <=',$price_to);
 		}
 	}
 
 
 	/**
-	*
 	*	фильтр для поля description
-	*
 	*/
 	protected function set_description_filter($value = ''){
-
-		$this->db->like('orders.description',$value);
+		if(!empty($value))
+			$this->db->like('orders.description',$value);
 	}
+
+
+	/**
+	 * Фильтр для поля create_date
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	protected function set_createdate_filter($value = array())
+	{
+		$createdate_from = $value['createdate_from'];
+		$createdate_to   = $value['createdate_to'];
+
+		if(!empty($createdate_from)){
+			$this->db->where('orders.create_date >=',$createdate_from);
+		}
+		if(!empty($createdate_to)){
+			$this->db->where('orders.create_date <=',$createdate_to);
+		}
+	}
+
+	/**
+	 * Фильтр для поля категория
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	protected function set_category_filter($value)
+	{
+		if(!empty($value))
+			$this->db->where('orders.category =',$value);
+	}
+
+	/**
+	 * Фильтр для поля тип сделки
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	protected function set_dealtype_filter($value)
+	{
+		if(!empty($value))
+			$this->db->where('orders.deal_type =',$value);
+	}
+
 
 	/**
 	 * Метод проходит по списку полей применяя к каждому свой фильтр
@@ -278,7 +358,6 @@ class M_Order extends MY_Model{
 	 **/
 	protected function set_filter($filter = array())
 	{
-
 		foreach($filter as $field => $value ){
 
 			$filter_name = "set_{$field}_filter";
@@ -467,9 +546,10 @@ class M_Order extends MY_Model{
 	 * @return array
 	 * @author alex.strigin
 	 **/
-	public function count_all_free_orders($org_id)
+	public function count_all_free_orders($org_id,$filter)
 	{
 		$this->build_select();
+		$this->set_filter($filter);
 		$this->db->where("orders_users.user_id IS NULL");
 		return $this->count_all_results(array("orders.org_id"=>$org_id));
 	}

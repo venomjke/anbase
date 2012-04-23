@@ -133,7 +133,12 @@ class Orders extends MX_Controller
 				$response['data'] = $orders;
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
 			}
 			$this->ajax->build_json($response);
 		}else{
@@ -160,7 +165,12 @@ class Orders extends MX_Controller
 				$response['data'] = $orders;
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
 			}
 			$this->ajax->build_json($response);
 		}else{

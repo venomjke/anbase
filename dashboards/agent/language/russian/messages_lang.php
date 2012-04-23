@@ -25,4 +25,4 @@ $lang['email_not_availabel']           = 'Выбранный email адрес у
 /*
 * Orders
 */
-$lang['success_edit_order'] = 'Заявка успешно отредактирована';
+$lang['success_edit_order'] = 'Изменения сохранены';

@@ -75,7 +75,7 @@
 					if(response.code && response.data){
 						switch(response.code){
 							case 'success_edit_order':
-								common.showResultMsg(response.data);
+								common.showSuccessMsg(response.data);
 							break;
 							case 'error_edit_order':
 								/*
@@ -89,9 +89,9 @@
 								* Если ошибка уровня валидации, то дя поля выводим ошибку. Если ошибка уровня системы, то просто выводим ошибку
 								*/
 								if(response.data.errors[field] && typeof response.data.errors[field] == "string"){
-									common.showResultMsg(response.data.errors[field]);
+									common.showErrorMsg(response.data.errors[field]);
 								}else{
-									common.showResultMsg(response.data.errors[0]);
+									common.showErrorMsg(response.data.errors[0]);
 								}
 								return false;
 							break;
@@ -122,6 +122,21 @@
 
 		model.onDataLoading.subscribe(function(){
 			common.showAjaxIndicator();
+		});
+
+		/*
+		* Обработчики фильтра
+		*/
+		$('#f_category').change(function(){
+			loader.setCategory($(this).val());
+			vp = grid.getViewport();
+			loader.ensureData(vp.top,vp.bottom);
+		});
+
+		$('#f_dealtype').change(function(){
+			loader.setDealtype($(this).val());
+			vp = grid.getViewport();
+			loader.ensureData(vp.top,vp.bottom);
 		});
 
 		model.onDataLoaded.subscribe(function(e,args){
