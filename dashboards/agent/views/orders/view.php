@@ -172,8 +172,6 @@
 				event.preventDefault();
 			}
 		});
-
-
 		$('#f_price_from').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
@@ -185,8 +183,6 @@
 				event.preventDefault();
 			}
 		});
-
-
 		$('#f_createdate_to').change(function(event){
 			vp = grid.getViewport();
 			model.setCreateDateTo($(this).val());
@@ -202,6 +198,20 @@
 
 		$('#description').keydown(function(event){
 
+		});
+
+		$('#search_btn').click(function(event){
+
+			model.setCategory($('#f_category').val());
+			model.setDealtype($('#f_dealtype').val());
+			model.setPriceFrom($('#f_price_from').val());
+			model.setPriceTo($('#f_price_to').val());
+			model.setCreateDateTo($('#f_createdate_to').val());
+			model.setCreateDateFrom($('#f_createdate_from').val());
+			model.setDescription($('#f_description').val());
+
+			vp = grid.getViewport();
+			model.applyFilter(vp.top,vp.bottom);
 		});
 
 		model.onDataLoaded.subscribe(function(e,args){

@@ -89,18 +89,6 @@
 				event.preventDefault();
 			}
 		});
-
-		$('#f_phone').keydown(function(event){
-			if(event.which == 13){
-				event.preventDefault();
-				vp = grid.getViewport();
-				model.setPhone($(this).val());
-				model.applyFilter(vp.top,vp.bottom);
-			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
-				event.preventDefault();
-			}
-		});
-
 		$('#f_price_to').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
@@ -142,6 +130,20 @@
 
 		$('#description').keydown(function(event){
 
+		});
+
+		$('#search_btn').click(function(event){
+
+			model.setCategory($('#f_category').val());
+			model.setDealtype($('#f_dealtype').val());
+			model.setPriceFrom($('#f_price_from').val());
+			model.setPriceTo($('#f_price_to').val());
+			model.setCreateDateTo($('#f_createdate_to').val());
+			model.setCreateDateFrom($('#f_createdate_from').val());
+			model.setDescription($('#f_description').val());
+
+			vp = grid.getViewport();
+			model.applyFilter(vp.top,vp.bottom);
 		});
 
 		agent.orders.grid = grid;

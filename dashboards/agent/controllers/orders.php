@@ -45,7 +45,6 @@ class Orders extends MX_Controller
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
 		$this->template->set_partial('dashboard_user','dashboard/dashboard_user');
 		$this->template->set_partial('dashboard_menu','dashboard/dashboard_menu');
-		$this->template->set_partial('dashboard_filter','dashboard/dashboard_filter');
 
 		/*
 		* [my_notice: Не знаю, как лучше обыграть эту задачу, но пока так.]
@@ -56,7 +55,7 @@ class Orders extends MX_Controller
 		/*
 		* Подключение скриптов
 		*/
-		$this->template->append_metadata('<script type="text/javascript"> common.regions='.$regions.'; common.metros='.$metros.'</script>');
+		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.'; common.metros='.$metros.'</script>');
 
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"></script>');
 		$this->template->append_metadata('<script type="text/javascript">$(function(){agent.init({baseUrl:"'.site_url("agent/orders").'"});agent.orders.init();});</script>');
@@ -89,6 +88,7 @@ class Orders extends MX_Controller
 				*/
 				$this->template->set('current',$section);
 				$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
+				$this->template->set_partial('dashboard_filter','dashboard/dashboard_filter');
 				switch ($section) {
 					case 'my':
 					default:

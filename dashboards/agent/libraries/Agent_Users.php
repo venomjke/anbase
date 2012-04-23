@@ -39,12 +39,10 @@ class Agent_Users extends Users{
 		parent::__construct();
 
 		/* 
-		*
 		*	 Загрузка либ
 		*/
 
 		/*
-		*
 		*	Загрузка моделей
 		*/
 		$this->ci->load->model('agent/m_agent');

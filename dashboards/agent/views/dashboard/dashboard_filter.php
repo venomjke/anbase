@@ -3,8 +3,10 @@
     <tr>
       <td><b>Фильтр</b>&nbsp;по&nbsp;номеру:</td>
       <td><input style="width:100px" type="text" id="f_number" /></td>
-      <td> по&nbsp;телефону:</td>
+      <?php if($current != 'free'): ?>
+        <td> по&nbsp;телефону:</td>
       <td><input type="text" name="phone" id="f_phone" /></td>
+      <?php endif; ?>
       <td style="width:80%">&nbsp;</td>
       <td colspan="2"><a href="#" id="filter_toggle" style="width:150px" onclick="img=$(this).find('img');if(img.attr('class')=='down'){img.attr('src','<?php echo site_url("themes/dashboard/images/strelkavverh.png"); ?>'); img.attr('class','up');}else{img.attr('class','down');img.attr('src','<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>')};return false;" class="svernut"><img src="<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>" class="down"/></a></td>
     </tr> 
@@ -60,7 +62,7 @@
         <td><input style="width:130px" type="text" class="date" id="f_createdate_to"/></td>
       </tr>
       <tr>
-        <td colspan="2"><input type="button"  style="cursor:pointer; padding:5px" value="подобрать" /></td>
+        <td colspan="2"><input id="search_btn" type="button"  style="cursor:pointer; padding:5px" value="подобрать" /></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>

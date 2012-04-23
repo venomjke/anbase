@@ -40,6 +40,7 @@ class MY_Model extends CI_Model {
      */
     protected $table = NULL;
     
+    
     /*
      * The primary key name, by default set to 'id'
      */
