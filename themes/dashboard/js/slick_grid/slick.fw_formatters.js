@@ -64,7 +64,8 @@
 
       var list_string = "";
       for(var i in list){
-        list_string += common.regions[list[i]]+"/";
+        if(common.regions[list[i]])
+          list_string += common.regions[list[i]]+"/";
       };
       return list_string.substr(0,list_string.length-1);
   };

@@ -82,9 +82,13 @@ class M_Order_region extends MY_Model
 		*/
 		$this->delete(array('order_id'=>$order_id));
 
-		foreach($regions as $region){
-			if(is_numeric($region) && $this->exists($region))
-				$this->insert(array('order_id'=>$order_id,'region_id'=>$region),true);
+
+		if(is_array($regions)){
+
+		 	foreach($regions as $region){
+				if(is_numeric($region) && ($region > 0) && $this->exists($region))
+					$this->insert(array('order_id'=>$order_id,'region_id'=>$region),true);
+			}	
 		}
 	}
 } // END class M_Order_region extends MY_Model

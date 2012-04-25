@@ -111,6 +111,17 @@ var common = {
 		return true;
 	},
 
+	/*
+	* Подсчет общего числа свойств
+	*/
+	count_props:function(obj){
+		var count_props = 0;
+		for(var prop in obj){
+			++count_props;
+		}
+		return count_props;
+	},
+
 	show_full_text:function(event,row,cell,value){
 		var tooltip_id = '#tooltip_'+row+'_'+cell;
 		if($(tooltip_id).length>0){

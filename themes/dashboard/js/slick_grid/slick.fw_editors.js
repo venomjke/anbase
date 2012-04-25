@@ -145,7 +145,7 @@
 			if(selected_station[$area.data('line')].indexOf($area.data('metro_id')) == -1){
 				//добавляем checkpoint
 				var coords = $area.attr('coords').split(',');
-				var checkpointImg = $('<img id="checkpoint-'+$area.data('metro_id')+'" src="'+common.baseUrl+'themes/dashboard/images/point.gif" style="position:absolute;top:'+(coords[1]-3)+'px;left:'+(coords[0]-3)+'px">');
+				var checkpointImg = $('<img id="checkpoint-'+$area.data('metro_id')+'" src="'+common.baseUrl+'themes/dashboard/images/point.gif" style="cursor:pointer; position:absolute;top:'+(coords[1]-3)+'px;left:'+(coords[0]-3)+'px">');
 				checkpointImg.attr('onclick','Slick.Editors.AnbaseMetros.checkpoint_click(event,$(this));');
 				checkpointImg.data('metro_id',$area.data('metro_id'));
 				$metro_wrapper.append(checkpointImg);
@@ -165,15 +165,15 @@
 			var $container = $('body');
 			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'>").appendTo($container);
 			$metro_wrapper = $('<div style="position:relative">');
-			$img = $('<img usemap="metro-normal" id="metromap" src="'+metros_images['metro-normal'].image+'"/>');
+			$img = $('<img usemap="#metro-normal" id="metromap" src="'+metros_images['metro-normal'].image+'"/>');
 			$metro_wrapper.append($img);
 			$map  = $('<map name="metro-normal">');
 
 			for(var i in metro_normal['elements']){
 				var element = metro_normal['elements'][i];
 				if(element.type == 'station'){
-					$area = $('<area id="station-'+element.metro_id+'" shape="'+element.shape+'" coords="'+element.coords+'" title="'+element.metro_name+'">');
-					$area.attr('onclick',"Slick.Editors.AnbaseMetros.station_click(event,$(this));");
+					$area = $('<area href="#" id="station-'+element.metro_id+'" shape="'+element.shape+'" coords="'+element.coords+'" title="'+element.metro_name+'">');
+					$area.attr('onclick',"Slick.Editors.AnbaseMetros.station_click(event,$(this));return false;");
 					$area.data('metro_id',element.metro_id); 
 					$area.data('line',element.metro_line); 
 					$map.append($area);
@@ -182,6 +182,7 @@
 			$metro_wrapper.append($map);
 			$wrapper.append($metro_wrapper);
 			$wrapper.center();
+			$metro_wrapper.append('<script type="text/javascript">$(function(){$("#metromap").maphilight();});</script>')
 		};
 
 		this.show = function(){
@@ -240,7 +241,7 @@
 		};
 
 		this.isValueChanged = function(){
-			// #баный фиктивный пустой объект. то есть, если мы при старте получили его, то по финишу selected_station пуст 
+			// #баный фиктивный пустой объект. то есть, если мы при старте получили его, и ничего не выбрали на карте, то по финишу selected_station пуст 
 			if(defaultValue["0"] && common.isEmptyObj(selected_station)){
 				return false;
 			}
@@ -249,6 +250,10 @@
 				return true;
 			}
 
+			//если число линий различно, то тоже меняем
+			if(common.count_props(defaultValue) != common.count_props(selected_station)){
+				return true;
+			}
 
 			for(var i in selected_station){
 				if(defaultValue.hasOwnProperty(i)){	
@@ -279,22 +284,88 @@
 	};
 
 	function AnbaseRegionsEditor(args){
+		
+		var $wrapper;
+		var $img;
+		var $map;
+		var $region_wrapper;
+
 		var defaultValue;
 		var regions = common.regions;
+		var region_normal = common.regions_images['regions-normal'];
+		var selected_regions = [];
 		var scope = this;
 
-		var $wrapper;
-		var $all_checkboxes;
+		/*
+		* Обобщая функция для клика по area и item
+		*/
+		function region_click(region_id){
+			var idx_metro_id = -1;
+			if( (idx_metro_id = selected_regions.indexOf(region_id)) != -1){
+				$('#region-item-'+region_id).css('background-color','#fff');
+				selected_regions.splice(idx_metro_id,1);
+			}else{
+				$('#region-item-'+region_id).css('background-color','#f7f21a');
+				selected_regions.push(region_id);
+				$('#region-'+region_id).mouseover();
+			}
+		}
+
+		Slick.Editors.AnbaseRegions.checkpoint_click = function(event,$checkpoint){
+
+		}
+
+		Slick.Editors.AnbaseRegions.region_click = function(event,$area){
+			region_click($area.data('region_id'));
+		}
 
 		this.init = function(){
 			var $container = $('body');
-			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'><button id=\"save_choose\">Сохранить</button><button id=\"cancel_choose\"> Отмена </button> </div>").appendTo($container);
-			var region_list = scope.buildRegionList(regions);
-			$wrapper.prepend(region_list);
-			$wrapper.find('#save_choose').on('click',scope.save);
-			$wrapper.find('#cancel_choose').on('click',scope.cancel);
-			$all_checkboxes = $wrapper.find('input:checkbox');
-			scope.position(args.position);
+			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'></div>").appendTo($container);
+			$region_wrapper = $('<div style="position:relative; width:700px"></div>');
+			$img = $('<img usemap="#region-normal" id="regionmap" src="'+region_normal.image+'"/>');
+			$map = $('<map name="region-normal">');
+			$list= $('<ol style="float:right">');
+
+			for(var i in region_normal.elements){
+				var element = region_normal.elements[i];
+
+				/*
+				* Область на карте
+				*/
+				$area = $('<area href="#" id="region-'+element.region_id+'" shape="'+element.shape+'" coords="'+element.coords+'" title="'+element.region_name+'">');
+				$area.attr('onclick','Slick.Editors.AnbaseRegions.region_click(event,$(this));return false;');
+				$area.data('region_id',element.region_id);
+				$map.append($area);
+				
+				/*
+				* Элемент списка
+				*/
+				$li = $('<li id="region-item-'+element.region_id+'" style="margin:5px;"><a href="#" onclick="return false;">'+element.region_name+'</a></li>');
+				$li.data('region_id',element.region_id);
+
+				$li.hover(
+					function(){
+						$('#region-'+$(this).data('region_id')).trigger('mouseover');
+					},
+					function(){
+						$('#region-'+$(this).data('region_id')).trigger('mouseout');
+					}
+				);
+
+				$li.click(function(){
+					region_click($(this).data('region_id'));
+				});
+				$list.append($li);
+			};
+			$region_wrapper.append($list);
+			$region_wrapper.append($img);
+			$region_wrapper.append($map);
+			$wrapper.append($region_wrapper);
+			$wrapper.center();			
+			// РАБОТАЕТ ТОЛЬКО ТУТ, ХЗ ПОЧЕМУ
+			// Если строчку ниже впихать где-нибудь выше, то не будет работать подсветка
+			$region_wrapper.append('<script type="text/javascript">$(function(){$("#regionmap").maphilight();});</script>');
 
 		};
 
@@ -323,28 +394,41 @@
 
 		this.loadValue = function(item){
 			defaultValue = item.regions;
-			for(var i in item.regions){
-				$all_checkboxes.each(function(){
-					if($(this).val() == item.regions[i]) 
-						$(this).attr('checked','checked');
-				});
+			for(var i in defaultValue){
+				$('#region-'+defaultValue[i]).click();
 			}
 		};
 
 		this.serializeValue = function(){
-			var all_checked_regions = [];
-			$wrapper.find('input:checkbox:checked').each(function(){
-				all_checked_regions.push($(this).val());
-			});
-			return all_checked_regions;
+			return selected_regions
 		};
 
 		this.applyValue = function(item,state){
-			item.regions = state;
+			delete item.regions;
+			item.regions = selected_regions.slice(0);
+			/*
+			* [my_notice: Не самое лучшее решение на мой взгляд, нужно подумать еще]
+			* В чем суть.
+			* Когда мы обнуляем текущий список выбранных метро, то нужно "что-то" отправить на сервер, что бы там
+			* удалить список выбранных метро, и ничего не записывать.
+			*/
+			if(item.regions.length == 0){
+				item.regions = [0];
+			}
 		};
 
 		this.isValueChanged = function(){
-			return !common.compareArrays(scope.serializeValue(),defaultValue,"eq");	
+
+			if(defaultValue.length != selected_regions.length){
+				return true;
+			}
+
+			for(var i in selected_regions){
+				if(defaultValue.indexOf(selected_regions[i]) == -1){
+					return true;
+				}
+			}
+			return false;		
 		};
 
 		this.validate = function(){
@@ -352,23 +436,6 @@
 				valid:true,
 				msg:null
 			};
-		};
-
-		this.buildRegionList = function(regions){
-			var $region_list = $('<table>');
-			for(var i in regions){
-				var $region_wrap = $('<tr>');
-				var $region_label    = $('<td><label for="">'+regions[i]+'</label></td>').appendTo($region_wrap);
-				var $region_checkbox = $('<td><input type="checkbox" value="'+i+'"/></td>').appendTo($region_wrap);
-				$region_list.append($region_wrap);
-			}
-			return $region_list;
-		};
-
-		this.position = function(position){
-			$wrapper
-				.css('top',position.top+10)
-				.css('left',position.left+20);
 		};
 
 		this.init();

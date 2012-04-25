@@ -27,7 +27,9 @@
 		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.editors.js"> </script>
 		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.fw_editors.js"> </script>
 		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.ui.datepicker-ru.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url(); ?>themes/dashboard/js/jquery.center.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.center.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.maphilight.js"></script>
+
 		<script type="text/javascript">
 			common.baseUrl = '<?php echo base_url(); ?>';
 		</script>
