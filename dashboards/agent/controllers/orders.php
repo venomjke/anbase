@@ -18,10 +18,13 @@ class Orders extends MX_Controller
 	public function __construct()
 	{
 		parent::__construct();
+
 		/*
-		*
+		* Загрузка драйверов
+		*/
+		$this->load->driver('Minify');
+		/*
 		*	Загрузка либ
-		*
 		*/
 		$this->load->library("agent/Agent_Users");
 		$this->load->library("agent/Agent_Orders");
@@ -40,6 +43,8 @@ class Orders extends MX_Controller
 		*/
 		$this->load->model('m_region');
 		$this->load->model('m_metro');
+		$this->load->model('m_metro_image');
+
 
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
@@ -51,11 +56,11 @@ class Orders extends MX_Controller
 		*/
 		$regions = $this->m_region->get_region_list("json");
 		$metros  = $this->m_metro->get_metro_list("json");
-
+		$metros_images = $this->m_metro_image->get_images();
 		/*
 		* Подключение скриптов
 		*/
-		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.'; common.metros='.$metros.'</script>');
+		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.'; common.metros='.$metros.'; common.metros_images = '.$metros_images.'</script>');
 
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"></script>');
 		$this->template->append_metadata('<script type="text/javascript">$(function(){agent.init({baseUrl:"'.site_url("agent/orders").'"});agent.orders.init();});</script>');

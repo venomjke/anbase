@@ -25,6 +25,11 @@ class Site extends MX_Controller {
 			$this->template->set('loginBox',$loginBox);
 		}
 	}
+	public function migration()
+	{
+		$this->load->library('migration');
+		$this->migration->latest();
+	}
 	/*
 	*	Главная страница:
 	*		- Форма входа
@@ -32,8 +37,7 @@ class Site extends MX_Controller {
 	*/
 	public function index(){
 
-		$this->load->library('users/users');
-	
+		$this->load->library('users/users');	
 		$this->template->build('site/index');
 	}
 

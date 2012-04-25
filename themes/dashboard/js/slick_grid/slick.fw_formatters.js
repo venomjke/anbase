@@ -75,8 +75,13 @@
 
       var list_string = "";
       for(var i in list){
-        for(var j in list[i])
-          list_string += common.metros[i][list[i][j]]+"/";
+         if(common.metros.hasOwnProperty(i)){
+          for(var j in list[i]){
+            if(common.metros[i].hasOwnProperty(list[i][j]) != -1){
+                list_string += common.metros[i][list[i][j]]+"/";              
+            }
+          }
+        }
       };
       return list_string.substr(0,list_string.length-1);
   };

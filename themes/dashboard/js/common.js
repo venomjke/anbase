@@ -4,6 +4,7 @@
 * @author alex.strigin
 */
 var common = {
+	baseUrl:'',
 	/**
 	*
 	* Методы уведомления о чем либо
@@ -96,6 +97,16 @@ var common = {
 					}
 				break;
 			}
+		}
+		return true;
+	},
+
+	/*
+	* Проверка объекта на пустотность
+	*/
+	isEmptyObj:function(obj){
+	    for (var prop in obj) {
+		    if (obj.hasOwnProperty(prop)) return false;
 		}
 		return true;
 	},

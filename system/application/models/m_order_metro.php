@@ -77,7 +77,7 @@ class M_Order_metro extends MY_Model
 	}
 
 	/**
-	 * Связать с заяку с новыми метро
+	 * Связать заяку с новыми метро
 	 *
 	 * @return void
 	 * @author alex.strigin
@@ -89,10 +89,23 @@ class M_Order_metro extends MY_Model
 		*/
 		$this->delete(array('order_id'=>$order_id));
 
-		foreach($metros as $k=>$metro_line){
-			foreach($metro_line as $metro){
-				if(is_numeric($metro) && $this->exists($metro))
-					$this->insert(array('order_id'=>$order_id,'metro_id'=>$metro));
+		/*
+		* [my_notice] в случае, если передан не массив, то ошибок не выдаем, типо все ок.
+		* Это связано с тем, что если пользователь решил удалить все выбранные метро, то полюбому массив будет пустым
+		* перебирать его не надо, но вот старые связи удалить нужно.
+		*/
+		if(is_array($metros)){
+			foreach($metros as $k=>$metro_line){
+				/*
+				* В целях безопасности проверяем все metro_line  т.к они могут быть пустыми
+				* если пустой, то ничего не делаем
+				*/
+				if(is_array($metro_line)){
+					foreach($metro_line as $metro){
+						if(is_numeric($metro) && $this->exists($metro))
+							$this->insert(array('order_id'=>$order_id,'metro_id'=>$metro));
+					}
+				}
 			}
 		}
 	}

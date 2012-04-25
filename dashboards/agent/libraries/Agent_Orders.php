@@ -102,12 +102,14 @@ class Agent_Orders
 				/*
 				* обращаемся к orders_metros
 				*/
-				$this->ci->m_order_metro->bind_order_metros($this->ci->input->post('id'),$this->ci->input->post('metros'));
+				$metros = $this->ci->input->post('metros');
+				$this->ci->m_order_metro->bind_order_metros($this->ci->input->post('id'),$metros);
 			}else if($this->ci->input->post('regions')){
 				/*
 				* обращаемся к orders_regions
 				*/
-				$this->ci->m_order_region->bind_order_regions($this->ci->input->post('id'),$this->ci->input->post('regions'));
+				$regions = $this->ci->input->post('regions');
+				$this->ci->m_order_region->bind_order_regions($this->ci->input->post('id'),$regions);
 			}else{
 				/*
 				* стандартное редактирование
