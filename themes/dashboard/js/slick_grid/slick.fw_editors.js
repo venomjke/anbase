@@ -110,95 +110,57 @@
 
 	function AnbaseMetrosEditor(args){
 		var $wrapper;
-		var $img;
-		var $map;
-		var $metro_wrapper;
 
 		var defaultValue;
 		var scope = this;
-		var metro = common.metros;
-		var metros_images = common.metros_images;
-		var metro_normal  = metros_images['metro-normal'];
-		var selected_station = {};
-
-		Slick.Editors.AnbaseMetros.checkpoint_click = function(event,$checkpoint){
-			var metro_id = $checkpoint.data('metro_id');
-			var $area = $('#station-'+metro_id);
-
-			selected_station[$area.data('line')].splice(selected_station[$area.data('line')].indexOf($area.data('metro_id')),1);
-			if(!selected_station[$area.data('line')].length){
-				delete selected_station[$area.data('line')];
-			}
-			$checkpoint.remove();
-		};
-
-		/*
-		* Функция для добавления станций метро в список отмеченных, а также удаления из этого списка
-		* если станция уже добавлена
-		*/
-		Slick.Editors.AnbaseMetros.station_click = function(event,$area){
-
-			if(!selected_station[$area.data('line')]){
-				selected_station[$area.data('line')] = [];
-			}
-
-			if(selected_station[$area.data('line')].indexOf($area.data('metro_id')) == -1){
-				//добавляем checkpoint
-				var coords = $area.attr('coords').split(',');
-				var checkpointImg = $('<img id="checkpoint-'+$area.data('metro_id')+'" src="'+common.baseUrl+'themes/dashboard/images/point.gif" style="cursor:pointer; position:absolute;top:'+(coords[1]-3)+'px;left:'+(coords[0]-3)+'px">');
-				checkpointImg.attr('onclick','Slick.Editors.AnbaseMetros.checkpoint_click(event,$(this));');
-				checkpointImg.data('metro_id',$area.data('metro_id'));
-				$metro_wrapper.append(checkpointImg);
-				selected_station[$area.data('line')].push($area.data('metro_id'));
-			}else{
-				$('#checkpoint-'+$area.data('metro_id')).remove();
-				//удаляем элемент массива
-				selected_station[$area.data('line')].splice(selected_station[$area.data('line')].indexOf($area.data('metro_id')),1);
-				if(!selected_station[$area.data('line')].length){
-					delete selected_station[$area.data('line')];
-				}
-
-			}
-		}
+		var widget;
 
 		this.init = function(){
 			var $container = $('body');
-			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'>").appendTo($container);
-			$metro_wrapper = $('<div style="position:relative">');
-			$img = $('<img usemap="#metro-normal" id="metromap" src="'+metros_images['metro-normal'].image+'"/>');
-			$metro_wrapper.append($img);
-			$map  = $('<map name="metro-normal">');
+			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'><button id='metro-map'>По карте</button><button id='metro-list'>По списку</button></div>").appendTo($container);
 
-			for(var i in metro_normal['elements']){
-				var element = metro_normal['elements'][i];
-				if(element.type == 'station'){
-					$area = $('<area href="#" id="station-'+element.metro_id+'" shape="'+element.shape+'" coords="'+element.coords+'" title="'+element.metro_name+'">');
-					$area.attr('onclick',"Slick.Editors.AnbaseMetros.station_click(event,$(this));return false;");
-					$area.data('metro_id',element.metro_id); 
-					$area.data('line',element.metro_line); 
-					$map.append($area);
+			$wrapper.find('#metro-map').click(function(){
+				if(!widget){
+					widget = common.widgets.metro_map({metros:defaultValue,onClose:scope.save});
+					widget.init();
+					widget.load();
 				}
-			};
-			$metro_wrapper.append($map);
-			$wrapper.append($metro_wrapper);
-			$wrapper.center();
-			$metro_wrapper.append('<script type="text/javascript">$(function(){$("#metromap").maphilight();});</script>')
+			});
+
+			$wrapper.find('#metro-list').click(function(){
+				if(!widget){
+					widget = common.widgets.metro_list({metros:defaultValue,onClose:scope.save});
+					widget.init();
+					widget.load();
+				}
+			});
+
+			$wrapper.css('top',args.position.top);
+			$wrapper.css('left',args.position.left);
 		};
 
 		this.show = function(){
 			$wrapper.show();
+			if(widget)
+				widget.show();
 		}
 
 		this.hide = function(){
 			$wrapper.hide();
+			if(widget)
+				widget.hide();
 		}
 
 		this.destroy = function(){
 			$wrapper.remove();
+			if(widget)
+				widget.destroy();
 		};
 
 		this.focus = function(){
 			$wrapper.focus();
+			if(widget)
+				widget.focus();
 		};
 
 		this.save  = function(){
@@ -210,16 +172,13 @@
 		}
 
 		this.loadValue = function(item){
-			defaultValue     = item.metros;
-			for(var i in item.metros){
-				for(var j in item.metros[i]){
-					$('#station-'+item.metros[i][j]).trigger('click');
-				}
-			}	
+			defaultValue     = item.metros;	
 		};
 
 		this.serializeValue = function(){
-			return selected_station;
+			if(widget)
+				return widget.serialize();
+			return {};
 		};
 
 		this.applyValue = function(item,state){
@@ -241,6 +200,10 @@
 		};
 
 		this.isValueChanged = function(){
+			if(!widget){
+				return false;
+			}
+			var selected_station = widget.serialize();
 			// #баный фиктивный пустой объект. то есть, если мы при старте получили его, и ничего не выбрали на карте, то по финишу selected_station пуст 
 			if(defaultValue["0"] && common.isEmptyObj(selected_station)){
 				return false;
@@ -361,11 +324,11 @@
 			$region_wrapper.append($list);
 			$region_wrapper.append($img);
 			$region_wrapper.append($map);
-			$wrapper.append($region_wrapper);
-			$wrapper.center();			
+			$wrapper.append($region_wrapper);		
 			// РАБОТАЕТ ТОЛЬКО ТУТ, ХЗ ПОЧЕМУ
 			// Если строчку ниже впихать где-нибудь выше, то не будет работать подсветка
 			$region_wrapper.append('<script type="text/javascript">$(function(){$("#regionmap").maphilight();});</script>');
+			$wrapper.center();	
 
 		};
 

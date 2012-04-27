@@ -34,6 +34,7 @@ class M_metro_image_element extends MY_Model
 
 		$this->select("metros.name as metro_name");
 		$this->select("metros.line as metro_line");
+		$this->select("metros.transshipment as metro_transshipment");
 
 		$this->join("metros","metros.id = metros_images_elements.metro_id","LEFT");
 		$this->order_by("metros.name");

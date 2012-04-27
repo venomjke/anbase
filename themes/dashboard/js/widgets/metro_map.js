@@ -1,0 +1,203 @@
+$(function(){
+	/*
+	* Короче, это для того, чтобы можно было редактировать список метро.
+	*/
+	$.extend(true,window,{
+		"common":{
+			"widgets":{
+				"metro_map":metro_map_widget				
+			}
+		}
+	});
+
+	/*
+	* Редактор метро по карте.
+	*/
+	function metro_map_widget(options){
+
+
+		var def_options = {
+			/*
+			* Список линиий и станций метро. ( Типа по ссылке передается, не копия)
+			*/
+			metros:{}, 
+
+			/*
+			* Функция, которую нужно выполнить при закрытии редактора
+			*/
+			onClose:function(){
+
+			}
+		};
+
+		options = $.extend(true,def_options,options);
+		
+		var $wrapper;
+		var $map_wrapper;
+		var $img;
+		var $map;
+
+		var metro_normal  = common.metros_images['metro-normal'];
+		var selected_metros = {};
+
+		/*
+		* Возвращает друзей по пересадке ( по умолчанию они обязательно должны быть)
+		* или false, если они уже заданы
+		*/
+		function get_transshipment_friends(metro_id,transshipment){
+			var transshipment_friends = [];
+
+			for(var i in metro_normal.elements){
+				var element = metro_normal.elements[i];
+				
+				//текущий пропускаем
+				if(metro_id == element.metro_id) continue;
+				
+				if(element.metro_transshipment == transshipment){
+					if( !selected_metros[element.metro_line] || selected_metros[element.metro_line].indexOf(element.metro_id) == -1)
+						transshipment_friends.push(element.metro_id);
+					else
+						return false;
+				}
+			}
+			return transshipment_friends;
+		}
+
+		function push_point(line,metro_id,x,y){
+
+				var checkpointImg = $('<img id="checkpoint-'+metro_id+'" src="'+common.baseUrl+'themes/dashboard/images/point.gif" style="cursor:pointer; position:absolute;top:'+(y-3)+'px;left:'+(x-3)+'px">');
+				checkpointImg.attr('onclick','common.widgets.metro_map.checkpoint_click(event,$(this));');
+				checkpointImg.data('metro_id',metro_id);
+
+				$map_wrapper.append(checkpointImg);
+				selected_metros[line].push(metro_id);
+		}
+
+		function pop_point(line,metro_id){
+
+			selected_metros[line].splice(selected_metros[line].indexOf(metro_id),1);
+			if(!selected_metros[line].length){
+				delete selected_metros[line];
+			}
+		}
+		/*
+		* Публичные методы объекта.
+		*/
+		common.widgets.metro_map.checkpoint_click = function(event,$checkpoint){
+
+			var metro_id = $checkpoint.data('metro_id');
+			var $area = $('#station-'+metro_id);
+			pop_point($area.data('line'),metro_id);
+			$checkpoint.remove();
+		};
+
+		/*
+		* Функция для добавления станций метро в список отмеченных, а также удаления из этого списка
+		* если станция уже добавлена
+		*/
+		common.widgets.metro_map.station_click = function(event,$area){
+
+			if(!selected_metros[$area.data('line')]){
+				selected_metros[$area.data('line')] = [];
+			}
+
+			if(selected_metros[$area.data('line')].indexOf($area.data('metro_id')) == -1){
+				
+				//добавляем checkpoint
+				var coords = $area.attr('coords').split(',');
+				
+				push_point($area.data('line'),$area.data('metro_id'),coords[0],coords[1]);
+				/*
+				* Значит, если станция является пересадочной, то ищем её друзей, проверяем, заданы ли они, и если нет, то задаем 
+				* и их.
+				*/
+				var transshipment = $area.data('transshipment');
+				if(transshipment){
+					transshipment_friends = get_transshipment_friends($area.data('metro_id'),transshipment); // копируем его
+					if(transshipment_friends){
+						var mass = transshipment_friends.slice(0);
+						for(var i in mass){
+							$('#station-'+mass[i]).click();
+						}
+					}
+				}
+			}else{
+				$('#checkpoint-'+$area.data('metro_id')).remove();
+				pop_point($area.data('line'),$area.data('metro_id'));
+			}
+		}
+
+
+		/*
+		* Типа конструктор, создадим определение редактора и вернем его.
+		*/
+		return {
+			init:function(){
+
+				var $container = $('body');
+				$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'>").appendTo($container);
+				$map_wrapper = $('<div style="position:relative">');
+				$img = $('<img usemap="#metro-normal" id="metromap" src="'+metro_normal.image+'"/>');
+				$map_wrapper.append($img);
+				$map  = $('<map name="metro-normal">');
+
+				for(var i in metro_normal.elements){
+					var element = metro_normal.elements[i];
+
+					if(element.type == 'station'){
+						$area = $('<area href="#" id="station-'+element.metro_id+'" shape="'+element.shape+'" coords="'+element.coords+'" title="'+element.metro_name+'">');
+						$area.attr('onclick',"common.widgets.metro_map.station_click(event,$(this));return false;");
+						$area.data('metro_id',element.metro_id); 
+						$area.data('line',element.metro_line); 
+						$area.data('transshipment',element.metro_transshipment);
+
+						$map.append($area);
+					}
+				};
+				$map_wrapper.append($map);
+				$wrapper.append($map_wrapper);
+				$map_wrapper.append('<script type="text/javascript">$(function(){$("#metromap").maphilight();});</script>')
+				$wrapper.center();
+
+			},
+
+			show:function(){
+				$wrapper.show();
+			},
+
+			hide:function(){
+				$wrapper.hide();
+			},
+
+			destroy:function(){
+				$wrapper.remove();
+			},
+
+			focus:function(){
+				$wrapper.focus();
+			},
+			load:function(){
+				for(var i in options.metros){
+					// пустые не берем
+					if(i == "0") continue;
+
+					for(var j in options.metros[i]){
+
+						if(!selected_metros[i]){
+							selected_metros[i] = [];
+						}
+						$area = $('#station-'+options.metros[i][j]);
+						if($area.length){
+							var coords = $area.attr('coords').split(',');
+							push_point(i,options.metros[i][j],coords[0],coords[1]);	
+						}
+					}
+				}
+			},
+			serialize:function(){
+				return selected_metros;
+			}
+		};
+	}
+
+})
