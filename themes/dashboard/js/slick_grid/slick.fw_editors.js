@@ -248,100 +248,25 @@
 
 	function AnbaseRegionsEditor(args){
 		
-		var $wrapper;
-		var $img;
-		var $map;
-		var $region_wrapper;
-
 		var defaultValue;
-		var regions = common.regions;
-		var region_normal = common.regions_images['regions-normal'];
-		var selected_regions = [];
 		var scope = this;
-
-		/*
-		* Обобщая функция для клика по area и item
-		*/
-		function region_click(region_id){
-			var idx_metro_id = -1;
-			if( (idx_metro_id = selected_regions.indexOf(region_id)) != -1){
-				$('#region-item-'+region_id).css('background-color','#fff');
-				selected_regions.splice(idx_metro_id,1);
-			}else{
-				$('#region-item-'+region_id).css('background-color','#f7f21a');
-				selected_regions.push(region_id);
-				$('#region-'+region_id).mouseover();
-			}
-		}
-
-		Slick.Editors.AnbaseRegions.checkpoint_click = function(event,$checkpoint){
-
-		}
-
-		Slick.Editors.AnbaseRegions.region_click = function(event,$area){
-			region_click($area.data('region_id'));
-		}
+		var widget;
 
 		this.init = function(){
-			var $container = $('body');
-			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'></div>").appendTo($container);
-			$region_wrapper = $('<div style="position:relative; width:700px"></div>');
-			$img = $('<img usemap="#region-normal" id="regionmap" src="'+region_normal.image+'"/>');
-			$map = $('<map name="region-normal">');
-			$list= $('<ol style="float:right">');
-
-			for(var i in region_normal.elements){
-				var element = region_normal.elements[i];
-
-				/*
-				* Область на карте
-				*/
-				$area = $('<area href="#" id="region-'+element.region_id+'" shape="'+element.shape+'" coords="'+element.coords+'" title="'+element.region_name+'">');
-				$area.attr('onclick','Slick.Editors.AnbaseRegions.region_click(event,$(this));return false;');
-				$area.data('region_id',element.region_id);
-				$map.append($area);
-				
-				/*
-				* Элемент списка
-				*/
-				$li = $('<li id="region-item-'+element.region_id+'" style="margin:5px;"><a href="#" onclick="return false;">'+element.region_name+'</a></li>');
-				$li.data('region_id',element.region_id);
-
-				$li.hover(
-					function(){
-						$('#region-'+$(this).data('region_id')).trigger('mouseover');
-					},
-					function(){
-						$('#region-'+$(this).data('region_id')).trigger('mouseout');
-					}
-				);
-
-				$li.click(function(){
-					region_click($(this).data('region_id'));
-				});
-				$list.append($li);
-			};
-			$region_wrapper.append($list);
-			$region_wrapper.append($img);
-			$region_wrapper.append($map);
-			$wrapper.append($region_wrapper);		
-			// РАБОТАЕТ ТОЛЬКО ТУТ, ХЗ ПОЧЕМУ
-			// Если строчку ниже впихать где-нибудь выше, то не будет работать подсветка
-			$region_wrapper.append('<script type="text/javascript">$(function(){$("#regionmap").maphilight();});</script>');
-			$wrapper.center();	
-
+			widget = common.widgets.region_map();
+			widget.init();
 		};
 
 		this.show = function(){
-			$wrapper.show();
+			widget.show();
 		};
 
 		this.hide = function(){
-			$wrapper.hide();
+			widget.hide();
 		};
 
 		this.destroy = function(){
-			$wrapper.remove();
+			widget.destroy();
 		};
 
 		this.focus = function(){
@@ -357,18 +282,16 @@
 
 		this.loadValue = function(item){
 			defaultValue = item.regions;
-			for(var i in defaultValue){
-				$('#region-'+defaultValue[i]).click();
-			}
+			widget.load(item.regions);
 		};
 
 		this.serializeValue = function(){
-			return selected_regions
+			return widget.serialize();
 		};
 
 		this.applyValue = function(item,state){
 			delete item.regions;
-			item.regions = selected_regions.slice(0);
+			item.regions = widget.serialize().slice(0);
 			/*
 			* [my_notice: Не самое лучшее решение на мой взгляд, нужно подумать еще]
 			* В чем суть.
@@ -381,6 +304,7 @@
 		};
 
 		this.isValueChanged = function(){
+			var selected_regions = widget.serialize();
 
 			if(defaultValue.length != selected_regions.length){
 				return true;

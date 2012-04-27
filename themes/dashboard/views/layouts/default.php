@@ -13,6 +13,7 @@
 		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/common.js"> </script>
 		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_map.js"></script>
 		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_list.js"></script>
+		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/region_map.js"></script>
 		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.noty.js"> </script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.center.js"> </script>
 

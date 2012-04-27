@@ -298,6 +298,7 @@ $(function(){
 
 							if(isSelected($area)){
 								if(transshipment){
+									// либо удаляем все сразу либо только одну точку на пересадке
 									if(!pop_transshipment_point($('#checkpoint-transshipment-'+transshipment))){
 										pop_point_map($area);
 										pop_point_list($area)
