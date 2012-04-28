@@ -24,7 +24,22 @@ class M_Region extends MY_Model
 		$this->validate = array();
 	}
 
-
+	public function check_regions($regions)
+	{
+		
+		if(!empty($regions)){
+			if(is_array($regions)){
+				foreach($regions as $region){
+					if(!is_numeric($region) || $region <= 0 || !$this->is_exists($region)){
+						return false;
+					}
+				}
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
 	/**
 	 * Проверка, существует ли такой region_id
 	 *

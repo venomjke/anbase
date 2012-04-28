@@ -24,6 +24,29 @@ class M_Metro extends MY_Model
 		$this->validate = array();
 	}
 
+	public function check_metros($metros)
+	{
+		if(!empty($metros)){
+			if(is_array($metros)){
+				foreach($metros as $metro_line){
+					if(!empty($metro_line)&&is_array($metro_line)){
+						foreach($metro_line as $metro_id){
+							if(!is_numeric($metro_id) || $metro_id <= 0 || !$this->is_exists($metro_id)){
+								return false;
+							}
+						}
+					}else{
+						return false;
+					}
+				}
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return true;
+	}
+
 
 	/**
 	 * Проверка, существует ли такой metro_id

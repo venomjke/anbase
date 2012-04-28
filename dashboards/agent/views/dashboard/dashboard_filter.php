@@ -38,11 +38,9 @@
         <td><input style="width:100px" type="text" id="f_price_from"/></td>
         <td class="l">С:</td>
         <td><input style="width:130px" type="text" class="date" id="f_createdate_from"/></td>
-        <td width="50%" rowspan="3" valign="top" class="l"><textarea style="width:90%" rows="5"></textarea></td>
-        <td width="20%" rowspan="3" valign="top" class="l"><select size="4" multiple="" style="width:98%">
-        </select><span class="plus" style="margin-top:5px"><a href="111">Добавить</a></span></td>
-        <td width="20%" rowspan="3" valign="top" class="l"><select size="4" multiple="" style="width:98%">
-        </select><span class="plus" style="margin-top:5px"><a href="111">Добавить</a></span></td>
+        <td width="50%" rowspan="3" valign="top" class="l"><textarea id="f_description" style="width:90%" rows="5"></textarea></td>
+        <td width="20%" rowspan="3" valign="top" class="l"><span id="region_btn" class="plus" style="margin-top:5px"><a href="#" onclick="return false;">Выбрать</a></span></td>
+        <td width="20%" rowspan="3" valign="top" class="l"><span id="metro_btn" class="plus" style="margin-top:5px"><a href="#" onclick="return false;">Выбрать</a></span></td>
       </tr>
       <tr>
         <td>Вид&nbsp;сделки:</td>

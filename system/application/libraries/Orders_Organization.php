@@ -61,10 +61,12 @@ class Orders_Organization
 	 **/
 	public function fetch_filter()
 	{
+		$this->ci->load->model('m_region');
+		$this->ci->load->model('m_metro');
 		/*
 		* Извлекаем параметры фильтра, валидируем их, а потом засовываем в массив
 		*/
-		$filter_fields = array('number','phone','category','dealtype','createdate_from','createdate_to','price_from','price_to','description');
+		$filter_fields = array('number','phone','category','dealtype','createdate_from','createdate_to','price_from','price_to','description','regions','metros');
 
 		/*
 		* [my_notice] Не самый лучший способ проверить данные фильтра, но другого не придумал.
@@ -73,7 +75,9 @@ class Orders_Organization
 
 		$this->ci->form_validation->set_rules($this->ci->m_order->filter_validation_rules);
 
-		if($this->ci->form_validation->run($this->ci->m_order)){
+		if($this->ci->form_validation->run($this->ci->m_order) && $this->ci->m_region->check_regions($this->ci->input->post('regions')) && $this->ci->m_metro->check_metros($this->ci->input->post('metros'))){
+
+
 			/*
 			* собираем фильтр и возвращаем
 			*/
@@ -84,7 +88,9 @@ class Orders_Organization
 				'dealtype' => $this->ci->input->post('dealtype'),
 				'createdate' => array('createdate_from'=>$this->ci->input->post('createdate_from'),'createdate_to'=>$this->ci->input->post('createdate_to')),
 				'price' => array('price_from'=>$this->ci->input->post('price_from'),'price_to'=>$this->ci->input->post('price_to')),
-				'description' => $this->ci->input->post('description')
+				'description' => $this->ci->input->post('description'),
+				'regions' => $this->ci->input->post('regions'),
+				'metros'  => $this->ci->input->post('metros')
 			);
 		}
 
@@ -139,13 +145,13 @@ class Orders_Organization
 		* 3. Привязывание metros
 		*/
 
-		$filter = $this->fetch_filter();
+		$filters = $this->fetch_filter();
 
 		$limit = false;
 		$offset = false;
 		$this->fetch_limit($limit,$offset);
 		
-		$orders = $this->ci->m_order->get_all_free_orders($org_id,$filter,$limit,$offset,$fields);
+		$orders = $this->ci->m_order->get_all_free_orders($org_id,$filters,$limit,$offset,$fields);
 		$this->bind_regions($orders);
 
 		$this->bind_metros($orders);
@@ -160,8 +166,8 @@ class Orders_Organization
 	 **/
 	public function count_all_free_orders($org_id)
 	{
-		$filter = $this->fetch_filter();
-		return $this->ci->m_order->count_all_free_orders($org_id,$filter);
+		$filters = $this->fetch_filter();
+		return $this->ci->m_order->count_all_free_orders($org_id,$filters);
 	}
 
 	/**
@@ -177,14 +183,14 @@ class Orders_Organization
 		* 2. Привязывание regions
 		* 3. Привязывание metros
 		*/
-		$filter = $this->fetch_filter();;
+		$filters = $this->fetch_filter();;
 
 		$limit = false;
 		$offset= false;
 
 		$this->fetch_limit($limit,$offset);
 
-		$orders = $this->ci->m_order->get_all_delegate_orders($org_id,$filter,$limit,$offset,$fields);
+		$orders = $this->ci->m_order->get_all_delegate_orders($org_id,$filters,$limit,$offset,$fields);
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);
@@ -201,8 +207,8 @@ class Orders_Organization
 	 **/
 	public function count_all_delegate_orders($org_id)
 	{
-		$filter = $this->fetch_filter();
-		return $this->ci->m_order->count_all_delegate_orders($org_id,$filter);
+		$filters = $this->fetch_filter();
+		return $this->ci->m_order->count_all_delegate_orders($org_id,$filters);
 	}
 
 	/**
@@ -215,14 +221,14 @@ class Orders_Organization
 	 **/
 	public function get_all_orders_org($org_id,$fields=array())
 	{
-		$filter = $this->fetch_filter();
+		$filters = $this->fetch_filter();
 		
 		$limit = false;
 		$offset = false;
 
 		$this->fetch_limit($limit,$offset);
 
-		$orders = $this->ci->m_order->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
+		$orders = $this->ci->m_order->get_all_orders_org($org_id,$filters,$limit,$offset,$fields);
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);
@@ -239,8 +245,8 @@ class Orders_Organization
 	 **/
 	public function count_all_orders_org($org_id)
 	{
-		$filter = $this->fetch_filter();
-		return $this->ci->m_order->count_all_orders_org($org_id,$filter);
+		$filters = $this->fetch_filter();
+		return $this->ci->m_order->count_all_orders_org($org_id,$filters);
 	}
 
 	/**
@@ -258,11 +264,14 @@ class Orders_Organization
 		* 3. Привязывание metros
 		*/
 		$filters = $this->fetch_filter();
-		
+
 		$limit  = false;
 		$offset = false;
-		$this->fetch_limit($limit,$offset);
 
+		//print_r($this->ci->input->get('regions'));
+		//print_r($this->ci->input->get('metros'));
+
+		$this->fetch_limit($limit,$offset);
 
 		$orders = $this->ci->m_order->get_all_orders_user($user_id,$filters,$limit,$offset,$fields);
 
@@ -279,8 +288,8 @@ class Orders_Organization
 	 **/
 	public function count_all_user_orders($user_id)
 	{
-		$filter = $this->fetch_filter();
-		return $this->ci->m_order->count_all_user_orders($user_id,$filter);
+		$filters = $this->fetch_filter();
+		return $this->ci->m_order->count_all_user_orders($user_id,$filters);
 	}
 	
 } // END class OrdersOrganization

@@ -348,7 +348,31 @@ class M_Order extends MY_Model{
 			$this->db->where('orders.deal_type =',$value);
 	}
 
+	protected function set_metros_filter($value)
+	{
+		if(!empty($value) && is_array($value)){
+			$metro_ids = array();
+			foreach($value as $metro_line){
+				foreach($metro_line as $metro_id){
+						$metro_ids[]= $metro_id;							
+					}
+			}
+			$this->db->join("orders_metros","orders.id = orders_metros.order_id");
+			$this->db->where("orders_metros.metro_id IN (".implode(',',$metro_ids).")");
+		}
+	}
 
+	protected function set_regions_filter($value)
+	{
+		if(!empty($value) && is_array($value)){
+			$region_ids = array();
+			foreach($value as $region_id){
+				$region_ids[]=$region_id;
+			}
+			$this->db->join("orders_regions","orders.id = orders_regions.order_id");
+			$this->db->where("orders_regions.region_id IN (".implode(',',$region_ids).")");
+		}
+	}
 	/**
 	 * Метод проходит по списку полей применяя к каждому свой фильтр
 	 *
@@ -364,7 +388,7 @@ class M_Order extends MY_Model{
 			if(method_exists($this,$filter_name)){
 				$this->$filter_name($value);
 			}else{
-				throw Exception("Undifned filter_name {$filter_name} in ".__CLASS__);
+				throw new Exception("Undifned filter_name {$filter_name} in ".__CLASS__);
 			}
 		}
 	}
@@ -409,6 +433,26 @@ class M_Order extends MY_Model{
 	}
 
 
+	protected function build_count_select($filter)
+	{
+		/*
+		* делаем подсчет своими руками
+		*/
+		$this->select('COUNT(DISTINCT orders.id) as _cnt');
+		$this->build_select();
+		$this->set_filter($filter);
+		$this->limit(1);
+	}
+
+	protected function get_count_result()
+	{
+		$result = $this->db->get($this->table);
+		if($result){
+			$cnt_res = $result->row();
+			return $cnt_res->_cnt;
+		}
+		return 0;
+	}
 	/**
 	*
 	*
@@ -425,39 +469,35 @@ class M_Order extends MY_Model{
 	public function get_all_orders_org($id,$filter = array(),$limit = false,$offset = false,$fields=array()){
 
 		/*
-		*	
 		* Выбор данных
 		*/
 		$this->build_select($fields);
 
 		/*
-		*
 		* Применение фильтров
 		*/
 		$this->set_filter($filter);
 
 
 		/*
-		*
 		*	Установка ограничений
 		*/
 		$this->limit($limit,$offset);
 
 		/*
-		*
 		*	Порядок сортировки
-		*
 		*/
 		$this->order_by('orders.id','DESC');
+		$this->group_by('orders.id');
 		return $this->get_all(array('organizations.id' => $id));
 
 	}
 
 	public function count_all_orders_org($org_id,$filter)
 	{
-		$this->build_select();
-		$this->set_filter($filter);
-		return $this->count_all_results(array('organizations.id'=>$org_id));
+		$this->build_count_select($filter);
+		$this->db->where('organizations.id',$id);
+		return $this->get_count_result();	
 	}
 
 	/**
@@ -493,9 +533,9 @@ class M_Order extends MY_Model{
 		*
 		* Установка порядка сортировки
 		*/
-		$this->order_by('orders.id','DESC');
 		$this->where_in('users.id',$user_ids);
-
+		$this->order_by('orders.id');
+		$this->group_by('orders.id');
 		return $this->get_all();
 	}
 
@@ -515,10 +555,9 @@ class M_Order extends MY_Model{
 
 	public function count_all_user_orders($user_id,$filter=array())	
 	{
-		$this->build_select();
-		$this->set_filter($filter);
+		$this->build_count_select($filter);
 		$this->where_in('users.id',array($user_id));
-		return $this->count_all_results();	
+		return $this->get_count_result();	
 	}
 
 	/**
@@ -550,10 +589,10 @@ class M_Order extends MY_Model{
 	 **/
 	public function count_all_free_orders($org_id,$filter)
 	{
-		$this->build_select();
-		$this->set_filter($filter);
+		$this->build_count_select($filter);
 		$this->db->where("orders_users.user_id IS NULL");
-		return $this->count_all_results(array("orders.org_id"=>$org_id));
+		$this->db->where("orders.org_id",$org_id);
+		return $this->get_count_result();
 	}
 
 	/**
@@ -574,10 +613,10 @@ class M_Order extends MY_Model{
 
 	public function count_all_delegate_orders($org_id,$filter=array())	
 	{
-		$this->build_select();
-		$this->set_filter($filter);
+		$this->build_count_select($filter);
 		$this->db->where('orders_users.user_id IS NOT NULL');
-		return $this->count_all_results(array('orders.org_id'=>$org_id));
+		$this->db->where('orders.org_id',$org_id);
+		return $this->get_count_result();
 	}
 
 }
