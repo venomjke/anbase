@@ -203,37 +203,7 @@
 			if(!widget){
 				return false;
 			}
-			var selected_station = widget.serialize();
-			// #баный фиктивный пустой объект. то есть, если мы при старте получили его, и ничего не выбрали на карте, то по финишу selected_station пуст 
-			if(defaultValue["0"] && common.isEmptyObj(selected_station)){
-				return false;
-			}
-
-			if(!common.isEmptyObj(defaultValue) && common.isEmptyObj(selected_station)){
-				return true;
-			}
-
-			//если число линий различно, то тоже меняем
-			if(common.count_props(defaultValue) != common.count_props(selected_station)){
-				return true;
-			}
-
-			for(var i in selected_station){
-				if(defaultValue.hasOwnProperty(i)){	
-					// если мы во время работы по убирали checkpoint'ы, то линия останется живой, но будет пустой.
-					if(!selected_station[i] || selected_station[i].length != defaultValue[i].length)
-						return true;
-
-					for(var j in selected_station[i]){
-						if(defaultValue[i].indexOf(selected_station[i][j]) == -1){
-							return true;
-						}	
-					}
-				}else{
-					return true;
-				}
-			}
-			return false;
+			return widget.isValueChanged();
 		};
 
 		this.validate = function(){
@@ -304,18 +274,7 @@
 		};
 
 		this.isValueChanged = function(){
-			var selected_regions = widget.serialize();
-
-			if(defaultValue.length != selected_regions.length){
-				return true;
-			}
-
-			for(var i in selected_regions){
-				if(defaultValue.indexOf(selected_regions[i]) == -1){
-					return true;
-				}
-			}
-			return false;		
+			return widget.isValueChanged();		
 		};
 
 		this.validate = function(){

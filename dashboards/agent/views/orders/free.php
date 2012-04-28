@@ -43,6 +43,15 @@
 			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter},
 		];
 
+
+		/*
+		* некоторые данные
+		*/
+		var region_widget;
+		var metro_widget;
+		var regions = [];
+		var metros  = {};
+		
 		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=free',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
 
@@ -132,6 +141,33 @@
 
 		});
 
+		$('#region_btn').click(function(event){
+			if(!region_widget){
+				region_widget = common.widgets.region_map();
+				region_widget.init();
+				region_widget.load(regions);
+			}else{
+				region_widget.destroy();
+				regions = region_widget.serialize().splice(0);
+				region_widget = undefined;
+			}
+		});
+
+		$('#metro_btn').click(function(event){
+			if(!metro_widget){
+				metro_widget = common.widgets.metro_map({metros:metros});
+				metro_widget.init();
+				metro_widget.load();
+			}else{
+				metro_widget.destroy();
+				serializeValue = metro_widget.serialize();
+				for(var i in serializeValue){
+					if(!metros[i]) metros[i] = [];
+					metros[i] = serializeValue[i].splice(0);
+				}
+				metro_widget = undefined;
+			}
+		});
 		$('#search_btn').click(function(event){
 
 			model.setCategory($('#f_category').val());
@@ -141,6 +177,14 @@
 			model.setCreateDateTo($('#f_createdate_to').val());
 			model.setCreateDateFrom($('#f_createdate_from').val());
 			model.setDescription($('#f_description').val());
+
+			if(metros){
+				model.setMetros(metros)
+			}
+
+			if(regions){
+				model.setRegions(regions);
+			}
 
 			vp = grid.getViewport();
 			model.applyFilter(vp.top,vp.bottom);

@@ -381,6 +381,39 @@ $(function(){
 			},
 			serialize:function(){
 				return selected_metros;
+			},
+			isValueChanged:function(){
+				
+				// #баный фиктивный пустой объект. то есть, если мы при старте получили его, и ничего не выбрали на карте, то по финишу selected_metros пуст 
+				if(options.metros["0"] && common.isEmptyObj(selected_metros)){
+					return false;
+				}
+
+				if(!common.isEmptyObj(options.metros) && common.isEmptyObj(selected_metros)){
+					return true;
+				}
+
+				//если число линий различно, то тоже меняем
+				if(common.count_props(options.metros) != common.count_props(selected_metros)){
+					return true;
+				}
+
+				for(var i in selected_metros){
+					if(options.metros.hasOwnProperty(i)){	
+						// если мы во время работы по убирали checkpoint'ы, то линия останется живой, но будет пустой.
+						if(!selected_metros[i] || selected_metros[i].length != options.metros[i].length)
+							return true;
+
+						for(var j in selected_metros[i]){
+							if(options.metros[i].indexOf(selected_metros[i][j]) == -1){
+								return true;
+							}	
+						}
+					}else{
+						return true;
+					}
+				}
+				return false;
 			}
 		};
 	}

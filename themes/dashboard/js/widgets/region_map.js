@@ -139,6 +139,18 @@ $(function(){
 			},
 			serialize:function(){
 				return selected_regions;
+			},
+			isValueChanged:function(){
+
+				if(options.regions.length != selected_regions.length){
+					return true;
+				}
+
+				for(var i in selected_regions){
+					if(options.regions.indexOf(selected_regions[i]) == -1){
+						return true;
+					}
+				}
 			}
 		};
 	}
