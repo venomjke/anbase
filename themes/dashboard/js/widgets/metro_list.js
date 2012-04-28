@@ -23,9 +23,12 @@ $(function(){
 			metros:{}, 
 
 			/*
-			* Функция, которую нужно выполнить при закрытии редактора
+			* Функция, которую нужно выполнить отмене работы
 			*/
-			onClose:function(){
+			onCancel:function(){
+
+			},
+			onSave:function(){
 
 			}
 		};
@@ -42,6 +45,28 @@ $(function(){
 
 		var metro_list  = common.metros_images['metro-list'];
 		var selected_metros = {};
+
+		function save_btn(event){
+			$wrapper.hide();
+			options.onSave();
+		}
+
+		function cancel_btn(event){
+			$wrapper.hide();
+			options.onCancel();
+		}
+
+		function reset_btn(event){
+			for(var i in selected_metros[i]){
+				for(var j in selected_metros[j]){
+					var $area = $('#station-'+selected_metros[i][j]);
+					pop_point_map($area);
+					pop_point_list($area);
+				}
+			}
+
+			selected_metros = {};
+		}
 
 		function get_transshipement_neighbors(transshipment){
 			var transshipment_neighbors = [];
@@ -228,6 +253,18 @@ $(function(){
 
 		}
 
+		common.widgets.metro_list.line_click = function(event,$area){
+			var line = $area.data('line');
+
+			for(var i in metro_list.elements){
+				var element = metro_list.elements[i];
+
+				if(element.type == 'station' && element.metro_line == line){
+					$('#station-'+element.metro_id).click();
+				}
+			}
+		}
+
 
 		/*
 		* Типа конструктор, создадим определение редактора и вернем его.
@@ -236,6 +273,25 @@ $(function(){
 			init:function(){
 				var $container = $('body');
 				$wrapper = $('<div style="z-index:9999;opacity:0.95;width: 850px;-moz-border-radius: 10px 10px 10px 10px;-webkit-border-radius: 10px 10px 10px 10px;border-radius: 10px 10px 10px 10px;border: 1px solid #666666;background-color: #FFFFFF;position: absolute;font-family: Arial,Helvetica, sans-serif;font-size: 11px;">').appendTo($container);
+				$save_btn = $('<button id="save_btn">Сохранить</button>');
+				$cancel_btn = $('<button id="cancel_btn">Отмена</button>"');
+				$reset_btn= $('<button id="reset">Сбросить</button>')
+
+
+				$save_btn.click(function(event){
+					save_btn(event);
+				});
+				$cancel_btn.click(function(event){
+					cancel_btn(event);
+				});
+				$reset_btn.click(function(event){
+					reset_btn(event);
+				});
+
+				$wrapper.append($save_btn);
+				$wrapper.append($cancel_btn);
+				$wrapper.append($reset_btn);
+
 				$map_wrapper = $('<div style="position:relative;">');
 				$img = $('<img usemap="#metro-list" style="float:left" id="metromap" src="'+metro_list.image+'"/>');
 				$list_wrapper = $('<div style="padding: 10px;float:right"><div style="height: 28px;padding-left: 42px;background-image: url('+common.baseUrl+'themes/dashboard/images/mlogo.png);background-repeat: no-repeat;background-position: left top;font-size: 14px;line-height: 14px;padding-top: 2px;font-weight: bold;color: #00569F;margin-bottom: 8px;">СХЕМА ЛИНИЙ САНКТ-ПЕТЕРБУРГСКОГО МЕТРОПОЛИТЕНА</div></div>');
@@ -338,12 +394,33 @@ $(function(){
 				$list_td.find('td').each(function(){
 					$(this).attr('width',td_width+"%");
 				});
+				
+				$clone_save_btn = $save_btn.clone();
+				$clone_cancel_btn = $cancel_btn.clone();
+				$clone_reset_btn= $reset_btn.clone();
+				
+				$clone_save_btn.click(function(event){
+					save_btn(event);
+				});
+				$clone_cancel_btn.click(function(event){
+					cancel_btn(event);
+				});
+				$clone_reset_btn.click(function(event){
+					reset_btn(event);
+				});
+
+				$right = $('<div style="float:right;"></div>');
+				$right.append($clone_save_btn);
+				$right.append($clone_cancel_btn);
+				$right.append($clone_reset_btn);
+
 				$list.append($list_td);
 				$list_wrapper.append($list);
 				$map_wrapper.append($list_wrapper);
 				$map_wrapper.append($img);
 				$map_wrapper.append($map);
 				$wrapper.append($map_wrapper);
+				$wrapper.append($right);
 				// РАБОТАЕТ ТОЛЬКО ТУТ, ХЗ ПОЧЕМУ
 				// Если строчку ниже впихать где-нибудь выше, то не будет работать подсветка
 				$map_wrapper.append('<script type="text/javascript">$(function(){$("#metromap").maphilight();});</script>');

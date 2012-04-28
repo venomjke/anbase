@@ -23,9 +23,12 @@ $(function(){
 			metros:{}, 
 
 			/*
-			* Функция, которую нужно выполнить при закрытии редактора
+			* Функция, которую нужно выполнить при отмене результата
 			*/
-			onClose:function(){
+			onСancel:function(){
+
+			},
+			onSave:function(){
 
 			}
 		};
@@ -39,6 +42,27 @@ $(function(){
 
 		var metro_normal  = common.metros_images['metro-normal'];
 		var selected_metros = {};
+
+		function save_btn(event){
+			$wrapper.hide();
+			options.onSave();
+		}
+
+		function cancel_btn(event){
+			$wrapper.hide();
+			options.onCancel();
+		}
+
+		function reset_btn(event){
+			
+			for(var i in selected_metros){
+				for(var j in selected_metros[i]){
+					$('#checkpoint-'+selected_metros[i][j]).remove();
+				}
+			}
+
+			selected_metros = {};
+		}
 
 		/*
 		* Возвращает друзей по пересадке ( по умолчанию они обязательно должны быть)
@@ -127,7 +151,15 @@ $(function(){
 			}
 		}
 
+		common.widgets.metro_map.line_click = function(event,$area){
 
+			for(var i in metro_normal.elements){
+				var element = metro_normal.elements[i];
+				if(element.type != 'line' && element.metro_line == $area.data('line')){
+					$('#station-'+element.metro_id).click();
+				}
+			}
+		}
 		/*
 		* Типа конструктор, создадим определение редактора и вернем его.
 		*/
@@ -136,6 +168,24 @@ $(function(){
 
 				var $container = $('body');
 				$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'>").appendTo($container);
+				$save_btn = $('<button id="save_btn">Сохранить</button>');
+				$cancel_btn = $('<button id="cancel_btn">Отмена</button>"');
+				$reset_btn= $('<button id="reset">Сбросить</button>')
+
+				$save_btn.click(function(event){
+					save_btn(event);
+				});
+				$cancel_btn.click(function(event){
+					cancel_btn(event);
+				});
+				$reset_btn.click(function(event){
+					reset_btn(event);
+				});
+
+				$wrapper.append($save_btn);
+				$wrapper.append($cancel_btn);
+				$wrapper.append($reset_btn);
+
 				$map_wrapper = $('<div style="position:relative">');
 				$img = $('<img usemap="#metro-normal" id="metromap" src="'+metro_normal.image+'"/>');
 				$map_wrapper.append($img);
@@ -152,10 +202,37 @@ $(function(){
 						$area.data('transshipment',element.metro_transshipment);
 
 						$map.append($area);
+					}else if(element.type == 'line'){
+						$area = $('<area href="#" id="line-'+element.line+'" shape="'+element.shape+'" coords="'+element.coords+'" title="'+element.line+'">');
+						$area.attr('onclick',"common.widgets.metro_map.line_click(event,$(this));return false;");
+						$area.data('line',element.line);
+
+						$map.append($area);
 					}
 				};
+
+				$clone_save_btn = $save_btn.clone();
+				$clone_cancel_btn = $cancel_btn.clone();
+				$clone_reset_btn = $reset_btn.clone();
+
+				$clone_save_btn.click(function(event){
+					save_btn(event);
+				});
+				$clone_cancel_btn.click(function(event){
+					cancel_btn(event);
+				});
+				$clone_reset_btn.click(function(event){
+					reset_btn(event);
+				});
+
+				$right = $('<div style="float:right;"></div>');
+				$right.append($clone_save_btn);
+				$right.append($clone_cancel_btn);
+				$right.append($clone_reset_btn);
+
 				$map_wrapper.append($map);
 				$wrapper.append($map_wrapper);
+				$wrapper.append($right);
 				$map_wrapper.append('<script type="text/javascript">$(function(){$("#metromap").maphilight();});</script>')
 				$wrapper.center();
 

@@ -121,7 +121,7 @@
 
 			$wrapper.find('#metro-map').click(function(){
 				if(!widget){
-					widget = common.widgets.metro_map({metros:defaultValue,onClose:scope.save});
+					widget = common.widgets.metro_map({metros:defaultValue,onSave:scope.save,onCancel:scope.cancel});
 					widget.init();
 					widget.load();
 				}
@@ -129,7 +129,7 @@
 
 			$wrapper.find('#metro-list').click(function(){
 				if(!widget){
-					widget = common.widgets.metro_list({metros:defaultValue,onClose:scope.save});
+					widget = common.widgets.metro_list({metros:defaultValue,onSave:scope.save,onCancel:scope.cancel});
 					widget.init();
 					widget.load();
 				}
@@ -223,7 +223,7 @@
 		var widget;
 
 		this.init = function(){
-			widget = common.widgets.region_map();
+			widget = common.widgets.region_map({onSave:scope.save,onCancel:scope.cancel});
 			widget.init();
 		};
 

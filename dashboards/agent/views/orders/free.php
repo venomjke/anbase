@@ -51,7 +51,7 @@
 		var metro_widget;
 		var regions = [];
 		var metros  = {};
-		
+
 		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=free',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
 
@@ -148,26 +148,51 @@
 				region_widget.load(regions);
 			}else{
 				region_widget.destroy();
-				regions = region_widget.serialize().splice(0);
+				if(region_widget.isValueChanged()){
+					regions = region_widget.serialize().splice(0);
+
+					vp = grid.getViewport();
+					model.setRegions(regions);
+					model.applyFilter(vp.top,vp.bottom);
+				}
 				region_widget = undefined;
+
 			}
 		});
 
+		function metroOnSave(event){
+			metro_widget.destroy();
+			if(metro_widget.isValueChanged()){
+				serializeValue = metro_widget.serialize();
+				if(common.isEmptyObj(serializeValue)){
+					metros = serializeValue;
+				}else{
+					for(var i in serializeValue){
+						if(!metros[i]) metros[i] = [];
+						metros[i] = serializeValue[i].splice(0);
+					}
+				}
+				vp = grid.getViewport();
+				model.setMetros(metros);
+				model.applyFilter(vp.top,vp.bottom);
+			}
+			metro_widget = undefined;
+		}
+
+		function metroOnCancel(event){
+		}
+
 		$('#metro_btn').click(function(event){
 			if(!metro_widget){
-				metro_widget = common.widgets.metro_map({metros:metros});
+				metro_widget = common.widgets.metro_map({metros:metros, onSave:metroOnSave, onCancel:metroOnCancel });
 				metro_widget.init();
 				metro_widget.load();
 			}else{
-				metro_widget.destroy();
-				serializeValue = metro_widget.serialize();
-				for(var i in serializeValue){
-					if(!metros[i]) metros[i] = [];
-					metros[i] = serializeValue[i].splice(0);
-				}
-				metro_widget = undefined;
+				metroOnSave();	
 			}
 		});
+
+
 		$('#search_btn').click(function(event){
 
 			model.setCategory($('#f_category').val());
