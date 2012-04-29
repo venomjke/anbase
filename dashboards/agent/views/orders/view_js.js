@@ -17,13 +17,13 @@ $(function(){
 		*/
 		var options = {enableCellNavigation: true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Integer },
-			{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date},
+			{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Integer,sortable:true },
+			{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date, sortable:true},
 			{id: "category", name:"Тип объекта", field:"category", editor:Slick.Editors.AnbaseCategory},
 			{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
 			{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
 			{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
-			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer},	
+			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer, sortable:true},	
 			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
 			{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer}
 		];
@@ -41,6 +41,13 @@ $(function(){
 		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=my',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
 
+		/*
+		* Событие сортировки
+		*/
+		grid.onSort.subscribe(function(e,args){
+			console.debug(e);
+			console.debug(args);
+		});
 		/*
 		* Сохраняем backup значение
 		*/
@@ -188,8 +195,8 @@ $(function(){
 			model.applyFilter(vp.top,vp.bottom);
 		});
 
-		$('#description').keydown(function(event){
 
+		$('#description').keydown(function(event){
 		});
 
 		function regionOnSave(event){
@@ -257,6 +264,8 @@ $(function(){
 
 		$('#search_btn').click(function(event){
 
+			model.setNumberTo($('#f_number_to').val());
+			model.setNumberFrom($('#f_number_from').val());
 			model.setCategory($('#f_category').val());
 			model.setDealtype($('#f_dealtype').val());
 			model.setPriceFrom($('#f_price_from').val());
@@ -265,6 +274,7 @@ $(function(){
 			model.setCreateDateFrom($('#f_createdate_from').val());
 			model.setDescription($('#f_description').val());
 
+			model.setDescriptionType($('input[name=f_description_type]:checked').val());
 			if(metros){
 				model.setMetros(metros)
 			}

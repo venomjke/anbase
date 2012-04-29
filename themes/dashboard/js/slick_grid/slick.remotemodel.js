@@ -16,6 +16,8 @@
     * filters
     */
     var number = '';
+    var number_to = '';
+    var number_from = '';
     var phone  = '' ;
     var category = '';
     var dealtype = '';
@@ -24,6 +26,7 @@
     var createdate_to ='';
     var createdate_from = '';
     var description ='';
+    var description_type ='';
     var metros = {};
     var regions = [];
 
@@ -44,6 +47,13 @@
 
     function setNumber(f_number){
       number = f_number;
+    }
+    function setNumberTo(f_number_to)
+    {
+      number_to = f_number_to;
+    }
+    function setNumberFrom(f_number_from){
+      number_from = f_number_from;
     }
 
     function setPhone(f_phone){
@@ -77,6 +87,10 @@
 
     function setDescription(f_description){
       description = f_description;
+    }
+
+    function setDescriptionType(f_description_type){
+      description_type = f_description_type;
     }
 
     function setMetros(f_metros){
@@ -144,6 +158,8 @@
 
       var param = {
         number:number,
+        number_from:number_from,
+        number_to:number_to,
         phone:phone,
         category:category,
         dealtype:dealtype,
@@ -152,6 +168,7 @@
         createdate_to:createdate_to,
         createdate_from:createdate_from,
         description:description,
+        description_type:description_type,
         metros:metros,
         regions:regions,
         offset:offset,
@@ -166,10 +183,6 @@
       h_request = setTimeout(function () {
        
       }, 50);
-      */
-      /*
-      * [my_notice] я думал, что необязательно запрос запуская через 50 милисекунд.
-      * т.к каждый нельзя одновренно загружать сразу несколько страниц, то и ожидать возможного req.abort не нужно
       */
 
       for (var i = fromPage; i <= toPage; i++)
@@ -205,7 +218,9 @@
             onDataLoaded.notify({from: from, to: to});
           break;
           case 'error_load_data':
+            req = null;
             console.log('Возникла ошибка во время работы');
+            onDataLoaded.notify({from: 0, to: 0});
           break;
         }
       }
@@ -224,6 +239,8 @@
 
       // filter methods
       "setNumber":setNumber,
+      "setNumberTo":setNumberTo,
+      "setNumberFrom":setNumberFrom,
       "setPhone":setPhone,
       "setCategory":setCategory,
       "setDealtype":setDealtype,
@@ -232,6 +249,7 @@
       "setCreateDateTo":setCreateDateTo,
       "setCreateDateFrom":setCreateDateFrom,
       "setDescription":setDescription,
+      "setDescriptionType":setDescriptionType,
       "setRegions":setRegions,
       "setMetros":setMetros,
       "applyFilter":applyFilter,

@@ -57,11 +57,15 @@ $(function(){
 		}
 
 		function reset_btn(event){
-			for(var i in selected_metros[i]){
-				for(var j in selected_metros[j]){
-					var $area = $('#station-'+selected_metros[i][j]);
-					pop_point_map($area);
-					pop_point_list($area);
+			for(var i in selected_metros){
+				for(var j in selected_metros[i]){
+					$area = $('#station-'+selected_metros[i][j]);
+					if($area.data('transshipment')){
+						$('#checkpoint-transshipment-'+$area.data('transshipment')).remove();
+					}else{
+						$('#checkpoint-'+selected_metros[i][j]).remove();
+					}
+					pop_point_list($('#station-'+selected_metros[i][j]));
 				}
 			}
 
@@ -122,24 +126,12 @@ $(function(){
 					}						
 				}
 			}
-
-			if(transshipment_neighbors.length == selected_neighbors.length){
-				for(var i in selected_neighbors){
-					pop_point_map($('#station-'+selected_neighbors[i]));
-					pop_point_list($('#station-'+selected_neighbors[i]));
-				}
-				$checkpoint.remove();
-				return true;
-			}else if(selected_neighbors.length == 1){
-				pop_point_map($('#station-'+selected_neighbors[0]));
-				pop_point_list($('#station-'+selected_neighbors[0]));
-				$checkpoint.remove();
-				return true;
+			while(selected_neighbors.length > 0){
+				pop_point_map($('#station-'+selected_neighbors[selected_neighbors.length-1]));
+				pop_point_list($('#station-'+selected_neighbors[selected_neighbors.length-1]));
+				selected_neighbors.pop();
 			}
-			/*
-			* Иначе ничего не делаем, так как никакое метро не привязано
-			*/
-			return false;
+			$checkpoint.remove();
 		}
 
 		function push_point_list($area){
@@ -226,8 +218,13 @@ $(function(){
 				* 1. ищу всех друзей
 				* 2. 
 				*/
-				pop_point_map($area);
-				pop_point_list($area);
+				if(!transshipment){
+					pop_point_map($area);
+					pop_point_list($area);		
+					$('#checkpoint-'+metro_id).remove();			
+				}else{
+					pop_transshipment_point($('#checkpoint-transshipment-'+transshipment));
+				}
 			}else{
 				/*
 				* ищу всех друзей по пересадке
@@ -272,7 +269,7 @@ $(function(){
 		return {
 			init:function(){
 				var $container = $('body');
-				$wrapper = $('<div style="z-index:9999;opacity:0.95;width: 850px;-moz-border-radius: 10px 10px 10px 10px;-webkit-border-radius: 10px 10px 10px 10px;border-radius: 10px 10px 10px 10px;border: 1px solid #666666;background-color: #FFFFFF;position: absolute;font-family: Arial,Helvetica, sans-serif;font-size: 11px;">').appendTo($container);
+				$wrapper = $('<div style="z-index:9999;opacity:0.95;width: 870px;-moz-border-radius: 10px 10px 10px 10px;-webkit-border-radius: 10px 10px 10px 10px;border-radius: 10px 10px 10px 10px;border: 1px solid #666666;background-color: #FFFFFF;position: absolute;font-family: Arial,Helvetica, sans-serif;font-size: 11px;">').appendTo($container);
 				$save_btn = $('<button id="save_btn">Сохранить</button>');
 				$cancel_btn = $('<button id="cancel_btn">Отмена</button>"');
 				$reset_btn= $('<button id="reset">Сбросить</button>')
@@ -354,12 +351,14 @@ $(function(){
 
 							if(isSelected($area)){
 								if(transshipment){
-									// либо удаляем все сразу либо только одну точку на пересадке
-									if(!pop_transshipment_point($('#checkpoint-transshipment-'+transshipment))){
-										pop_point_map($area);
-										pop_point_list($area)
-										$('#checkpoint-transshipment-'+metro_id).remove();
+									
+									transshipment_friends = get_transshipment_friends(metro_id,transshipment);
+									if(transshipment_friends){
+										$('#checkpoint-transshipment-'+transshipment).remove();
 									}
+									pop_point_list($area);
+									pop_point_map($area);
+
 								}else{
 									pop_point_map($area);
 									pop_point_list($area);
@@ -386,19 +385,26 @@ $(function(){
 
 						$td.append($a);
 						++cnt;
+					}else{
+						var $area = $('<area href="#" class="line-'+element.line+'" shape="'+element.shape+'" coords="'+element.coords+'" title="'+element.line+'">');
+						$area.data('line',element.line);
+						$area.attr('onclick','common.widgets.metro_list.line_click(event,$(this));return false;');
+
+						$map.append($area);
 					}
 				};
 
+				/*
 				var td_width = 100/$list_td.find('td').length;
 
 				$list_td.find('td').each(function(){
 					$(this).attr('width',td_width+"%");
 				});
-				
+				*/
 				$clone_save_btn = $save_btn.clone();
 				$clone_cancel_btn = $cancel_btn.clone();
 				$clone_reset_btn= $reset_btn.clone();
-				
+
 				$clone_save_btn.click(function(event){
 					save_btn(event);
 				});

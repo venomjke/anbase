@@ -74,6 +74,8 @@ class M_Order extends MY_Model{
 	* Правила валидации фильтра
 	*/
 	public $filter_validation_rules = array(
+		array('field'=>'number_from','label'=>'lang:order.label_number','rules'=>'is_natural|max_length[9]'),
+		array('field'=>'number_to','label'=>'lang:order.label_number','rules'=>'is_natural|max_length[9]'),
 		array('field'=>'number','label'=>'lang:order.label_number','rules'=>'is_natural|max_length[9]'),
 		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|valid_phone'),
 		array('field'=>'category','label'=>'lang:order.label_category','rules'=>'valid_order_category'),
@@ -82,7 +84,8 @@ class M_Order extends MY_Model{
 		array('field'=>'createdate_to','label'=>'lang:order.label_create_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'price_from','label'=>'lang:order.label_price','rules'=>'greater_than[-1]|max_length[12]'),
 		array('field'=>'price_to','label'=>'lang:order.label_price','rules'=>'greater_than[-1]|max_length[12]'),
-		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean')
+		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean'),
+		array('field'=>'description_type','label'=>'lang:order.label_description_type','rules'=>'alpha')
 	);
 
 	/**
@@ -262,9 +265,22 @@ class M_Order extends MY_Model{
 	 **/
 	protected function set_number_filter($value)
 	{
-		if(is_numeric($value) && $value >= 0)
+		$number = $value['number'];
+		$number_to = $value['number_to'];
+		$number_from = $value['number_from'];
+
+		if(!empty($number) && is_numeric($number) && $number >= 0)
 		{
-			$this->db->where('orders.number',$value);
+			$this->db->where('orders.number',$number);
+			return;
+		}
+
+		if(!empty($number_to) && is_numeric($number_to) && $number_to >= 0){
+			$this->db->where('orders.number <=',$number_to);
+		}
+
+		if(!empty($number_from) && is_numeric($number_from) && $number_from >= 0){
+			$this->db->where('orders.number >=',$number_from);
 		}
 	}
 
@@ -300,8 +316,34 @@ class M_Order extends MY_Model{
 	*	фильтр для поля description
 	*/
 	protected function set_description_filter($value = ''){
-		if(!empty($value))
-			$this->db->like('orders.description',$value);
+		$words = $value['words'];
+		$type  = $value['type']?$value['type']:'full';
+
+		if(!empty($words)){
+			$search_words = preg_split('/[\s,;]/',$words);
+			switch ($type) {
+				default:
+				case 'full':
+					if(is_array($search_words)){
+						foreach($search_words as $search_word){
+							$this->db->like('orders.description',$search_word);
+						}
+					}
+					break;
+				case 'each':
+				if(is_array($search_words)){
+					$where_string = '(';
+					foreach($search_words as $search_word){
+						$where_string .= "orders.description LIKE '%".$search_word."%'";
+						$where_string .=" OR ";
+					};
+					$where_string = rtrim($where_string,"OR ");
+					$where_string .=')';
+					$this->db->where($where_string);
+				}
+					break;
+			}
+		}
 	}
 
 
