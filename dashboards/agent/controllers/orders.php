@@ -110,7 +110,13 @@ class Orders extends MX_Controller
 						* Отображение свободных
 						*/
 						$this->_free_orders();
-						break;		
+						break;
+					case 'off':
+						/*
+						* Отображение отключенных заявок
+						*/
+						$this->_off_orders();
+					break;		
 				}
 				break;
 			case 'edit':
@@ -189,6 +195,31 @@ class Orders extends MX_Controller
 		}
 	}
 
+	private function _off_orders()
+	{
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$orders = $this->agent_orders->get_all_off_orders();
+				$response['code'] = 'success_load_data';
+				$response['data'] = $orders;
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'runtime';
+				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'runtime';
+				$response['data']['errors'] = $ve->get_error_messages();
+			}
+			$this->ajax->build_json($response);
+		}else{
+			/*
+			* Вывод страницы и скрипта загрузки таблицы
+			*/
+			$this->template->build('orders/off');
+		}
+	}
 	/**
 	 * Редактирование заявки
 	 *

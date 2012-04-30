@@ -1,5 +1,5 @@
 <div class="filter">
-  <table width="100%" border="0" cellspacing="4" cellpadding="0">
+  <table id="filter_header" width="100%" border="0" cellspacing="4" cellpadding="0">
     <tr>
       <td><b>Фильтр</b>&nbsp;по&nbsp;номеру:</td>
       <td><input style="width:100px" type="text" id="f_number" /></td>
@@ -9,7 +9,7 @@
       <td><input type="text" name="phone" id="f_phone" /></td>
       <?php endif; ?>
       <td style="width:80%">&nbsp;</td>
-      <td colspan="2"><a href="#" id="filter_toggle" style="width:150px" onclick="img=$(this).find('img');if(img.attr('class')=='down'){img.attr('src','<?php echo site_url("themes/dashboard/images/strelkavverh.png"); ?>'); img.attr('class','up');}else{img.attr('class','down');img.attr('src','<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>')};return false;" class="svernut"><img src="<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>" class="down"/></a></td>
+      <td colspan="2"><a href="#" style="width:150px" class="svernut" onclick="return false;"><img id="filter_toggle" src="<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>" class="down"/></a></td>
     </tr> 
   </table>
 
@@ -81,8 +81,18 @@
   </div>
   <script type="text/javascript">
     $(function(){
-      $('#filter_toggle').click(function(e){
-        $('#dashboard_filter').slideToggle("fast");
+      $('#filter_header').click(function(e){
+        if(!e.isImmediatePropagationStopped()){
+          $('#dashboard_filter').slideToggle("fast");
+          img=$('#filter_toggle');
+          if(img.attr('class')=='down'){
+              img.attr('src','<?php echo site_url("themes/dashboard/images/strelkavverh.png"); ?>'); 
+              img.attr('class','up');
+          }else{
+              img.attr('class','down');
+              img.attr('src','<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>');
+          };
+        }
       });
 
       $.datepicker.setDefaults($.datepicker.regional["ru"]);

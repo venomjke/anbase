@@ -15,9 +15,9 @@ $(function(){
 		/*
 		* Настройки грида
 		*/
-		var options = {enableCellNavigation: true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
+		var options = {enableCellNavigation:true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Integer,sortable:true },
+			{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Integer,sortable:true,editable:false},
 			{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date, sortable:true},
 			{id: "category", name:"Тип объекта", field:"category", editor:Slick.Editors.AnbaseCategory},
 			{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
@@ -35,6 +35,7 @@ $(function(){
 		var metro_widget;
 		var regions = [];
 		var metros  = {};
+
 		/*
 		* Создание грида
 		*/
@@ -44,16 +45,64 @@ $(function(){
 		/*
 		* Событие сортировки
 		*/
-		grid.onSort.subscribe(function(e,args){
-			console.debug(e);
-			console.debug(args);
+		grid.onSort.subscribe(function(e,sortHandle){
+			if(sortHandle){
+				model.resetSortOrder();
+				switch(sortHandle.sortCol.field){
+					case 'price':
+						model.setPriceOrder(sortHandle.sortAsc);
+						vp = grid.getViewport();
+						model.applyFilter(vp.top,vp.bottom);
+						break;
+					case 'number':
+						model.setNumberOrder(sortHandle.sortAsc);
+						vp = grid.getViewport();
+						model.applyFilter(vp.top,vp.bottom);
+					break;
+					case 'create_date':
+						model.setCreateDateOrder(sortHandle.sortAsc);
+						vp = grid.getViewport();
+						model.applyFilter(vp.top,vp.bottom);
+					break;
+				}
+			}
 		});
+
 		/*
 		* Сохраняем backup значение
 		*/
 		grid.onBeforeEditCell.subscribe(function(e,handle){
 			handle.item.backupFieldValue = handle.item[handle.column.field]; 
 		});
+		
+		/*
+		[my_notice:] Комментирую тебя бро до наилучших времен, я обязательно тебя включу
+		grid.onHeaderClick.subscribe(function(e,columnHandle){
+			if(columnHandle){
+				switch(columnHandle.column.field){
+					case 'metros':
+						if(!metro_widget){
+							metro_widget = common.widgets.metro_map({metros:metros,onSave:metroOnSave,onCancel:metroOnCancel});
+							metro_widget.init();
+							metro_widget.load();
+						}else{
+							metroOnSave();
+						}
+					break;
+					case 'regions':
+						if(!region_widget){
+							region_widget = common.widgets.region_map({onSave:regionOnSave,onCancel:regionOnCancel});
+							region_widget.init();
+							region_widget.load(regions);
+						}else{
+							regionOnCancel();
+						}
+					break;
+				}
+			}
+		});
+		*/
+
 		/*
 		* Обработка события изменения ячейки
 		*/
@@ -138,6 +187,7 @@ $(function(){
 			model.applyFilter(vp.top,vp.bottom)
 		});
 
+		$('#f_number').click(function(){ event.stopImmediatePropagation(); });
 		$('#f_number').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
@@ -147,8 +197,10 @@ $(function(){
 			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
 				event.preventDefault();
 			}
+			return false;
 		});
 
+		$('#f_phone').click(function(){event.stopImmediatePropagation();})
 		$('#f_phone').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
@@ -158,6 +210,7 @@ $(function(){
 			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
 				event.preventDefault();
 			}
+			return false;
 		});
 
 		$('#f_price_to').keydown(function(event){

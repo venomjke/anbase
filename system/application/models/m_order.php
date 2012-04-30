@@ -84,8 +84,9 @@ class M_Order extends MY_Model{
 		array('field'=>'createdate_to','label'=>'lang:order.label_create_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'price_from','label'=>'lang:order.label_price','rules'=>'greater_than[-1]|max_length[12]'),
 		array('field'=>'price_to','label'=>'lang:order.label_price','rules'=>'greater_than[-1]|max_length[12]'),
+		array('field'=>'price_order','label'=>'price order','rules'=>'numeric|max_length[2]'),
 		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean'),
-		array('field'=>'description_type','label'=>'lang:order.label_description_type','rules'=>'alpha')
+		array('field'=>'description_type','label'=>'description_type','rules'=>'alpha')
 	);
 
 	/**
@@ -268,6 +269,7 @@ class M_Order extends MY_Model{
 		$number = $value['number'];
 		$number_to = $value['number_to'];
 		$number_from = $value['number_from'];
+		$number_order = $value['number_order'];
 
 		if(!empty($number) && is_numeric($number) && $number >= 0)
 		{
@@ -281,6 +283,11 @@ class M_Order extends MY_Model{
 
 		if(!empty($number_from) && is_numeric($number_from) && $number_from >= 0){
 			$this->db->where('orders.number >=',$number_from);
+		}
+
+		if(!empty($number_order) && is_numeric($number_order) ){
+			if($number_order >= 1) $this->db->order_by('orders.number','ASC');
+			else $this->db->order_by('orders.number','DESC');
 		}
 	}
 
@@ -302,12 +309,19 @@ class M_Order extends MY_Model{
 
 		$price_from = $value['price_from'];
 		$price_to   = $value['price_to'];
+		$price_order = $value['price_order'];
+
 		if(is_numeric($price_from) && $price_from >= 0 ){
 			$this->db->where('orders.price >=',$price_from);
 		}
 
 		if(is_numeric($price_to) && $price_to >= 0){
 			$this->db->where('orders.price <=',$price_to);
+		}
+
+		if(!empty($price_order) && is_numeric($price_order)){
+			if($price_order >= 1) $this->db->order_by('orders.price','ASC');
+			else $this->db->order_by('orders.price','DESC');
 		}
 	}
 
@@ -357,12 +371,17 @@ class M_Order extends MY_Model{
 	{
 		$createdate_from = $value['createdate_from'];
 		$createdate_to   = $value['createdate_to'];
+		$createdate_order = $value['createdate_order'];
 
 		if(!empty($createdate_from)){
 			$this->db->where('orders.create_date >=',$createdate_from);
 		}
 		if(!empty($createdate_to)){
 			$this->db->where('orders.create_date <=',$createdate_to);
+		}
+		if(!empty($createdate_order) && is_numeric($createdate_order)){
+			if($createdate_order >= 1)$this->db->order_by('orders.create_date','ASC');
+			else $this->db->order_by('orders.create_date','DESC');
 		}
 	}
 
@@ -600,6 +619,18 @@ class M_Order extends MY_Model{
 		$this->build_count_select($filter);
 		$this->where_in('users.id',array($user_id));
 		return $this->get_count_result();	
+	}
+
+	public function get_all_off_orders($user_id,$filter=array(),$limit=false,$offset=false,$fields=array())
+	{
+		$this->where('orders.state',M_Order::ORDER_STATE_OFF);
+		return $this->get_all_orders_user($user_id,$filter,$limit,$offset,$fields);
+	}
+
+	public function count_all_off_orders($user_id,$filter)
+	{
+		$this->where('orders.state',M_Order::ORDER_STATE_OFF);
+		return $this->count_all_user_orders($user_id,$filter);
 	}
 
 	/**

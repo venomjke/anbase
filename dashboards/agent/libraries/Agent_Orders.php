@@ -78,6 +78,19 @@ class Agent_Orders
 	}
 
 	/**
+	 * Выбор всех завершенных заявок
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_all_off_orders()
+	{
+		$order_fields = array('number','create_date','finish_date','category','deal_type','description','price','phone');
+		$items        = $this->ci->orders_organization->get_all_off_orders($this->ci->agent_users->get_user_id(),$order_fields);
+		return array('count' => count($items), 'total'=>$this->ci->orders_organization->count_all_off_orders($this->ci->agent_users->get_user_id()),'items'=>$items);
+	}
+
+	/**
 	 * Редактирование заявки
 	 *
 	 * @return void

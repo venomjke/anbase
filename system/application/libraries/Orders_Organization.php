@@ -66,7 +66,7 @@ class Orders_Organization
 		/*
 		* Извлекаем параметры фильтра, валидируем их, а потом засовываем в массив
 		*/
-		$filter_fields = array('number','number_from','number_to','phone','category','dealtype','createdate_from','createdate_to','price_from','price_to','description','regions','metros','description_type');
+		$filter_fields = array('number','number_from','number_to','number_order','phone','category','dealtype','createdate_from','createdate_to','createdate_order','price_from','price_to','price_order','description','regions','metros','description_type');
 
 		/*
 		* [my_notice] Не самый лучший способ проверить данные фильтра, но другого не придумал.
@@ -82,12 +82,12 @@ class Orders_Organization
 			* собираем фильтр и возвращаем
 			*/
 			return array(
-				'number' => array('number'=>$this->ci->input->post('number'),'number_from'=>$this->ci->input->post('number_from'),'number_to'=>$this->ci->input->post('number_to')),
+				'number' => array('number'=>$this->ci->input->post('number'),'number_from'=>$this->ci->input->post('number_from'),'number_to'=>$this->ci->input->post('number_to'),'number_order'=>$this->ci->input->post('number_order')),
 				'phone'  => $this->ci->input->post('phone'),
 				'category' => $this->ci->input->post('category'),
 				'dealtype' => $this->ci->input->post('dealtype'),
-				'createdate' => array('createdate_from'=>$this->ci->input->post('createdate_from'),'createdate_to'=>$this->ci->input->post('createdate_to')),
-				'price' => array('price_from'=>$this->ci->input->post('price_from'),'price_to'=>$this->ci->input->post('price_to')),
+				'createdate' => array('createdate_from'=>$this->ci->input->post('createdate_from'),'createdate_to'=>$this->ci->input->post('createdate_to'),'createdate_order'=>$this->ci->input->post('createdate_order')),
+				'price' => array('price_from'=>$this->ci->input->post('price_from'),'price_to'=>$this->ci->input->post('price_to'),'price_order'=>$this->ci->input->post('price_order')),
 				'description' => array('words'=>$this->ci->input->post('description'),'type'=>$this->ci->input->post('description_type')),
 				'regions' => $this->ci->input->post('regions'),
 				'metros'  => $this->ci->input->post('metros')
@@ -292,4 +292,34 @@ class Orders_Organization
 		return $this->ci->m_order->count_all_user_orders($user_id,$filters);
 	}
 	
+	/**
+	 * Выбор всех завершенных заявок агента
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_all_off_orders($user_id,$fields=array())
+	{
+		$filters = $this->fetch_filter();
+
+		$limit  = false;
+		$offset = false;
+
+		//print_r($this->ci->input->get('regions'));
+		//print_r($this->ci->input->get('metros'));
+
+		$this->fetch_limit($limit,$offset);
+
+		$orders = $this->ci->m_order->get_all_off_orders($user_id,$filters,$limit,$offset,$fields);
+
+		$this->bind_regions($orders);
+		$this->bind_metros($orders);
+		return $orders;
+	}
+
+	public function count_all_off_orders($user_id)
+	{
+		$filters = $this->fetch_filter();
+		return $this->ci->m_order->count_all_off_orders($user_id,$filters);
+	}
 } // END class OrdersOrganization

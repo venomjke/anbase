@@ -18,13 +18,16 @@
     var number = '';
     var number_to = '';
     var number_from = '';
+    var number_order='';
     var phone  = '' ;
     var category = '';
     var dealtype = '';
     var price_to ='';
     var price_from ='';
+    var price_order = '';
     var createdate_to ='';
     var createdate_from = '';
+    var createdate_order='';
     var description ='';
     var description_type ='';
     var metros = {};
@@ -55,7 +58,9 @@
     function setNumberFrom(f_number_from){
       number_from = f_number_from;
     }
-
+    function setNumberOrder(f_number_order){
+      number_order = f_number_order?1:-1;
+    }
     function setPhone(f_phone){
       phone = f_phone;
     }
@@ -71,11 +76,12 @@
     function setPriceTo(f_price_to){
         price_to = f_price_to;
     }
-
     function setPriceFrom(f_price_from){
       price_from = f_price_from;
     }
-
+    function setPriceOrder(f_price_order){
+      price_order = f_price_order?1:-1;
+    }
     function setCreateDateFrom(f_createdate_from){
       createdate_from = f_createdate_from;
     }
@@ -84,7 +90,9 @@
 
       createdate_to = f_createdate_to;
     }
-
+    function setCreateDateOrder(f_createdate_order){
+      createdate_order = f_createdate_order?1:-1;
+    }
     function setDescription(f_description){
       description = f_description;
     }
@@ -106,6 +114,12 @@
     function applyFilter(top,bottom){
       clear();
       ensureData(top,bottom);
+    }
+
+    function resetSortOrder(){
+      number_order = '';
+      createdate_order = '';
+      price_order = '';
     }
 
     function isDataLoaded(from, to) {
@@ -160,13 +174,16 @@
         number:number,
         number_from:number_from,
         number_to:number_to,
+        number_order:number_order,
         phone:phone,
         category:category,
         dealtype:dealtype,
         price_to:price_to,
         price_from:price_from,
+        price_order:price_order,
         createdate_to:createdate_to,
         createdate_from:createdate_from,
+        createdate_order:createdate_order,
         description:description,
         description_type:description_type,
         metros:metros,
@@ -241,18 +258,22 @@
       "setNumber":setNumber,
       "setNumberTo":setNumberTo,
       "setNumberFrom":setNumberFrom,
+      "setNumberOrder":setNumberOrder,
       "setPhone":setPhone,
       "setCategory":setCategory,
       "setDealtype":setDealtype,
       "setPriceFrom":setPriceFrom,
       "setPriceTo":setPriceTo,
+      "setPriceOrder":setPriceOrder,
       "setCreateDateTo":setCreateDateTo,
       "setCreateDateFrom":setCreateDateFrom,
+      "setCreateDateOrder":setCreateDateOrder,
       "setDescription":setDescription,
       "setDescriptionType":setDescriptionType,
       "setRegions":setRegions,
       "setMetros":setMetros,
       "applyFilter":applyFilter,
+      "resetSortOrder":resetSortOrder,
       // methods
       "clear": clear,
       "isDataLoaded": isDataLoaded,

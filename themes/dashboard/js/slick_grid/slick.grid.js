@@ -464,7 +464,7 @@ if (typeof Slick === "undefined") {
         }
 
         if (m.sortable) {
-          header.append("<span class='slick-sort-indicator' />");
+          header.append("<span class='slick-sort-indicator' style />");
         }
 
         if (options.showHeaderRow) {
