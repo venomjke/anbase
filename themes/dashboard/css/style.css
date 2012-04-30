@@ -415,3 +415,6 @@ div.zagolovok   {
  #orders_grid .active{
 	border:1px #000 solid;
 }
+.error{
+	color:red;
+}

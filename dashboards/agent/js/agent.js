@@ -103,8 +103,11 @@ var agent = {
 								if(response.data.errors && response.data.errorType){
 									if(response.data.errorType == 'validation'){
 										for(var i in response.data.errors){
-											$('#profile').find('input[name="'+i+'"]').parent().prepend(response.data.errors[i])
+											$('#profile').find('input[name="'+i+'"]').parent().prepend('<div class="error">'+response.data.errors[i]+'</div>');
 										}
+										setTimeout(function(){
+											$('#profile .error').remove();
+										},5000);
 									}else{
 										common.showErrorMsg(response.data.errors[0]);
 									}
