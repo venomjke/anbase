@@ -116,19 +116,30 @@
 			model.applyFilter(vp.top,vp.bottom)
 		});
 
-		$('#f_number').click(function(){ event.stopImmediatePropagation(); });
+		
+		$('#f_number').keyfilter(/[\d]/);
 		$('#f_number').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
 				vp = grid.getViewport();
 				model.setNumber($(this).val());
+				model.setPhone($('#f_phone'));
 				model.applyFilter(vp.top,vp.bottom);
-			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
-				event.preventDefault();
 			}
-			return false;
 		});
 		
+		$('#f_phone').keyfilter(/[\+\d]/);
+		$('#f_phone').keydown(function(event){
+			if(event.which == 13){
+				event.preventDefault();
+				vp = grid.getViewport();
+				model.setPhone($(this).val());
+				model.setNumber($('#f_number').val());
+				model.applyFilter(vp.top,vp.bottom);
+			}
+		});
+
+		$('#f_price_to').keyfilter(/[\d\.]/);
 		$('#f_price_to').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
@@ -136,12 +147,10 @@
 				model.setPriceTo($(this).val());
 				model.setPriceFrom($('#f_price_from').val());
 				model.applyFilter(vp.top,vp.bottom);
-			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
-				event.preventDefault();
 			}
 		});
 
-
+		$('#f_price_from').keyfilter(/[\d\.]/);
 		$('#f_price_from').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
@@ -153,7 +162,6 @@
 				event.preventDefault();
 			}
 		});
-
 
 		$('#f_createdate_to').change(function(event){
 			vp = grid.getViewport();

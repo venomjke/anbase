@@ -269,7 +269,7 @@ $(function(){
 		return {
 			init:function(){
 				var $container = $('body');
-				$wrapper = $('<div style="z-index:9999;opacity:0.95;width: 870px;-moz-border-radius: 10px 10px 10px 10px;-webkit-border-radius: 10px 10px 10px 10px;border-radius: 10px 10px 10px 10px;border: 1px solid #666666;background-color: #FFFFFF;position: absolute;font-family: Arial,Helvetica, sans-serif;font-size: 11px;">').appendTo($container);
+				$wrapper = $('<div style="z-index:9999;opacity:0.95;width: 850px;-moz-border-radius: 10px 10px 10px 10px;-webkit-border-radius: 10px 10px 10px 10px;border-radius: 10px 10px 10px 10px;border: 1px solid #666666;background-color: #FFFFFF;position: absolute;font-family: Arial,Helvetica, sans-serif;font-size: 11px;">').appendTo($container);
 				$save_btn = $('<button id="save_btn">Сохранить</button>');
 				$cancel_btn = $('<button id="cancel_btn">Отмена</button>"');
 				$reset_btn= $('<button id="reset">Сбросить</button>')
@@ -312,7 +312,7 @@ $(function(){
 						$area.data('transshipment',element.metro_transshipment);
 						$map.append($area);
 
-						if(cnt % 21 == 0){
+						if(cnt % 23 == 0){
 							$td  = $('<td valign="top">');
 							$td.appendTo($list_td);
 						}
@@ -394,13 +394,13 @@ $(function(){
 					}
 				};
 
-				/*
-				var td_width = 100/$list_td.find('td').length;
+				
+				//var td_width = 100/$list_td.find('td').length;
 
 				$list_td.find('td').each(function(){
-					$(this).attr('width',td_width+"%");
+					$(this).attr('width',"120px");
 				});
-				*/
+				
 				$clone_save_btn = $save_btn.clone();
 				$clone_cancel_btn = $cancel_btn.clone();
 				$clone_reset_btn= $reset_btn.clone();

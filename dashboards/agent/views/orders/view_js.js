@@ -12,6 +12,11 @@ $(function(){
 		  return wrap.html();
 		};
 
+		function RegionFormatter(row,cell,value,columnDef,dataContext){
+			if(!value)
+				return "";
+		}
+
 		/*
 		* Настройки грида
 		*/
@@ -41,6 +46,7 @@ $(function(){
 		*/
 		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=my',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
+		common.grid = grid;
 
 		/*
 		* Событие сортировки
@@ -187,32 +193,29 @@ $(function(){
 			model.applyFilter(vp.top,vp.bottom)
 		});
 
-		$('#f_number').click(function(){ event.stopImmediatePropagation(); });
+		$('#f_number').keyfilter(/[\d]/);
 		$('#f_number').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
 				vp = grid.getViewport();
 				model.setNumber($(this).val());
+				model.setPhone($('#f_phone'));
 				model.applyFilter(vp.top,vp.bottom);
-			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
-				event.preventDefault();
 			}
-			return false;
 		});
-
-		$('#f_phone').click(function(){event.stopImmediatePropagation();})
+		
+		$('#f_phone').keyfilter(/[\+\d]/);
 		$('#f_phone').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
 				vp = grid.getViewport();
 				model.setPhone($(this).val());
+				model.setNumber($('#f_number').val());
 				model.applyFilter(vp.top,vp.bottom);
-			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
-				event.preventDefault();
 			}
-			return false;
 		});
 
+		$('#f_price_to').keyfilter(/[\d\.]/);
 		$('#f_price_to').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
@@ -220,10 +223,10 @@ $(function(){
 				model.setPriceTo($(this).val());
 				model.setPriceFrom($('#f_price_from').val());
 				model.applyFilter(vp.top,vp.bottom);
-			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
-				event.preventDefault();
 			}
 		});
+
+		$('#f_price_from').keyfilter(/[\d\.]/);
 		$('#f_price_from').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();

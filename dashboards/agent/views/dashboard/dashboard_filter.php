@@ -1,5 +1,5 @@
 <div class="filter">
-  <table id="filter_header" width="100%" border="0" cellspacing="4" cellpadding="0">
+  <table width="100%" border="0" cellspacing="4" cellpadding="0">
     <tr>
       <td><b>Фильтр</b>&nbsp;по&nbsp;номеру:</td>
       <td><input style="width:100px" type="text" id="f_number" /></td>
@@ -8,8 +8,8 @@
         <td> по&nbsp;телефону:</td>
       <td><input type="text" name="phone" id="f_phone" /></td>
       <?php endif; ?>
-      <td style="width:80%">&nbsp;</td>
-      <td colspan="2"><a href="#" style="width:150px" class="svernut" onclick="return false;"><img id="filter_toggle" src="<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>" class="down"/></a></td>
+      <td class="filter_header" style="width:80%">&nbsp;</td>
+      <td class="filter_header" colspan="2"><a href="#" style="width:150px" class="svernut" onclick="return false;"><img id="filter_toggle" src="<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>" class="down"/></a></td>
     </tr> 
   </table>
 
@@ -30,7 +30,7 @@
       </tr>
       <tr>
         <td>Объект:</td>
-        <td><select style="width:120px" id="f_category">
+        <td><select tabindex="5" style="width:120px" id="f_category">
             <option value=""></option>
         <?php 
           foreach($this->m_order->get_category_list() as $category){
@@ -41,16 +41,16 @@
         ?>
         </select></td>
         <td class="l">От:</td>
-        <td><input style="width:100px" type="text" id="f_price_from"/></td>
+        <td><input tabindex="7" style="width:100px" type="text" id="f_price_from"/></td>
         <td class="l">С:</td>
-        <td><input style="width:130px" type="text" class="date" id="f_createdate_from"/></td>
-        <td width="50%" rowspan="2" valign="top" class="l"><textarea id="f_description" style="width:90%" rows="3"></textarea></td>
+        <td><input tabindex="9" style="width:130px" type="text" class="date" id="f_createdate_from"/></td>
+        <td tabindex="11" width="50%" rowspan="2" valign="top" class="l"><textarea id="f_description" style="width:90%" rows="3"></textarea></td>
         <td>От:</td>
-        <td><input type="text" id="f_number_from" style="width:100px"/></td>
+        <td><input tabindex="12" type="text" id="f_number_from" style="width:100px"/></td>
       </tr>
       <tr>
         <td>Вид&nbsp;сделки:</td>
-        <td><select style="width:120px" id="f_dealtype">
+        <td><select tabindex="6" style="width:120px" id="f_dealtype">
             <option value=""></option>
         <?php 
           foreach($this->m_order->get_dealtype_list() as $deal_type){
@@ -61,11 +61,11 @@
         ?>
         </select></td>
         <td class="l">До:</td>
-        <td><input type="text" style="width:100px" id="f_price_to"/></td>
+        <td><input tabindex="8" type="text" style="width:100px" id="f_price_to"/></td>
         <td class="l">До:</td>
-        <td><input style="width:130px" type="text" class="date" id="f_createdate_to"/></td>
+        <td><input tabindex="10" style="width:130px" type="text" class="date" id="f_createdate_to"/></td>
         <td>До:</td>
-        <td><input type="text" id="f_number_to" style="width:100px"/></td>
+        <td><input tabindex="13" type="text" id="f_number_to" style="width:100px"/></td>
       </tr>
       <tr>
         <td colspan="2"><input id="search_btn" type="button"  style="cursor:pointer; padding:5px" value="подобрать" /></td>
@@ -81,18 +81,16 @@
   </div>
   <script type="text/javascript">
     $(function(){
-      $('#filter_header').click(function(e){
-        if(!e.isImmediatePropagationStopped()){
-          $('#dashboard_filter').slideToggle("fast");
-          img=$('#filter_toggle');
-          if(img.attr('class')=='down'){
-              img.attr('src','<?php echo site_url("themes/dashboard/images/strelkavverh.png"); ?>'); 
-              img.attr('class','up');
-          }else{
-              img.attr('class','down');
-              img.attr('src','<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>');
-          };
-        }
+      $('.filter_header').click(function(e){
+        $('#dashboard_filter').slideToggle("fast");
+        img=$('#filter_toggle');
+        if(img.attr('class')=='down'){
+            img.attr('src','<?php echo site_url("themes/dashboard/images/strelkavverh.png"); ?>'); 
+            img.attr('class','up');
+        }else{
+            img.attr('class','down');
+            img.attr('src','<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>');
+        };
       });
 
       $.datepicker.setDefaults($.datepicker.regional["ru"]);

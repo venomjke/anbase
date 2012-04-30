@@ -299,8 +299,9 @@ class M_Order extends MY_Model{
 	 **/
 	protected function set_phone_filter($value)
 	{
-		if(!empty($value))
-			$this->db->where('orders.phone',$value);
+		if(!empty($value) && is_numeric($value)){
+			$this->db->like('orders.phone',(float)$value);			
+		}
 	}
 	/**
 	*	Фильтр для поля Price
@@ -611,6 +612,7 @@ class M_Order extends MY_Model{
 	 **/
 	public function get_all_orders_user ($user_id,$filter = array(),$limit = false,$offset = false,$fields = array())
 	{
+		$this->where('orders.state',M_Order::ORDER_STATE_ON);
 		return $this->get_all_orders_users(array($user_id),$filter,$limit,$offset,$fields);
 	}
 
@@ -618,19 +620,23 @@ class M_Order extends MY_Model{
 	{
 		$this->build_count_select($filter);
 		$this->where_in('users.id',array($user_id));
+		$this->where('orders.state',M_Order::ORDER_STATE_ON);
 		return $this->get_count_result();	
 	}
 
 	public function get_all_off_orders($user_id,$filter=array(),$limit=false,$offset=false,$fields=array())
 	{
 		$this->where('orders.state',M_Order::ORDER_STATE_OFF);
-		return $this->get_all_orders_user($user_id,$filter,$limit,$offset,$fields);
+		return $this->get_all_orders_users(array($user_id),$filter,$limit,$offset,$fields);
 	}
 
 	public function count_all_off_orders($user_id,$filter)
 	{
+		
+		$this->build_count_select($filter);
+		$this->where_in('users.id',array($user_id));
 		$this->where('orders.state',M_Order::ORDER_STATE_OFF);
-		return $this->count_all_user_orders($user_id,$filter);
+		return $this->get_count_result();	
 	}
 
 	/**

@@ -63,10 +63,41 @@
 
 
       var list_string = "";
+      Slick.Formatters.RegionsList.show_full_list = function(event,row,cell,value){
+        var tooltip_id = '.tooltip_list_'+row+'_'+cell;
+        if($(tooltip_id).length <= 0){
+          var tooltip = $('<div class="tooltip_list_'+row+'_'+cell+' cell_tooltip" style="display:none;width:450">');
+          for(var i in value){
+            if(common.regions[value[i]])
+              tooltip.append(common.regions[value[i]]);
+            tooltip.append('<br/>');
+          }
+          $('body').append(tooltip);  
+          tooltip.css('position','absolute');
+          tooltip.css('top',event.pageY-tooltip.outerHeight(true)-20);
+          tooltip.css('left',event.pageX-tooltip.outerWidth()-20);
+          tooltip.css('display','block');
+        }
+      }
+
+      Slick.Formatters.RegionsList.hide_full_list = function(event,row,cell){
+        $('.tooltip_list_'+row+'_'+cell).remove();
+      }
+
       for(var i in list){
         if(common.regions[list[i]])
           list_string += common.regions[list[i]]+"/";
       };
+
+      if(common.grid && list_string != ""){
+        var $wrapper = $('<div style="height:25px"/>');
+        $wrapper.attr('onclick','Slick.Formatters.RegionsList.show_full_list(event,'+row+','+cell+',common.grid.getDataItem('+row+').regions);');
+        $wrapper.attr('onmouseout',' Slick.Formatters.RegionsList.hide_full_list(event,'+row+','+cell+');');
+        $wrapper.text(list_string.substr(0,list_string.length-1));
+        var d=$('<div>');
+        d.append($wrapper);
+        return d.html();
+      } 
       return list_string.substr(0,list_string.length-1);
   };
 
