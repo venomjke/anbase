@@ -192,16 +192,7 @@
         limit:limit
       }
 
-      /*
-      if (h_request != null) {
-        clearTimeout(h_request);
-      }
       
-      h_request = setTimeout(function () {
-       
-      }, 50);
-      */
-
       for (var i = fromPage; i <= toPage; i++)
           data[i * options.PageSize] = null; // null indicates a 'requested but not available yet'
 

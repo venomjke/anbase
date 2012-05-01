@@ -102,10 +102,15 @@
   };
 
   function MetrosListFormatter(row,cell,list,columnDef,dataContext){
-    if(!list || !(list instanceof Object))
+    if(!list && (dataContext.any_metro=="0") || !(list instanceof Object) )
       return "";
 
       var list_string = "";
+
+      if(dataContext.any_metro == "1"){
+        list_string = "Любое/";
+      }
+
       for(var i in list){
          if(common.metros.hasOwnProperty(i)){
           for(var j in list[i]){
@@ -115,6 +120,7 @@
           }
         }
       };
+
       return list_string.substr(0,list_string.length-1);
   };
 

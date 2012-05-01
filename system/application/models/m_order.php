@@ -99,13 +99,11 @@ class M_Order extends MY_Model{
 	{
 		parent::__construct();
 		/*
-		*
 		*	Определение структура модели
-		*
 		*/
 		$this->table       = 'orders';
 		$this->primary_key = 'id';
-		$this->fileds      = array('id','number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id');
+		$this->fileds      = array('id','number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id','any_metro');
 		$this->result_mode = 'object';
 		/*
 		*
@@ -189,6 +187,14 @@ class M_Order extends MY_Model{
 		return false;
 	}
 
+	public function check_any_metro($any_metro)
+	{
+		if(!empty($any_metro) && $any_metro == 1){
+			return true;
+		}else{
+			return 0;
+		}
+	}
 	/**
 	 * Проверка состояния
 	 *
@@ -419,8 +425,8 @@ class M_Order extends MY_Model{
 						$metro_ids[]= $metro_id;							
 					}
 			}
-			$this->db->join("orders_metros","orders.id = orders_metros.order_id");
-			$this->db->where("orders_metros.metro_id IN (".implode(',',$metro_ids).")");
+			$this->db->join("orders_metros","orders.id = orders_metros.order_id","LEFT");
+			$this->db->where("(`orders_metros`.`metro_id` IN (".implode(',',$metro_ids).") OR `orders`.`any_metro`=1)");
 		}
 	}
 
@@ -464,7 +470,7 @@ class M_Order extends MY_Model{
 		/*
 		* Можно указывать какие поля нужно выбрать. По умолчанию выбираются все.
 		*/
-		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state');
+		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','any_metro');
 		$fields = array_flip(array_intersect_key(array_flip($fields),array_flip($allow_fields)));
 
 		if(empty($fields)) $fields = $allow_fields;

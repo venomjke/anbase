@@ -309,3 +309,15 @@ input.button:hover    {
 .podval a:hover {
 	text-decoration: underline;
 }
+
+#recaptcha_area, #recaptcha_table{
+	width:290px!important;
+}
+.recaptchatable #recaptcha_image {
+	width:260px;
+	margin:none;
+}
+.loginField{
+	width:290px;
+	overflow:hidden;
+}

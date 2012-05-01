@@ -59,7 +59,7 @@ class Agent_Orders
 		/*
 		* Поля, которые нужно выбрать
 		*/
-		$order_fields = array('number','create_date','category','deal_type','description','price','phone');
+		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro');
 		$items        = $this->ci->orders_organization->get_all_user_orders($this->ci->agent_users->get_user_id(),$order_fields);
 		return array('count'=>count($items),'total'=>$this->ci->orders_organization->count_all_user_orders($this->ci->agent_users->get_user_id()),'items'=>$items);
 	}
@@ -72,7 +72,7 @@ class Agent_Orders
 	 **/
 	public function get_all_free_orders()
 	{
-		$order_fields = array('number','create_date','category','deal_type','description','price');
+		$order_fields = array('number','create_date','category','deal_type','description','price','any_metro');
 		$items        = $this->ci->orders_organization->get_all_free_orders($this->ci->agent_users->get_org_id(),$order_fields);
 		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_free_orders($this->ci->agent_users->get_org_id()),'items' =>$items );
 	}
@@ -85,7 +85,7 @@ class Agent_Orders
 	 **/
 	public function get_all_off_orders()
 	{
-		$order_fields = array('number','create_date','finish_date','category','deal_type','description','price','phone');
+		$order_fields = array('number','create_date','finish_date','category','deal_type','description','price','phone','any_metro');
 		$items        = $this->ci->orders_organization->get_all_off_orders($this->ci->agent_users->get_user_id(),$order_fields);
 		return array('count' => count($items), 'total'=>$this->ci->orders_organization->count_all_off_orders($this->ci->agent_users->get_user_id()),'items'=>$items);
 	}
@@ -101,7 +101,7 @@ class Agent_Orders
 		/*
 		* правила валидации для полей
 		*/
-		$order_field = array('number','create_date','deal_type','category','price','description','phone');
+		$order_field = array('number','create_date','deal_type','category','price','description','phone','any_metro');
 		$metro_field = array('metros');
 		$region_field = array('regions');
 
@@ -114,28 +114,28 @@ class Agent_Orders
 			if($this->ci->input->post('metros')){
 				/*
 				* обращаемся к orders_metros
+				* т.к во время передачи metros передается еще и any_metro флаг
 				*/
 				$metros = $this->ci->input->post('metros');
 				$this->ci->m_order_metro->bind_order_metros($this->ci->input->post('id'),$metros);
-			}else if($this->ci->input->post('regions')){
+			}
+
+			if($this->ci->input->post('regions')){
 				/*
 				* обращаемся к orders_regions
 				*/
 				$regions = $this->ci->input->post('regions');
 				$this->ci->m_order_region->bind_order_regions($this->ci->input->post('id'),$regions);
-			}else{
-				/*
-				* стандартное редактирование
-				*/
-				$data = array_intersect_key($this->ci->input->post(), array_flip($order_field));
-				if(!empty($data))
-					$this->ci->m_agent_order->update($this->ci->input->post('id'),$data,true);
-				else
-					throw new AnbaseRuntimeException(lang('common.not_legal_data'));
 			}
+
+			/*
+			* стандартное редактирование
+			*/
+			$data = array_intersect_key($this->ci->input->post(), array_flip($order_field));
+			if(!empty($data))
+				$this->ci->m_agent_order->update($this->ci->input->post('id'),$data,true);
 			return;
 		}
-
 		$errors_validation = array();
 		if(has_errors_validation($this->ci->m_agent_order->get_edit_validation_fields(),$errors_validation)){
 			throw new ValidationException($errors_validation);

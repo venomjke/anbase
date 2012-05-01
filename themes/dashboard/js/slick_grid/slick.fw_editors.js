@@ -110,14 +110,34 @@
 
 	function AnbaseMetrosEditor(args){
 		var $wrapper;
-
+		var $any_metro_checkbox;
 		var defaultValue;
 		var scope = this;
 		var widget;
 
+		var isChangedAnyMetro = false;
+		var isChangedMetroList = false;
+
 		this.init = function(){
 			var $container = $('body');
 			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'><button id='metro-map'>По карте</button><button id='metro-list'>По списку</button></div>").appendTo($container);
+
+			$any_metro_label    = $('<label for="any_metro_checkbox">Любое</label>')
+			$any_metro_checkbox = $('<input id="any_metro_checkbox" type="checkbox" value="'+args.item.any_metro+'"/>');
+			if(args.item.any_metro == "1"){
+				$any_metro_checkbox.attr('checked','checked');
+			}
+
+			$any_metro_checkbox.click(function(){
+				if($(this).val()=="1"){
+					$(this).val("0");
+				}else{
+					$(this).val("1");
+				}
+			});
+
+			$wrapper.append($any_metro_checkbox);
+			$wrapper.append($any_metro_label);
 
 			$wrapper.find('#metro-map').click(function(){
 				if(!widget){
@@ -182,28 +202,40 @@
 		};
 
 		this.applyValue = function(item,state){
-			delete item.metros;
-			item.metros = {};
-			for(var i in state){
-				if(state[i].length)
-					item.metros[i] = state[i].slice(0);
+
+			if(isChangedMetroList){
+				delete item.metros;
+				item.metros = {};
+				for(var i in state){
+					if(state[i].length)
+						item.metros[i] = state[i].slice(0);
+				}
+				/*
+				* [my_notice: Не самое лучшее решение на мой взгляд, нужно подумать еще]
+				* В чем суть.
+				* Когда мы обнуляем текущий список выбранных метро, то нужно "что-то" отправить на сервер, что бы там
+				* удалить список выбранных метро, и ничего не записывать.
+				*/
+				if(common.isEmptyObj(item.metros)){
+					item.metros = {"0":[0]};
+				}
 			}
-			/*
-			* [my_notice: Не самое лучшее решение на мой взгляд, нужно подумать еще]
-			* В чем суть.
-			* Когда мы обнуляем текущий список выбранных метро, то нужно "что-то" отправить на сервер, что бы там
-			* удалить список выбранных метро, и ничего не записывать.
-			*/
-			if(common.isEmptyObj(item.metros)){
-				item.metros = {"0":[0]};
+
+			if(isChangedAnyMetro){
+				item.any_metro = $any_metro_checkbox.val();				
 			}
 		};
 
 		this.isValueChanged = function(){
-			if(!widget){
-				return false;
+			if($any_metro_checkbox.val() != args.item.any_metro){
+				isChangedAnyMetro = true;
 			}
-			return widget.isValueChanged();
+
+			if(widget && widget.isValueChanged()){
+				isChangedMetroList = true;
+			}
+
+			return isChangedAnyMetro || isChangedMetroList;
 		};
 
 		this.validate = function(){

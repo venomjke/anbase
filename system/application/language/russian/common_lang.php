@@ -36,6 +36,7 @@ $lang['order.label_delegate_date'] = 'Дата делегирования';
 $lang['order.label_finish_date'] = 'Дата закрытия';
 $lang['order.label_phone'] = 'Телефон';
 $lang['order.label_state'] = 'Состояние';
+$lang['order.label_any_metro'] = 'Любое метро';
 
 $lang['order.validation.valid_state'] = 'Поле "%s" содержит неверное состояние';
 $lang['order.validation.valid_dealtype'] = 'Поле "%s" содержит неверный вид сделки';

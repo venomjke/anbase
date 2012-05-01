@@ -113,6 +113,7 @@ $(function(){
 		* Обработка события изменения ячейки
 		*/
 		grid.onCellChange.subscribe(function(e,handle){
+			console.debug(handle);
 			var data = {};
 			var item = handle.item;
 			var cell = handle.cell;
@@ -120,6 +121,14 @@ $(function(){
 
 			data['id']  = item.id;
 			data[field] = item[field];
+
+			/*
+			* [my_notice]Наверно, стоит подумать над тем как нормально сохранять эти данные
+			*/
+			if(field == "metros"){
+				data["any_metro"] = item["any_metro"];
+			}
+
 			$.ajax({
 				url:agent.baseUrl+'/?act=edit',
 				type:'POST',
