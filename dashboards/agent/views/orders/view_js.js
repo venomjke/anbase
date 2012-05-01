@@ -129,6 +129,10 @@ $(function(){
 				data["any_metro"] = item["any_metro"];
 			}
 
+			if(field == "regions"){
+				data["any_region"] = item["any_region"];
+			}
+
 			$.ajax({
 				url:agent.baseUrl+'/?act=edit',
 				type:'POST',

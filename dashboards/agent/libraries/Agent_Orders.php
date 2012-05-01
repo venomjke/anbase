@@ -59,7 +59,7 @@ class Agent_Orders
 		/*
 		* Поля, которые нужно выбрать
 		*/
-		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro');
+		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region');
 		$items        = $this->ci->orders_organization->get_all_user_orders($this->ci->agent_users->get_user_id(),$order_fields);
 		return array('count'=>count($items),'total'=>$this->ci->orders_organization->count_all_user_orders($this->ci->agent_users->get_user_id()),'items'=>$items);
 	}
@@ -72,7 +72,7 @@ class Agent_Orders
 	 **/
 	public function get_all_free_orders()
 	{
-		$order_fields = array('number','create_date','category','deal_type','description','price','any_metro');
+		$order_fields = array('number','create_date','category','deal_type','description','price','any_metro','any_region');
 		$items        = $this->ci->orders_organization->get_all_free_orders($this->ci->agent_users->get_org_id(),$order_fields);
 		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_free_orders($this->ci->agent_users->get_org_id()),'items' =>$items );
 	}
@@ -85,7 +85,7 @@ class Agent_Orders
 	 **/
 	public function get_all_off_orders()
 	{
-		$order_fields = array('number','create_date','finish_date','category','deal_type','description','price','phone','any_metro');
+		$order_fields = array('number','create_date','finish_date','category','deal_type','description','price','phone','any_metro','any_region');
 		$items        = $this->ci->orders_organization->get_all_off_orders($this->ci->agent_users->get_user_id(),$order_fields);
 		return array('count' => count($items), 'total'=>$this->ci->orders_organization->count_all_off_orders($this->ci->agent_users->get_user_id()),'items'=>$items);
 	}
@@ -101,7 +101,7 @@ class Agent_Orders
 		/*
 		* правила валидации для полей
 		*/
-		$order_field = array('number','create_date','deal_type','category','price','description','phone','any_metro');
+		$order_field = array('number','create_date','deal_type','category','price','description','phone','any_metro','any_region');
 		$metro_field = array('metros');
 		$region_field = array('regions');
 

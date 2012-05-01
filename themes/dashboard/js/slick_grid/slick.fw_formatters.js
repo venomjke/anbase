@@ -58,18 +58,29 @@
   * Форматирование списка значений районов
   */
   function RegionsListFormatter(row,cell,list,columnDef,dataContext){
-    if( !list || !(list instanceof Object))
+    if( !list && dataContext.any_region == "0" || !(list instanceof Object))
         return "";
 
 
       var list_string = "";
-      Slick.Formatters.RegionsList.show_full_list = function(event,row,cell,value){
+
+      if(dataContext.any_region == "1"){
+        list_string = "Любой/";
+      }
+
+      Slick.Formatters.RegionsList.show_full_list = function(event,row,cell){
+        var regions = common.grid.getDataItem(row).regions;
+        var any_region = common.grid.getDataItem(row).any_region;
+
         var tooltip_id = '.tooltip_list_'+row+'_'+cell;
         if($(tooltip_id).length <= 0){
           var tooltip = $('<div class="tooltip_list_'+row+'_'+cell+' cell_tooltip" style="display:none;width:450">');
-          for(var i in value){
-            if(common.regions[value[i]])
-              tooltip.append(common.regions[value[i]]);
+          if(any_region == "1")
+            tooltip.append("Любой <br/>");
+
+          for(var i in regions){
+            if(common.regions[regions[i]])
+              tooltip.append(common.regions[regions[i]]);
             tooltip.append('<br/>');
           }
           $('body').append(tooltip);  
@@ -91,7 +102,7 @@
 
       if(common.grid && list_string != ""){
         var $wrapper = $('<div style="height:25px"/>');
-        $wrapper.attr('onclick','Slick.Formatters.RegionsList.show_full_list(event,'+row+','+cell+',common.grid.getDataItem('+row+').regions);');
+        $wrapper.attr('onclick','Slick.Formatters.RegionsList.show_full_list(event,'+row+','+cell+')');
         $wrapper.attr('onmouseout',' Slick.Formatters.RegionsList.hide_full_list(event,'+row+','+cell+');');
         $wrapper.text(list_string.substr(0,list_string.length-1));
         var d=$('<div>');

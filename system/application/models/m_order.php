@@ -38,6 +38,7 @@ class M_Order extends MY_Model{
 	/*
 	*
 	* Правила валидации "создание" записи
+	* чисто формальные, фактически для каждой панели должны будут быть свои правила
 	*/
 	public $insert_validation_rules = array(
 		array('field'=>'number','label'=>'lang:order.label_number', 'rules'=>'is_natural|max_length[9]'),
@@ -55,6 +56,7 @@ class M_Order extends MY_Model{
 	/*
 	*
 	* Правила валидации "изменение записи
+	* чисто формальные, фактически для каждой панели должны будут быть свои правила
 	*/
 	public $update_validation_rules = array(
 		array('field'=>'id','label'=>'ORDER_ID','rules'=>'required|is_natural_no_zero|valid_order_id'),
@@ -437,8 +439,8 @@ class M_Order extends MY_Model{
 			foreach($value as $region_id){
 				$region_ids[]=$region_id;
 			}
-			$this->db->join("orders_regions","orders.id = orders_regions.order_id");
-			$this->db->where("orders_regions.region_id IN (".implode(',',$region_ids).")");
+			$this->db->join("orders_regions","orders.id = orders_regions.order_id","LEFT");
+			$this->db->where("(`orders_regions`.`region_id` IN (".implode(',',$region_ids).") OR `orders`.`any_region`=1)");
 		}
 	}
 	/**
@@ -470,7 +472,7 @@ class M_Order extends MY_Model{
 		/*
 		* Можно указывать какие поля нужно выбрать. По умолчанию выбираются все.
 		*/
-		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','any_metro');
+		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','any_metro','any_region');
 		$fields = array_flip(array_intersect_key(array_flip($fields),array_flip($allow_fields)));
 
 		if(empty($fields)) $fields = $allow_fields;
