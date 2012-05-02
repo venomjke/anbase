@@ -6,15 +6,15 @@
 		<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/smoothness/jquery-ui.css"); ?>
 		<?php echo link_tag("themes/dashboard/css/style.css"); ?>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-		<script language="javascript">
+		<script type="text/javascript">
 			google.load("jquery","1.7.1");
 			google.load("jqueryui","1.8");
 		</script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/common.js"> </script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_map.js"></script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_list.js"></script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/region_map.js"></script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.noty.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/common.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_map.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_list.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/region_map.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.noty.js"> </script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.center.js"> </script>
 
 		<?php echo link_tag("themes/dashboard/css/noty/jquery.noty.css"); ?>
@@ -22,15 +22,20 @@
 		<?php echo link_tag("themes/dashboard/css/noty/noty_theme_mitgux.css"); ?>
 
 		<?php echo link_tag("themes/dashboard/css/slick.grid.css"); ?>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/jquery.event.drag-2.0.min.js"> </script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.core.js"> </script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.grid.js"> </script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.remotemodel.js"> </script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.formatters.js"> </script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.fw_formatters.js"> </script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.editors.js"> </script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.fw_editors.js"> </script>
-		<script language="javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.ui.datepicker-ru.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/jquery.event.drag-2.0.min.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.core.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.grid.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.checkboxselectcolumn.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.rowselectionmodel.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.cellrangeselector.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.cellrangedecorator.js"></script>
+		
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.remotemodel.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.formatters.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.fw_formatters.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.editors.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.fw_editors.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.ui.datepicker-ru.js"> </script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.center.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.maphilight.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.keyfilter.js?>"></script>

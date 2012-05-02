@@ -6,45 +6,26 @@ $(function(){
 			if(!value)
 				return "";
 		  var cell_content = $('<div id="cell_description" style="height:40px;overflow:hidden;">').html(value);
-		  cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',common.grid.getDataItem('+row+').description);');
+		  cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',manager.orders.grid.getDataItem('+row+').description);');
 		  cell_content.attr('onmouseout','common.hide_full_text(event,'+row+','+cell+');');
 		  var wrap = $('<div>').html(cell_content);
 		  return wrap.html();
 		};
-
-		function AgentFormatter(row,cell,value,columnDef,dataContext){
-			if(!value)
-				return '<a href="#"> Назначить агента </a>';
-			var agent_name = dataContext.user_name.charAt(0).toUpperCase();
-			var agent_middle_name = dataContext.user_middle_name.charAt(0).toUpperCase();
-			var agent_last_name = dataContext.user_last_name.charAt(0).toUpperCase()+dataContext.user_last_name.substr(1,dataContext.user_last_name.length);
-			return '<a href="#">'+agent_last_name+' '+agent_name+'.'+agent_middle_name+'</a>';
-		}
-
-
 		/*
 		* Настройки грида
 		*/
-		var options = {enableCellNavigation: true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
-		var checkboxSelector = new Slick.CheckboxSelectColumn({
-      		cssClass: "slick-cell-checkboxsel"
-    	});
-    	var columns = [];
-		columns.push(checkboxSelector.getColumnDefinition());
-
-		$.merge(columns,[
+		var options = {enableCellNavigation:true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
+		var columns = [
 			{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Integer,sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date,sortable:true},
-			{id: "category", name:"Объект", field:"category", editor:Slick.Editors.AnbaseCategory},
+			{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date, sortable:true},
+			{id: "category", name:"Тип объекта", field:"category", editor:Slick.Editors.AnbaseCategory},
 			{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
 			{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
 			{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
-			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer,sortable:true},	
-			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:200, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
-			{id: "phone", name:"Телефон", field:"phone",  editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone },
-			{id: "agent", name:"Агент", field:"user_id", formatter:AgentFormatter},
-			{id:"delegate_date", name:"Дата делегирования", field:"delegate_date", editor:Slick.Editors.Date}
-		]);	
+			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer, sortable:true},	
+			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
+			{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer}
+		];
 
 		/*
 		* некоторые данные
@@ -57,13 +38,8 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',PageSize:200});	
-		/*
-		* Создание грида
-		*/
+		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=my',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
-	    grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
-	    grid.registerPlugin(checkboxSelector);
 		common.grid = grid;
 
 		/*
@@ -98,6 +74,34 @@ $(function(){
 		grid.onBeforeEditCell.subscribe(function(e,handle){
 			handle.item.backupFieldValue = handle.item[handle.column.field]; 
 		});
+		
+		/*
+		[my_notice:] Комментирую тебя бро до наилучших времен, я обязательно тебя включу
+		grid.onHeaderClick.subscribe(function(e,columnHandle){
+			if(columnHandle){
+				switch(columnHandle.column.field){
+					case 'metros':
+						if(!metro_widget){
+							metro_widget = common.widgets.metro_map({metros:metros,onSave:metroOnSave,onCancel:metroOnCancel});
+							metro_widget.init();
+							metro_widget.load();
+						}else{
+							metroOnSave();
+						}
+					break;
+					case 'regions':
+						if(!region_widget){
+							region_widget = common.widgets.region_map({onSave:regionOnSave,onCancel:regionOnCancel});
+							region_widget.init();
+							region_widget.load(regions);
+						}else{
+							regionOnCancel();
+						}
+					break;
+				}
+			}
+		});
+		*/
 
 		/*
 		* Обработка события изменения ячейки
@@ -110,6 +114,7 @@ $(function(){
 
 			data['id']  = item.id;
 			data[field] = item[field];
+
 			/*
 			* [my_notice]Наверно, стоит подумать над тем как нормально сохранять эти данные
 			*/
@@ -120,9 +125,9 @@ $(function(){
 			if(field == "regions"){
 				data["any_region"] = item["any_region"];
 			}
-			
+
 			$.ajax({
-				url:admin.baseUrl+'/?act=edit',
+				url:manager.baseUrl+'/?act=edit',
 				type:'POST',
 				dataType:'json',
 				data:data,
@@ -130,7 +135,7 @@ $(function(){
 					if(response.code && response.data){
 						switch(response.code){
 							case 'success_edit_order':
-								common.showResultMsg(response.data);
+								common.showSuccessMsg(response.data);
 							break;
 							case 'error_edit_order':
 								/*
@@ -144,9 +149,9 @@ $(function(){
 								* Если ошибка уровня валидации, то дя поля выводим ошибку. Если ошибка уровня системы, то просто выводим ошибку
 								*/
 								if(response.data.errors[field] && typeof response.data.errors[field] == "string"){
-									common.showResultMsg(response.data.errors[field]);
+									common.showErrorMsg(response.data.errors[field]);
 								}else{
-									common.showResultMsg(response.data.errors[0]);
+									common.showErrorMsg(response.data.errors[0]);
 								}
 								return false;
 							break;
@@ -161,7 +166,6 @@ $(function(){
 				}
 			});
 		});
-
 		/*
 		* Обработка события неверного редактирования ячейки
 		*/
@@ -170,6 +174,7 @@ $(function(){
 			var validationResults = handle.validationResults;
 			common.showResultMsg(validationResults.msg);
 		});
+
 		grid.onViewportChanged.subscribe(function(e,args){
 			var vp = grid.getViewport();
 			model.ensureData(vp.top,vp.bottom);
@@ -178,18 +183,7 @@ $(function(){
 		model.onDataLoading.subscribe(function(){
 			common.showAjaxIndicator();
 		});
-	
 
-		/*
-		* Обработчики "удалить" "добавить"
-		*/
-		$('#del_order').click(function(){
-
-		});
-
-		$('#add_order').click(function(){
-
-		});
 		/*
 		* Обработчики фильтра
 		*/
@@ -364,5 +358,5 @@ $(function(){
 			common.hideAjaxIndicator();
 		});
 		grid.onViewportChanged.notify();
-		admin.orders.grid = grid;
+		manager.orders.grid = grid;
 	});

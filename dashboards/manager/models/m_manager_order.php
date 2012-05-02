@@ -24,9 +24,10 @@ class M_Manager_order extends M_Order
 		array('field'=>'deal_type', 'label'=>'lang:order.label_deal_type', 'rules'=>'valid_order_deal_type'),
 		array('field'=>'price', 'label'=>'lang:order.label_price','rules'=>'numeric|greater_than[-1]|max_length[15]'),
 		array('field'=>'description', 'label'=>'lang:order.label_description','rules'=>'trim|xss_clean|html_escape'),
-		array('field'=>'phone','label'=>'lang:order.label_phone','rules' =>'trim|valid_phone')
+		array('field'=>'phone','label'=>'lang:order.label_phone','rules' =>'trim|valid_phone'),
+		array('field'=>'any_metro','label'=>'lang:order.label_any_metro','rules'=>'callback_valid_any_metro'),
+		array('field'=>'any_region','label'=>'lang:order.label_any_region','rules'=>'callback_valid_any_region')
 	);
-
 	/**
 	 * Конструктор
 	 *
@@ -78,6 +79,22 @@ class M_Manager_order extends M_Order
 		return $this->get_all(array("managers_users.manager_id" => $user_id));
 	}
 
+	public function count_all_delegate_orders($user_id,$filter=array())
+	{
+		$this->build_count_select($filter);
+		$this->join("managers_users","managers_users.user_id = orders_users.user_id");
+		$this->db->where("managers_users.manager_id",$user_id);
+		return $this->get_count_result();	
+	}
+
+	public function valid_any_metro($any_metro)
+	{
+		return $this->check_any_metro($any_metro);
+	}
+
+	public function valid_any_region($any_region){
+		return $this->check_any_region($any_region);
+	}
 
 	public function get_edit_validation_fields()
 	{

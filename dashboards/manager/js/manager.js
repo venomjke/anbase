@@ -23,164 +23,115 @@ var manager = {
 
 	},
 
+
 	profile:{
-
-		/*
-		* 
-		* объект настроект по умолчанию
-		*/
-		def_options:{
-			jField:{},
-			jObjAct:{},
-			type:'text',
-			name:'name',
-			uri:'manager/profile/view/'
+		init:function(){
+			manager.profile.hash_form = {};
+			manager.profile.load_form('personal');
+			manager.profile.load_form('system');
 		},
 		/*
-		*
-		* переключение поля в режим редактирования поля
-		*
-		* @param object
+		* Загрузка формы
 		*/
-		edit_field:function(options){
+		load_form:function(form){
+			if(!form || typeof form != "string")
+				return false;			
+			manager.profile.hash_form[form] = {};
 
-			/*
-			*
-			* 1. Выбрать поле profile_col_label
-			* 2. Выбрать поле profile_col_action
-			* 3. Создать поля profile_col_input и profile_col_action
-			* 4. Заменить одни на другие.
-			*/
-
-			var profile_col_text  = options.jField.find('.profile_col_text');
-			var profile_col_action = options.jField.find('.profile_col_action');
-			var profile_col_input = $("<input type=\"text\" onkeypress=\"manager.profile.keypressed_edit_field({ jObjAct:$(this),name:'"+options.name+"',uri:'"+options.uri+"', type:'"+options.type+"'},event);\"  class=\"profile_col profile_col_input\"  />");
-			var text = $.trim(profile_col_text.text());
-			profile_col_input.val(text);
-		    profile_col_text.replaceWith(profile_col_input); 
-		
-			profile_col_action.replaceWith("<span class=\"profile_col profile_col_action\"><a href=\"#\" onclick=\"manager.profile.click_edit_field({ jObjAct:$(this),name:'"+options.name+"', uri:'"+options.uri+"', type:'"+options.type+"' });return false;\"> Сохранить </a> </span>")
-		},
-
-		/*
-		*
-		* Обработчики событий клик и keypressed во время редактирования поля
-		*
-		*/
-		click_edit_field:function(options){
-
-
-			/*
-			* 1. считать параметры 
-			* 2. переключиться в режим просмотра
-			*/
-			options = $.extend(true,this.def_options,options);
-			
-			if(options.jObjAct){
-
-				options.jField = options.jObjAct.parent().parent();
-				this.show_field(options);	
-			}
-		},
-		
-		keypressed_edit_field:function(options,e){
-			e = e || event;
-			if(e.keyCode == 13){
+			$('#'+form+' input').each(function(){
+				if($(this).attr('type') != 'text' && $(this).attr('type') != 'password')
+					return false;
 				/*
-				* 1. считать параметры 
-				* 2. переключиться в режим просмотра
+				* Т.к все элементы формы у нас либо просто text,либо password, 
+				* то считываем name и value и сохраняем их в hash_form для последующей обработки
 				*/
-				options = $.extend(true,this.def_options,options);
-				
-				if(options.jObjAct){
-
-					options.jField = options.jObjAct.parent();
-					this.show_field(options);	
-				}
-			}	
+				var name  = $(this).attr('name');
+				var value = $(this).attr('value');
+				manager.profile.hash_form[form][name] = value;
+			})
 		},
-
-
-
 		/*
-		*
-		* переключение поля в режим только просмотра поля
-		*
-		* @param object
+		* Сохранение формы
 		*/
-		show_field:function(options){
+		save_form:function(form){
+			if( !form || typeof form != "string")
+				return false;
+			var data = {};
+			var cnt  = 0; // кол-во полей для изменения.
+			$('#'+form+' input').each(function(){
+				if($(this).attr('type') != 'text' && $(this).attr('type') != 'password')
+					return false;
+
+				var name = $(this).attr('name');
+				var value = $(this).attr('value');
+
+				if(manager.profile.hash_form[form][name] != value){
+					data[name] = value;
+					++cnt;
+
+				}
+			});
 
 			/*
-			* Попытка сохранить данные
-			* Выбрать profile_col_input
-			* Выбрать profile_col_action и заменить на profile_col_text
-			*
+			* если сохранять нечего, то выходим
 			*/
-			var profile_col_input  = options.jField.find('.profile_col_input');
-			var profile_col_action = options.jField.find('.profile_col_action');
+			if(cnt == 0){
+				return false;
+			}
 
-			var postData = {};
-			postData[options.name] = profile_col_input.attr('value');
-
+			/*
+			* Отправляем форму.
+			*/
 			$.ajax({
-
+				url:manager.baseUrl+'/edit/?sct='+form,
 				type:'POST',
-				url:manager.baseUrl+options.uri,
-				data:postData,
+				dataType:'json',
+				data:data,
+				beforeSend:function(){
+					common.showAjaxIndicator();
+				},
+				complete:function(){
+					common.hideAjaxIndicator();
+				},
 				success:function(response){
-					/*
-					*
-					* проверка ответа и вывод результата
-					*/
 					if(response.code && response.data){
-
-						switch (response.code){
-							case "success_edit_profile":
-								profile_col_input.replaceWith("<span class=\"profile_col profile_col_text\">"+profile_col_input.attr('value')+"</span>");
-								profile_col_action.replaceWith("<span class=\"profile_col profile_col_action\"> <a href=\"#\" onclick=\"manager.profile.click_show_field({jObjAct:$(this),uri:'"+options.uri+"',name:'"+options.name+"', type:'"+options.type+"'});return false;\">Изменить</a></span>"); 	
-								common.showMsg(response.data);
+						switch(response.code){
+							case 'success_edit_profile':
+								common.showSuccessMsg(response.data);
+								for(var i in data){
+									manager.profile.hash_form[form][i] = data[i];
+								}
 							break;
-							case "error_edit_profile":
-								for (var i in response.data.errors){
-									common.showMsg(response.data.errors[i],{type:"alert"});
+							case 'error_edit_profile':
+								if(response.data.errors && response.data.errorType){
+									if(response.data.errorType == 'validation'){
+										for(var i in response.data.errors){
+											$('#profile').find('input[name="'+i+'"]').parent().prepend('<div class="error">'+response.data.errors[i]+'</div>');
+										}
+										setTimeout(function(){
+											$('#profile .error').remove();
+										},5000);
+									}else{
+										common.showErrorMsg(response.data.errors[0]);
+									}
 								}
 							break;
 						}
 					}
-					
-				},
-				beforeSend:function(){
-					options.jField.append('<span class="profile_col preloader"> <img src="'+manager.baseUrl+'themes/dashboard/images/preloader.gif" /> </span>')
-				},
-				complete:function(){
-					options.jField.find('.preloader').remove();
 				}
-			})
+			});
+		}
 
-		},
-
-		/*
-		* Обработчики событий click во время просмотра поля
-		* @param object
-		*/
-		click_show_field:function(options){
-
-			/*
-			* 1. считать параметры 
-			* 2. переключиться в режим редактирования
-			*/
-
-			options = $.extend(true,this.def_options,options);
-			
-			if(options.jObjAct){
-
-				options.jField = options.jObjAct.parent().parent();
-				this.edit_field(options);	
-			}
+	},
+	/*
+	* JS модуль для реализации интерфейса заявок
+	*/
+	orders:{
+		init:function(options){
 		}
 	},
-	orders:{
-		init:function(){
+	user:{
+		init:function(options){
 			
 		}
 	}

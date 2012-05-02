@@ -50,8 +50,9 @@ class Manager_Orders
 		/*
 		* Необходимые поля
 		*/
-		$orders_fields = array('number','create_date','category','deal_type','description','price','phone');
-		return $this->ci->orders_organization->get_all_user_orders($this->ci->manager_users->get_user_id(),$orders_fields);
+		$orders_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region');
+		$items = $this->ci->orders_organization->get_all_user_orders($this->ci->manager_users->get_user_id(),$orders_fields);
+		return array('count'=>count($items),'total'=>$this->ci->orders_organization->count_all_user_orders($this->ci->manager_users->get_user_id()),'items'=>$items);
 	}
 
 	/**
@@ -62,10 +63,23 @@ class Manager_Orders
 	 **/
 	public function get_all_free_orders()
 	{
-		$orders_fields = array('number','create_date','category','deal_type','description','price');
-		return $this->ci->orders_organization->get_all_free_orders($this->ci->manager_users->get_org_id(),$orders_fields);
+		$order_fields = array('number','create_date','category','deal_type','description','price','any_metro','any_region');
+		$items        = $this->ci->orders_organization->get_all_free_orders($this->ci->manager_users->get_org_id(),$order_fields);
+		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_free_orders($this->ci->manager_users->get_org_id()),'items' =>$items );
 	}
 
+	/**
+	 * Выбор всех завершенных заявок
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_all_off_orders()
+	{
+		$order_fields = array('number','create_date','finish_date','category','deal_type','description','price','phone','any_metro','any_region');
+		$items        = $this->ci->orders_organization->get_all_off_orders($this->ci->agent_users->get_user_id(),$order_fields);
+		return array('count' => count($items), 'total'=>$this->ci->orders_organization->count_all_off_orders($this->ci->manager_users->get_user_id()),'items'=>$items);
+	}
 	/**
 	 * Выбор всех заявок, делегированных агентам, которых курирует админ
 	 *
@@ -74,19 +88,23 @@ class Manager_Orders
 	 **/
 	public function get_all_delegate_orders()
 	{
-		$orders_fields = array('number','create_date','category','deal_type','description','price','phone');
+		$orders_fields = array('number','create_date','category','deal_type','description','price','phone','any_region','any_metro');
 
 		/*
 		* Определяем фильтры, limit, offset
 		*/
-		$filter = array();
+		$filter = $this->ci->orders_organization->fetch_filter();
+
 		$limit  = false;
 		$offset = false;
+
+		$orders = $this->ci->orders_organization->fetch_limit($limit,$offset);
 			
 		$orders = $this->ci->m_manager_order->get_all_delegate_orders($this->ci->manager_users->get_user_id(),$filter,$limit,$offset,$orders_fields);
 		$this->ci->orders_organization->bind_metros($orders);
 		$this->ci->orders_organization->bind_regions($orders);
-		return $orders;
+
+		return array('count'=>count($orders),'total'=>$this->ci->m_manager_order->count_all_delegate_orders($this->ci->manager_users->get_user_id(),$filter),'items'=>$orders);
 	}
 
 	/**
@@ -101,7 +119,7 @@ class Manager_Orders
 		/*
 		* правила валидации для полей
 		*/
-		$order_field = array('number','create_date','deal_type','category','price','description','phone');
+		$order_field = array('number','create_date','deal_type','category','price','description','phone','any_region','any_metro');
 		$metro_field = array('metros');
 		$region_field = array('regions');
 
@@ -116,21 +134,22 @@ class Manager_Orders
 				* обращаемся к orders_metros
 				*/
 				$this->ci->m_order_metro->bind_order_metros($this->ci->input->post('id'),$this->ci->input->post('metros'));
-			}else if($this->ci->input->post('regions')){
+			}
+
+			if($this->ci->input->post('regions')){
 				/*
 				* обращаемся к orders_regions
 				*/
 				$this->ci->m_order_region->bind_order_regions($this->ci->input->post('id'),$this->ci->input->post('regions'));
-			}else{
-				/*
-				* стандартное редактирование
-				*/
-				$data = array_intersect_key($this->ci->input->post(), array_flip($order_field));
-				if(!empty($data))
-					$this->ci->m_manager_order->update($this->ci->input->post('id'),$data,true);
-				else
-					throw new AnbaseRuntimeException(lang('common.not_legal_data'));
 			}
+
+			/*
+			* стандартное редактирование
+			*/
+			$data = array_intersect_key($this->ci->input->post(), array_flip($order_field));
+			if(!empty($data))
+				$this->ci->m_manager_order->update($this->ci->input->post('id'),$data,true);
+
 			return;
 		}
 

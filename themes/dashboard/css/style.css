@@ -415,6 +415,10 @@ div.zagolovok   {
  #orders_grid .active{
 	border:1px #000 solid;
 }
+#orders_grid .slick-cell.selected{
+	background-color: beige;
+}
 .error{
 	color:red;
 }
+

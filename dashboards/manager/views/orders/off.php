@@ -41,6 +41,8 @@
 			{id: "metros", name:"Метро", field:"metros",  formatter:Slick.Formatters.MetrosList},
 			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true},	
 			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter},
+			{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone},
+			{id: "finish_date", name:"Дата завершения", field:"finish_date"}
 		];
 
 
@@ -52,7 +54,7 @@
 		var regions = [];
 		var metros  = {};
 
-		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=free',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=off',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
 
 		grid.onViewportChanged.subscribe(function(e,args){
@@ -114,16 +116,29 @@
 			model.applyFilter(vp.top,vp.bottom)
 		});
 
+		
 		$('#f_number').keyfilter(/[\d]/);
 		$('#f_number').keydown(function(event){
 			if(event.which == 13){
 				event.preventDefault();
 				vp = grid.getViewport();
 				model.setNumber($(this).val());
+				model.setPhone($('#f_phone'));
 				model.applyFilter(vp.top,vp.bottom);
 			}
 		});
 		
+		$('#f_phone').keyfilter(/[\+\d]/);
+		$('#f_phone').keydown(function(event){
+			if(event.which == 13){
+				event.preventDefault();
+				vp = grid.getViewport();
+				model.setPhone($(this).val());
+				model.setNumber($('#f_number').val());
+				model.applyFilter(vp.top,vp.bottom);
+			}
+		});
+
 		$('#f_price_to').keyfilter(/[\d\.]/);
 		$('#f_price_to').keydown(function(event){
 			if(event.which == 13){

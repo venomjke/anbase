@@ -17,10 +17,14 @@ class Orders extends MX_Controller
 	 **/
 	public function __construct()
 	{
+		parent::__construct();
+
 		/*
-		*
+		* Загрузка драйверов
+		*/
+		$this->load->driver('Minify');
+		/*
 		*	Загрузка либ
-		*
 		*/
 		$this->load->library("Manager_Users");
 		$this->load->library("Manager_Orders");
@@ -35,6 +39,8 @@ class Orders extends MX_Controller
 		*/
 		$this->load->model('m_region');
 		$this->load->model('m_metro');
+		$this->load->model('m_metro_image');
+		$this->load->model('m_region_image');
 
 		/*
 		* Подключение сообщений
@@ -46,17 +52,22 @@ class Orders extends MX_Controller
 		*/
 		$this->template->set_theme("dashboard");
 		$this->template->set_partial("dashboard_head","dashboard/dashboard_head");
+		$this->template->set_partial("dashboard_user","dashboard/dashboard_user");
+		$this->template->set_partial("dashboard_menu","dashboard/dashboard_menu");
 
 		/*
 		* Подключение скриптов
 		*/
 		$regions = $this->m_region->get_region_list("json");
 		$metros  = $this->m_metro->get_metro_list("json");
+		$metros_images = $this->m_metro_image->get_images();
+		$regions_images = $this->m_region_image->get_images();
 
-		$this->template->append_metadata('<script type="text/javascript"> common.regions='.$regions.'; common.metros='.$metros.'</script>');
+		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.'; common.metros='.$metros.'; common.metros_images = '.$metros_images.'; common.regions_images = '.$regions_images.';</script>');
+
 
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/manager/js/manager.js").'"></script>');
-		$this->template->append_metadata('<script type="text/javascript">$(function(){	manager.init({baseUrl:"'.site_url('manager/orders').'"});manager.orders.init(); });</script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){manager.init({baseUrl:"'.site_url('manager/orders').'"});manager.orders.init(); });</script>');
 	}
 
 
@@ -76,7 +87,10 @@ class Orders extends MX_Controller
 				/*
 				* отображение заявок
 				*/
-				$section = $this->input->get('sct')?$this->input->get('sct'):'my';
+				$section = $this->input->get('s')?$this->input->get('s'):'my';
+				$this->template->set('current',$section);
+				$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
+				$this->template->set_partial('dashboard_filter','dashboard/dashboard_filter');
 				switch ($section) {
 					case 'my':
 					default:
@@ -88,6 +102,9 @@ class Orders extends MX_Controller
 					case 'delegate':
 						$this->_delegate_orders();
 						break;
+					case 'off':
+						$this->_off_orders();
+					break;
 				}
 				break;
 			case 'edit':
@@ -115,18 +132,19 @@ class Orders extends MX_Controller
 			$response = array();
 			try{
 				$orders = $this->manager_orders->get_all_orders_manager();
-				$response['code'] = 'success_view_orders';
+				$response['code'] = 'success_load_data';
 				$response['data'] = $orders;
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_view_orders';
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['validation'] = $ve->get_error_messages();
 			}
 			$this->ajax->build_json($response);
 		}else{
-			/*
-			*	Настройки шаблона
-			*/
-			$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
 			/*
 			*	Вывод данных
 			*/
@@ -148,24 +166,21 @@ class Orders extends MX_Controller
 			$response = array();
 			try{
 				$orders = $this->manager_orders->get_all_free_orders();
-				$response['code'] = 'success_view_orders';
+				$response['code'] = 'success_load_data';
 				$response['data'] = $orders;
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_view_orders';
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
 			}
 			$this->ajax->build_json($response);
 		}else{
 			/*
-			*
-			* Установки шаблона
-			* 
-			*/	
-			$this->template->set_partial("dashboard_tabs","dashboard/dashboard_tabs");
-			/*
-			*
 			* Вывод данных на экран
-			*
 			*/
 			$this->template->build("orders/free");
 		}
@@ -183,18 +198,19 @@ class Orders extends MX_Controller
 			$response = array();
 			try{
 				$orders = $this->manager_orders->get_all_delegate_orders();	
-				$response['code'] = 'success_view_orders';
+				$response['code'] = 'success_load_data';
 				$response['data'] = $orders;
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_view_orders';
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
 			}
 			$this->ajax->build_json($response);
 		}else{
-			/*
-			*  Установки шаблона
-			*/
-			$this->template->set_partial("dashboard_tabs","dashboard/dashboard_tabs");
 			/*
 			*	Вывод данных
 			*/
@@ -202,6 +218,32 @@ class Orders extends MX_Controller
 		}
 	}
 
+	private function _off_orders()
+	{
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$orders = $this->manager_orders->get_all_off_orders();
+				$response['code'] = 'success_load_data';
+				$response['data'] = $orders;
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'runtime';
+				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'runtime';
+				$response['data']['errors'] = $ve->get_error_messages();
+			}
+			$this->ajax->build_json($response);
+		}else{
+			/*
+			* Вывод страницы и скрипта загрузки таблицы
+			*/
+			$this->template->build('orders/off');
+		}
+	}
+	
 	/**
 	 * Редактирование своих заявок
 	 *

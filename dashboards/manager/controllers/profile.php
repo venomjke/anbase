@@ -34,6 +34,8 @@ class Profile extends MX_Controller
 
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
+		$this->template->set_partial('dashboard_user','dashboard/dashboard_user');
+		$this->template->set_partial('dashboard_menu','dashboard/dashboard_menu');
 
 		/*
 		*
@@ -43,160 +45,117 @@ class Profile extends MX_Controller
 		*/
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/manager/js/manager.js").'"> </script>');
 
-		$this->template->append_metadata('<script type="text/javascript">$(function(){manager.init({baseUrl:"'.base_url().'"});});</script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){manager.init({baseUrl:"'.site_url("manager/profile").'"}); manager.profile.init()});</script>');
 	}
 
 
 
 	/**
-	 * Индексный action,redirect
-	 *
+	 *	Отображение профиля
+	 * 
 	 * @return void
-	 * @author alex.strigin
+	 * @author Alex.strigin
 	 **/
 	public function index()
 	{
-		redirect('manager/profile/view');
+		$this->template->build("profile/info");
 	}
 
 
 	/**
-	 * Маршрутизатор
+	 * Редактирование разделов профиля
 	 *
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	public function view()
+	public function edit()
 	{
-		$section = $this->input->get('s');
-
-		if (!empty($section)) {
-			/*
-			*
-			* обработка действий
-			*
-			*/
+		/*
+		* Редактирование доступно только с использованием ajax
+		*/
+		if($this->ajax->is_ajax_request()){
+			$section = $this->input->get('sct')?$this->input->get('sct'):'';
 
 			switch ($section) {
 				case 'personal':
-					/*
-					*
-					* личное инфо
-					*
-					*/
-					$this->_personal_profile();
+					$this->_edit_personal_profile();
 					break;
-				case 'org':
-					/*
-					*
-					*	организационное ифно ( менеджер меня его не может )
-					*
-					*/
-					$this->_organization_profile();
-				break;
 				case 'system':
-					/*
-					*
-					* инфо об аккаунте
-					*
-					*/
-					$this->_system_info();
-				break;
+					$this->_edit_system_profile();
+					break;
 				default:
 					/*
-					*
-					* по умолчанию показывает личное инфо
+					* Ничего не делаем, пускай помучаются
 					*/
-					$this->_personal_profile();
+					return;
 					break;
 			}
-		} else {
-			/*
-			*
-			* действие по умолчанию
-			*
-			*/
-			$this->_personal_profile();
+		}else{
+			redirect('agent/profile');
 		}
-		
 	}
-
-
 	/**
-	 * Вывод личной инфы
+	 * Личная информация
 	 *
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	private function _personal_profile()
-	{
-		$this->template->set_partial('dashboard_tabs','dashboard/profile/tabs');
+	private function _edit_personal_profile()
+	{	
 		/*
-		*
-		*	Если данные переданы с использованием ajax, значи мы 
-		* пытаемся редактировать поля, если нет,  то просто 
-		*  выводим спсикок полей
-		*
+		*  
+		* Если данные переданы с использованием ajax, 
+		* значит мы пытаемся редактировать поля, если нет
+		* то просто выводим список полей
 		*/
 		if($this->ajax->is_ajax_request()){
-
-			/*
-			*
-			* Пытаемся изменить личный профиль
-			*
-			*/
 			try{
-
 				$this->manager_users->edit_personal_profile();
-				
 				$response['code'] = 'success_edit_profile';
 				$response['data'] = lang('success_edit_personal_profile');
-				$this->ajax->build_json($response);			
 			}catch(ValidationException $ve){
-				/*
-				*
-				* Обработка исключений валидации
-				*
-				*/
 				$response['code'] = 'error_edit_profile';
+				$response['data']['errorType'] = 'validation';
 				$response['data']['errors'] = $ve->get_error_messages();
-				$this->ajax->build_json($response);
 			}catch(AnbaseRuntimeException $re){
-				/*
-				*
-				* Обработка исключений времени выполнения
-				*/
 				$response['code'] = 'error_edit_profile';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
 			}
-			return;
+			$this->ajax->build_json($response);
+		}else{
+			redirect("agent/profile");
 		}
-		$this->template->build('profile/personal');
 	}
 
 
 	/**
-	 * Орг. инфа
+	 * Редактирование системный инфы 
 	 *
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	private function _organization_profile()
+	private function _edit_system_profile()
 	{
-		$this->template->set_partial('dashboard_tabs','dashboard/profile/tabs');
-		$this->template->build('profile/organization');
-	}
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$this->manager_users->edit_system_profile();
+				$response['code'] = 'success_edit_profile';
+				$response['data'] = lang('success_edit_system_profile');
+			}catch(ValidationException $ve){
 
-
-	/**
-	 * системное инфо
-	 *
-	 * @return void
-	 * @author alex.strigin
-	 **/
-	private function _system_info()
-	{
-		$this->template->set_partial('dashboard_tabs','dashboard/profile/tabs');
-		$this->template->build('profile/system_info');
+				$response['code'] = 'error_edit_profile';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_edit_profile';
+				$response['data']['errorType'] = 'runtime';
+				$response['data']['errors'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect("agent/profile");
+		}
 	}
 }// END Profile class
