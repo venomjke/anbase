@@ -27,7 +27,9 @@ class M_Admin_order extends M_Order
 		array('field'=>'price', 'label'=>'lang:order.label_price','rules'=>'numeric|greater_than[-1]|max_length[15]'),
 		array('field'=>'description', 'label'=>'lang:order.label_description','rules'=>'trim|xss_clean|html_escape'),
 		array('field'=>'phone','label'=>'lang:order.label_phone','rules' =>'trim|valid_phone'),
-		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]')
+		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
+		array('field'=>'any_metro','label'=>'lang:order.label_any_metro','rules'=>'callback_valid_any_metro'),
+		array('field'=>'any_region','label'=>'lang:order.label_any_region','rules'=>'callback_valid_any_region')
 	);
 
 	/**
@@ -41,24 +43,14 @@ class M_Admin_order extends M_Order
 		parent::__construct();
 	}
 
-
-	/**
-	 * Метод обращается к get_all_orders_org, предварительно установив фильтр NOT NULL
-	 * на поле user_id
-	 *
-	 * @param int
-	 * @param array
-	 * @param int
-	 * @param int
-	 * @return void
-	 * @author Alex.strigin
-	 **/
-	function get_all_delegate_orders($org_id,$filter=array(),$limit=FALSE,$offset=FALSE)
+	public function valid_any_metro($any_metro)
 	{
-		$this->where('orders_users.user_id IS NOT NULL');
-		return $this->get_all_orders_org($org_id,$filter,$limit,$offset);
+		return $this->check_any_metro($any_metro);
 	}
 
+	public function valid_any_region($any_region){
+		return $this->check_any_region($any_region);
+	}
 
 	public function get_edit_validation_fields()
 	{

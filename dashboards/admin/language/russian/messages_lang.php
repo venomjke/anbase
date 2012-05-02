@@ -14,9 +14,9 @@ $lang['no_enough_right'] = 'Недостаточно прав для выпол�
 * Сообщения profile
 *
 */
-$lang['success_edit_personal_profile'] = 'Личные данные отредактированы';
-$lang['success_edit_org_profile']      = 'Профиль организации успешно отредактирован';
-$lang['success_edit_sys_profile']	   = 'Учетная запись успешно отредактирована';
+$lang['success_edit_personal_profile'] = 'Изменения сохранены';
+$lang['success_edit_org_profile']      = $lang['success_edit_personal_profile'];
+$lang['success_edit_sys_profile']	   = $lang['success_edit_personal_profile'];
 
 /*
 *

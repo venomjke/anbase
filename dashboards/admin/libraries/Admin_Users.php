@@ -190,37 +190,38 @@ class Admin_Users extends Users{
 	 **/
 	public function edit_personal_profile()
 	{
-		$this->ci->form_validation->set_rules($this->ci->m_admin->get_validation_rules());
-		if($this->ci->form_validation->run()){
-			$data = array();
+		$fields = array('name','middle_name','last_name','phone');
+		$this->ci->form_validation->set_rules($this->ci->m_admin->personal_profile_validation_rules);
+
+		if($this->ci->form_validation->run($this->ci->m_admin)){
+			$data=array();
 			/*
-			*
-			* собираем данные для изменения т.к правила валидации required не
-			* предусматривают
-			*
+			* консервируем необходимые для изменения данные
 			*/
-			if($this->ci->input->post('name')) $data['name'] = $this->ci->input->post('name');
-			if($this->ci->input->post('middle_name')) $data['middle_name'] = $this->ci->input->post('middle_name');
-			if($this->ci->input->post('last_name')) $data['last_name'] = $this->ci->input->post('last_name');
-			if($this->ci->input->post('phone')) $data['phone'] = $this->ci->input->post('phone');
+			$data = array_intersect_key($this->ci->input->post(), array_flip($fields));
 
-			if(!empty($data)){
-				$this->ci->m_user->update($this->get_user_id(),$data,true);
-				$this->update_admin_session_data($data);
-				return TRUE;
-			}else{
-
-				$this->error += array('not_recive_data' => lang('common.empty_data'));
-				return FALSE;
+			/*
+			* Воизбежание пустых полей делаем следующее.
+			* Validation rules этого отловить не может, required тут не помогает, т.к необязательно передавать все поля
+			* [my_notice]: не очень нравится такое решение, но пока так.
+			*/
+			foreach($data as $k=>$item){
+				if(empty($data[$k])) unset($data[$k]);
 			}
-			return TRUE;
+			if (!empty($data)) {
+				$this->ci->m_admin->update($this->get_user_id(),$data,true);
+				$this->update_admin_session_data($data);
+			} else {
+				throw new AnbaseRuntimeException(lang('common.empty_data'));
+			}
+			return;
 		}
-		$this->error += array( 'name' => $this->ci->form_validation->error('name'));
-		$this->error += array( 'middle_name' => $this->ci->form_validation->error('middle_name'));
-		$this->error += array( 'last_name' => $this->ci->form_validation->error('last_name'));
-		$this->error += array( 'phone' => $this->ci->form_validation->error('phone'));
-	
-		return TRUE;
+
+		$errors_validation = array();
+
+		if(has_errors_validation($fields,$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
 	}
 
 
@@ -233,36 +234,39 @@ class Admin_Users extends Users{
 	public function edit_organization_profile()
 	{
 		$this->ci->load->model('users/m_organization');
-		$this->ci->form_validation->set_rules($this->ci->m_organization->get_validation_rules());
-		if($this->ci->form_validation->run()){
+
+		$fields = array('name','phone','email');
+
+		$this->ci->form_validation->set_rules($this->ci->m_organization->edit_validation_rules);
+		if($this->ci->form_validation->run($this->ci->m_organization)){
 			$data = array();
+			
 			/*
-			*
-			* собираем данные для изменения т.к правила валидации required не
-			* предусматривают
-			*
+			* консервируем необходимые для изменения данные
 			*/
-			if($this->ci->input->post('name')) $data['name'] = $this->ci->input->post('name');
+			$data = array_intersect_key($this->ci->input->post(), array_flip($fields));
 
-			if($this->ci->input->post('email')) $data['email'] = $this->ci->input->post('email');
-
-			if($this->ci->input->post('phone')) $data['phone'] = $this->ci->input->post('phone');
-
-			if(!empty($data)){
-				$this->ci->m_organization->update($this->get_org_id(),$data,true);
-				return TRUE;
-			}else{
-
-				$this->error += array('not_recive_data' => lang('common.empty_data'));
-				return FALSE;
+			/*
+			* Воизбежание пустых полей делаем следующее.
+			* Validation rules этого отловить не может, required тут не помогает, т.к необязательно передавать все поля
+			* [my_notice]: не очень нравится такое решение, но пока так.
+			*/
+			foreach($data as $k=>$item){
+				if(empty($data[$k])) unset($data[$k]);
 			}
-			return TRUE;
+
+			if (!empty($data)) {
+				$this->ci->m_organization->update($this->get_org_id(),$data,true);
+			} else {
+				throw new AnbaseRuntimeException(lang('common.empty_data'));
+			}
+			return;		
 		}
-		$this->error += array( 'name' => $this->ci->form_validation->error('name'));
-		$this->error += array( 'email' => $this->ci->form_validation->error('email'));
-		$this->error += array( 'phone' => $this->ci->form_validation->error('phone'));
-		
-		return false;
+		$errors_validation = array();
+
+		if(has_errors_validation($fields,$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
 	}
 
 	/**
@@ -273,29 +277,22 @@ class Admin_Users extends Users{
 	 **/
 	public function edit_system_profile()
 	{
-		$this->ci->form_validation->set_rules($this->ci->m_admin->get_validation_rules());
-		if($this->ci->form_validation->run()){
-			$data = array();
-			/*
-			*
-			* собираем данные для изменения т.к правила валидации required не
-			* предусматривают
-			*
-			*/
-			if($this->ci->input->post('password')) $data['password'] = $this->ci->input->post('password');
+		$fields = array('password','new_password','re_new_password');
+		$this->ci->form_validation->set_rules($this->ci->m_admin->system_profile_validation_rules);
 
-			if(!empty($data)){
-				$this->ci->m_user->update($this->get_org_id(),$data,true);
-				return TRUE;
-			}else{
+		if($this->ci->form_validation->run($this->ci->m_admin)){
 
-				$this->error += array('not_recive_data' => lang('common.empty_data'));
-				return FALSE;
-			}
-			return TRUE;
+			$data = array_intersect_key($this->ci->input->post(),array_flip($fields));
+
+			$this->change_password($this->get_user_id(),$data);
+			return;
 		}
-		$this->error += array( 'password' => $this->ci->form_validation->error('password'));
-		return false;
+
+		$error_validation = array();
+
+		if(has_errors_validation($fields,$error_validation)){
+			throw new ValidationException($error_validation);
+		}
 	}
 
 	/**

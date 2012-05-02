@@ -64,6 +64,13 @@ class Orders_Organization
 		$this->ci->load->model('m_region');
 		$this->ci->load->model('m_metro');
 		/*
+		* Если get array пуст, то даже и не пытаемся что-то сделать
+		*/
+		if(!$this->ci->input->get()){
+			return array();
+		}
+
+		/*
 		* Извлекаем параметры фильтра, валидируем их, а потом засовываем в массив
 		*/
 		$filter_fields = array('number','number_from','number_to','number_order','phone','category','dealtype','createdate_from','createdate_to','createdate_order','price_from','price_to','price_order','description','regions','metros','description_type');

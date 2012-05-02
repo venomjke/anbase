@@ -32,7 +32,10 @@ class Admin_Orders
 
 		$this->ci->load->library("admin/Admin_Users");
 		$this->ci->load->library("Orders_Organization");
+
 		$this->ci->load->model("m_admin_order");
+		$this->ci->load->model("m_order_region");
+		$this->ci->load->model("m_order_metro");
 	}
 
 	/**
@@ -43,7 +46,13 @@ class Admin_Orders
 	 **/
 	public function get_all_orders_org()
 	{
-		return $this->ci->orders_organization->get_all_orders_org($this->ci->admin_users->get_org_id());
+		/*
+		* Поля, которые нужно выбирать из базы
+		*/
+		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region','delegate_date','finish_date');
+		$items = $this->ci->orders_organization->get_all_orders_org($this->ci->admin_users->get_org_id(),$order_fields);
+		return array('count'=>count($items),'total'=>$this->ci->orders_organization->count_all_orders_org($this->ci->admin_users->get_org_id()),'items'=>$items);
+
 	}
 	/**
 	 * Выбор всех свободных заявок
@@ -52,8 +61,10 @@ class Admin_Orders
 	 * @author alex.strigin
 	 **/
 	public function get_all_free_orders()
-	{
-		return $this->ci->orders_organization->get_all_free_orders($this->ci->admin_users->get_org_id());
+	{	
+		$order_fields = array('number','create_date','category','deal_type','description','phone','price','any_metro','any_region');
+		$items        = $this->ci->orders_organization->get_all_free_orders($this->ci->admin_users->get_org_id(),$order_fields);
+		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_free_orders($this->ci->admin_users->get_org_id()),'items' =>$items );
 	}
 
 	/**
@@ -64,7 +75,9 @@ class Admin_Orders
 	 **/
 	public function get_all_delegate_orders()
 	{
-		return $this->ci->orders_organization->get_all_delegate_orders($this->ci->admin_users->get_org_id());
+		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region','delegate_date');
+		$items        = $this->ci->orders_organization->get_all_delegate_orders($this->ci->admin_users->get_org_id(),$order_fields);
+		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_delegate_orders($this->ci->admin_users->get_org_id()),'items' =>$items );
 	}
 
 
@@ -79,7 +92,7 @@ class Admin_Orders
 		/*
 		* правила валидации для полей
 		*/
-		$order_field = array('number','create_date','deal_type','category','price','description','phone','delegate_date');
+		$order_field = array('number','create_date','deal_type','category','price','description','phone','delegate_date','finish_date','state');
 		$metro_field = array('metros');
 		$region_field = array('regions');
 
@@ -94,21 +107,21 @@ class Admin_Orders
 				* обращаемся к orders_metros
 				*/
 				$this->ci->m_order_metro->bind_order_metros($this->ci->input->post('id'),$this->ci->input->post('metros'));
-			}else if($this->ci->input->post('regions')){
+			}
+
+			if($this->ci->input->post('regions')){
 				/*
 				* обращаемся к orders_regions
 				*/
 				$this->ci->m_order_region->bind_order_regions($this->ci->input->post('id'),$this->ci->input->post('regions'));
-			}else{
-				/*
-				* стандартное редактирование
-				*/
-				$data = array_intersect_key($this->ci->input->post(), array_flip($order_field));
-				if(!empty($data))
-					$this->ci->m_admin_order->update($this->ci->input->post('id'),$data,true);
-				else
-					throw new AnbaseRuntimeException(lang('common.not_legal_data'));
 			}
+
+			/*
+			* стандартное редактирование
+			*/
+			$data = array_intersect_key($this->ci->input->post(), array_flip($order_field));
+			if(!empty($data))
+				$this->ci->m_admin_order->update($this->ci->input->post('id'),$data,true);
 			return;
 		}
 

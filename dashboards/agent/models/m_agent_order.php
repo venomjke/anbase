@@ -24,7 +24,8 @@ class M_Agent_order extends M_Order
 		array('field'=>'price', 'label'=>'lang:order.label_price','rules'=>'numeric|greater_than[-1]|max_length[15]'),
 		array('field'=>'description', 'label'=>'lang:order.label_description','rules'=>'trim|xss_clean|html_escape'),
 		array('field'=>'phone','label'=>'lang:order.label_phone','rules' =>'trim|valid_phone'),
-		array('field'=>'any_metro','label'=>'lang:order.label_any_metro','rules'=>'callback_valid_any_metro')
+		array('field'=>'any_metro','label'=>'lang:order.label_any_metro','rules'=>'callback_valid_any_metro'),
+		array('field'=>'any_region','label'=>'lang:order.label_any_region','rules'=>'callback_valid_any_region')
 	);
 
 	public function __construct()
@@ -35,6 +36,10 @@ class M_Agent_order extends M_Order
 	public function valid_any_metro($any_metro)
 	{
 		return $this->check_any_metro($any_metro);
+	}
+
+	public function valid_any_region($any_region){
+		return $this->check_any_region($any_region);
 	}
 	public function get_edit_validation_fields()
 	{

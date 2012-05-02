@@ -43,17 +43,16 @@ class User extends MX_Controller
 		*/
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
+		$this->template->set_partial('dashboard_user','dashboard/dashboard_user');
+		$this->template->set_partial('dashboard_menu','dashboard/dashboard_menu');
 	
 		/*
-		*
 		*	Загрузка скриптов и всякой другой мета инфы
-		*
 		*/
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/admin/js/admin.js").'"></script>');
 		$this->template->append_metadata('<script type="text/javascript">
 			$(function(){
-				admin.init({ baseUrl:"'.base_url().'"});
-				admin.user.init();
+				admin.init({ baseUrl:"'.site_url("admin/user").'"});admin.user.init();
 			})
 		</script>');
 
@@ -80,6 +79,7 @@ class User extends MX_Controller
 	 **/
 	public function staff()
 	{
+		$this->template->set_partial('dashboard_tabs','dashboard/user/tabs',array('current'=>'staff'));
 		$section = $this->input->get('act')?$this->input->get('act'):'view';
 		switch ($section) {
 			case 'view':
@@ -133,6 +133,7 @@ class User extends MX_Controller
 	 **/
 	public function admins()
 	{
+		$this->template->set_partial('dashboard_tabs','dashboard/user/tabs',array('current'=>'admins'));
 		$section = $this->input->get('act')?$this->input->get('act'):'view';
 
 		switch ($section) {
@@ -178,11 +179,23 @@ class User extends MX_Controller
 	 **/
 	private function _view_admins()
 	{
-		$this->template->set_partial('sidebar','dashboard/user/sidebar');
-
-		$admins = $this->admin_users->get_list_admins();
-
-		$this->template->build('user/admins',array('admins' => $admins));
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$admins = $this->admin_users->get_list_admins();	
+				$response['code'] = 'success_view_user';
+				$response['data'] = $admins;
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_view_user';
+				$response['data'] = $ve->get_error_message();
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_view_user';
+				$response['data'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+			return;
+		}
+		$this->template->build('user/admins');
 	}
 
 	/**
@@ -193,10 +206,23 @@ class User extends MX_Controller
 	 **/
 	private function _view_staff()
 	{
-		$this->template->set_partial('sidebar','dashboard/user/sidebar');
-
-		$staff = $this->admin_users->get_list_staff();
-		$this->template->build('user/staff',array('staff' => $staff));
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$staff = $this->admin_users->get_list_staff();	
+				$response['code'] = 'success_view_user';
+				$response['data'] = $staff;
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_view_user';
+				$response['data'] = $ve->get_error_message();
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_view_user';
+				$response['data'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+			return "";
+		}
+		$this->template->build('user/staff');
 	}
 
 

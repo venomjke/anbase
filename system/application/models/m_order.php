@@ -197,6 +197,15 @@ class M_Order extends MY_Model{
 			return 0;
 		}
 	}
+
+	public function check_any_region($any_region)
+	{
+		if(!empty($any_region) && $any_region == 1){
+			return true;
+		}else{
+			return 0;
+		}
+	}
 	/**
 	 * Проверка состояния
 	 *
@@ -566,7 +575,7 @@ class M_Order extends MY_Model{
 	public function count_all_orders_org($org_id,$filter)
 	{
 		$this->build_count_select($filter);
-		$this->db->where('organizations.id',$id);
+		$this->db->where('organizations.id',$org_id);
 		return $this->get_count_result();	
 	}
 

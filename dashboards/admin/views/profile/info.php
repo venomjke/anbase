@@ -13,7 +13,7 @@
 					</tr>
 					<tr>
 						<td valign="top">
-							<form method="post" id="system" onsubmit="agent.profile.save_form('system');return false;">
+							<form method="post" id="system" onsubmit="admin.profile.save_form('system');return false;">
 								<table width="100%" border="0" cellpadding="4px" cellspacing="0px">
 									<tr>
 										<td>Профиль:</td>
@@ -21,11 +21,11 @@
 									</tr>
 									<tr>
 										<td>Логин:</td>
-						   				 <td style="color:#666666"><?php echo $this->agent_users->get_user_login(); ?></td>
+						   				 <td style="color:#666666"><?php echo $this->admin_users->get_user_login(); ?></td>
 									</tr>
 									<tr>
 										 <td>Email:</td>
-					    				<td style="color:#666666"><?php echo $this->agent_users->get_user_email(); ?></td>
+					    				<td style="color:#666666"><?php echo $this->admin_users->get_user_email(); ?></td>
 									</tr>
 									<tr>
 										 <td>&nbsp;</td>
@@ -69,23 +69,23 @@
 							</form>
 						</td>
 						<td valign="top" class="left">
-							<form method="post" id="personal" onsubmit="agent.profile.save_form('personal');return false;">
+							<form method="post" id="personal" onsubmit="admin.profile.save_form('personal');return false;">
 								<table width="100%" border="0" cellpadding="4px" cellspacing="0px">
 									<tr>
 	 								<td class="l">Фамилия:</td>
-						   			 <td><input class="text" name="last_name" type="text" value="<?php echo htmlspecialchars($this->agent_users->get_user_last_name()); ?>" required /></td>
+						   			 <td><input class="text" name="last_name" type="text" value="<?php echo htmlspecialchars($this->admin_users->get_user_last_name()); ?>" required /></td>
 									</tr>
 									<tr>
 										<td class="l">Имя:</td>
-					    				<td><input class="text" type="text" name="name" value="<?php echo htmlspecialchars($this->agent_users->get_user_name());?>" required/></td>
+					    				<td><input class="text" type="text" name="name" value="<?php echo htmlspecialchars($this->admin_users->get_user_name());?>" required/></td>
 									</tr>
 									<tr>
 										 <td class="l">Отчество:</td>
-						    			 <td><input class="text" type="text" name="middle_name" value="<?php echo htmlspecialchars($this->agent_users->get_user_middle_name()); ?>" required/></td>
+						    			 <td><input class="text" type="text" name="middle_name" value="<?php echo htmlspecialchars($this->admin_users->get_user_middle_name()); ?>" required/></td>
 									</tr>
 									<tr>
 										 <td class="l">Телефон:</td>
-						    			 <td><input class="text" type="text" name="phone" value="<?php echo htmlspecialchars($this->agent_users->get_user_phone()); ?>" required/>
+						    			 <td><input class="text" type="text" name="phone" value="<?php echo htmlspecialchars($this->admin_users->get_user_phone()); ?>" required/>
 									        <input type="submit" style="position:absolute; top:-9999999px;left:-999999999px"/>      
 						    			 </td>
 									</tr>
@@ -93,19 +93,21 @@
 							</form>
 						</td>
 						<td valign="top" class="left">
-							<form method="post" onsubmit="return false;">
+							<form method="post" id="organization" onsubmit="admin.profile.save_form('organization');return false;">
 								<table width="100%" border="0" cellpadding="4px" cellspacing="0px">
 									<tr>
 										<td class="l">Название:</td>
-						   				 <td><?php echo $this->agent_users->get_org_name(); ?></td>
+						   				 <td><input type="text" name="name" value="<?php echo htmlspecialchars($this->admin_users->get_org_name());?>" /></td>
 									</tr>
 									<tr>
-										 <td class="l">Диспетчер:</td>
-					    				<td><?php echo $this->agent_users->get_callmanager_phone(); ?></td>
+										<td class="l">Диспетчер:</td>
+					    				<td><input type="text" name="phone" value="<?php echo htmlspecialchars($this->admin_users->get_callmanager_phone());?>" /></td>
 									</tr>
 									<tr>
 										<td class="l">Email:</td>
-						    			<td><?php echo $this->agent_users->get_org_email(); ?></td>
+						    			<td><input type="text" name="email" value="<?php echo htmlspecialchars($this->admin_users->get_org_email());?>" />
+						    				<input type="submit" style="position:absolute; top:-9999999px;left:-99999999px"/>
+						    			</td>
 									</tr>
 								</table>
 							</form>
@@ -114,18 +116,22 @@
 					<tr>
 						<td>
 							<span class="l">
-			     				 <input class="button" name="button" type="submit" value="Сохранить изменения" onclick="$('#system').submit();"/>
+			     				<input class="button" name="button" type="submit" value="Сохранить изменения" onclick="$('#system').submit();"/>
 		    				</span>
 		    			</td>
 						<td>
 							<span class="l">
-				     				 <input class="button" name="button" type="submit" value="Сохранить изменения" onclick="$('#personal').submit();"/>
+			     				<input class="button" name="button" type="submit" value="Сохранить изменения" onclick="$('#personal').submit();"/>
 		    				</span>
 		    			</td>						
-		    			<td>&nbsp;</td>
+		    			<td>
+		    				<span class="l">
+			     				<input class="button" name="button" type="submit" value="Сохранить изменения" onclick="$('#organization').submit();"/>
+		    				</span>
+		    			</td>
 					</tr>	  
 				</table>
 		      </div>
 		    </div>
-			<div class="podval">© <a href="111">copyright 2012 Flyweb inc.</a>	</div>
+			<div class="podval">©<a href="111">copyright 2012 Flyweb inc.</a></div>
 </div>
