@@ -32,6 +32,7 @@
     var createdate_order='';
     var description ='';
     var description_type ='';
+    var user_id = '';
     var metros = {};
     var regions = [];
 
@@ -117,6 +118,10 @@
         regions = f_regions;
     }
 
+    function setUserId(f_user_id){
+      user_id = f_user_id;
+    }
+
     function applyFilter(top,bottom){
       clear();
       ensureData(top,bottom);
@@ -138,6 +143,7 @@
         createdate_order='';
         description ='';
         description_type ='';
+        user_id = '';
         metros = {};
         regions = [];
     }
@@ -214,6 +220,7 @@
         description_type:description_type,
         metros:metros,
         regions:regions,
+        user_id:user_id,
         offset:offset,
         limit:limit
       }
@@ -325,6 +332,7 @@
       "setDescriptionType":setDescriptionType,
       "setRegions":setRegions,
       "setMetros":setMetros,
+      "setUserId":setUserId,
       "applyFilter":applyFilter,
       "resetFilter":resetFilter,
       "resetSortOrder":resetSortOrder,

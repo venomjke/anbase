@@ -48,7 +48,6 @@ class M_Manager_user extends MY_Model
 		);
 	}
 
-
 	/**
 	 * Проверка, есть ли у юзера менеджер
 	 *
@@ -79,5 +78,13 @@ class M_Manager_user extends MY_Model
 	public function get_validation_rules()
 	{
 		return $this->validate;
+	}
+
+	public function get_manager_agents($manager_id)
+	{
+		$this->select("users.*");
+		$this->join("managers_users","managers_users.user_id = users.id");
+		$this->db->where('managers_users.manager_id',$manager_id);
+		return $this->db->get("users")->result();
 	}
 } // END class M_Manager_user extends MY_Model

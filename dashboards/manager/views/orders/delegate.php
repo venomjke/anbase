@@ -7,7 +7,6 @@
 		<?php load_partial_template($template,'dashboard_tabs'); ?>
 	    <div class="tablica" id="orders_grid" style="height:550px; border:1px #8AA1BC solid;">
 	    </div>
-	    <div class="nastroiki"><a href="111">Настройки таблицы</a></div>
   	</div>
   	<div class="podval">© <a href="111">copyright 2012 Flyweb inc.</a>	</div>
 </div>
@@ -183,6 +182,12 @@
 			}
 		});
 
+		$('#f_user_id').change(function(event){
+			vp = grid.getViewport();
+			model.setUserId($(this).val());
+			model.applyFilter(vp.top,vp.bottom);
+		})
+
 		$('#f_price_to').keyfilter(/[\d\.]/);
 		$('#f_price_to').keydown(function(event){
 			if(event.which == 13){
@@ -312,6 +317,7 @@
 		});
 		$('#reset_filter_btn').click(function(){
 			model.resetFilter();
+			$('#f_user_id').val('');
 			$('#f_phone').val('');
 			$('#f_number').val('');
 			$('#f_number_to').val('');

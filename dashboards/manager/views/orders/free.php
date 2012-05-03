@@ -84,7 +84,72 @@
 				}
 			}
 		});
+		grid.onClick.subscribe(function(e,columnHandle){
+			var columns = grid.getColumns();
+			switch(columns[columnHandle.cell].field){
+				case "metros":
+						if(!metro_widget){
+							metro_widget = common.widgets.metro_map({
+								metros:grid.getDataItem(columnHandle.row).metros,
+								onCancel:function(){
+									metro_widget.destroy();
+									metro_widget = undefined;
+								},
+								needButtons:false
+							});
+							metro_widget.init();
+							metro_widget.load();
+						}else{
+							metro_widget.destroy();
+							metro_widget = undefined;
+						}
+					break;
+				case "regions":
+						if(!region_widget){
+							region_widget = common.widgets.region_map({
+								onCancel:function(){
+									region_widget.destroy();
+									region_widget = undefined;
+								},
+								needButtons:false
+							});
+							region_widget.init();
+							region_widget.load(grid.getDataItem(columnHandle.row).regions);
+						}else{
+							region_widget.destroy();
+							region_widget = undefined;
+						}
+					break;
+				default:
+					if(metro_widget){
+						metro_widget.destroy();
+						metro_widget = undefined;
+					}
 
+					if(region_widget){
+						region_widget.destroy();
+						region_widget = undefined;
+					}
+					break;
+			}
+		});
+ 		/*
+		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
+		*/
+		$(window).keydown(function(e){
+			if(e.keyCode == 27){
+				if(region_widget){
+					region_widget.destroy();
+					region_widget = undefined;
+				}
+
+				if(metro_widget){
+					metro_widget.destroy();
+					metro_widget = undefined;
+				}
+			}
+		});
+		
 		model.onDataLoading.subscribe(function(){
 			common.showAjaxIndicator();
 		});

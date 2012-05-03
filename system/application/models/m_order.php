@@ -88,7 +88,8 @@ class M_Order extends MY_Model{
 		array('field'=>'price_to','label'=>'lang:order.label_price','rules'=>'greater_than[-1]|max_length[12]'),
 		array('field'=>'price_order','label'=>'price order','rules'=>'numeric|max_length[2]'),
 		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean'),
-		array('field'=>'description_type','label'=>'description_type','rules'=>'alpha')
+		array('field'=>'description_type','label'=>'description_type','rules'=>'alpha'),
+		array('field'=>'user_id','label'=>'user id','rules'=>'is_valid_user_id')
 	);
 
 	/**
@@ -451,6 +452,13 @@ class M_Order extends MY_Model{
 			}
 			$this->db->join("orders_regions","orders.id = orders_regions.order_id","LEFT");
 			$this->db->where("(`orders_regions`.`region_id` IN (".implode(',',$region_ids).") OR `orders`.`any_region`=1)");
+		}
+	}
+
+	public function set_user_id_filter($value)
+	{
+		if(!empty($value) && is_numeric($value)){
+			$this->db->where("users.id",$value);
 		}
 	}
 	/**

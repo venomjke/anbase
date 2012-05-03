@@ -8,6 +8,15 @@
         <td> по&nbsp;телефону:</td>
       <td><input type="text" name="phone" id="f_phone" /></td>
       <?php endif; ?>
+      <?php /*в заявках агентов выводим фильтр по агентам*/ if($current == 'delegate'): ?>
+      <td> по&nbsp;агенту: </td>
+      <td>  <select style="width:130px" name="user_id" id="f_user_id"> 
+        <?php foreach($manager_agents as $manager_agent): ?>
+          <option value=""></option>
+          <option value="<?php echo $manager_agent->id; ?>"><?php echo make_official_name($manager_agent->name,$manager_agent->middle_name,$manager_agent->last_name); ?></option>
+        <?php endforeach;?>
+      </select></td>
+      <?php endif; ?> 
       <td class="filter_header" style="width:80%">&nbsp;</td>
       <td class="filter_header" colspan="2"><a href="#" style="width:150px" class="svernut" onclick="return false;"><img id="filter_toggle" src="<?php echo site_url("themes/dashboard/images/strelkavniz.png"); ?>" class="down"/></a></td>
     </tr> 

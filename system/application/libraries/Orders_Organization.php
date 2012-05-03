@@ -73,7 +73,7 @@ class Orders_Organization
 		/*
 		* Извлекаем параметры фильтра, валидируем их, а потом засовываем в массив
 		*/
-		$filter_fields = array('number','number_from','number_to','number_order','phone','category','dealtype','createdate_from','createdate_to','createdate_order','price_from','price_to','price_order','description','regions','metros','description_type');
+		$filter_fields = array('number','number_from','number_to','number_order','phone','category','dealtype','createdate_from','createdate_to','createdate_order','price_from','price_to','price_order','description','regions','metros','description_type','user_id');
 
 		/*
 		* [my_notice] Не самый лучший способ проверить данные фильтра, но другого не придумал.
@@ -97,7 +97,8 @@ class Orders_Organization
 				'price' => array('price_from'=>$this->ci->input->post('price_from'),'price_to'=>$this->ci->input->post('price_to'),'price_order'=>$this->ci->input->post('price_order')),
 				'description' => array('words'=>$this->ci->input->post('description'),'type'=>$this->ci->input->post('description_type')),
 				'regions' => $this->ci->input->post('regions'),
-				'metros'  => $this->ci->input->post('metros')
+				'metros'  => $this->ci->input->post('metros'),
+				'user_id' => $this->ci->input->post('user_id')
 			);
 		}
 

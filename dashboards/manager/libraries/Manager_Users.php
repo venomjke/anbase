@@ -115,6 +115,12 @@ class Manager_Users extends Users
 		return $this->ci->m_manager->get_list_admins($this->get_org_id());
 	}
 
+	public function get_manager_agents()
+	{
+		$this->ci->load->model('m_manager_user');
+		return $this->ci->m_manager_user->get_manager_agents($this->get_user_id());
+	}
+
 	/**
 	 * Редактирование персонального профиля
 	 *

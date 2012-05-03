@@ -90,7 +90,7 @@ class Orders extends MX_Controller
 				$section = $this->input->get('s')?$this->input->get('s'):'my';
 				$this->template->set('current',$section);
 				$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
-				$this->template->set_partial('dashboard_filter','dashboard/dashboard_filter');
+				$this->template->set_partial('dashboard_filter','dashboard/dashboard_filter',array('manager_agents'=>$this->manager_users->get_manager_agents()));
 				switch ($section) {
 					case 'my':
 					default:
