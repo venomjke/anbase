@@ -16,7 +16,7 @@ $(function(){
 		*/
 		var options = {enableCellNavigation:true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Integer,sortable:true},
+			{id: "number", name:"№", field:"number",width:40, editor:Slick.Editors.Integer,sortable:true},
 			{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date, sortable:true},
 			{id: "category", name:"Тип объекта", field:"category", editor:Slick.Editors.AnbaseCategory},
 			{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
@@ -205,7 +205,7 @@ $(function(){
 				event.preventDefault();
 				vp = grid.getViewport();
 				model.setNumber($(this).val());
-				model.setPhone($('#f_phone'));
+				model.setPhone($('#f_phone').val());
 				model.applyFilter(vp.top,vp.bottom);
 			}
 		});

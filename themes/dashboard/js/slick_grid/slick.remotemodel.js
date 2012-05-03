@@ -8,7 +8,9 @@
 
     var def_options = {
       PageSize:100,
-      BaseUrl:''
+      BaseUrl:'',
+      AddUrl:'',
+      DeleteUrl:''
     };
     options = $.extend(true,def_options,options);
 
@@ -34,13 +36,17 @@
     var regions = [];
 
     // private
-    var data = {length: 0};
+    var data = [];
     var h_request = null;
     var req = null; // ajax request
 
     // events
     var onDataLoading = new Slick.Event();
     var onDataLoaded = new Slick.Event();
+    var onDataCreating = new Slick.Event();
+    var onDataCreated = new Slick.Event();
+    var onDataDeleting = new Slick.Event();
+    var onDataDeleted = new Slick.Event();
 
 
     function init() {
@@ -239,6 +245,42 @@
       ensureData(from, to);
     }
 
+    function delOrders(list){
+      onDataDeleting.notify();
+      onDataDeleted.notify();
+    }
+
+    function addOrder(){
+      onDataCreating.notify();
+      
+      $.ajax({
+        url:options.AddUrl,
+        dataType:'json',
+        data:{
+          state:"on"
+        },
+        type:'POST',
+        success:function(response){
+          if(response.code && response.data){
+            switch(response.code){
+              case 'success_add_data':
+                data.splice(0,0,response.data.add_order);
+                common.showSuccessMsg(response.data.msg);
+                onDataCreated.notify();
+                break;
+              case 'error_add_data':
+                console.log(response.data);
+                common.hideAjaxIndicator();
+                break;
+            }
+          }
+        },
+        error:function(){
+          common.hideAjaxIndicator();
+        }
+      });
+    }
+
     init();
 
     return {
@@ -265,6 +307,8 @@
       "setMetros":setMetros,
       "applyFilter":applyFilter,
       "resetSortOrder":resetSortOrder,
+      "addOrder":addOrder,
+      "delOrders":delOrders,
       // methods
       "clear": clear,
       "isDataLoaded": isDataLoaded,
@@ -273,7 +317,11 @@
 
       // events
       "onDataLoading": onDataLoading,
-      "onDataLoaded": onDataLoaded
+      "onDataLoaded": onDataLoaded,
+      "onDataCreating":onDataCreating,
+      "onDataCreated":onDataCreated,
+      "onDataDeleting":onDataDeleting,
+      "onDataDeleted":onDataDeleted
     };
   }
 

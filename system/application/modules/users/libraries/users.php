@@ -627,6 +627,16 @@ class Users {
 	}
 
 	/**
+	 * Выбор даты последнего визита
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function get_last_visit()
+	{
+		return $this->ci->session->userdata('last_login');
+	}
+	/**
 	 * Выбор роли текущего пользователя
 	 *
 	 * @return string
@@ -703,7 +713,8 @@ class Users {
 				'middle_name'=> $user->middle_name,
 				'phone' 	=> $user->phone,
 				'org_id'	=> $user_as_org->org_id,
-				'ceo'		=> $user_as_org->ceo
+				'ceo'		=> $user_as_org->ceo,
+				'last_login' => $user->last_login
 		));
 	}
 

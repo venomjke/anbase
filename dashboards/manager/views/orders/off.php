@@ -123,7 +123,7 @@
 				event.preventDefault();
 				vp = grid.getViewport();
 				model.setNumber($(this).val());
-				model.setPhone($('#f_phone'));
+				model.setPhone($('#f_phone').val());
 				model.applyFilter(vp.top,vp.bottom);
 			}
 		});
@@ -233,7 +233,9 @@
 
 
 		$('#search_btn').click(function(event){
-
+			
+			model.setNumberTo($('#f_number_to').val());
+			model.setNumberFrom($('#f_number_from').val());
 			model.setCategory($('#f_category').val());
 			model.setDealtype($('#f_dealtype').val());
 			model.setPriceFrom($('#f_price_from').val());

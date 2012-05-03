@@ -247,19 +247,23 @@ class Orders extends MX_Controller
 			* Пытаемся добавить запись
 			*/
 			try{
-				if($order_id = $this->admin_users->add_order()){
-					$response['code'] = 'success_add_order';
-					$response['data']['id'] = $order_id;
+				if($order_id = $this->admin_orders->add_order()){
+
+					$response['code'] = 'success_add_data';
+					$response['data']['add_order'] = $this->m_order->get($order_id);
 					$response['data']['msg'] = lang('success_add_order');	
 				}else{
-					$response['code'] = 'error_add_order';
+					$response['code'] = 'error_add_data';
+					$response['data']['errorType'] = 'runtime';
 					$response['data']['errors'] = array(lang('common.insert_error')); 
 				}
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_add_order';
+				$response['code'] = 'error_add_data';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
 			}catch(ValidationException $ve){
-				$response['code'] = 'error_add_order';
+				$response['code'] = 'error_add_data';
+				$response['data']['errorType'] = 'validation';
 				$response['data']['errors'] = $ve->get_error_messages();
 			}
 
@@ -320,11 +324,16 @@ class Orders extends MX_Controller
 			*/
 			try{
 				$this->admin_users->del_orders();
-				$response['code'] = 'success_del_order';
+				$response['code'] = 'success_del_data';
 				$response['data'] = lang('success_del_order');
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_edit_order';
+				$response['code'] = 'error_del_data';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_del_data';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
 			}
 			$this->ajax->build_json($response);
 		}else{
@@ -348,15 +357,17 @@ class Orders extends MX_Controller
 			* Пытаемся назначить
 			*/
 			try{
-				$this->admin_users->delegate_order();
+				$this->admin_order->delegate_order();
 				$response['code'] = 'success_delegate_order';
 				$response['data'] = lang('success_delegate_order');
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_delegate_order';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
 			}catch(ValidationException $ve){
 				$response['code'] = 'error_delegate_order';
-				$response['data']['errors'] = array($ve->get_error_messages());
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
 			}
 			$this->ajax->build_json($response);
 		}else{

@@ -150,7 +150,7 @@ span.plus a:hover {
 	-moz-box-shadow: 0 1px 1px #596b77;
 	-webkit-box-shadow: 0 1px 1px #596b77;
 	box-shadow: 0 1px 1px #596b77;
-	margin-bottom: 16px;
+	/*margin-bottom: 16px;*/
 }
 .conteiner  .menu  span span {
 	vertical-align: middle;

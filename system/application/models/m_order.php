@@ -116,7 +116,7 @@ class M_Order extends MY_Model{
 		/*
 		* Хуки
 		*/
-		$this->before_insert = array('fill_empty_fields');
+		$this->before_create = array('fill_empty_fields');
 	}
 
 	/**
@@ -162,6 +162,7 @@ class M_Order extends MY_Model{
 			$data['create_date'] = date('Y/m/d');
 			$data['created']	 = date('Y-m-d H:i:s');
 		}
+		return $data;
 	}
 
 	public function check_state($state)	
@@ -488,10 +489,6 @@ class M_Order extends MY_Model{
 
 		$this->select('orders.id');
 		foreach($fields as $field){
-			if($field == 'number'){
-				$this->select('orders.id as number');
-				continue;
-			}
 			if($field == 'create_date' or $field == 'delegate_date' or $field == 'finish_date'){
 				$this->select("DATE_FORMAT(orders.$field,'%d.%m.%y') as $field",FALSE);	
 			}else{

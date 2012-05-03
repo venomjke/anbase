@@ -47,5 +47,33 @@
 	</head>
 	<body>
 		<?php echo $template['body']; ?>
+		
+		<script type="text/javascript">
+			$(function(){
+				var $imgToggleUp = $('<img src="'+common.baseUrl+'themes/dashboard/images/panel-collapse-up.png" style="cursor:pointer;display:block;width:16px;margin:0 auto;"/>');
+				var $imgToggleDown = $('<img src="'+common.baseUrl+'themes/dashboard/images/panel-collapse-down.png" style="cursor:pointer;display:none;width:16px;position: absolute;top: 0px;left: 49.4%;"/>');
+
+				$('.menu').after($imgToggleUp);
+				$('.menu').after($imgToggleDown);
+
+				$imgToggleUp.click(function(){
+					$('.shapka').slideToggle("fast");
+					$('.user').slideToggle("fast");
+					$('.podval').slideToggle("fast");
+					$('.menu').css('margin-bottom','16px');
+					$imgToggleDown.show();
+					$(this).hide();
+				});
+
+				$imgToggleDown.click(function(){
+					$('.shapka').slideToggle("fast");
+					$('.user').slideToggle("fast");
+					$('.podval').slideToggle("fast");
+					$('.menu').css('margin-bottom','0px');
+					$imgToggleUp.show();
+					$(this).hide();
+				});
+			});
+		</script>
 	</body>
 </html>

@@ -167,7 +167,7 @@
 				event.preventDefault();
 				vp = grid.getViewport();
 				model.setNumber($(this).val());
-				model.setPhone($('#f_phone'));
+				model.setPhone($('#f_phone').val());
 				model.applyFilter(vp.top,vp.bottom);
 			}
 		});

@@ -13,5 +13,5 @@
 </div>
 
 <script type="text/javascript">
-	<?php echo $this->load->view('orders/view_js.js',array(),true);?>
+	<?php echo $this->minify->js->min($this->load->view('orders/view_js.js',array(),true));?>
 </script>

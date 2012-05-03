@@ -154,6 +154,7 @@ class M_User extends MY_Model{
 	 */
 	function get_user_by_login_or_email($login)
 	{
+		$this->_build_user_select();
 		$this->db->where('login',$login)
 				 ->or_where('email',$login);
 		$query = $this->db->get($this->table);
@@ -169,6 +170,7 @@ class M_User extends MY_Model{
 	 */
 	function get_user_by_login($login)
 	{
+		$this->_build_user_select();
 		return $this->get(array('login'=>$login));
 	}
 
@@ -180,6 +182,7 @@ class M_User extends MY_Model{
 	 */
 	function get_user_by_email($email)
 	{
+		$this->_build_user_select();
 		return $this->get(array('email'=>$email));
 	}
 
@@ -260,6 +263,23 @@ class M_User extends MY_Model{
 		}
 	}
 
+	private function _build_user_select(){
+		$this->select("users.id");
+		$this->select("users.login");
+		$this->select("users.email");
+		$this->select("users.name");
+		$this->select("users.middle_name");
+		$this->select("users.last_name");
+		$this->select("users.phone");
+		$this->select("users.role");
+		$this->select("users.password");
+		$this->select("users.created");
+		$this->select("users.modifed");
+		$this->select("users.last_ip");
+		$this->select("users.activated");
+		$this->select("DATE_FORMAT(users.last_login,'%d.%m.%y %H:%i:%s') as last_login",FALSE);
+	}
+
 	/**
 	 * Сборка select на выбор из трех таблиц.
 	 *
@@ -280,6 +300,7 @@ class M_User extends MY_Model{
 		$this->select("users2.name        as manager_name");
 		$this->select("users2.middle_name as manager_middle_name");
 		$this->select("users2.last_name   as manager_last_name");
+		$this->select("DATE_FORMAT(users.last_login,'%d.%m.%y %H:%i:%s') as last_login",FALSE);
 		$this->select("organizations.ceo");
 
 		$this->from("users")

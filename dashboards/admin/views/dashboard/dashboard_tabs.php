@@ -8,13 +8,3 @@
     	<span class="plus" id="add_order" style="margin-top:5px; float:right; margin-right:16px"><a href="#" onclick="return false;">Добавить</a></span>
     </ul>
 </div>
-<script type="text/javascript">
-	$(function(){
-		$('#togglePanel').click(function(){
-			$('.shapka').slideToggle("fast");
-			$('.user').slideToggle("fast");
-			$('.menu').slideToggle("fast");
-			$('.podval').slideToggle("fast");
-		});
-	});
-</script>

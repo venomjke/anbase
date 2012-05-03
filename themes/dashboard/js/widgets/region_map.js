@@ -18,6 +18,10 @@ $(function(){
 
 		var def_options = {
 			/*
+			* Показывать кнопки или нет
+			*/
+			needButtons:true,
+			/*
 			* Список районов
 			*/
 			regions:[], 
@@ -44,12 +48,12 @@ $(function(){
 		var selected_regions = [];
 
 		function save_btn(event){
-			$wrapper.hide();
+			$wrapper.remove();
 			options.onSave();
 		}
 
 		function cancel_btn(event){
-			$wrapper.hide();
+			$wrapper.remove();
 			options.onCancel();
 		}
 
@@ -96,24 +100,34 @@ $(function(){
 			$map = $('<map name="region-normal">');
 			$list= $('<ol style="float:right">');
 
-			$save_btn = $('<button id="save_btn">Сохранить</button>');
-			$cancel_btn = $('<button id="cancel_btn">Отмена</button>"');
-			$reset_btn= $('<button id="reset">Сбросить</button>')
-
-
-			$save_btn.click(function(event){
-				save_btn(event);
-			});
-			$cancel_btn.click(function(event){
+			$closeImg = $('<img title="Закрыть без сохранения" style="position:relative; top:0; left:96%; cursor:pointer;" src="'+common.baseUrl+'themes/dashboard/images/delete.png" />');
+			$closeImg.click(function(){
 				cancel_btn(event);
 			});
-			$reset_btn.click(function(event){
-				reset_btn(event);
-			});
+			$wrapper.append($closeImg);
 
-			$wrapper.append($save_btn);
-			$wrapper.append($cancel_btn);
-			$wrapper.append($reset_btn);
+			if(options.needButtons){
+				$save_btn = $('<button id="save_btn">Сохранить</button>');
+				$cancel_btn = $('<button id="cancel_btn">Отмена</button>"');
+				$reset_btn= $('<button id="reset">Сбросить</button>');
+
+
+				
+				$save_btn.click(function(event){
+					save_btn(event);
+				});
+				$cancel_btn.click(function(event){
+					cancel_btn(event);
+				});
+				$reset_btn.click(function(event){
+					reset_btn(event);
+				});
+
+				$wrapper.append($save_btn);
+				$wrapper.append($cancel_btn);
+				$wrapper.append($reset_btn);	
+			}
+			
 
 			for(var i in region_normal.elements){
 				var element = region_normal.elements[i];
@@ -147,30 +161,34 @@ $(function(){
 				$list.append($li);
 			};
 
-			$clone_save_btn = $save_btn.clone();
-			$clone_cancel_btn = $cancel_btn.clone();
-			$clone_reset_btn= $reset_btn.clone();
-			
-			$clone_save_btn.click(function(event){
-				save_btn(event);
-			});
-			$clone_cancel_btn.click(function(event){
-				cancel_btn(event);
-			});
-			$clone_reset_btn.click(function(event){
-				reset_btn(event);
-			});
+			if(options.needButtons){
+				$clone_save_btn = $save_btn.clone();
+				$clone_cancel_btn = $cancel_btn.clone();
+				$clone_reset_btn= $reset_btn.clone();
+				
+				$clone_save_btn.click(function(event){
+					save_btn(event);
+				});
+				$clone_cancel_btn.click(function(event){
+					cancel_btn(event);
+				});
+				$clone_reset_btn.click(function(event){
+					reset_btn(event);
+				});
 
-			$right = $('<div style="float:right;"></div>');
-			$right.append($clone_save_btn);
-			$right.append($clone_cancel_btn);
-			$right.append($clone_reset_btn);
+				$right = $('<div style="float:right;"></div>');
+				$right.append($clone_save_btn);
+				$right.append($clone_cancel_btn);
+				$right.append($clone_reset_btn);	
+			}
+			
 
 			$region_wrapper.append($list);
 			$region_wrapper.append($img);
 			$region_wrapper.append($map);
 			$wrapper.append($region_wrapper);	
-			$wrapper.append($right);	
+			if(options.needButtons)
+				$wrapper.append($right);	
 			// РАБОТАЕТ ТОЛЬКО ТУТ, ХЗ ПОЧЕМУ
 			// Если строчку ниже впихать где-нибудь выше, то не будет работать подсветка
 			$region_wrapper.append('<script type="text/javascript">$(function(){$("#regionmap").maphilight();});</script>');
@@ -191,7 +209,6 @@ $(function(){
 			},
 
 			focus:function(){
-				$wrapper.focus();
 			},
 			load:function(regions){
 				options.regions = regions;

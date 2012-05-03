@@ -172,14 +172,14 @@ class MY_Model extends CI_Model {
      */
     public function insert($data, $skip_validation = FALSE) {
         $valid = TRUE;
-        
+
         if ($skip_validation === FALSE) {
             $valid = $this->_run_validation($data);
         }
         
         if ($valid) {
             $data = $this->_callbacks('before_create', array($data));
-            
+           
             $data = array_intersect_key($data, array_flip($this->_fields()));
             $this->db->insert($this->_table(), $data);
             

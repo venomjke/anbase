@@ -33,7 +33,7 @@
 		*/
 		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"Номер", field:"number", sortable:true},
+			{id: "number", name:"Номер", field:"number", width:40, sortable:true},
 			{id: "create_date", name:"Дата создания", field:"create_date", sortable:true},
 			{id: "category", name:"Объект", field:"category"},
 			{id: "deal_type", name:"Сделка", field:"deal_type"},
@@ -123,7 +123,7 @@
 				event.preventDefault();
 				vp = grid.getViewport();
 				model.setNumber($(this).val());
-				model.setPhone($('#f_phone'));
+				model.setPhone($('#f_phone').val());
 				model.applyFilter(vp.top,vp.bottom);
 			}
 		});
@@ -233,7 +233,8 @@
 
 
 		$('#search_btn').click(function(event){
-
+			model.setNumberTo($('#f_number_to').val());
+			model.setNumberFrom($('#f_number_from').val());
 			model.setCategory($('#f_category').val());
 			model.setDealtype($('#f_dealtype').val());
 			model.setPriceFrom($('#f_price_from').val());

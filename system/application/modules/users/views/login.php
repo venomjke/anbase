@@ -22,7 +22,7 @@
 	</div>
 	<?php endif; ?>
 	<br/>
-	  <input name="" type="checkbox" value="" />Запомнить меня<br />
+	  <input name="remember" type="checkbox" value="1" />Запомнить меня<br />
 	  <input class="button" type="submit" value="ВОЙТИ" /> <br/>
 <?php echo form_close(); ?>
 &nbsp;&nbsp;<a href="<?php echo site_url("forget_password"); ?>">Забыли пароль</a> / <a href="<?php echo site_url("register");?>">Регистрация</a>

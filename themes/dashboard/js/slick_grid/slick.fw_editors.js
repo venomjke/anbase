@@ -178,9 +178,6 @@
 		};
 
 		this.focus = function(){
-			$wrapper.focus();
-			if(widget)
-				widget.focus();
 		};
 
 		this.save  = function(){

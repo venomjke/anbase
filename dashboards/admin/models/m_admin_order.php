@@ -32,6 +32,18 @@ class M_Admin_order extends M_Order
 		array('field'=>'any_region','label'=>'lang:order.label_any_region','rules'=>'callback_valid_any_region')
 	);
 
+	public $add_order_validation_rules = array(
+		array('field'=>'number','label'=>'lang:order.label_number', 'rules'=>'is_natural|max_length[9]'),
+		array('field'=>'create_date','label'=>'lang:order.label_create_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
+		array('field'=>'category','label'=>'lang:order.label_category','rules'=>'valid_order_category'),
+		array('field'=>'deal_type','label'=>'lang:order.label_deal_type','rules'=>'valid_order_deal_type'),
+		array('field'=>'price','label'=>'lang:order.label_price','rules'=>'greater_than[-1]|max_length[12]'),
+		array('field'=>'description','label'=>'lang:order.label_description','rules'=>'trim|xss_clean|html_escape'),
+		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
+		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
+		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|valid_phone'),
+		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state')
+	);
 	/**
 	 * конструктор
 	 *

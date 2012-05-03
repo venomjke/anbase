@@ -56,6 +56,7 @@ class M_Autologin_user extends MY_Model{
                 $this->db->select("users".'.middle_name');
                 $this->db->select("users".'.last_name');
                 $this->db->select("users".'.phone');
+                $this->db->select("DATE_FORMAT(users.last_login,'%d.%m.%y %H:%i:%s') as last_login",FALSE);
                 $this->db->from("users");
 
                 $this->db->join($this->table, $this->table.'.user_id = '."users".'.id');

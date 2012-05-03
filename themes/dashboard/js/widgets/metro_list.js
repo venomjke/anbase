@@ -18,6 +18,10 @@ $(function(){
 
 		var def_options = {
 			/*
+			* Видимость кнопок
+			*/
+			needButtons:true,
+			/*
 			* Список линиий и станций метро. ( Типа по ссылке передается, не копия)
 			*/
 			metros:{}, 
@@ -269,25 +273,33 @@ $(function(){
 		return {
 			init:function(){
 				var $container = $('body');
-				$wrapper = $('<div style="z-index:9999;opacity:0.95;width: 850px;-moz-border-radius: 10px 10px 10px 10px;-webkit-border-radius: 10px 10px 10px 10px;border-radius: 10px 10px 10px 10px;border: 1px solid #666666;background-color: #FFFFFF;position: absolute;font-family: Arial,Helvetica, sans-serif;font-size: 11px;">').appendTo($container);
-				$save_btn = $('<button id="save_btn">Сохранить</button>');
-				$cancel_btn = $('<button id="cancel_btn">Отмена</button>"');
-				$reset_btn= $('<button id="reset">Сбросить</button>')
+				$wrapper = $('<div style="z-index:9999;opacity:0.95;width: 870px;-moz-border-radius: 10px 10px 10px 10px;-webkit-border-radius: 10px 10px 10px 10px;border-radius: 10px 10px 10px 10px;border: 1px solid #666666;background-color: #FFFFFF;position: absolute;font-family: Arial,Helvetica, sans-serif;font-size: 11px;">').appendTo($container);
 
+				if(options.needButtons){
+					$save_btn = $('<button id="save_btn">Сохранить</button>');
+					$cancel_btn = $('<button id="cancel_btn">Отмена</button>"');
+					$reset_btn= $('<button id="reset">Сбросить</button>');
 
-				$save_btn.click(function(event){
-					save_btn(event);
-				});
-				$cancel_btn.click(function(event){
+					$save_btn.click(function(event){
+						save_btn(event);
+					});
+					$cancel_btn.click(function(event){
+						cancel_btn(event);
+					});
+					$reset_btn.click(function(event){
+						reset_btn(event);
+					});
+					$wrapper.append($save_btn);
+					$wrapper.append($cancel_btn);
+					$wrapper.append($reset_btn);
+				}				
+				
+				$closeImg = $('<img title="Закрыть без сохранения" style="position:relative; top:0; left:71%; cursor:pointer;" src="'+common.baseUrl+'themes/dashboard/images/delete.png" />');
+				$closeImg.click(function(){
 					cancel_btn(event);
 				});
-				$reset_btn.click(function(event){
-					reset_btn(event);
-				});
 
-				$wrapper.append($save_btn);
-				$wrapper.append($cancel_btn);
-				$wrapper.append($reset_btn);
+				$wrapper.append($closeImg);
 
 				$map_wrapper = $('<div style="position:relative;">');
 				$img = $('<img usemap="#metro-list" style="float:left" id="metromap" src="'+metro_list.image+'"/>');
@@ -398,35 +410,40 @@ $(function(){
 				//var td_width = 100/$list_td.find('td').length;
 
 				$list_td.find('td').each(function(){
-					$(this).attr('width',"120px");
+					$(this).attr('width',"170px");
 				});
 				
-				$clone_save_btn = $save_btn.clone();
-				$clone_cancel_btn = $cancel_btn.clone();
-				$clone_reset_btn= $reset_btn.clone();
+				if(options.needButtons){
+					$clone_save_btn = $save_btn.clone();
+					$clone_cancel_btn = $cancel_btn.clone();
+					$clone_reset_btn= $reset_btn.clone();
 
-				$clone_save_btn.click(function(event){
-					save_btn(event);
-				});
-				$clone_cancel_btn.click(function(event){
-					cancel_btn(event);
-				});
-				$clone_reset_btn.click(function(event){
-					reset_btn(event);
-				});
+					$clone_save_btn.click(function(event){
+						save_btn(event);
+					});
+					$clone_cancel_btn.click(function(event){
+						cancel_btn(event);
+					});
+					$clone_reset_btn.click(function(event){
+						reset_btn(event);
+					});
 
-				$right = $('<div style="float:right;"></div>');
-				$right.append($clone_save_btn);
-				$right.append($clone_cancel_btn);
-				$right.append($clone_reset_btn);
-
+					$right = $('<div style="float:right;"></div>');
+					$right.append($clone_save_btn);
+					$right.append($clone_cancel_btn);
+					$right.append($clone_reset_btn);
+				}
+				
 				$list.append($list_td);
 				$list_wrapper.append($list);
 				$map_wrapper.append($list_wrapper);
 				$map_wrapper.append($img);
 				$map_wrapper.append($map);
 				$wrapper.append($map_wrapper);
-				$wrapper.append($right);
+
+				if(options.needButtons)
+					$wrapper.append($right);
+				
 				// РАБОТАЕТ ТОЛЬКО ТУТ, ХЗ ПОЧЕМУ
 				// Если строчку ниже впихать где-нибудь выше, то не будет работать подсветка
 				$map_wrapper.append('<script type="text/javascript">$(function(){$("#metromap").maphilight();});</script>');

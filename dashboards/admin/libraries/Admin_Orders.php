@@ -128,7 +128,105 @@ class Admin_Orders
 		$errors_validation = array();
 		if(has_errors_validation($this->ci->m_admin_order->get_edit_validation_fields(),$errors_validation)){
 			throw new ValidationException($errors_validation);
+		}
 	}
-}
+
+	/**
+	 * Добавление заявки.
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function add_order()
+	{
+		/*
+		* Устанавливаем правила валидации	
+		*/
+		$insert_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state');
+
+		$this->ci->form_validation->set_rules($this->ci->m_admin_order->add_order_validation_rules);
+
+		if($this->ci->form_validation->run($this->ci->m_admin_order)){
+			/*
+			* Валидацию прошли, теперь можем наши данные собрать воедино вместе с пред. определенными
+			*/
+			$insert_data = array_intersect_key($this->ci->input->post(),array_flip($insert_fields));
+			$insert_data['org_id'] = $this->ci->admin_users->get_org_id();
+			if( ($org_id = $this->ci->m_admin_order->insert($insert_data,true))){
+				return $org_id;
+			}
+
+			throw new AnbaseRuntimeException(lang('common.insert_error'));
+		}
+
+		$errors_validation = array();
+
+		if(has_errors_validation($insert_fields,$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
+		return false;
+	}
+
+	
+	/**
+	 * Удаление заказов
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function del_orders()
+	{
+		$orders_ids = $this->ci->input->post('orders_ids');
+
+		if(is_array($orders_ids)){
+			foreach($orders_ids as $order_id){
+
+				if(is_numeric($order_id) && $this->ci->m_order->is_exists($order_id,$this->get_org_id())) {
+					/*
+					* Будем просто удалять, а получилось или нет, это уже не наша забота. 
+					* P.S Если пользователь не хакер, то все получится.
+					*/
+					$this->ci->m_order->delete($order_id);
+				}
+			}
+			return;
+		}
+		throw new AnbaseRuntimeException(lang('common.not_legal_data'));
+	}
+
+	/**
+	 * Назначение заявки члену персонала
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function delegate_order()
+	{
+		/*
+		* Правила валидации прикрепляем
+		*/
+		$this->ci->form_validation->set_rules($this->ci->m_order_user->delegate_validation_rules);
+
+		if($this->ci->form_validation->run($this->ci->m_order_user)){
+
+			/*
+			*
+			* Т.к к одной заявке может быть привязан только один человек, то для удаления записи в таблице orders_users
+			* достаточно знать order_id
+			*/
+			$order_id = $this->ci->input->post('order_id');
+			$user_id  = $this->ci->input->post('user_id');
+			if($this->ci->m_order_user->delegate_order($order_id,$user_id)){
+				return true;
+			}
+			throw new AnbaseRuntimeException(lang("common.insert_error"));
+		}
+
+		$errors_validation = array();
+
+		if(has_errors_validation(array('order_id','user_id'),$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
+	}
 
 } // END class Admin_Orders

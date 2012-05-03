@@ -33,13 +33,13 @@
 		*/
 		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"Номер", field:"number", sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date", sortable:true},
-			{id: "category", name:"Объект", field:"category"},
-			{id: "deal_type", name:"Сделка", field:"deal_type"},
-			{id: "regions",  name:"Район", field:"regions", formatter:Slick.Formatters.RegionsList},
-			{id: "metros", name:"Метро", field:"metros",  formatter:Slick.Formatters.MetrosList},
-			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true},	
+			{id: "number", name:"№", field:"number", width:40, sortable:true},
+			{id: "create_date", name:"Дата создания", field:"create_date", width:63, sortable:true},
+			{id: "category", name:"Объект", field:"category", width:60},
+			{id: "deal_type", name:"Сделка", field:"deal_type", width:60},
+			{id: "regions",  name:"Район", field:"regions", formatter:Slick.Formatters.RegionsList, width:55},
+			{id: "metros", name:"Метро", field:"metros",  formatter:Slick.Formatters.MetrosList, width:55},
+			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true, width:70},	
 			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter},
 		];
 
@@ -85,6 +85,75 @@
 			}
 		});
 
+		grid.onClick.subscribe(function(e,columnHandle){
+			var columns = grid.getColumns();
+			switch(columns[columnHandle.cell].field){
+				case "metros":
+						if(!metro_widget){
+							metro_widget = common.widgets.metro_map({
+								metros:grid.getDataItem(columnHandle.row).metros,
+								onCancel:function(){
+									metro_widget.destroy();
+									metro_widget = undefined;
+								},
+								needButtons:false
+							});
+							metro_widget.init();
+							metro_widget.load();
+						}else{
+							metro_widget.destroy();
+							metro_widget = undefined;
+						}
+					break;
+				case "regions":
+						if(!region_widget){
+							region_widget = common.widgets.region_map({
+								onCancel:function(){
+									region_widget.destroy();
+									region_widget = undefined;
+								},
+								needButtons:false
+							});
+							region_widget.init();
+							region_widget.load(grid.getDataItem(columnHandle.row).regions);
+						}else{
+							region_widget.destroy();
+							region_widget = undefined;
+						}
+					break;
+				default:
+					if(metro_widget){
+						metro_widget.destroy();
+						metro_widget = undefined;
+					}
+
+					if(region_widget){
+						region_widget.destroy();
+						region_widget = undefined;
+					}
+					break;
+			}
+		});
+
+		/*
+		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
+		*/
+		$(window).keydown(function(e){
+			if(e.keyCode == 27){
+				if(region_widget){
+					region_widget.destroy();
+					region_widget = undefined;
+				}
+
+				if(metro_widget){
+					metro_widget.destroy();
+					metro_widget = undefined;
+				}
+			}
+		})
+		/*
+		* события модели
+		*/
 		model.onDataLoading.subscribe(function(){
 			common.showAjaxIndicator();
 		});
@@ -165,22 +234,31 @@
 
 		});
 
+		function regionOnSave(event){
+			region_widget.destroy();
+			if(region_widget.isValueChanged()){
+				regions = region_widget.serialize().splice(0);
+
+				vp = grid.getViewport();
+				model.setRegions(regions);
+				model.applyFilter(vp.top,vp.bottom);
+			}
+			region_widget = undefined;
+		}
+
+		function regionOnCancel(event){
+			region_widget.destroy();
+			region_widget = undefined;
+
+		}
+
 		$('#region_btn').click(function(event){
 			if(!region_widget){
-				region_widget = common.widgets.region_map();
+				region_widget = common.widgets.region_map({onSave:regionOnSave,onCancel:regionOnCancel});
 				region_widget.init();
 				region_widget.load(regions);
 			}else{
-				region_widget.destroy();
-				if(region_widget.isValueChanged()){
-					regions = region_widget.serialize().splice(0);
-
-					vp = grid.getViewport();
-					model.setRegions(regions);
-					model.applyFilter(vp.top,vp.bottom);
-				}
-				region_widget = undefined;
-
+				regionOnSave();
 			}
 		});
 
@@ -191,6 +269,7 @@
 				if(common.isEmptyObj(serializeValue)){
 					metros = serializeValue;
 				}else{
+					metros = {};
 					for(var i in serializeValue){
 						if(!metros[i]) metros[i] = [];
 						metros[i] = serializeValue[i].splice(0);
@@ -204,6 +283,8 @@
 		}
 
 		function metroOnCancel(event){
+			metro_widget.destroy();
+			metro_widget = undefined;
 		}
 
 		$('#metro_btn').click(function(event){
@@ -218,7 +299,8 @@
 
 
 		$('#search_btn').click(function(event){
-
+			model.setNumberTo($('#f_number_to').val());
+			model.setNumberFrom($('#f_number_from').val());
 			model.setCategory($('#f_category').val());
 			model.setDealtype($('#f_dealtype').val());
 			model.setPriceFrom($('#f_price_from').val());

@@ -12,6 +12,7 @@ $(function(){
 		  return wrap.html();
 		};
 
+		
 		function AgentFormatter(row,cell,value,columnDef,dataContext){
 			if(!value)
 				return '<a href="#"> Назначить агента </a>';
@@ -57,7 +58,7 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',AddUrl:admin.baseUrl+'?act=add',PageSize:200});	
 		/*
 		* Создание грида
 		*/
@@ -174,22 +175,44 @@ $(function(){
 			var vp = grid.getViewport();
 			model.ensureData(vp.top,vp.bottom);
 		});
-
 		model.onDataLoading.subscribe(function(){
 			common.showAjaxIndicator();
 		});
-	
-
+		model.onDataLoaded.subscribe(function(e,args){
+			for (var i = args.from; i <= args.to; i++) {
+		    	grid.invalidateRow(i);
+		  	}
+		  	grid.updateRowCount();
+		  	grid.render();
+			common.hideAjaxIndicator();
+		});
+		model.onDataCreating.subscribe(function(e,args){
+			common.showAjaxIndicator();
+		});
+		model.onDataCreated.subscribe(function(e,args){
+			grid.invalidateAllRows();
+			grid.updateRowCount();
+			grid.render();
+			common.hideAjaxIndicator();
+		});
+		model.onDataDeleting.subscribe(function(e,args){
+			common.showAjaxIndicator()
+		})
+		model.onDataDeleted.subscribe(function(e,args){
+			common.hideAjaxIndicator();
+		})
 		/*
 		* Обработчики "удалить" "добавить"
 		*/
 		$('#del_order').click(function(){
-
+			console.debug(grid.getSelectedRows());
+			model.delOrders();
 		});
 
 		$('#add_order').click(function(){
-
+			model.addOrder();
 		});
+
 		/*
 		* Обработчики фильтра
 		*/
@@ -211,7 +234,7 @@ $(function(){
 				event.preventDefault();
 				vp = grid.getViewport();
 				model.setNumber($(this).val());
-				model.setPhone($('#f_phone'));
+				model.setPhone($('#f_phone').val());
 				model.applyFilter(vp.top,vp.bottom);
 			}
 		});
@@ -355,14 +378,6 @@ $(function(){
 			model.applyFilter(vp.top,vp.bottom);
 		});
 
-		model.onDataLoaded.subscribe(function(e,args){
-			for (var i = args.from; i <= args.to; i++) {
-		    	grid.invalidateRow(i);
-		  	}
-		  	grid.updateRowCount();
-		  	grid.render();
-			common.hideAjaxIndicator();
-		});
 		grid.onViewportChanged.notify();
 		admin.orders.grid = grid;
 	});
