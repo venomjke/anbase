@@ -66,7 +66,7 @@
       </tr>
       <tr>
         <td colspan="2"><input id="search_btn" type="button"  style="cursor:pointer; padding:5px" value="подобрать" /></td>
-        <td>&nbsp;</td>
+        <td colspan="2"><input id="reset_filter_btn" type="button" style="cursor:pointer; padding:5px" value="очистить"/> </td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>

@@ -9,7 +9,6 @@
 		<?php load_partial_template($template,'dashboard_tabs'); ?>
 	    <div class="tablica" id="orders_grid" style="height:550px; border:1px #8AA1BC solid;">
 	    </div>
-	    <div class="nastroiki"><a href="111">Настройки таблицы</a></div>
   	</div>
   	<div class="podval">© <a href="111">copyright 2012 Flyweb inc.</a>	</div>
 </div>
@@ -254,7 +253,26 @@
 			vp = grid.getViewport();
 			model.applyFilter(vp.top,vp.bottom);
 		});
+		$('#reset_filter_btn').click(function(){
+			model.resetFilter();
+			$('#f_phone').val('');
+			$('#f_number').val('');
+			$('#f_number_to').val('');
+			$('#f_number_from').val('');
+			$('#f_category').val('');
+			$('#f_dealtype').val('');
+			$('#f_price_from').val('');
+			$('#f_price_to').val('');
+			$('#f_createdate_to').val('');
+			$('#f_createdate_from').val('');
+			$('#f_description').val('');
+			metros = {};
+			regions = {};
+			
+			vp = grid.getViewport();
+			model.applyFilter(vp.top,vp.bottom);
 
+		});
 		agent.orders.grid = grid;
 		grid.onViewportChanged.notify();
 

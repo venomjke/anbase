@@ -122,6 +122,26 @@
       ensureData(top,bottom);
     }
 
+    function resetFilter(){
+        number = '';
+        number_to = '';
+        number_from = '';
+        number_order='';
+        phone  = '' ;
+        category = '';
+        dealtype = '';
+        price_to ='';
+        price_from ='';
+        price_order = '';
+        createdate_to ='';
+        createdate_from = '';
+        createdate_order='';
+        description ='';
+        description_type ='';
+        metros = {};
+        regions = [];
+    }
+
     function resetSortOrder(){
       number_order = '';
       createdate_order = '';
@@ -306,6 +326,7 @@
       "setRegions":setRegions,
       "setMetros":setMetros,
       "applyFilter":applyFilter,
+      "resetFilter":resetFilter,
       "resetSortOrder":resetSortOrder,
       "addOrder":addOrder,
       "delOrders":delOrders,
