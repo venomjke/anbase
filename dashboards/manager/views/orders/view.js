@@ -183,7 +183,31 @@ $(function(){
 		model.onDataLoading.subscribe(function(){
 			common.showAjaxIndicator();
 		});
+		/*
+		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
+		*/
+		$(window).keydown(function(e){
+			if(e.keyCode == 27){
+				if(region_widget){
+					region_widget.destroy();
+					region_widget = undefined;
+				}
 
+				if(metro_widget){
+					metro_widget.destroy();
+					metro_widget = undefined;
+				}
+
+				/*
+				* Закрываем редактор
+				*/
+				var c = grid.getActiveCell();
+				var e = grid.getCellEditor(c);
+				if(e){
+					e.cancel();
+				}
+			}
+		});
 		/*
 		* Обработчики фильтра
 		*/

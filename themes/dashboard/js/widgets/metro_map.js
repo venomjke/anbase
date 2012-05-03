@@ -201,10 +201,6 @@ $(function(){
 					$wrapper.append($cancel_btn);
 					$wrapper.append($reset_btn);	
 				}
-
-				$wrapper.keydown(function(e){
-					console.log(e);
-				});
 				
 				$map_wrapper = $('<div style="position:relative">');
 				$img = $('<img usemap="#metro-normal" id="metromap" src="'+metro_normal.image+'"/>');

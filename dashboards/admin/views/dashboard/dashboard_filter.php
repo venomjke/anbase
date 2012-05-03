@@ -65,9 +65,9 @@
         <td><input tabindex="13" type="text" id="f_number_to" style="width:100px"/></td>
       </tr>
       <tr>
-        <td colspan="2"><input id="search_btn" type="button"  style="cursor:pointer; padding:5px" value="подобрать" /></td>
-        <td colspan="2"><input id="reset_filter_btn" type="button" style="cursor:pointer; padding:5px" value="очистить"/> </td>
-        <td>&nbsp;</td>
+        <td><input id="search_btn" type="button"  style="cursor:pointer; padding:5px" value="подобрать" /></td>
+        <td><input id="reset_filter_btn" type="button" style="cursor:pointer; padding:5px" value="очистить"/> </td>
+        <td colspan="2">&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td class="l" valign="top"><label for="f_description_full">Точное совпадение</label><input checked="checked" type="radio" id="f_description_full" name="f_description_type" value="full"/><label for="f_description_each">По каждому слову</label><input type="radio" id="f_description_each" name="f_description_type" value="each"/></td>
