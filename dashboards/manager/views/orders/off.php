@@ -255,6 +255,26 @@
 			vp = grid.getViewport();
 			model.applyFilter(vp.top,vp.bottom);
 		});
+		$('#reset_filter_btn').click(function(){
+			model.resetFilter();
+			$('#f_phone').val('');
+			$('#f_number').val('');
+			$('#f_number_to').val('');
+			$('#f_number_from').val('');
+			$('#f_category').val('');
+			$('#f_dealtype').val('');
+			$('#f_price_from').val('');
+			$('#f_price_to').val('');
+			$('#f_createdate_to').val('');
+			$('#f_createdate_from').val('');
+			$('#f_description').val('');
+			metros = {};
+			regions = {};
+			
+			vp = grid.getViewport();
+			model.applyFilter(vp.top,vp.bottom);
+
+		});
 
 		manager.orders.grid = grid;
 		grid.onViewportChanged.notify();
