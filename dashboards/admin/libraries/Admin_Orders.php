@@ -81,6 +81,12 @@ class Admin_Orders
 	}
 
 
+	public function get_all_off_orders()
+	{
+		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region');
+		$items        = $this->ci->orders_organization->get_all_off_orders_org($this->ci->admin_users->get_org_id(),$order_fields);
+		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_off_orders_org($this->ci->admin_users->get_org_id()),'items' =>$items );	
+	}
 	/**
 	 * Редактирование заявки.
 	 *

@@ -13,5 +13,5 @@
 </div>
 
 <script type="text/javascript">
-	<?php echo $this->load->view('orders/view.js',array(),true); ?>
+	<?php echo $this->load->view('orders/'.$section.'.js',array(),true); ?>
 </script>

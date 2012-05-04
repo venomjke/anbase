@@ -94,6 +94,9 @@ class Orders extends MX_Controller
 				$this->template->set_partial('dashboard_filter','dashboard/dashboard_filter');
 
 				switch ($section) {
+					case 'off':
+						$this->_off_orders();
+						break;
 					case 'free':
 						$this->_view_free_orders();
 						break;
@@ -206,7 +209,7 @@ class Orders extends MX_Controller
 	*	@author Alex.strigin
 	*	@company Flyweb
 	*/
-	public function _view_delegate_orders(){
+	private function _view_delegate_orders(){
 		if($this->ajax->is_ajax_request()){
 			try{
 				$orders = $this->admin_orders->get_all_delegate_orders();
@@ -230,6 +233,31 @@ class Orders extends MX_Controller
 		}
 	}
 
+
+	private function _off_orders()
+	{
+		if($this->ajax->is_ajax_request()){
+			try{
+				$orders = $this->admin_orders->get_all_off_orders();
+				$response['code'] = 'success_load_data';
+				$response['data'] = $orders;
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'runtime';
+				$response['data']['errors'] = array($re->get_error_message()); 
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_load_data';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
+			}
+			$this->ajax->build_json($response);
+		}else{
+			/*
+			*	Вывод данных
+			*/
+			$this->template->build('orders/view',array('section'=>'off'));
+		}
+	}
 	/**
 	 * Добавление заявки.
 	 * Добавление доступно только для ajax requests. Для всех остальных будем давать redirect.

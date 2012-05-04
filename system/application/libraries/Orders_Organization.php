@@ -330,4 +330,35 @@ class Orders_Organization
 		$filters = $this->fetch_filter();
 		return $this->ci->m_order->count_all_off_orders($user_id,$filters);
 	}
+
+	/**
+	 * Выбор всех завершенных заявок организации
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_all_off_orders_org($org_id,$fields=array())
+	{
+		$filters = $this->fetch_filter();
+
+		$limit  = false;
+		$offset = false;
+
+		//print_r($this->ci->input->get('regions'));
+		//print_r($this->ci->input->get('metros'));
+
+		$this->fetch_limit($limit,$offset);
+
+		$orders = $this->ci->m_order->get_all_off_orders_org($org_id,$filters,$limit,$offset,$fields);
+
+		$this->bind_regions($orders);
+		$this->bind_metros($orders);
+		return $orders;
+	}
+
+	public function count_all_off_orders_org($org_id)
+	{
+		$filters = $this->fetch_filter();
+		return $this->ci->m_order->count_all_off_orders_org($org_id,$filters);
+	}
 } // END class OrdersOrganization

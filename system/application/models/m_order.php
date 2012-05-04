@@ -584,6 +584,21 @@ class M_Order extends MY_Model{
 		return $this->get_count_result();	
 	}
 
+	public function get_all_off_orders_org($org_id,$filter=array(),$limit=false,$offset=false,$fields=array())
+	{
+		$this->where('orders.state',M_Order::ORDER_STATE_OFF);
+		return $this->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
+	}
+
+	public function count_all_off_orders_org($org_id,$filter)
+	{
+		
+		$this->build_count_select($filter);
+		$this->where('orders.state',M_Order::ORDER_STATE_OFF);
+		$this->db->where('organizations.id',$org_id);
+		return $this->get_count_result();	
+	}
+
 	/**
 	 * Метод, позволяющий выбрать заявки всех пользователей или одного
 	 *
