@@ -351,7 +351,7 @@ class Orders extends MX_Controller
 			* Пытаемся изменить
 			*/
 			try{
-				$this->admin_users->del_orders();
+				$this->admin_orders->del_orders();
 				$response['code'] = 'success_del_data';
 				$response['data'] = lang('success_del_order');
 			}catch(AnbaseRuntimeException $re){

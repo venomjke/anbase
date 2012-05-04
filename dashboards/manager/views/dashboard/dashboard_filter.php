@@ -10,9 +10,9 @@
       <?php endif; ?>
       <?php /*в заявках агентов выводим фильтр по агентам*/ if($current == 'delegate'): ?>
       <td> по&nbsp;агенту: </td>
-      <td>  <select style="width:130px" name="user_id" id="f_user_id"> 
+      <td>  <select style="width:130px" name="user_id" id="f_user_id">
+                <option value=""></option> 
         <?php foreach($manager_agents as $manager_agent): ?>
-          <option value=""></option>
           <option value="<?php echo $manager_agent->id; ?>"><?php echo make_official_name($manager_agent->name,$manager_agent->middle_name,$manager_agent->last_name); ?></option>
         <?php endforeach;?>
       </select></td>

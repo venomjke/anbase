@@ -15,7 +15,7 @@ $(function(){
 		
 		function AgentFormatter(row,cell,value,columnDef,dataContext){
 			if(!value)
-				return '<a href="#"> Назначить агента </a>';
+				return '<a href="#"> Назначить </a>';
 			var agent_name = dataContext.user_name.charAt(0).toUpperCase();
 			var agent_middle_name = dataContext.user_middle_name.charAt(0).toUpperCase();
 			var agent_last_name = dataContext.user_last_name.charAt(0).toUpperCase()+dataContext.user_last_name.substr(1,dataContext.user_last_name.length);
@@ -41,8 +41,9 @@ $(function(){
 			{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
 			{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
 			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer,sortable:true},	
-			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:300, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
-			{id: "phone", name:"Телефон", field:"phone",  width:115, editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone }
+			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:280, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
+			{id: "phone", name:"Телефон", field:"phone",  width:115, editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone },
+			{id: "agent", name:"Агент", field:"user_id", formatter:AgentFormatter}
 		]);	
 
 		/*
@@ -56,7 +57,7 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',AddUrl:admin.baseUrl+'?act=add',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',AddUrl:admin.baseUrl+'?act=add',DeleteUrl:admin.baseUrl+'?act=del',PageSize:200});	
 		/*
 		* Создание грида
 		*/
@@ -188,16 +189,18 @@ $(function(){
 			common.showAjaxIndicator();
 		});
 		model.onDataCreated.subscribe(function(e,args){
-			grid.invalidateAllRows();
-			grid.updateRowCount();
-			grid.render();
 			common.hideAjaxIndicator();
+			vp = grid.getViewport();
+			model.reloadAll(vp.top,vp.bottom);
 		});
 		model.onDataDeleting.subscribe(function(e,args){
 			common.showAjaxIndicator()
 		})
 		model.onDataDeleted.subscribe(function(e,args){
 			common.hideAjaxIndicator();
+			grid.setSelectedRows([]);
+			vp = grid.getViewport();
+			model.reloadAll(vp.top,vp.bottom);
 		})
 		/*
 		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
@@ -254,8 +257,7 @@ $(function(){
 		* Обработчики "удалить" "добавить"
 		*/
 		$('#del_order').click(function(){
-			console.debug(grid.getSelectedRows());
-			model.delOrders();
+			admin.orders.del_orders(grid,model);
 		});
 
 		$('#add_order').click(function(){

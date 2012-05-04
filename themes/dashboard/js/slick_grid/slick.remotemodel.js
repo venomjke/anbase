@@ -266,14 +266,37 @@
         }
       }
     }
+
+    function reloadAll(from,to){
+      clear();
+      ensureData(from,to);
+    }
     function reloadData(from, to) {
       for (var i = from; i <= to; i++)
         delete data[i];
       ensureData(from, to);
     }
 
-    function delOrders(list){
+    function delOrders(ids){
       onDataDeleting.notify();
+      $.ajax({
+        url:options.DeleteUrl,
+        dataType:'json',
+        data:{"orders":ids},
+        type:'POST',
+        success:function(response){
+          if(response.code && response.data){
+            switch(response.code){
+              case  'success_del_data':
+                common.showSuccessMsg(response.data);
+              break;
+              case 'error_del_data':
+                common.showErrorMsg(response.data.errors[0]);
+              break;
+            }
+          }
+        }
+      });
       onDataDeleted.notify();
     }
 
@@ -291,7 +314,6 @@
           if(response.code && response.data){
             switch(response.code){
               case 'success_add_data':
-                data.splice(0,0,response.data.add_order);
                 common.showSuccessMsg(response.data.msg);
                 onDataCreated.notify();
                 break;
@@ -343,6 +365,7 @@
       "isDataLoaded": isDataLoaded,
       "ensureData": ensureData,
       "reloadData": reloadData,
+      "reloadAll":reloadAll,
 
       // events
       "onDataLoading": onDataLoading,

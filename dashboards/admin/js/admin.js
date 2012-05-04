@@ -710,158 +710,6 @@ var admin = {
 				$('#dashboard_table input[type="checkbox"]').removeAttr('checked','checked');
 			}
 		},
-		del:function(options){
-			/*
-			* 1. формируем пачку id для отправки
-			* 2. отправляем
-			* 3. все ок? удаляем их из таблицы
-			*/
-			var orders_ids = [];
-			var all_checkbox = $('#dashboard_table td input:checked');
-			all_checkbox.each(function(){
-				orders_ids.push($(this).attr('value'));
-			});
-
-			var post_data = {};
-			post_data['orders_ids'] = orders_ids;
-
-			$.ajax({
-				url:admin.baseUrl+options.uri,
-				type:'POST',
-				dataType:'json',
-				data:post_data,
-				success:function(response){
-					if(response.code && response.data){
-						switch(response.code){
-							case 'success_del_order':
-								common.showResultMsg(response.data);
-								all_checkbox.each(function(){
-									$('#order_'+$(this).val()).remove();
-								});
-							break;
-							case 'error_del_order':
-								common.showResultMsg('Удалить не удалось');
-							break;
-						}
-					}
-				},
-				beforeSend:function(){
-					common.showStatusMsg();
-				},
-				complete:function(){
-					common.hideStatusMsg();
-				}
-			})
-		},
-		edit:function(options){
-			/*
-			* 1. выдергиваем поле
-			* 2. отправлялем изменение
-			* 3. все в поряде
-			*/
-			var form_data = options.form.serialize();
-			form_data += "&id="+options.id;
-			$.ajax({
-				url:admin.baseUrl+options.uri,
-				type:'POST',
-				dataType:'json',
-				data:form_data,
-				success:function(response){
-					if(response.code && response.data){
-						switch(response.code){
-							case 'success_edit_order':
-								options.callback();
-								common.showStatusMsg({id:'response_msg',msg:response.data,timeout:5000});
-							break;
-							case 'error_edit_order':
-								common.showStatusMsg({id:'response_msg',msg:'Сохранить не удалось...',timeout:5000});
-							break;
-						}
-					}
-				},
-				beforeSend:function(){
-					common.showStatusMsg();
-				},
-				complete:function(){
-					common.hideStatusMsg();
-				}
-			});
-			return true;
-		},
-		edit_text:function(options){
-			/*
-			* выцепить из формы текст
-			* прицепить его соотв. диалогу
-			* создать соотв. диалог
-			*/
-			var txt = $.trim(options.jObjAction.text());
-			var dialog = $('#dialog_edit_'+options.name);
-			var form = dialog.find('form');
-			form.find('input[type="text"]').val(txt);
-			dialog.dialog('option','buttons',{
-				'Сохранить':function(event){
-					options['form'] = form;
-					// callback нужна для того, чтобы после отправки запроса можно было сохранить результат в таблице пользователя
-					options['callback'] = function(){
-						options.jObjAction.text(form.find('input').val());
-					};
-					admin.orders.edit(options);
-					dialog.dialog('close');
-				},
-				'Отмена':function(event){
-					dialog.dialog('close');
-				}
-			});
-			dialog.dialog('open');
-		},
-		edit_bigtext:function(options){
-			
-			var txt = $.trim(options.jObjAction.text());
-			var dialog = $('#dialog_edit_'+options.name);
-			var form = dialog.find('form');
-			form.find('textarea').val(txt);
-			dialog.dialog('option','buttons',{
-				'Сохранить':function(event){
-					options['form'] = form;
-					// callback нужна для того, чтобы после отправки запроса можно было сохранить результат в таблице пользователя
-					options['callback'] = function(){
-						options.jObjAction.text(form.find('textarea').val());
-					};
-					admin.orders.edit(options);
-					dialog.dialog('close');
-				},
-				'Отмена':function(event){
-					dialog.dialog('close');
-				}
-			});
-			dialog.dialog('open');
-		},
-		edit_select:function(options){
-			var text   = $.trim(options.jObjAction.text());
-			var dialog = $('#dialog_edit_'+options.name);
-			var form = dialog.find('form');
-			form.find('option').each(function(){
-				if($.trim($(this).text()) == text){
-					$(this).attr('selected','selected');
-				}
-			});
-
-			dialog.dialog('option','buttons',{
-				'Сохранить':function(event){
-					options['form'] = form;
-					// callback нужна для того, чтобы после отправки запроса можно было сохранить результат в таблице пользователя
-					options['callback'] = function(){
-						options.jObjAction.text(form.find('option:selected').text());
-					};
-					admin.orders.edit(options);
-					dialog.dialog('close');
-				},
-				'Отмена':function(event){
-					dialog.dialog('close');
-				}
-			});
-			dialog.dialog('open');
-		},
 		/*
 		*
 		* Передать заявку под управление агента
@@ -921,6 +769,31 @@ var admin = {
 				}
 			});
 			dialog.dialog('open');
+		},
+		del_orders:function(grid,model){
+			var ids = [];
+			var SelectedRows = grid.getSelectedRows();
+
+			for(var i in SelectedRows){
+				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
+					ids.push(grid.getDataItem(SelectedRows[i]).id);
+				}
+			}
+			if(ids.length){
+				$d = $('<div>');
+				$d.dialog({
+					'title':'Вы точно желаете удалить записи?',
+					'buttons':{
+						'Удалить':function(){
+							model.delOrders(ids);
+							$d.dialog('close');
+						},
+						'Отмена':function(){
+							$d.dialog('close');
+						}
+					}
+				});		
+			}
 		}	
 	}
 }

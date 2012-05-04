@@ -34,17 +34,17 @@ $(function(){
 		columns.push(checkboxSelector.getColumnDefinition());
 
 		$.merge(columns,[
-			{id: "number", name:"Номер", field:"number", editor:Slick.Editors.Integer,sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date,sortable:true},
+			{id: "number", name:"№", field:"number", width:40, editor:Slick.Editors.Integer,sortable:true},
+			{id: "create_date", name:"Дата создания", field:"create_date", width:50, editor:Slick.Editors.Date,sortable:true},
 			{id: "category", name:"Объект", field:"category", editor:Slick.Editors.AnbaseCategory},
-			{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
-			{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
-			{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
+			{id: "deal_type", name:"Сделка", field:"deal_type", width:50, editor:Slick.Editors.AnbaseDealType},
+			{id: "regions",  name:"Район", field:"regions",  width:60, editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
+			{id: "metros", name:"Метро", field:"metros",  width:60, editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
 			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer,sortable:true},	
 			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:200, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
-			{id: "phone", name:"Телефон", field:"phone",  editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone },
+			{id: "phone", name:"Телефон", field:"phone", width:100,  editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone },
 			{id: "agent", name:"Агент", field:"user_id", formatter:AgentFormatter},
-			{id:"delegate_date", name:"Дата делегирования", field:"delegate_date", editor:Slick.Editors.Date}
+			{id:"finish_date", name:"Дата завершения", field:"finish_date", width:90, editor:Slick.Editors.Date}
 		]);	
 
 		/*
@@ -266,6 +266,12 @@ $(function(){
 			}
 		});
 		
+		$('#f_user_id').change(function(event){
+			vp = grid.getViewport();
+			model.setUserId($(this).val());
+			model.applyFilter(vp.top,vp.bottom);
+		})
+
 		$('#f_phone').keyfilter(/[\+\d]/);
 		$('#f_phone').keydown(function(event){
 			if(event.which == 13){
@@ -403,6 +409,27 @@ $(function(){
 
 			vp = grid.getViewport();
 			model.applyFilter(vp.top,vp.bottom);
+		});
+		$('#reset_filter_btn').click(function(){
+			model.resetFilter();
+			$('#f_user_id').val('')
+			$('#f_phone').val('');
+			$('#f_number').val('');
+			$('#f_number_to').val('');
+			$('#f_number_from').val('');
+			$('#f_category').val('');
+			$('#f_dealtype').val('');
+			$('#f_price_from').val('');
+			$('#f_price_to').val('');
+			$('#f_createdate_to').val('');
+			$('#f_createdate_from').val('');
+			$('#f_description').val('');
+			metros = {};
+			regions = {};
+			
+			vp = grid.getViewport();
+			model.applyFilter(vp.top,vp.bottom);
+
 		});
 
 		grid.onViewportChanged.notify();

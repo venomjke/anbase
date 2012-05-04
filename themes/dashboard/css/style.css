@@ -20,9 +20,10 @@ a:hover {
 div.clier {
 	clear: both;
 }
+
+
 span.plus {
 	background-color: #eeeeee;
-	background-image: url(../images/plus.png);
 	height: 18px;
 	padding-right: 10px;
 	padding-left: 24px;
@@ -41,6 +42,12 @@ span.plus a:hover {
 	text-decoration: underline;
 }
 
+span.plus {
+	background-image: url(../images/plus.png);
+}
+span.minus{
+	background-image: url(../images/minus.png);
+}
 
 .shapka {
 	height: 100px;

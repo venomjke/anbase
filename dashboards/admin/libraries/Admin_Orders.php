@@ -83,7 +83,7 @@ class Admin_Orders
 
 	public function get_all_off_orders()
 	{
-		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region');
+		$order_fields = array('number','create_date','finish_date','category','deal_type','description','price','phone','any_metro','any_region');
 		$items        = $this->ci->orders_organization->get_all_off_orders_org($this->ci->admin_users->get_org_id(),$order_fields);
 		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_off_orders_org($this->ci->admin_users->get_org_id()),'items' =>$items );	
 	}
@@ -182,15 +182,15 @@ class Admin_Orders
 	 **/
 	public function del_orders()
 	{
-		$orders_ids = $this->ci->input->post('orders_ids');
-
+		$orders_ids = $this->ci->input->post('orders');
 		if(is_array($orders_ids)){
 			foreach($orders_ids as $order_id){
 
-				if(is_numeric($order_id) && $this->ci->m_order->is_exists($order_id,$this->get_org_id())) {
+				if(is_numeric($order_id) && $this->ci->m_order->is_exists($order_id,$this->ci->admin_users->get_org_id())) {
 					/*
 					* Будем просто удалять, а получилось или нет, это уже не наша забота. 
 					* P.S Если пользователь не хакер, то все получится.
+					* P.P.S База должна позаботиться о том, чтобы все связанные с заявкой записи были тоже удалены
 					*/
 					$this->ci->m_order->delete($order_id);
 				}
