@@ -82,7 +82,9 @@
 		}
 
 		this.loadValue = function(item){
-			defaultValue = item.user_id;
+			defaultValue = !item.user_id?-1:item.user_id;
+
+			$select.find('option[value='+defaultValue+']').attr('selected','selected');
 		}
 
 		this.serializeValue = function(){

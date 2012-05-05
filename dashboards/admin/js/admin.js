@@ -618,6 +618,35 @@ var admin = {
 				return false;
 			}
 
+			function metroOnSave(){
+				if(metro_widget.isValueChanged()){
+					serializeValue = metro_widget.serialize();
+					if(common.isEmptyObj(serializeValue)){
+						metros = serializeValue;
+					}else{
+						metros = {};
+						for(var i in serializeValue){
+							if(!metros[i]) metros[i] = [];
+							metros[i] = serializeValue[i].splice(0);
+						}
+					}
+				}
+				metro_widget = undefined;
+			}
+			function metroOnCancel(){
+				metro_widget = undefined;
+			}
+
+			function regionOnSave(){
+				if(region_widget.isValueChanged()){
+					regions = region_widget.serialize().splice(0);
+				}
+				region_widget = undefined;
+			}
+			function regionOnCancel(){
+				region_widget = undefined;
+			}
+
 			function fill_table(table,body){
 				for(var i in body){
 					$tr = $('<tr>');
@@ -664,7 +693,7 @@ var admin = {
 			*/
 			left_table['regions'].input.click(function(){
 				if(!region_widget){
-					region_widget = common.widgets.region_map({onSave:function(){region_widget=undefined},onCancel:function(){region_widget=undefined}});
+					region_widget = common.widgets.region_map({onSave:regionOnSave,onCancel:regionOnCancel});
 					region_widget.init();
 					region_widget.load(regions);
 				}else{
@@ -675,7 +704,7 @@ var admin = {
 
 			left_table['metros'].input.click(function(){
 				if(!metro_widget){
-					metro_widget = common.widgets.metro_map({metros:metros,onSave:function(){metro_widget=undefined;},onCancel:function(){metro_widget=undefined}});
+					metro_widget = common.widgets.metro_map({metros:metros,onSave:metroOnSave,onCancel:regionOnSave});
 					metro_widget.init();
 					metro_widget.load();
 				}else{
@@ -746,20 +775,15 @@ var admin = {
 						data['description'] = right_table['description'].input.val();
 
 						if(region_widget){
-							regions = region_widget.serialize();
-							region_widget.destroy();
-							region_widget = undefined;
-
-							data['regions'] = regions;
+							metroOnSave();
 						}
+						data['regions'] = regions;
 
 						if(metro_widget){
-							metros = metro_widget.serialize();
-							metro_widget.destroy();
-							metro_widget = undefined;
-
-							data['metros'] = metros;
+							regionOnSave();
 						}
+						data['metros'] = metros;
+
 						model.addOrder(data,callback_add_order);
 					},
 					'Отмена':function(){

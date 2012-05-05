@@ -98,7 +98,7 @@ class Admin_Orders
 		/*
 		* правила валидации для полей
 		*/
-		$order_field = array('number','create_date','deal_type','category','price','description','phone','delegate_date','finish_date','state');
+		$order_field = array('number','create_date','deal_type','category','price','description','phone','delegate_date','finish_date','state','any_metro','any_region');
 		$metro_field = array('metros');
 		$region_field = array('regions');
 
@@ -159,6 +159,25 @@ class Admin_Orders
 			$insert_data = array_intersect_key($this->ci->input->post(),array_flip($insert_fields));
 			$insert_data['org_id'] = $this->ci->admin_users->get_org_id();
 			if( ($org_id = $this->ci->m_admin_order->insert($insert_data,true))){
+
+				/*
+				* Добавляем метро, если указано
+				*/
+				if($this->ci->input->post('metros')){
+					/*
+					* обращаемся к orders_metros
+					*/
+					$this->ci->m_order_metro->bind_order_metros($org_id,$this->ci->input->post('metros'));
+				}
+				/*
+				* Добавляем районы если указаны
+				*/
+				if($this->ci->input->post('regions')){
+					/*
+					* обращаемся к orders_regions
+					*/
+					$this->ci->m_order_region->bind_order_regions($org_id,$this->ci->input->post('regions'));
+				}
 				return $org_id;
 			}
 
@@ -188,12 +207,6 @@ class Admin_Orders
 			foreach($orders_ids as $order_id){
 
 				if(is_numeric($order_id) && $this->ci->m_order->is_exists($order_id,$this->ci->admin_users->get_org_id())) {
-					/*
-					* [my_notice] Странную ошибку я получаю, если удаляю по одной записи. Точнее даже не ошибку, а результат...
-					* Пример, хочу я удалить 5 записей сразу, отправляю запрос на удаление сюда, все норм. След. запросом пытаюсь
-					* загрузить все записи, и получаю  несколько тех записей, которые я уже удалил. При том, бывает, что на выходе
-					* count = 6 а total = 4, то есть, total Говорить о том, что записи то удалены, а select выбирает 6...
-					*/
 					$valid_ids[] = $order_id;
 				}
 			}
