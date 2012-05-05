@@ -94,7 +94,7 @@ $(function(){
 
 
 			var $container = $('body');
-			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'></div>").appendTo($container);
+			$wrapper = $("<div style='z-index:99999; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'></div>").appendTo($container);
 			$region_wrapper = $('<div style="position:relative; width:700px"></div>');
 			$img = $('<img usemap="#region-normal" id="regionmap" src="'+region_normal.image+'"/>');
 			$map = $('<map name="region-normal">');

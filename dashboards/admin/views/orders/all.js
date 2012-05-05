@@ -185,16 +185,15 @@ $(function(){
 		* Обработчик создания записи
 		*/
 		$('#add_order').click(function(){
-			model.addOrder();
+			admin.orders.add_order(grid,model);
 		});
 		model.onDataCreating.subscribe(function(e,args){
 			common.showAjaxIndicator();
 		});
 		model.onDataCreated.subscribe(function(e,args){
-			grid.invalidateAllRows();
-			grid.updateRowCount();
-			grid.render();
 			common.hideAjaxIndicator();
+			vp = grid.getViewport();
+			model.reloadAll(vp.top,vp.bottom);
 		});
 
 		/*

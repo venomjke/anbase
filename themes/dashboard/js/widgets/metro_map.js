@@ -172,7 +172,7 @@ $(function(){
 			init:function(){
 
 				var $container = $('body');
-				$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'>").appendTo($container);
+				$wrapper = $("<div style='z-index:99999; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'>").appendTo($container);
 
 
 				$closeImg = $('<img title="Закрыть без сохранения" style="position:relative; top:0; left:96%; cursor:pointer;" src="'+common.baseUrl+'themes/dashboard/images/delete.png" />');

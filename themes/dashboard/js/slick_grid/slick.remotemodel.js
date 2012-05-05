@@ -289,6 +289,7 @@
             switch(response.code){
               case  'success_del_data':
                 common.showSuccessMsg(response.data);
+                onDataDeleted.notify();
               break;
               case 'error_del_data':
                 common.showErrorMsg(response.data.errors[0]);
@@ -297,28 +298,27 @@
           }
         }
       });
-      onDataDeleted.notify();
     }
 
-    function addOrder(){
+    function addOrder(data,callback){
       onDataCreating.notify();
       
+      data['state'] = 'on';
       $.ajax({
         url:options.AddUrl,
         dataType:'json',
-        data:{
-          state:"on"
-        },
+        data:data,
         type:'POST',
         success:function(response){
           if(response.code && response.data){
             switch(response.code){
               case 'success_add_data':
-                common.showSuccessMsg(response.data.msg);
+                callback('success',response.data);
                 onDataCreated.notify();
                 break;
               case 'error_add_data':
                 console.log(response.data);
+                callback('error',response.data);
                 common.hideAjaxIndicator();
                 break;
             }

@@ -735,4 +735,9 @@ class M_Order extends MY_Model{
 		return $this->get_count_result();
 	}
 
+	public function delete_orders($ids)
+	{
+		$this->where_in('id',$ids);
+		$this->db->delete($this->table);
+	}
 }

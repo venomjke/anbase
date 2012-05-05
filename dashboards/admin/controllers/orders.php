@@ -40,6 +40,7 @@ class Orders extends MX_Controller
 		/*
 		*	загрузка моделей
 		*/
+		$this->load->model('m_order');
 		$this->load->model('m_region');
 		$this->load->model('m_metro');
 		$this->load->model('m_metro_image');
@@ -53,24 +54,44 @@ class Orders extends MX_Controller
 		$this->template->set_partial('dashboard_user','dashboard/dashboard_user');
 		$this->template->set_partial('dashboard_menu','dashboard/dashboard_menu');
 		
+
 		/*
 		* Загружаем другую метаинфу
 		* [my_notice] Это все ресурсы, используемые во время работы. У меня есть такое мнение, что их стоит выделить 
 		* в какой-то класс AppAssets
 		*/
+		$this->_load_app_assets();
+
+
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url('dashboards/admin/js/admin.js').'"></script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){admin.init({baseUrl:"'.site_url("admin/orders").'"}); admin.orders.init();}); </script>');
+	}
+
+	private function _load_app_assets($value='')
+	{
+		
 		$regions = $this->m_region->get_region_list("json");
 		$metros  = $this->m_metro->get_metro_list("json");
 		$metros_images = $this->m_metro_image->get_images();
 		$regions_images = $this->m_region_image->get_images();
 		$staff_list  = json_encode($this->admin_users->get_list_staff());
+		$category_list = json_encode($this->m_order->get_category_list());
+		$dealtype_list = json_encode($this->m_order->get_dealtype_list());
 
+		$assets = array(
+			"common.regions=$regions",
+			"common.metros=$metros",
+			"common.metros_images=$metros_images",
+			"common.regions_images=$regions_images",
+			"common.staff_list=$staff_list",
+			"common.category_list=$category_list",
+			"common.dealtype_list=$dealtype_list",
+			""
+		);
 		/*
 		* Подключение скриптов
 		*/
-		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.'; common.metros='.$metros.'; common.metros_images = '.$metros_images.'; common.regions_images = '.$regions_images.'; common.staff_list='.$staff_list.'</script>');
-
-		$this->template->append_metadata('<script type="text/javascript" src="'.site_url('dashboards/admin/js/admin.js').'"></script>');
-		$this->template->append_metadata('<script type="text/javascript">$(function(){admin.init({baseUrl:"'.site_url("admin/orders").'"}); admin.orders.init();}); </script>');
+		$this->template->append_metadata('<script type="text/javascript">'.implode(';',$assets).'</script>');
 	}
 
 
@@ -277,16 +298,9 @@ class Orders extends MX_Controller
 			* Пытаемся добавить запись
 			*/
 			try{
-				if($order_id = $this->admin_orders->add_order()){
-
-					$response['code'] = 'success_add_data';
-					$response['data']['add_order'] = $this->m_order->get($order_id);
-					$response['data']['msg'] = lang('success_add_order');	
-				}else{
-					$response['code'] = 'error_add_data';
-					$response['data']['errorType'] = 'runtime';
-					$response['data']['errors'] = array(lang('common.insert_error')); 
-				}
+				$this->admin_orders->add_order();
+				$response['code'] = 'success_add_data';
+				$response['data'] = lang('success_add_order');	
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_add_data';
 				$response['data']['errorType'] = 'runtime';
