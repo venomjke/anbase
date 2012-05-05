@@ -5,7 +5,7 @@
       <td><input style="width:100px" type="text" id="f_number" /></td>
       <td> по&nbsp;телефону:</td>
       <td><input type="text" name="phone" id="f_phone" /></td>
-      <?php if($current == "delegate" or $current=="off"): ?>
+      <?php if($current == "all" or $current == "delegate" or $current=="off"): ?>
       <td> по&nbsp;сотруднику: </td>
       <td>  <select style="width:130px" name="user_id" id="f_user_id"> 
             <option value=""></option>

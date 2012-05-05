@@ -572,7 +572,7 @@ class M_Order extends MY_Model{
 		*	Порядок сортировки
 		*/
 		$this->order_by('orders.id','DESC');
-		$this->group_by('orders.id');
+		$this->group_by('orders.id');	
 		return $this->get_all(array('organizations.id' => $id));
 
 	}
@@ -582,6 +582,17 @@ class M_Order extends MY_Model{
 		$this->build_count_select($filter);
 		$this->db->where('organizations.id',$org_id);
 		return $this->get_count_result();	
+	}
+
+	public function get_all_on_orders_org($org_id,$filter=array(),$limit=false,$offset=false,$fields=array()){
+		$this->where(array('state'=>M_Order::ORDER_STATE_ON));
+		return $this->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
+	}
+
+	public function count_all_on_orders_org($org_id,$filter)
+	{
+		$this->where(array('state'=>M_Order::ORDER_STATE_ON));
+		return $this->count_all_orders_org($org_id,$filter);	
 	}
 
 	public function get_all_off_orders_org($org_id,$filter=array(),$limit=false,$offset=false,$fields=array())
@@ -693,7 +704,7 @@ class M_Order extends MY_Model{
 		* выбираем просто проверяя user_id на NULL
 		*/
 		$this->db->where("orders_users.user_id IS NULL");
-		return $this->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
+		return $this->get_all_on_orders_org($org_id,$filter,$limit,$offset,$fields);
 	}
 
 	/**
@@ -705,10 +716,8 @@ class M_Order extends MY_Model{
 	 **/
 	public function count_all_free_orders($org_id,$filter)
 	{
-		$this->build_count_select($filter);
 		$this->db->where("orders_users.user_id IS NULL");
-		$this->db->where("orders.org_id",$org_id);
-		return $this->get_count_result();
+		return $this->count_all_on_orders_org($org_id,$filter);
 	}
 
 	/**
@@ -724,20 +733,24 @@ class M_Order extends MY_Model{
 	public function get_all_delegate_orders($org_id,$filter=array(),$limit=false,$offset=false,$fields=array())
 	{
 		$this->db->where("orders_users.user_id IS NOT NULL");
-		return $this->get_all_orders_org($org_id,$filter,$limit,$offset,$fields);
+		return $this->get_all_on_orders_org($org_id,$filter,$limit,$offset,$fields);
 	}
 
 	public function count_all_delegate_orders($org_id,$filter=array())	
 	{
-		$this->build_count_select($filter);
 		$this->db->where('orders_users.user_id IS NOT NULL');
-		$this->db->where('orders.org_id',$org_id);
-		return $this->get_count_result();
+		return $this->count_all_on_orders_org($org_id,$filter);
 	}
 
 	public function delete_orders($ids)
 	{
 		$this->where_in('id',$ids);
 		$this->db->delete($this->table);
+	}
+
+	public function finish_orders($ids)
+	{
+		$this->where_in('id',$ids);
+		$this->db->update($this->table,array('state'=>M_Order::ORDER_STATE_OFF));
 	}
 }

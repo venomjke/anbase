@@ -158,6 +158,12 @@ class Orders extends MX_Controller
 				*/
 				$this->_delegate_order();
 			break;
+			case 'finish':
+				/*
+				* Прикончить заявки
+				*/
+				$this->_finish_orders();
+			break;
 		}
 	}
 
@@ -385,6 +391,33 @@ class Orders extends MX_Controller
 		}
 	}
 
+	/**
+	 * Отключение заявок
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _finish_orders()
+	{
+		if($this->ajax->is_ajax_request()){
+			try{
+				$this->admin_orders->finish_orders();
+				$response['code'] = 'success_finish_data';
+				$response['data'] = lang('success_finish_data');
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_finish_data';
+				$response['data']['errorType'] = 'runtime';
+				$response['data']['errors'] = array($re->get_error_message());
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_finish_data';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
+			}
+			$this->ajax->build_json($response);
+		}else{
+			redirect($this->admin_users->get_home_page());
+		}
+	}
 	/**
 	 * Назначить заявку члену персонала
 	 *

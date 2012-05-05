@@ -10,7 +10,8 @@
       PageSize:100,
       BaseUrl:'',
       AddUrl:'',
-      DeleteUrl:''
+      DeleteUrl:'',
+      finishUrl:''
     };
     options = $.extend(true,def_options,options);
 
@@ -48,6 +49,8 @@
     var onDataCreated = new Slick.Event();
     var onDataDeleting = new Slick.Event();
     var onDataDeleted = new Slick.Event();
+    var onDataFinish  = new Slick.Event();
+    var onDataFinished = new Slick.Event();
 
 
     function init() {
@@ -300,6 +303,29 @@
       });
     }
 
+    function finishOrders(ids){
+      onDataFinish.notify();
+      $.ajax({
+        url:options.finishUrl,
+        dataType:'json',
+        data:{"orders":ids},
+        type:'POST',
+        success:function(response){
+          if(response.code && response.data){
+            switch(response.code){
+              case  'success_finish_data':
+                common.showSuccessMsg(response.data);
+                onDataFinished.notify();
+              break;
+              case 'error_finish_data':
+                common.showErrorMsg(response.data.errors[0]);
+              break;
+            }
+          }
+        }
+      });
+    }
+
     function addOrder(data,callback){
       onDataCreating.notify();
       
@@ -360,6 +386,7 @@
       "resetSortOrder":resetSortOrder,
       "addOrder":addOrder,
       "delOrders":delOrders,
+      "finishOrders":finishOrders,
       // methods
       "clear": clear,
       "isDataLoaded": isDataLoaded,
@@ -373,7 +400,9 @@
       "onDataCreating":onDataCreating,
       "onDataCreated":onDataCreated,
       "onDataDeleting":onDataDeleting,
-      "onDataDeleted":onDataDeleted
+      "onDataDeleted":onDataDeleted,
+      "onDataFinish":onDataFinish,
+      "onDataFinished":onDataFinished
     };
   }
 

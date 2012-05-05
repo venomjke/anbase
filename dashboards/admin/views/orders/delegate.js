@@ -190,7 +190,21 @@ $(function(){
 			grid.render();
 			common.hideAjaxIndicator();
 		});
-
+		/*
+		* Завершить заявки
+		*/
+		$('#finish_order').click(function(){
+			admin.orders.finish_orders(grid,model);
+		})
+		model.onDataFinish.subscribe(function(e,args){
+			common.showAjaxIndicator()
+		})
+		model.onDataFinished.subscribe(function(e,args){
+			common.hideAjaxIndicator();
+			grid.setSelectedRows([]);
+			vp = grid.getViewport();
+			model.reloadAll(vp.top,vp.bottom);
+		})
 		/*
 		* Обработчики "удалить" "добавить"
 		*/

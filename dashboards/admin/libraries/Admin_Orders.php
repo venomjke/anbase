@@ -125,7 +125,7 @@ class Admin_Orders
 			/*
 			* стандартное редактирование
 			*/
-			$data = array_intersect_key($this->ci->input->post(), array_flip($order_field));
+			$data = array_intersect_key($this->ci->input->post(), array_flip237($order_field));
 			if(!empty($data))
 				$this->ci->m_admin_order->update($this->ci->input->post('id'),$data,true);
 			return;
@@ -211,14 +211,35 @@ class Admin_Orders
 				}
 			}
 
-			foreach($valid_ids as $order_id){
-				/*
-				* Будем просто удалять, а получилось или нет, это уже не наша забота. 
-				* P.S Если пользователь не хакер, то все получится.
-				* P.P.S База должна позаботиться о том, чтобы все связанные с заявкой записи были тоже удалены
-				*/
-				$this->ci->m_order->delete_orders($order_id);
+			/*
+			* Будем просто удалять, а получилось или нет, это уже не наша забота. 
+			* P.S Если пользователь не хакер, то все получится.
+			* P.P.S База должна позаботиться о том, чтобы все связанные с заявкой записи были тоже удалены
+			*/
+			$this->ci->m_order->delete_orders($valid_ids);
+			return;
+		}
+		throw new AnbaseRuntimeException(lang('common.not_legal_data'));
+	}
+
+	/**
+	 * Выключение заявок
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function finish_orders()
+	{
+		$orders_ids = $this->ci->input->post('orders');
+		$valid_ids = array();
+		if(is_array($orders_ids)){
+			foreach($orders_ids as $order_id){
+
+				if(is_numeric($order_id) && $this->ci->m_order->is_exists($order_id,$this->ci->admin_users->get_org_id())) {
+					$valid_ids[] = $order_id;
+				}
 			}
+			$this->ci->m_order->finish_orders($valid_ids);
 			return;
 		}
 		throw new AnbaseRuntimeException(lang('common.not_legal_data'));

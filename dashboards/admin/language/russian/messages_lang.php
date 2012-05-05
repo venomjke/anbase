@@ -52,6 +52,9 @@ $lang['unbind_manager'] = 'Вы действительно хотите отвя
 
 $lang['success_del_staff']  = 'Член(ы) персонала успешно удален(ы)';
 $lang['success_del_admins'] = 'Администратор(ы) успешно удален(ы)';
+
+$lang['success_finish_data'] = 'Изменения сохранены';
+$lang['error_finish_data'] = 'Возникли ошибки';
 /*
 * Регистрация админа
 */

@@ -45,7 +45,7 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',AddUrl:admin.baseUrl+'?act=add',DeleteUrl:admin.baseUrl+'?act=del',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',AddUrl:admin.baseUrl+'?act=add',DeleteUrl:admin.baseUrl+'?act=del',finishUrl:admin.baseUrl+'?act=finish',PageSize:200});	
 		/*
 		* Создание грида
 		*/
@@ -211,6 +211,22 @@ $(function(){
 			vp = grid.getViewport();
 			model.reloadAll(vp.top,vp.bottom);
 		})
+
+		/*
+		* Завершить заявки
+		*/
+		$('#finish_order').click(function(){
+			admin.orders.finish_orders(grid,model);
+		})
+		model.onDataFinish.subscribe(function(e,args){
+			common.showAjaxIndicator()
+		})
+		model.onDataFinished.subscribe(function(e,args){
+			common.hideAjaxIndicator();
+			grid.setSelectedRows([]);
+			vp = grid.getViewport();
+			model.reloadAll(vp.top,vp.bottom);
+		})
 		/*
 		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
 		*/
@@ -298,6 +314,12 @@ $(function(){
 				model.applyFilter(vp.top,vp.bottom);
 			}
 		});
+
+		$('#f_user_id').change(function(event){
+			vp = grid.getViewport();
+			model.setUserId($(this).val());
+			model.applyFilter(vp.top,vp.bottom);
+		})
 
 		$('#f_price_to').keyfilter(/[\d\.]/);
 		$('#f_price_to').keydown(function(event){
@@ -430,6 +452,7 @@ $(function(){
 		$('#reset_filter_btn').click(function(){
 			model.resetFilter();
 			$('#f_phone').val('');
+			$('#f_user_id').val('');
 			$('#f_number').val('');
 			$('#f_number_to').val('');
 			$('#f_number_from').val('');

@@ -138,20 +138,6 @@ var admin = {
 		* Инициализация модуля init
 		*/
 		init:function(){
-
-			/*
-			* Подключение диалога "Назначить менеджера"
-			*
-			*/
-			$('#assign_manager_dialog').dialog({ modal:true,autoOpen:false,draggable:false});
-		
-			/*
-			* Подключение диалога "Отправить инвайт"
-			*
-			*/
-			$('#admin_invite_dialog').dialog({modal:true,autoOpen:false,draggable:false,title:'Инвайт для админа'});
-			$('#manager_invite_dialog').dialog({ modal:true,autoOpen:false,draggable:false,title:'Инвайт для менеджера'});
-			$('#admin_invite_dialog').dialog({modal:true,autoOpen:false,draggable:false,title:'Инвайт для агента'});
 		},
 		/**
 		*
@@ -809,6 +795,8 @@ var admin = {
 				$d = $('<div>');
 				$d.dialog({
 					'title':'Вы точно желаете удалить записи?',
+					'modal':true,
+					'width':400,
 					'buttons':{
 						'Удалить':function(){
 							model.delOrders(ids);
@@ -820,6 +808,33 @@ var admin = {
 					}
 				});		
 			}
+		},
+		finish_orders:function(grid,model){
+			var ids = [];
+			var SelectedRows = grid.getSelectedRows();
+
+			for(var i in SelectedRows){
+				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
+					ids.push(grid.getDataItem(SelectedRows[i]).id);
+				}
+			}
+			if(ids.length){
+				$d = $('<div>');
+				$d.dialog({
+					'title':'Вы точно желаете завершить записи?',
+					'modal':true,
+					'width':400,
+					'buttons':{
+						'Завершить':function(){
+							model.finishOrders(ids);
+							$d.dialog('close');
+						},
+						'Отмена':function(){
+							$d.dialog('close');
+						}
+					}
+				});		
+			}	
 		}	
 	}
 }
