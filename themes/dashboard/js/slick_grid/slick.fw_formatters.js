@@ -10,7 +10,8 @@
         "RegionsList":RegionsListFormatter,
         "MetrosList":MetrosListFormatter,
         "Phone":PhoneFormatter,
-        "Agent":AgentFormatter
+        "Agent":AgentFormatter,
+        "Description":DescriptionFormatter
       }
     }
   });
@@ -172,5 +173,21 @@
       var agent_last_name = dataContext.user_last_name.charAt(0).toUpperCase()+dataContext.user_last_name.substr(1,dataContext.user_last_name.length);
       return '<a href="#" onclick="return false;">'+agent_last_name+' '+agent_name+'.'+agent_middle_name+'</a>';
   }
+
+    /*
+    * Мои форматтеры
+    */
+    function DescriptionFormatter(row,cell,value,columnDef,dataContext){
+      if(!value)
+        return "";
+      /*
+      * Доступ к данным через глобальный объект common.grid!
+      */
+      var cell_content = $('<div id="cell_description" style="height:40px;overflow:hidden;">').html(value);
+      cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',common.grid.getDataItem('+row+').description);');
+      cell_content.attr('onmouseout','common.hide_full_text(event,'+row+','+cell+');');
+      var wrap = $('<div>').html(cell_content);
+      return wrap.html();
+    };
 
 })(jQuery);

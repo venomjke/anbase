@@ -14,19 +14,8 @@
 </div>
 
 <script type="text/javascript">
-	$(function(){	
-		/*
-		* Мои форматтеры
-		*/
-		function DescriptionFormatter(row,cell,value,columnDef,dataContext){
-			if(!value)
-				return;
-		  var cell_content = $('<div id="cell_description" style="height:40px;overflow:hidden;">').html(value);
-		  cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',agent.orders.grid.getDataItem('+row+').description);');
-		  cell_content.attr('onmouseout','common.hide_full_text(event,'+row+','+cell+');');
-		  var wrap = $('<div>').html(cell_content);
-		  return wrap.html();
-		};
+
+	$(function(){
 		/*
 		* Настройки грида
 		*/
@@ -39,7 +28,7 @@
 			{id: "regions",  name:"Район", field:"regions", formatter:Slick.Formatters.RegionsList, width:55},
 			{id: "metros", name:"Метро", field:"metros",  formatter:Slick.Formatters.MetrosList, width:55},
 			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true, width:70},	
-			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:DescriptionFormatter},
+			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
 		];
 
 
