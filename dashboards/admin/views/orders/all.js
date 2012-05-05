@@ -11,18 +11,6 @@ $(function(){
 		  var wrap = $('<div>').html(cell_content);
 		  return wrap.html();
 		};
-
-		
-		function AgentFormatter(row,cell,value,columnDef,dataContext){
-			if(!value)
-				return '<a href="#"> Назначить </a>';
-			var agent_name = dataContext.user_name.charAt(0).toUpperCase();
-			var agent_middle_name = dataContext.user_middle_name.charAt(0).toUpperCase();
-			var agent_last_name = dataContext.user_last_name.charAt(0).toUpperCase()+dataContext.user_last_name.substr(1,dataContext.user_last_name.length);
-			return '<a href="#">'+agent_last_name+' '+agent_name+'.'+agent_middle_name+'</a>';
-		}
-
-
 		/*
 		* Настройки грида
 		*/
@@ -43,7 +31,7 @@ $(function(){
 			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer,sortable:true},	
 			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:280, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
 			{id: "phone", name:"Телефон", field:"phone",  width:115, editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone },
-			{id: "agent", name:"Агент", field:"user_id", formatter:AgentFormatter}
+			{id: "agent", name:"Агент", field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent }
 		]);	
 
 		/*
@@ -103,6 +91,8 @@ $(function(){
 		* Обработка события изменения ячейки
 		*/
 		grid.onCellChange.subscribe(function(e,handle){
+
+			var act  = 'edit';
 			var data = {};
 			var item = handle.item;
 			var cell = handle.cell;
@@ -120,9 +110,14 @@ $(function(){
 			if(field == "regions"){
 				data["any_region"] = item["any_region"];
 			}
+
+			if(field == "user_id"){
+				act = 'delegate';
+				data["order_id"] = item["id"];
+			}
 			
 			$.ajax({
-				url:admin.baseUrl+'/?act=edit',
+				url:admin.baseUrl+'/?act='+act,
 				type:'POST',
 				dataType:'json',
 				data:data,
@@ -185,13 +180,28 @@ $(function(){
 		  	grid.render();
 			common.hideAjaxIndicator();
 		});
+
+		/*
+		* Обработчик создания записи
+		*/
+		$('#add_order').click(function(){
+			model.addOrder();
+		});
 		model.onDataCreating.subscribe(function(e,args){
 			common.showAjaxIndicator();
 		});
 		model.onDataCreated.subscribe(function(e,args){
+			grid.invalidateAllRows();
+			grid.updateRowCount();
+			grid.render();
 			common.hideAjaxIndicator();
-			vp = grid.getViewport();
-			model.reloadAll(vp.top,vp.bottom);
+		});
+
+		/*
+		* Обработчики "удалить" "добавить"
+		*/
+		$('#del_order').click(function(){
+			admin.orders.del_orders(grid,model);
 		});
 		model.onDataDeleting.subscribe(function(e,args){
 			common.showAjaxIndicator()
@@ -251,17 +261,6 @@ $(function(){
 					e.cancel();
 				}
 			}
-		});
-		
-		/*
-		* Обработчики "удалить" "добавить"
-		*/
-		$('#del_order').click(function(){
-			admin.orders.del_orders(grid,model);
-		});
-
-		$('#add_order').click(function(){
-			model.addOrder();
 		});
 
 		/*

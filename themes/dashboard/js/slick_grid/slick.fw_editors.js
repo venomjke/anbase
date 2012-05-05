@@ -8,6 +8,7 @@
 	$.extend(true,window,{
 		"Slick":{
 			"Editors":{
+				"AnbaseAgent":AnbaseAgentEditor,
 				"AnbaseCategory":AnbaseCategoryEditor,
 				"AnbaseDealType":AnbaseDealTypeEditor,
 				"AnbaseRegions":AnbaseRegionsEditor,
@@ -17,6 +18,104 @@
 	});
 
 
+	function AnbaseAgentEditor(args){
+		if(!common.staff_list){
+			this.cancel();
+			console.log('Ошибка: список сотрудников не задан');
+		}
+
+		var $wrapper;
+		var $select;
+		var defaultValue;
+		var scope = this;
+
+		this.init = function(){
+			var $container = $('body');
+				$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'>").appendTo($container);
+				$apply_btn = $('<button>Применить</button>');
+				$cancel_btn = $('<button>Отмена</button>');
+
+				$apply_btn.click(scope.save);
+				$cancel_btn.click(scope.cancel);
+
+				$select = $('<select style="width:200px">');
+
+				var $nobody_opt = $('<option value="-1"></option>');
+				$select.append($nobody_opt);
+
+				for(var i in common.staff_list){
+					var employee = common.staff_list[i];
+					var $opt = $('<option value="'+employee.id+'">'+employee.last_name+' '+employee.name+' '+employee.middle_name+'</option>');
+					$select.append($opt);
+				}
+
+
+				$wrapper.append($select);
+				$wrapper.append($apply_btn);
+				$wrapper.append($cancel_btn);
+
+				$wrapper.center();
+		}
+
+		this.save = function(){
+			args.commitChanges();
+		}
+
+		this.cancel = function(){
+			args.cancelChanges();
+		}
+
+		this.hide = function(){
+			$wrapper.hide();
+		}
+
+		this.show = function(){
+			$wrapper.show();
+		}
+
+		this.destroy = function(){
+			$wrapper.remove();
+		}
+
+		this.focus = function(){
+			$select.focus();
+		}
+
+		this.loadValue = function(item){
+			defaultValue = item.user_id;
+		}
+
+		this.serializeValue = function(){
+			return $wrapper.find('option:selected').val();
+		}
+
+		this.applyValue = function(item,state){
+			item.user_id = state;
+			if(state != -1){
+				for(var i in common.staff_list){
+					if(common.staff_list[i].id == state){
+						item.user_name = common.staff_list[i].name;
+						item.user_middle_name = common.staff_list[i].middle_name;
+						item.user_last_name = common.staff_list[i].last_name;
+					}
+				}	
+			}	
+			
+		}
+
+		this.isValueChanged = function(){
+			return defaultValue != $select.find('option:selected').val();
+		}
+
+		this.validate = function(){
+			return {
+				valid:true,
+				msg:null
+			}
+		}
+
+		this.init();
+	}
 	function AnbaseCategoryEditor(args){
 
 		var $select;

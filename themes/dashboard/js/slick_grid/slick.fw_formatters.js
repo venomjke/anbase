@@ -9,7 +9,8 @@
         "Rubbles":RubblesFormatter,
         "RegionsList":RegionsListFormatter,
         "MetrosList":MetrosListFormatter,
-        "Phone":PhoneFormatter
+        "Phone":PhoneFormatter,
+        "Agent":AgentFormatter
       }
     }
   });
@@ -158,6 +159,18 @@
       if(code == "7") code = "+"+code;
       return code+" ("+phone.substr(len_code,3)+") "+phone.substr(len_code+3,3)+"-"+phone.substr(len_code+6,2)+"-"+phone.substr(len_code+8,2);
     }
+  }
+
+  function AgentFormatter(row,cell,agent_id,columnDef,dataContext){
+    /*
+    * -1 возможен в тех случаях, когда редактируя заявку мы убираем агента
+    */
+      if(!agent_id || agent_id == -1)
+        return '<a href="#" onclick="return false;">Назначить</a>';
+      var agent_name = dataContext.user_name.charAt(0).toUpperCase();
+      var agent_middle_name = dataContext.user_middle_name.charAt(0).toUpperCase();
+      var agent_last_name = dataContext.user_last_name.charAt(0).toUpperCase()+dataContext.user_last_name.substr(1,dataContext.user_last_name.length);
+      return '<a href="#" onclick="return false;">'+agent_last_name+' '+agent_name+'.'+agent_middle_name+'</a>';
   }
 
 })(jQuery);

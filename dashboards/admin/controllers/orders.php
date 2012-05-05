@@ -55,17 +55,19 @@ class Orders extends MX_Controller
 		
 		/*
 		* Загружаем другую метаинфу
+		* [my_notice] Это все ресурсы, используемые во время работы. У меня есть такое мнение, что их стоит выделить 
+		* в какой-то класс AppAssets
 		*/
 		$regions = $this->m_region->get_region_list("json");
 		$metros  = $this->m_metro->get_metro_list("json");
 		$metros_images = $this->m_metro_image->get_images();
 		$regions_images = $this->m_region_image->get_images();
-
+		$staff_list  = json_encode($this->admin_users->get_list_staff());
 
 		/*
 		* Подключение скриптов
 		*/
-		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.'; common.metros='.$metros.'; common.metros_images = '.$metros_images.'; common.regions_images = '.$regions_images.';</script>');
+		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.'; common.metros='.$metros.'; common.metros_images = '.$metros_images.'; common.regions_images = '.$regions_images.'; common.staff_list='.$staff_list.'</script>');
 
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url('dashboards/admin/js/admin.js').'"></script>');
 		$this->template->append_metadata('<script type="text/javascript">$(function(){admin.init({baseUrl:"'.site_url("admin/orders").'"}); admin.orders.init();}); </script>');
@@ -385,7 +387,7 @@ class Orders extends MX_Controller
 			* Пытаемся назначить
 			*/
 			try{
-				$this->admin_order->delegate_order();
+				$this->admin_orders->delegate_order();
 				$response['code'] = 'success_delegate_order';
 				$response['data'] = lang('success_delegate_order');
 			}catch(AnbaseRuntimeException $re){

@@ -204,7 +204,9 @@ $(function(){
 				
 				$map_wrapper = $('<div style="position:relative">');
 				$img = $('<img usemap="#metro-normal" id="metromap" src="'+metro_normal.image+'"/>');
-				$map_wrapper.append($img);
+				$dimg = $('<div style="width:570;height:600px"></div>');
+				$dimg.append($img);
+				$map_wrapper.append($dimg);
 				$map  = $('<map name="metro-normal">');
 
 				for(var i in metro_normal.elements){

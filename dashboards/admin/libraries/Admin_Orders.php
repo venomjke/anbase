@@ -208,6 +208,7 @@ class Admin_Orders
 	 **/
 	public function delegate_order()
 	{
+		$this->ci->load->model('m_order_user');
 		/*
 		* Правила валидации прикрепляем
 		*/
