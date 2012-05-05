@@ -22,15 +22,15 @@ $(function(){
 		columns.push(checkboxSelector.getColumnDefinition());
 
 		$.merge(columns,[
-			{id: "number", name:"№", field:"number",width:40, editor:Slick.Editors.Integer,sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date,sortable:true},
-			{id: "category", name:"Объект", field:"category", editor:Slick.Editors.AnbaseCategory},
-			{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
-			{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
-			{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
-			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer,sortable:true},	
-			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:280, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
-			{id: "phone", name:"Телефон", field:"phone",  width:115, editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone },
+			{id: "number", name:"№", field:"number",width:30, editor:Slick.Editors.Integer,sortable:true},
+			{id: "create_date", name:"Дата создания", field:"create_date", width:55, editor:Slick.Editors.Date,sortable:true},
+			{id: "category", name:"Объект", field:"category", width:55,editor:Slick.Editors.AnbaseCategory},
+			{id: "deal_type", name:"Сделка", field:"deal_type",width:50, editor:Slick.Editors.AnbaseDealType},
+			{id: "regions",  name:"Район", field:"regions",width:60,  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
+			{id: "metros", name:"Метро", field:"metros",width:60,  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
+			{id: "price", name:"Цена", field:"price", width:60, formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer,sortable:true},	
+			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:170, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
+			{id: "phone", name:"Телефон", field:"phone",  width:95, editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone },
 			{id: "agent", name:"Агент", field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent }
 		]);	
 

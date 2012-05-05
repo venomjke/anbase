@@ -11,7 +11,8 @@
       BaseUrl:'',
       AddUrl:'',
       DeleteUrl:'',
-      finishUrl:''
+      finishUrl:'',
+      RestoreUrl:''
     };
     options = $.extend(true,def_options,options);
 
@@ -51,6 +52,8 @@
     var onDataDeleted = new Slick.Event();
     var onDataFinish  = new Slick.Event();
     var onDataFinished = new Slick.Event();
+    var onDataRestore = new Slick.Event();
+    var onDataRestored = new Slick.Event();
 
 
     function init() {
@@ -303,6 +306,29 @@
       });
     }
 
+    function restoreOrders(ids){
+      onDataRestore.notify();
+      $.ajax({
+        url:options.RestoreUrl,
+        dataType:'json',
+        data:{"orders":ids},
+        type:'POST',
+        success:function(response){
+          if(response.code && response.data){
+            switch(response.code){
+              case  'success_restore_data':
+                common.showSuccessMsg(response.data);
+                onDataRestored.notify();
+              break;
+              case 'error_restore_data':
+                common.showErrorMsg(response.data.errors[0]);
+              break;
+            }
+          }
+        }
+      });
+    }
+
     function finishOrders(ids){
       onDataFinish.notify();
       $.ajax({
@@ -387,6 +413,7 @@
       "addOrder":addOrder,
       "delOrders":delOrders,
       "finishOrders":finishOrders,
+      "restoreOrders":restoreOrders,
       // methods
       "clear": clear,
       "isDataLoaded": isDataLoaded,
@@ -402,7 +429,10 @@
       "onDataDeleting":onDataDeleting,
       "onDataDeleted":onDataDeleted,
       "onDataFinish":onDataFinish,
-      "onDataFinished":onDataFinished
+      "onDataFinished":onDataFinished,
+      "onDataRestore":onDataDeleting,
+      "onDataRestored":onDataRestored
+
     };
   }
 

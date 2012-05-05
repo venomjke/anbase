@@ -835,6 +835,33 @@ var admin = {
 					}
 				});		
 			}	
+		},
+		restore_orders:function(grid,model){
+			var ids = [];
+			var SelectedRows = grid.getSelectedRows();
+
+			for(var i in SelectedRows){
+				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
+					ids.push(grid.getDataItem(SelectedRows[i]).id);
+				}
+			}
+			if(ids.length){
+				$d = $('<div>');
+				$d.dialog({
+					'title':'Вы точно желаете возобновить записи?',
+					'modal':true,
+					'width':400,
+					'buttons':{
+						'Завершить':function(){
+							model.restoreOrders(ids);
+							$d.dialog('close');
+						},
+						'Отмена':function(){
+							$d.dialog('close');
+						}
+					}
+				});		
+			}	
 		}	
 	}
 }

@@ -31,7 +31,7 @@ $(function(){
 			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer,sortable:true},	
 			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:200, formatter:DescriptionFormatter, editor:Slick.Editors.LongText},
 			{id: "phone", name:"Телефон", field:"phone", width:115, editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone },
-			{id: "agent", name:"Агент", field:"user_id", formatter:Slick.Formatters.Agent},
+			{id: "agent", name:"Агент", field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent },
 			{id:"delegate_date", name:"Дата делегирования", width:95, field:"delegate_date", editor:Slick.Editors.Date}
 		]);	
 
@@ -46,7 +46,7 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',AddUrl:admin.baseUrl+'?act=add',DeleteUrl:admin.baseUrl+'?act=del',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',AddUrl:admin.baseUrl+'?act=add',DeleteUrl:admin.baseUrl+'?act=del',finishUrl:admin.baseUrl+'?act=finish',PageSize:200});	
 		/*
 		* Создание грида
 		*/

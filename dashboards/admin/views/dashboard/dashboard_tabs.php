@@ -10,7 +10,7 @@
     		<span class="plus minus" id="finish_order" style="margin-top:5px; float:right; margin-right:16px"><a href="#" onclick="return false;">Завершить</a></span>
             <span class="plus" id="add_order" style="margin-top:5px; float:right; margin-right:16px"><a href="#" onclick="return false;">Добавить</a></span>
         <?php else: ?>
-            <span class="plus" id="" style="margin-top:5px; float:right; margin-right:16px"><a href="#" onclick="return false;">Возобновить</a></span>
+            <span class="plus" id="restore_order" style="margin-top:5px; float:right; margin-right:16px"><a href="#" onclick="return false;">Возобновить</a></span>
     	<?php endif; ?>
 
     </ul>

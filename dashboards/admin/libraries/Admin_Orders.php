@@ -222,6 +222,23 @@ class Admin_Orders
 		throw new AnbaseRuntimeException(lang('common.not_legal_data'));
 	}
 
+	public function restore_orders()
+	{
+		$orders_ids = $this->ci->input->post('orders');
+		$valid_ids = array();
+		if(is_array($orders_ids)){
+			foreach($orders_ids as $order_id){
+
+				if(is_numeric($order_id) && $this->ci->m_order->is_exists($order_id,$this->ci->admin_users->get_org_id())) {
+					$valid_ids[] = $order_id;
+				}
+			}
+
+			$this->ci->m_order->restore_orders($valid_ids);
+			return;
+		}
+		throw new AnbaseRuntimeException(lang('common.not_legal_data'));
+	}
 	/**
 	 * Выключение заявок
 	 *

@@ -46,7 +46,7 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',AddUrl:admin.baseUrl+'?act=add',DeleteUrl:admin.baseUrl+'?act=del',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',RestoreUrl:admin.baseUrl+'?act=restore',DeleteUrl:admin.baseUrl+'?act=del',PageSize:200});	
 		/*
 		* Создание грида
 		*/
@@ -186,6 +186,22 @@ $(function(){
 			common.showAjaxIndicator()
 		})
 		model.onDataDeleted.subscribe(function(e,args){
+			common.hideAjaxIndicator();
+			grid.setSelectedRows([]);
+			vp = grid.getViewport();
+			model.reloadAll(vp.top,vp.bottom);
+		})
+
+		/*
+		* Обработчики "возобновить"
+		*/
+		$('#restore_order').click(function(){
+			admin.orders.restore_orders(grid,model);
+		});
+		model.onDataRestore.subscribe(function(e,args){
+			common.showAjaxIndicator()
+		})
+		model.onDataRestored.subscribe(function(e,args){
 			common.hideAjaxIndicator();
 			grid.setSelectedRows([]);
 			vp = grid.getViewport();
