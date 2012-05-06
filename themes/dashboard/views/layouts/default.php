@@ -30,7 +30,6 @@
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.cellrangeselector.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.cellrangedecorator.js"></script>
 		
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.remotemodel.js"> </script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.formatters.js"> </script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.fw_formatters.js"> </script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.editors.js"> </script>
@@ -52,14 +51,10 @@
 		
 		<script type="text/javascript">
 			$(function(){
-
-
 				var $imgToggleUp = $('<img id="panel-collapse-up" src="'+common.baseUrl+'themes/dashboard/images/panel-collapse-up.png" style="cursor:pointer;display:block;width:16px;margin:0 auto;"/>');
 				var $imgToggleDown = $('<img id="panel-collapse-down" src="'+common.baseUrl+'themes/dashboard/images/panel-collapse-down.png" style="cursor:pointer;display:none;width:16px;position: absolute;top: 0px;left: 49.4%;"/>');
-
 				$('.menu').after($imgToggleUp);
 				$('.menu').after($imgToggleDown);
-
 				$imgToggleUp.click(function(){
 					$('.shapka').slideToggle("fast");
 					$('.user').slideToggle("fast");
@@ -70,7 +65,6 @@
 					if(!$.cookie('toggle'))
 						$.cookie('toggle',1,{path:'/'});
 				});
-
 				$imgToggleDown.click(function(){
 					$('.shapka').slideToggle("fast");
 					$('.user').slideToggle("fast");
@@ -80,11 +74,9 @@
 					$(this).hide();
 					$.cookie('toggle',null,{path:'/'});
 				});
-
 				if($.cookie('toggle')){
 					$('#panel-collapse-up').click();
 				}
-
 			});
 		</script>
 	</body>

@@ -1,29 +1,19 @@
-/*
-*
-* логина обработки админ части на стороне клиента
-*
-*/
 var admin = {
 
 	/*
-	*
 	*	Базовый URL для выполнения запросов
-	*
 	*/
 	baseUrl:'',
 
 	init:function(params){
 	
 		/*
-		*	
 		*	Установка базового URL
 		*/
 		admin.baseUrl = params.baseUrl || admin.baseUrl;
 	},
 	/*
-	*
 	* Модуль, для управления разделом profile
-	*
 	*/
 	profile:{
 		init:function(){
@@ -126,181 +116,14 @@ var admin = {
 	},
 
 	/*
-	*
 	*	Модуль для управления разделом user
-	*
-	*
 	*/
 	user:{
-
 		/*
 		*
 		* Инициализация модуля init
 		*/
 		init:function(){
-		},
-		/**
-		*
-		*	Объект настроект по умолчанию
-		*
-		**/
-		def_options:{
-			jCol:{},
-			jObjAct:{},
-			id:'',
-			name:'role',
-			uri:'admin/user/admins/?act=change_position',
-			role:['Админ','Менеджер','Агент'],
-			text:'',
-			last_role:''
-		},
-
-		/*
-		* 
-		*	Переключение поля в режим редактирования
-		*
-		*/
-		edit_col:function(options){
-
-			/*
-			*
-			* В ячейку добавить select для выбора нового значения
-			* 
-			*
-			*/
-			role_string = "['";
-			role_string += options.role.join("','");
-			role_string += "']";
-			
-			if(options){
-				options.last_role = $.trim(options.jCol.text());
-				var col_select = $('<select name="'+options.name+'">');
-				col_select.attr('onchange',"admin.user.change_edit_col({jObjAct:$(this),uri:'"+options.uri+"',name:'"+options.name+"',role:"+role_string+",last_role:'"+options.last_role+"',user_id:'"+options.user_id+"'})");
-
-				for(var i in options.role){
-					var select_option = $('<option value="'+options.role[i]+'">'+options.role[i]+'</option>');
-					if(options.role[i] == options.last_role)
-						select_option.attr('selected','');
-					select_option.appendTo(col_select);
-				}
-				options.jCol.html(col_select);
-			}
-		},
-
-		/*
-		*
-		*	Обработчик события changed во время редактирования ячейки
-		*
-		*/
-		change_edit_col:function(options){
-
-			/*
-			*
-			* 1. считать параметры
-			* 2. переключиться в режим просмотра
-			*
-			*/
-			options = $.extend(true,this.def_options,options);
-
-			if(options.jObjAct){
-				options.jCol = options.jObjAct.parent();
-				this.show_col(options);
-			}
-		},
-
-		/*
-		*
-		* Переключение в режим просмотра поля
-		*
-		*/
-		show_col:function(options){
-
-			/*
-			* 1.Подтвердить изменение должности
-			* 2.Сохранить изменения
-			*/
-			 noty({
-			    text: options.text, 
-			    buttons: [
-			      {type: 'button green', text: 'Да', click: function($noty) {
-
-			          // this = button element
-			          // $noty = $noty element
-			          $noty.close();
-			          var col_select = options.jObjAct;
-			          var checked_option = col_select.find('option:checked');
-			          var data = {};
-			          /*
-			          * передаваемые данные
-			          *
-			          */
-			          data[options.name] = checked_option.val();
-			          data['id']		 = options.user_id;
-			          $.ajax({
-			          	url:admin.baseUrl+options.uri,
-			          	data:data,
-			          	type:'POST',
-			          	dataType:'json',
-			          	success:function(response){
-
-			          		/*
-			          		*
-			          		* проверка ответа и вывод результата
-			          		*/
-			          		if(response.code && response.data){
-			          			switch(response.code){
-				          			case 'success_change_position_employee':
-				          				options.jCol.html(checked_option.val());
-				          				common.showMsg(response.data);
-				          			break;
-				          			case 'error_change_position_employee':
-				          				for(var i in response.data.errors)
-				          					common.showMsg(response.data.errors[i],{type:'error'});
-				          				options.jCol.html(options.last_role);
-				          			break;
-			          			}
-			          		}
-			          	},
-			          	beforeSend:function(){
-
-			          	},
-			          	complete:function(){
-
-			          	}
-			          });
-			        }
-			      },
-			      {type: 'button pink', text: 'Нет', click: function($noty) {
-			          $noty.close();
-			          options.jCol.html(options.last_role);
-			        }
-			      }
-			      ],
-			    closable: false,
-			    timeout: false,
-			    layout:'center',
-			    theme:'noty_theme_mitgux'
-			  });
-		},
-
-		/*
-		*
-		*	Обработчик события dblclick во время просмотра колонки
-		*
-		*/
-		dblclick_show_col:function(options){
-			/*
-			*
-			* 1. Считать параметры
-			* 2. переключиться в режим редактирования
-			*
-			*/
-			options = $.extend(true,this.def_options,options);
-
-			if(options && options.jObjAct){
-				options.jCol = options.jObjAct;
-				this.edit_col(options);
-			}
 		},
 
 		/**
@@ -310,289 +133,13 @@ var admin = {
 		* @param object
 		**/
 		assign_manager:function(options){
-			$("#assign_manager_dialog").dialog("option","buttons",{
-				'Назначить':function(){
-					/*
-					*
-					* Выцепить manager_id и user_id
-					* отправить запрос на назначение
-					* success? все ок
-					* error? еще не праздник
-					*/
-					var manager_id = $('#assign_manager_dialog select[name=~"manager_id"] option:selected').val();
-					var manager_name = $.trim($('#assign_manager_dialog select[name=~"manager_id"] option:selected').text());
-					var user_id	   = options.user_id;
-
-					$.ajax({
-						url:admin.baseUrl+options.uri,
-						type:"POST",
-						data:{'manager_id':manager_id,'user_id':user_id},
-						dataType:"JSON",
-						success:function(response){
-							if(response.code && response.data){
-								switch(response.code){
-									case 'success_assign_manager_admin':
-										common.showMsg(response.data);
-										$('#assign_manager_dialog').dialog('close');
-										options.jObjAct.replaceWith(manager_name);
-									break;
-									case 'error_assign_manager_admin':
-										for(var i in response.data.errors){
-											if(response.data.errors[i])
-												common.showMsg(response.data.errors[i],{type:'error'});
-										}
-									break;
-									default:
-										$('#assign_manager_dialog').dialog('close');
-								}
-							}
-						}
-					})
-
-				},
-				'Отмена':function(){
-					$(this).dialog("close");
-				}
-			});
-			$("#assign_manager_dialog").dialog("open");
 		},
 		/*
-		*
 		* Отсоединяем агента от менеджера
 		*/
 		unbind_manager:function(options){
-
-			 noty({
-			    text: options.text, 
-			    buttons: [
-			      {type: 'button green', text: 'Да', click: function($noty) {
-
-			          // this = button element
-			          // $noty = $noty element
-			          $noty.close();
-			          var post_data = {};
-			          post_data['user_id'] = options.user_id;
-
-			          $.ajax({
-			          	url:admin.baseUrl+options.uri,
-			          	type:'POST',
-			          	dataType:'json',
-			          	data:post_data,
-			          	success:function(response){
-			          		if(response.code && response.data){
-
-			          			switch(response.code){
-			          				case 'success_unbind_manager':
-			          					common.showMsg(response.data);
-			          				break;
-			          				case 'error_unbind_manager':
-			          					for(var i in response.data.errors){
-			          						common.showMsg(response.data.errors[i],{type:'error'});
-			          					}
-			          				break;
-			          			}
-			          		}
-			          	},
-			          	beforeSend:function(){
-			          		common.showAjaxIndicator();
-			          	},
-			          	complete:function(){
-			          		common.hideAjaxIndicator();
-			          	}
-			          })
-
-			        }
-			      },
-			      {type: 'button pink', text: 'Нет', click: function($noty) {
-			          $noty.close();
-			        }
-			      }
-			      ],
-			    closable: false,
-			    timeout: false,
-			    layout:'center',
-			    theme:'noty_theme_mitgux'
-			  });
-		},
-		admin_invite:function(){
-			admin.user.invite('#admin_invite_dialog');
-		},
-		manager_invite:function(){
-			admin.user.invite('#manager_invite_dialog');
-		},
-		admin_invite:function(){
-			admin.user.invite('#admin_invite_dialog');
-		},
-
-		/*
-		*
-		* Сериализация формы, отправка инвайта
-		*
-		*/
-		invite:function(dialog_id){
-			$(dialog_id).dialog('option','buttons',{
-
-				'Отправить':function(){
-
-					/*
-					* Сериализация формы
-					* Отправки формы
-					* Обработка ответа
-					*/
-					var post_data = $(dialog_id+' form').serialize();
-					$.ajax({
-						url:$(dialog_id+' form').attr('action'),
-						type:"POST",
-						data:post_data,
-						dataType:'json',
-						success:function(response){
-
-							if(response.code && response.data){
-								switch(response.code){
-
-									case 'success_send_invite':
-										$(dialog_id).dialog('close');
-										common.showMsg(response.data);
-									break;
-									case 'error_send_invite':
-										for(var i in response.data.errors)
-											if(response.data.errors[i])
-												common.showMsg(response.data.errors[i],{type:'error'});
-									break;
-								}
-							}
-						}
-					})
-				},
-				'Отмена':function(){
-					$(this).dialog('close');
-				}
-			});
-			$(dialog_id).dialog('open');
-		},
-		del_invite:function(options){
-
-			var def_options = {
- 				jObjAct:{},
- 				id:'',
- 				uri:''
-			};
-			options = $.extend(true,def_options,options);
-			/*
-			* Упаковываем ID в массив и передаем del_invites со всем вытекающим
-			*/
-			var del_invites = [];
-			del_invites.push(options.id);
-			
-			 noty({
-			    text: options.text, 
-			    buttons: [
-			      {type: 'button green', text: 'Да', click: function($noty) {
-			      		$noty.close();
-						admin.user.del_invites({jObjTable:options.jObjAct.parent().parent().parent(),uri:options.uri,ids:del_invites});	
-			        }
-			      },
-			      {type: 'button pink', text: 'Нет', click: function($noty) {
-			          $noty.close();
-			        }
-			      }
-			      ],
-			    closable: false,
-			    timeout: false,
-			    layout:'center',
-			    theme:'noty_theme_mitgux'
-			  });
-		},
-		del_invites:function(options){
-			var def_options = {
-				jObjTable:{},
-				ids:[],
-				uri:''
-			};
-
-			options = $.extend(true,def_options,options);
-			var post_data = {};
-			post_data['ids_invites'] = options.ids; 
-			$.ajax({
-				url:admin.baseUrl+options.uri,
-				type:'POST',
-				data:post_data,
-				dataType:'json',
-				success:function(response){
-
-					if(response.code && response.data){
-						switch(response.code){
-							case 'success_del_user_invites':
-								for(i in options.ids){
-									$('#invite_'+options.ids[i]).remove();
-								}
-								common.showMsg(response.data);
-							break;
-							case 'error_del_user_invites':
-								for(var i in response.data.errors){
-									if(response.data.errors[i])
-										common.showMsg(response.data.errors[i],{type:'error'});
-								}
-							break;
-						}
-					}
-				}
-			});
-		},
-		check_all:function(options){
-
-			var i_checked = options.jObjAction.attr('checked');
-			if(i_checked == "checked"){
-				$('.user_table input[type="checkbox"]').attr('checked','checked');
-			}else{
-				$('.user_table input[type="checkbox"]').removeAttr('checked','checked');
-			}
-		},
-		del_user:function(options){
-
 		},
 		del_users:function(options){
-			/*
-			* 1. формируем пачку id для отправки
-			* 2. отправляем
-			* 3. все ок? удаляем их из таблицы
-			*/
-			var users_ids = [];
-			var all_checkbox = $('.user_table td input:checked');
-			all_checkbox.each(function(){
-				users_ids.push($(this).attr('value'));
-			});
-
-			var post_data = {};
-			post_data['ids_users'] = users_ids;
-
-			$.ajax({
-				url:admin.baseUrl+options.uri,
-				type:'POST',
-				dataType:'json',
-				data:post_data,
-				success:function(response){
-					if(response.code && response.data){
-						switch(response.code){
-							case 'success_del_users':
-								common.showResultMsg(response.data);
-								all_checkbox.each(function(){
-									$('#user_'+$(this).val()).remove();
-								});
-							break;
-							case 'error_del_users':
-								common.showResultMsg('Удалить не удалось');
-							break;
-						}
-					}
-				},
-				beforeSend:function(){
-					common.showAjaxIndicator();
-				},
-				complete:function(){
-					common.hideAjaxIndicator();
-				}
-			})
 		}
 	},
 
@@ -863,5 +410,131 @@ var admin = {
 				});		
 			}	
 		}	
+	},
+	invites:{
+		init:function(){
+
+		},
+		del_invites:function(grid,model){
+			var ids = [];
+			var SelectedRows = grid.getSelectedRows();
+
+			for(var i in SelectedRows){
+				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
+					ids.push(grid.getDataItem(SelectedRows[i]).id);
+				}
+			}
+			if(ids.length){
+				$d = $('<div>');
+				$d.dialog({
+					'title':'Вы точно желаете удалить записи?',
+					'modal':true,
+					'width':300,
+					'buttons':{
+						'Удалить':function(){
+							model.delInvites(ids);
+							$d.dialog('close');
+						},
+						'Отмена':function(){
+							$d.dialog('close');
+						}
+					}
+				});		
+			}
+		},
+		fill_table:function(table,body){
+			for(var i in body){
+				$tr = $('<tr>');
+				$td = $('<td>');
+				$td.append(body[i].label).append('<br/>').append(body[i].input);
+				table.append($tr.append($td));
+			}
+		},
+		reset_table:function(table){
+			function reset_table(table){
+				for(var i in table){
+					table[i].input.val('');
+				}
+			}
+		},
+		callback:function($d,code,data){
+			switch(code){
+				case 'success':
+					$d.dialog('close');
+					common.showSuccessMsg(data);
+					admin.invites.reset_table(table);
+					break;
+				case 'error':
+					if(data.errorType == "runtime"){
+						if(data.errors[0])
+							common.showNotyErrorMsg(data.errors[0]);
+					}else if(data.errorType == "validation"){
+						for(var i in data.errors){
+							if(data.errors[i])
+								common.showNotyErrorMsg(data.errors[i]);
+						}
+					}
+					break;
+			}
+		},
+		add_agent:function(grid,model){
+			if(!common.staff_list){
+				return false;
+			}
+			var callback = function(code,data){
+				admin.invites.callback($d,code,data);
+			};
+
+			if($('#add_agent_dialog').length == 0){
+				var $d = $('<div id="add_agent_dialog">').dialog({autoOpen:false,width:280,modal:true});
+				var $form = $('<table cellpadding="0" align="center" cellspacing="0"></table>');
+				var table = {};
+
+				table['managers'] = {
+					'label':$('<label>Менеджер</label>'),
+					'input':$('<select></select>')
+				};
+
+				table['email'] = {
+					'label':$('<label>Email</label>'),
+					'input':$('<input type="text" />')
+				};
+
+				admin.invites.fill_table($form,table);
+
+				table['managers'].input.append('<option value="">- Нету -</option>');
+				for(var i in common.staff_list){
+					var empl = common.staff_list[i];
+
+					if(empl.role=="Менеджер"){
+						var $opt = $('<option value="'+empl.id+'">'+empl.last_name+' '+empl.name+' '+empl.middle_name+'</option>');
+						table['managers'].input.append($opt);
+					}
+				}
+
+				$d.append($form);
+				$d.dialog('option','title','Инвайт для агента');
+				$d.dialog('option','buttons',{
+					'Добавить':function(){
+						var data = {};
+						data['manager_id'] = table['managers'].input.val();
+						data['email']	   = table['email'].input.val();
+						model.add_agent(data,callback);
+					},
+					'Отмена':function(){
+						$d.dialog('close');
+					}
+				});
+				$d.dialog('open');
+			}else{
+				$('#add_agent_dialog').dialog('open');
+			}
+		},
+		add_manager:function(grid,model){
+
+		},
+		add_admin:function(grid,model){
+
+		}
 	}
 }

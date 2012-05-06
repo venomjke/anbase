@@ -461,29 +461,24 @@ class Admin_Users extends Users{
 		 * выбираем список ids на удаление
 		 */
 		 $ids_invites = $this->ci->input->post('ids_invites',array());
-
+		 $valid_ids = array();
 		 /*
 		 *
 		 * Если есть, что удалять, то удаляем
 		 */ 
-		 if(!empty($ids_invites)){
+		 if(!empty($ids_invites) && is_array($ids_invites)){
 
 		 	foreach($ids_invites as $id_invite){
-
 		 		/*
 		 		* Инвайт должен быть numeric, а также принадлежать к опр. организации
 		 		*/
 		 		if(is_numeric($id_invite) && $this->ci->m_invite_user->belongs_org($id_invite,$this->get_org_id())) {
-			 		/*
-			 		* Если удалить не удалось
-			 		*/
-			 		if(!$this->ci->m_invite_user->delete($id_invite)){
-			 			throw new AnbaseRuntimeException(lang('common.delete_error'));
-			 		}
-			 	}else{
-			 		throw new AnbaseRuntimeException(lang('common.not_legal_data'));
+		 			$valid_ids[] = $id_invite;
 			 	}
+		 	}
 
+		 	foreach($valid_ids as $id_invite){
+		 		$this->ci->m_invite_user->delete($id_invite);
 		 	}
 		 	return;
 		 }
@@ -592,7 +587,8 @@ class Admin_Users extends Users{
 	public function get_all_invites()
 	{
 		$this->ci->load->model("m_invite_user");
-		return $this->ci->m_invite_user->get_all(array("org_id"=>$this->get_org_id()));
+		$items = $this->ci->m_invite_user->get_all(array("org_id"=>$this->get_org_id()));
+		return array('count'=>count($items),'items'=>$items,'total'=>$this->ci->m_invite_user->count_all_results(array('org_id'=>$this->get_org_id())));
 	}
 
 	/**
@@ -680,10 +676,12 @@ class Admin_Users extends Users{
 
 			throw new AnbaseRuntimeException(lang("common.insert_error"));		
 		}
-		/*
-		* Валидация не пройдена, генерим исключение
-		*/
-		throw new ValidationException(array('manager_id' => $this->ci->form_validation->error('manager_id'), 'email'=>$this->ci->form_validation->error('email')));
+
+		$errors_validation = array();
+
+		if(has_errors_validation($data,$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
 	}
 	
 	/**

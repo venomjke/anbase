@@ -14,6 +14,7 @@ var common = {
 		var def_options = {
 			text:'',
 			layout:'topRight',
+			textAlign:'left',
 			animateOpen:{opacity:'show'},
 			animateClose:{opacity:'hide'},
 			type:'success',
@@ -23,6 +24,12 @@ var common = {
 		if(text){
 			noty($.extend(options,{text:text}));
 		}
+	},
+	showNotySuccessMsg:function(text){
+		common.showMsg(text);
+	},
+	showNotyErrorMsg:function(text){
+		common.showMsg(text,{type:'error'});
 	},
 	showAjaxIndicator:function(){
 		common.showStatusMsg();

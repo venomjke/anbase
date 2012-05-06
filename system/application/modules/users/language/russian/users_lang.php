@@ -34,7 +34,7 @@ $lang['label_role']		= 'Роль';
 *
 */
 $lang['user.validation.valid_user_id'] = 'В поле "%s" указан не верный идентификатор пользователя';
-$lang['user.validation.is_email_available'] = 'Пользователь с указанным в поле "%s" email уже существует';
+$lang['user.validation.is_email_available'] = 'Пользователь с указанным в поле <b>email</b> уже существует';
 $lang['user.validation.is_manager_org'] = 'Указанный в поле "%s" не является менеджером, а также сотрудником текущей организации';
 $lang['user.validation.is_valid_user_id'] = 'Указанный в поле "%s" идентификатор пользователя не действительный';
 $lang['user.validation.is_valid_user_role'] = 'В поле "%s" указана неверная должность';

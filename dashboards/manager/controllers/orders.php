@@ -63,6 +63,7 @@ class Orders extends MX_Controller
 		$metros_images = $this->m_metro_image->get_images();
 		$regions_images = $this->m_region_image->get_images();
 
+		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/slick_grid/slick.remotemodel.js"></script>');
 		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.'; common.metros='.$metros.'; common.metros_images = '.$metros_images.'; common.regions_images = '.$regions_images.';</script>');
 
 

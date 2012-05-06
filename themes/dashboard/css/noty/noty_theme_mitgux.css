@@ -71,7 +71,7 @@
 .noty_bar.noty_theme_mitgux.noty_layout_bottomRight .noty_message,
 .noty_bar.noty_theme_mitgux.noty_layout_topCenter .noty_message {
 	padding-left: 60px;
-	padding-right: 40px;
+	padding-right: 10px;
 	width: auto;
 }
 .noty_bar.noty_theme_mitgux.noty_layout_topLeft .noty_message .noty_buttons,
@@ -101,4 +101,8 @@
 }
 .noty_bar.noty_theme_mitgux.noty_layout_center .noty_buttons {
 	margin-top: -3px;
+}
+.noty_text{
+	font-size:9pt;
+	text-align:left;
 }

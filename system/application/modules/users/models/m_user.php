@@ -69,6 +69,14 @@ class M_User extends MY_Model{
 	}
 
 
+	public function get_role_list()
+	{
+		return array(M_User::USER_ROLE_ADMIN,M_User::USER_ROLE_MANAGER,M_User::USER_ROLE_AGENT);
+	}
+
+	public function get_assoc_role_list(){
+		return array('USER_ROLE_ADMIN'=>M_User::USER_ROLE_ADMIN,'USER_ROLE_MANAGER'=>M_User::USER_ROLE_MANAGER,'USER_ROLE_AGENT'=>M_User::USER_ROLE_AGENT);
+	}
 	/**
 	 * Проверка того, что данный пользователь существует и принадлежит к текущей орг.
 	 *

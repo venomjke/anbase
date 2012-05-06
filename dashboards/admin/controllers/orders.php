@@ -67,9 +67,10 @@ class Orders extends MX_Controller
 		$this->template->append_metadata('<script type="text/javascript">$(function(){admin.init({baseUrl:"'.site_url("admin/orders").'"}); admin.orders.init();}); </script>');
 	}
 
-	private function _load_app_assets($value='')
+	private function _load_app_assets()
 	{
 		
+
 		$regions = $this->m_region->get_region_list("json");
 		$metros  = $this->m_metro->get_metro_list("json");
 		$metros_images = $this->m_metro_image->get_images();
@@ -88,9 +89,11 @@ class Orders extends MX_Controller
 			"common.dealtype_list=$dealtype_list",
 			""
 		);
+
 		/*
 		* Подключение скриптов
 		*/
+		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/slick_grid/slick.remotemodel.js"></script>');
 		$this->template->append_metadata('<script type="text/javascript">'.implode(';',$assets).'</script>');
 	}
 

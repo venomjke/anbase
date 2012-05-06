@@ -2,7 +2,7 @@ $(function(){
 		/*
 		* Настройки грида
 		*/
-		var options = {enableCellNavigation: true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
+		var options = {enableCellNavigation: true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true,enableTextSelectionOnCells:true};
 		var checkboxSelector = new Slick.CheckboxSelectColumn({
       		cssClass: "slick-cell-checkboxsel"
     	});

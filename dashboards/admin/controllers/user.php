@@ -46,6 +46,7 @@ class User extends MX_Controller
 		$this->template->set_partial('dashboard_user','dashboard/dashboard_user');
 		$this->template->set_partial('dashboard_menu','dashboard/dashboard_menu');
 	
+		$this->_load_app_assets();
 		/*
 		*	Загрузка скриптов и всякой другой мета инфы
 		*/
@@ -58,6 +59,24 @@ class User extends MX_Controller
 
 	}
 
+
+	private function _load_app_assets()
+	{
+
+		$staff_list = json_encode($this->admin_users->get_list_stafF());
+		$role_list  = json_encode($this->m_user->get_assoc_role_list());
+		$assets = array(
+			"common.staff_list=$staff_list",
+			"common.role_list=$role_list",
+			""
+		);
+
+		/*
+		* Подключение скриптов
+		*/
+		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/slick_grid/slick.invitemodel.js"></script>');
+		$this->template->append_metadata('<script type="text/javascript">'.implode(';',$assets).'</script>');
+	}
 
 	/**
 	 * Редирект на user/staff
@@ -388,63 +407,57 @@ class User extends MX_Controller
 	 **/
 	public function invites()
 	{
-		$act = $this->input->get('act');
+		$this->template->set_partial('dashboard_tabs','dashboard/user/tabs',array('current'=>'invites'));
+		$act = $this->input->get('act')?$this->input->get('act'):'view';
 
-		if (!empty($act)) {
-			switch ($act) {
+		switch ($act) {
 
-				case 'add':
-					/*
-					*	Узнаем для кого
-					*/
-					$for = $this->input->get('for');
-					switch($for){
-						case 'agents':
-							/*
-							*
-							*	Инвайты агентам
-							*	
-							*/
-							$this->_agents_invites();
-							break;
-						case 'managers':
-							/*
-							*
-							*  Инвайты менеджерам
-							*
-							*/
-							$this->_managers_invites();
+			case 'add':
+				/*
+				*	Узнаем для кого
+				*/
+				$for = $this->input->get('for');
+				switch($for){
+					case 'agents':
+						/*
+						*
+						*	Инвайты агентам
+						*	
+						*/
+						$this->_agents_invites();
 						break;
-						case 'admins':
-							/*
-							*
-							*
-							* Инвайты админам
-							*
-							*/
-							$this->_admins_invites();
+					case 'managers':
+						/*
+						*
+						*  Инвайты менеджерам
+						*
+						*/
+						$this->_managers_invites();
+					break;
+					case 'admins':
+						/*
+						*
+						*
+						* Инвайты админам
+						*
+						*/
+						$this->_admins_invites();
+					break;
+					default:
+						redirect('admin/user');
 						break;
-						default:
-							redirect('admin/user');
-							break;
-					}
-				break;
-				case 'del':
-					/*
-					* Удаление списка инвайтов. Удаление одного является частным случаем
-					*/
-					$this->_del_invites();
-				break;
-				case 'view':
-				default:
-					$this->_view_invites();
-				break;
-			}
-		} else {
-			/*
-			*По умолчанию ничего нет, поэтому redirect на admin/user 
-			*/
-			redirect('admin/user/');
+				}
+			break;
+			case 'del':
+				/*
+				* Удаление списка инвайтов. Удаление одного является частным случаем
+				*/
+				$this->_del_invites();
+			break;
+			case 'view':
+			default:
+				$this->_view_invites();
+			break;
 		}
 		
 	}
@@ -467,13 +480,13 @@ class User extends MX_Controller
 			try{
 
 				$this->admin_users->del_invites();
-				$response['code'] = 'success_del_user_invites';
+				$response['code'] = 'success_del_data';
 				$response['data'] = lang('success_del_user_invites');
 			}catch(ValidationException $ve){
-				$response['code'] = 'error_del_user_invites';
+				$response['code'] = 'error_del_data';
 				$response['data']['errors'] = $ve->get_error_messages();
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_del_user_invites';
+				$response['code'] = 'error_del_data';
 				$response['data']['errors'] = array($re->get_error_message());
 			}
 			$this->ajax->build_json($response);
@@ -490,28 +503,22 @@ class User extends MX_Controller
 	 **/
 	private function _view_invites()
 	{
-		/*
-		* Установки шаблона
-		*/
-		$this->template->set_partial('sidebar','dashboard/user/sidebar');
-
-		/*
-		*
-		* Загрузка моделей
-		*
-		*/
-		$this->load->model('m_invite_user');
-
-		/*
-		*
-		* Выбор данных
-		*/
-		$all_invites = $this->admin_users->get_all_invites();
-
-		/*
-		* Вывод данных
-		*/
-		$this->template->build('user/invites',array('invites' => $all_invites));
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$response['code'] = 'success_load_data';
+				$response['data'] = $this->admin_users->get_all_invites();
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_load_data';
+				$response['data'] = $ve->get_error_message();
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_load_data';
+				$response['data'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+			return;
+		}
+		$this->template->build('user/invites');
 	}
 
 	/**
@@ -614,14 +621,18 @@ class User extends MX_Controller
 			}catch(ValidationException $ve){
 
 				$response['code'] = 'error_send_invite';
+				$response['data']['errorType'] = 'validation';
 				$response['data']['errors'] = $ve->get_error_messages();
 
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_send_invite';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
 			}
 
 			$this->ajax->build_json($response);
+		}else{
+			redirect($this->admin_users->get_home_page());
 		}
 	}
 

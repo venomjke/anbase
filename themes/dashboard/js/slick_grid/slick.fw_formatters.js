@@ -11,7 +11,8 @@
         "MetrosList":MetrosListFormatter,
         "Phone":PhoneFormatter,
         "Agent":AgentFormatter,
-        "Description":DescriptionFormatter
+        "Description":DescriptionFormatter,
+        "InviteKey":InviteKeyFormatter
       }
     }
   });
@@ -189,5 +190,18 @@
       var wrap = $('<div>').html(cell_content);
       return wrap.html();
     };
+
+    /*
+    * Преобразование ключа регистрации в понятный для человека вида
+    */
+    function InviteKeyFormatter(row,cell,value,columnDef,dataContext){
+      if(!value || !common.role_list)
+        return "";
+      var url = "register/?key="+value+"&email="+dataContext.email;
+      if(dataContext.role == "Агент") url = "agent/"+url;
+      else if(dataContext.role == "Менеджер") url = "manager/"+url;
+      else if(dataContext.role == "Админ") url = "admin/"+url;
+      return url;
+    }
 
 })(jQuery);
