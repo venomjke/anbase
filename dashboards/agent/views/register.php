@@ -70,7 +70,6 @@
 		<?php echo form_password("r_re_password","",'placeholder="Повторите ввод пароля" class="text"'); ?></td>
   </tr>
 </table>
-<?php echo form_error("recaptcha_response_field"); ?>
 <table width="500px" border="0" cellspacing="4" cellpadding="0">
   <tr>
     <td width="235" align="center" valign="bottom"><input class="button" type="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ" /></td>

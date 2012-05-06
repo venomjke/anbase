@@ -71,6 +71,8 @@ class Register extends MX_Controller
 		*/
 		$data['invite'] = $invite;
 
+		$this->template->set('loginBox',$this->load->view('users/login',array(),true));
+
 		/*
 		* Контейнер данных для ajax ответа
 		*/
