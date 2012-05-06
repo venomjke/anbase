@@ -451,13 +451,11 @@ var admin = {
 			}
 		},
 		reset_table:function(table){
-			function reset_table(table){
-				for(var i in table){
-					table[i].input.val('');
-				}
+			for(var i in table){
+				table[i].input.val('');
 			}
 		},
-		callback:function($d,code,data){
+		callback:function($d,code,data,table){
 			switch(code){
 				case 'success':
 					$d.dialog('close');
@@ -482,7 +480,7 @@ var admin = {
 				return false;
 			}
 			var callback = function(code,data){
-				admin.invites.callback($d,code,data);
+				admin.invites.callback($d,code,data,table);
 			};
 
 			if($('#add_agent_dialog').length == 0){
@@ -531,10 +529,78 @@ var admin = {
 			}
 		},
 		add_manager:function(grid,model){
+			if(!common.staff_list){
+				return false;
+			}
+			var callback = function(code,data){
+				admin.invites.callback($d,code,data,table);
+			};
 
+			if($('#add_manager_dialog').length == 0){
+				var $d = $('<div id="add_manager_dialog">').dialog({autoOpen:false,width:280,modal:true});
+				var $form = $('<table cellpadding="0" align="center" cellspacing="0"></table>');
+				var table = {};
+
+				table['email'] = {
+					'label':$('<label>Email</label>'),
+					'input':$('<input type="text" />')
+				};
+
+				admin.invites.fill_table($form,table);
+
+				$d.append($form);
+				$d.dialog('option','title','Инвайт для менеджера');
+				$d.dialog('option','buttons',{
+					'Добавить':function(){
+						var data = {};
+						data['email']	   = table['email'].input.val();
+						model.add_manager(data,callback);
+					},
+					'Отмена':function(){
+						$d.dialog('close');
+					}
+				});
+				$d.dialog('open');
+			}else{
+				$('#add_manager_dialog').dialog('open');
+			}
 		},
 		add_admin:function(grid,model){
+			if(!common.staff_list){
+				return false;
+			}
+			var callback = function(code,data){
+				admin.invites.callback($d,code,data,table);
+			};
 
+			if($('#add_manager_dialog').length == 0){
+				var $d = $('<div id="add_manager_dialog">').dialog({autoOpen:false,width:280,modal:true});
+				var $form = $('<table cellpadding="0" align="center" cellspacing="0"></table>');
+				var table = {};
+
+				table['email'] = {
+					'label':$('<label>Email</label>'),
+					'input':$('<input type="text" />')
+				};
+
+				admin.invites.fill_table($form,table);
+
+				$d.append($form);
+				$d.dialog('option','title','Инвайт для админа');
+				$d.dialog('option','buttons',{
+					'Добавить':function(){
+						var data = {};
+						data['email']	   = table['email'].input.val();
+						model.add_admin(data,callback);
+					},
+					'Отмена':function(){
+						$d.dialog('close');
+					}
+				});
+				$d.dialog('open');
+			}else{
+				$('#add_manager_dialog').dialog('open');
+			}
 		}
 	}
 }

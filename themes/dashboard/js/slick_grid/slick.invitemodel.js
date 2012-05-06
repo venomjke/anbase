@@ -157,15 +157,55 @@
             }
           }
         }
-      })
+      });
     }
 
     function add_manager(data,callback){
-
+      onDataCreating.notify();
+      $.ajax({
+        url:options.AddUrl+'&for=managers',
+        dataType:'json',
+        data:data,
+        type:'POST',
+        success:function(response){
+          if(response.code && response.data){
+            switch(response.code){
+              case 'success_send_invite':
+                onDataCreated.notify();
+                callback('success',response.data);
+                break;
+              case 'error_send_invite':
+                common.hideAjaxIndicator();
+                callback('error',response.data);
+                break;
+            }
+          }
+        }
+      });
     }
 
     function add_admin(data,callback){
-
+      onDataCreating.notify();
+      $.ajax({
+        url:options.AddUrl+'&for=admins',
+        dataType:'json',
+        data:data,
+        type:'POST',
+        success:function(response){
+          if(response.code && response.data){
+            switch(response.code){
+              case 'success_send_invite':
+                onDataCreated.notify();
+                callback('success',response.data);
+                break;
+              case 'error_send_invite':
+                common.hideAjaxIndicator();
+                callback('error',response.data);
+                break;
+            }
+          }
+        }
+      });
     }
 
     function delInvites(ids){
