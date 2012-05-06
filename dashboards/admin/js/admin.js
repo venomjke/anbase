@@ -139,7 +139,32 @@ var admin = {
 		*/
 		unbind_manager:function(options){
 		},
-		del_users:function(options){
+		del_users:function(grid,model){
+			var ids = [];
+			var SelectedRows = grid.getSelectedRows();
+
+			for(var i in SelectedRows){
+				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
+					ids.push(grid.getDataItem(SelectedRows[i]).id);
+				}
+			}
+			if(ids.length){
+				$d = $('<div>');
+				$d.dialog({
+					'title':'Вы точно желаете удалить записи?',
+					'modal':true,
+					'width':300,
+					'buttons':{
+						'Удалить':function(){
+							model.delUsers(ids);
+							$d.dialog('close');
+						},
+						'Отмена':function(){
+							$d.dialog('close');
+						}
+					}
+				});		
+			}
 		}
 	},
 

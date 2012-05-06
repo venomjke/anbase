@@ -74,6 +74,7 @@ class User extends MX_Controller
 		/*
 		* Подключение скриптов
 		*/
+		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/slick_grid/slick.usermodel.js"></script>');
 		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/slick_grid/slick.invitemodel.js"></script>');
 		$this->template->append_metadata('<script type="text/javascript">'.implode(';',$assets).'</script>');
 	}
@@ -201,14 +202,13 @@ class User extends MX_Controller
 		if($this->ajax->is_ajax_request()){
 			$response = array();
 			try{
-				$admins = $this->admin_users->get_list_admins();	
-				$response['code'] = 'success_view_user';
-				$response['data'] = $admins;
+				$response['code'] = 'success_load_data';
+				$response['data'] = $this->admin_users->get_org_admins();
 			}catch(ValidationException $ve){
-				$response['code'] = 'error_view_user';
+				$response['code'] = 'error_load_data';
 				$response['data'] = $ve->get_error_message();
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_view_user';
+				$response['code'] = 'error_load_data';
 				$response['data'] = array($re->get_error_message());
 			}
 			$this->ajax->build_json($response);
@@ -228,18 +228,17 @@ class User extends MX_Controller
 		if($this->ajax->is_ajax_request()){
 			$response = array();
 			try{
-				$staff = $this->admin_users->get_list_staff();	
-				$response['code'] = 'success_view_user';
-				$response['data'] = $staff;
+				$response['code'] = 'success_load_data';
+				$response['data'] = $this->admin_users->get_org_staff();
 			}catch(ValidationException $ve){
-				$response['code'] = 'error_view_user';
+				$response['code'] = 'error_load_data';
 				$response['data'] = $ve->get_error_message();
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_view_user';
+				$response['code'] = 'error_load_data';
 				$response['data'] = array($re->get_error_message());
 			}
 			$this->ajax->build_json($response);
-			return "";
+			return ;
 		}
 		$this->template->build('user/staff');
 	}
@@ -257,13 +256,13 @@ class User extends MX_Controller
 
 			try{
 				$this->admin_users->del_staff();
-				$response['code'] = 'success_del_users';
+				$response['code'] = 'success_del_data';
 				$response['data'] = lang('success_del_staff');
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_del_users';
+				$response['code'] = 'error_del_data';
 				$response['data']['errors'] = array($re->get_error_message());
 			}catch(ValidationException $ve){
-				$response['code'] = 'error_del_users';
+				$response['code'] = 'error_del_data';
 				$response['data']['errors'] = $re->get_error_messages();
 			}
 			$this->ajax->build_json($response);
@@ -286,13 +285,13 @@ class User extends MX_Controller
 			try{
 
 				$this->admin_users->del_admins();
-				$response['code'] = 'success_del_users';
+				$response['code'] = 'success_del_data';
 				$response['data'] = lang('success_del_admins');
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_del_users';
+				$response['code'] = 'error_del_data';
 				$response['data']['errors'] = array($re->get_error_message());
 			}catch(ValidationException $ve){
-				$response['code'] = 'error_del_users';
+				$response['code'] = 'error_del_data';
 				$response['data']['errors'] = $re->get_error_messages();
 			}
 			$this->ajax->build_json($response);

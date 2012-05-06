@@ -143,4 +143,10 @@ class M_Invite_user extends MY_Model
 		$this->limit(1);
 		return $this->db->get()->row();
 	}
+
+	public function delete_invites($ids)
+	{
+		$this->db->where_in('id',$ids);
+		$this->db->delete($this->table);
+	}
 } // END class M_Invite_user extends MY_Model

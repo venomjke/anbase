@@ -388,4 +388,10 @@ class M_User extends MY_Model{
 		$this->where("users.role",M_User::USER_ROLE_MANAGER);
 		return $this->get_users_organization($org_id);
 	}
+
+	public function delete_users($ids)
+	{
+		$this->db->where_in('id',$ids);
+		$this->db->delete($this->table);
+	}
 }

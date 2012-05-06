@@ -477,14 +477,37 @@ class Admin_Users extends Users{
 			 	}
 		 	}
 
-		 	foreach($valid_ids as $id_invite){
-		 		$this->ci->m_invite_user->delete($id_invite);
-		 	}
+		 	if(!empty($valid_ids))
+		 		$this->ci->m_invite_user->delete_invites($valid_ids);
 		 	return;
 		 }
 		 throw new AnbaseRuntimeException(lang('common.not_legal_data'));	
 
 
+	}
+
+	/**
+	 * Загрузка персонала организации
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function get_org_staff()
+	{
+		$items = $this->get_list_staff();
+		return array('count'=>count($items),'items'=>$items,'total'=>count($items));
+	}
+
+	/**
+	 * Загрузка администрации персонала
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function get_org_admins()
+	{
+		$items = $this->get_list_admins();
+		return array('count'=>count($items),'items'=>$items,'total'=>count($items));
 	}
 
 	/**
@@ -521,12 +544,13 @@ class Admin_Users extends Users{
 		/*
 		* выбираем список ids на удаление
 		*/
-		$ids_users = $this->ci->input->post('ids_users');
+		$ids_users = $this->ci->input->post('users');
 		/*
 		* Если есть, что удалять.
 		*/
-		if(!empty($ids_users)){
+		if(!empty($ids_users) and is_array($ids_users)){
 
+			$valid_ids = array();
 			foreach($ids_users as $id_user){
 
 				/*
@@ -534,7 +558,7 @@ class Admin_Users extends Users{
 				* User не может удалить сам себя
 				*/
 				if($id_user == $this->get_user_id()){
-					throw new AnbaseRuntimeException(lang('no_enough_right'));
+					continue;
 				};
 
 				/*
@@ -547,31 +571,21 @@ class Admin_Users extends Users{
 					* Юзер должен относиться к текущей организации
 					*/
 					if(is_numeric($id_user) && $this->ci->m_user->is_exists($id_user,$this->get_org_id())){
-						/*
-						* Если удалить не удалось
-						*/
-						if(!$this->ci->m_user->delete($id_user)){
-							throw new AnbaseRuntimeException(lang('common.delete_error'));
-						}
-						return;
+						$valid_ids[] = $id_user;
 					}
-					throw new AnbaseRuntimeException(lang('no_enough_right'));
 				}else{
 
 					/*
 					* Админ может удалять всех кроме админов
 					*/
 					if(is_numeric($id_user) && $this->ci->m_user->is_exists($id_user,$this->get_org_id()) && !$this->is_admin($id_user)){
-						/*
-						* Если удалить не удалось
-						*/
-						if(!$this->ci->m_user->delete($id_user)){
-							throw new AnbaseRuntimeException(lang('common.delete_error'));
-						}
-						return;	
+						$valid_ids[] = $id_user;
 					}
-					throw new AnbaseRuntimeException(lang('no_enough_right'));
 				}
+			}
+
+			if(!empty($valid_ids)){
+				$this->ci->m_user->delete_users($valid_ids);
 			}
 			return;
 		}

@@ -216,7 +216,8 @@ class Admin_Orders
 			* P.S Если пользователь не хакер, то все получится.
 			* P.P.S База должна позаботиться о том, чтобы все связанные с заявкой записи были тоже удалены
 			*/
-			$this->ci->m_order->delete_orders($valid_ids);
+			if(!empty($valid_ids))
+				$this->ci->m_order->delete_orders($valid_ids);
 			return;
 		}
 		throw new AnbaseRuntimeException(lang('common.not_legal_data'));
