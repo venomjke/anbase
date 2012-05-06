@@ -710,7 +710,7 @@ class Admin_Users extends Users{
 		*
 		* Наши данные
 		*/
-		$fields = array('login','name','password','middle_name','last_name','phone');
+		$fields = array('r_login','name','r_password','r_re_password','middle_name','last_name','phone');
 
 		/*
 		* Валидация данных
@@ -725,10 +725,14 @@ class Admin_Users extends Users{
 		if($this->ci->form_validation->run($this->ci->m_admin)){
 
 			/*
-			* Выбираем наши данные путем пересечения "наших" и "общих"
+			* Выбираем наши данные
 			*/
-			$register_data = array_intersect_key($this->ci->input->post(),array_flip($fields));
-
+			$register_data['login']  = $this->ci->input->post('r_login');
+			$register_data['password'] = $this->ci->input->post('r_password');
+			$register_data['name'] = $this->ci->input->post('name');
+			$register_data['middle_name'] = $this->ci->input->post('middle_name');
+			$register_data['last_name'] = $this->ci->input->post('last_name');
+			$register_data['phone'] = $this->ci->input->post('phone');			
 			$register_data['email']  = $invite->email;
 			$register_data['org_id'] = $invite->org_id;
 			$register_data['role']   = $invite->role;

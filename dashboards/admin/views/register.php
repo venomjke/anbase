@@ -1,101 +1,78 @@
-<div class="contentWrap">
-	<div id="registerWrap">
-		<?php echo form_open("admin/register/?key={$invite->key_id}&email={$invite->email}",'onsubmit="register.submit({jObjForm:$(this)});"'); ?>
-		<div class="registerRow">
-			<div style="overflow: auto; border-bottom: 1px #B4B4B4 solid;">
-				<div class="registerLeftColumn">
-					<h3> Админ </h3>
-					<?php
-						if(!empty($runtime_error)) echo $runtime_error;
-					?>
-					<fieldset>
-						<legend> Учетная запись </legend>
-						
-						<table>
-							<tr>
-								<td>  <label for=""> Логин </label> </td>
-								<td> 
-									<?php echo form_error("login"); ?>
-									<?php echo form_input("login",set_value("login"),'placeholder="Введите имя"'); ?> </td>
-							</tr>
-							<tr>
-								<td> <label for="">Email </label> </td>
-								<td> <?php echo $invite->email; ?> </td>
-							</tr>
-							<tr>
-								<td> <label for="password"> Пароль </label></td>
-								<td><?php echo form_error("password"); ?> 
-									<?php echo form_password("password",set_value("password")); ?>
-						 		</td>
-							</tr>
-							<tr>
-								<td>
-									<label for="re_password"> Повторите пароль </label>
-								</td>
-								<td>
-									<?php echo form_error("re_password"); ?>
-									<?php echo form_password("re_password"); ?>
-								</td>
-							</tr>
-						</table>
-					</fieldset>		
-					<fieldset>
-						<legend> Личные данные </legend>
-						<table>
-							<tr>
-								<td> <label for=""> Имя </label>
-								 </td>
-								<td><?php echo form_error("name"); ?>
-									<?php echo form_input("name",set_value("name"),'placeholder="Введите свое имя"'); ?>
-							 	</td>
-							</tr>
-							<tr>
-								<td><label for=""> Отчество </label>
-								</td>
-								<td><?php echo form_error("middle_name"); ?>
-									<?php echo form_input("middle_name",set_value("middle_name"),'placeholder="Введите свое отчество"'); ?>
-								</td>
-							</tr>
-							<tr>
-								<td><label for=""> Фамилия </label>
-								 </td>
-								<td><?php echo form_error("last_name"); ?>
-									<?php echo form_input("last_name",set_value("last_name"),'placeholder="Введите свою фамилию"'); ?>
-								 </td>
-							</tr>
-							<tr>
-								<td><label for=""> Телефон </label>
-								</td>
-								<td><?php echo form_error("phone"); ?>
-									<?php echo form_input("phone",set_value("phone"),'placeholder="Введите свой телефон"'); ?>
-								</td>
-							</tr>
-						</table>
-					</fieldset>
-				</div>
-				<div class="registerRightColumn">
-					<h3> Организация </h3>
-					<table>
-							<tr>
-								<td><label for=""> Название организации </label>
-								</td>
-								<td><?php echo $invite->org_name; ?></td>
-							</tr>
-							<tr>
-								<td><label for=""> Тел. организации ( диспетчера ) </label></td>
-								<td>
-									<?php echo $invite->org_phone; ?>
-								</td>
-							</tr>
-							<tr>
-								<td> <label for=""> Имя директора </label> </td>
-								<td> <?php echo make_official_name($invite->ceo_name,$invite->ceo_middle_name,$invite->ceo_last_name); ?> </td>
-							</tr>
-						</table>
-				</div>
-			</div>
-			<?php echo form_submit("submit","Зарегистрироваться"); ?>
-		</div>
-		<?php echo form_close(); ?>
-	</div>
+<?php echo form_open("admin/register/?key={$invite->key_id}&email={$invite->email}",'onsubmit="register.submit({jObjForm:$(this)});"'); ?>
+<div class="zagolovok">
+   	<div class="date"><div><img src="<?php echo site_url("themes/start")?>/images/6.png" /></div></div>
+        <h1><a href="111"> Регистрация</a></h1>
+            Регистрация необходима для работы в системе. <br />
+        Все поля обязательны для заполнения
 </div>
+	<h3 class="reg">Организация</h3>
+<table width="500px" border="0" cellspacing="4" cellpadding="0">
+  <tr>
+    <td width="200px">Название организации:</td>
+    <td width="300px"><?php echo $invite->org_name; ?></td>
+  </tr>
+  <tr>
+    <td>Имя директора:</td>
+    <td> <?php echo make_official_name($invite->ceo_name,$invite->ceo_middle_name,$invite->ceo_last_name); ?></td>
+  </tr>
+  <tr>
+    <td>Телефон организации (диспетчера)</td>
+    <td><?php echo $invite->org_phone; ?></td>
+  </tr>
+</table>
+	<h3 class="reg">Личные данные</h3>
+	<?php
+		if(!empty($runtime_error)) echo $runtime_error;
+	?>
+    <table width="500px" border="0" cellspacing="4" cellpadding="0">
+	  <tr>
+	    <td width="200px">Фамилия:</td>
+	    <td width="300px"><?php echo form_error("last_name"); ?>
+			<?php echo form_input("last_name",set_value("last_name"),'placeholder="Введите свою фамилию" class="text"'); ?></td>
+	  </tr>
+	  <tr>
+	    <td>Имя:</td>
+	    <td><?php echo form_error("name"); ?>
+			<?php echo form_input("name",set_value("name"),'placeholder="Введите свое имя" class="text"'); ?></td>
+	  </tr>
+	  <tr>
+	    <td>Отчество:</td>
+	    <td><?php echo form_error("middle_name"); ?>
+			<?php echo form_input("middle_name",set_value("middle_name"),'placeholder="Введите свое отчество" class="text"'); ?></td>
+	  </tr>
+	  <tr>
+	    <td>Телефон:</td>
+	    <td>
+		<?php echo form_error("phone"); ?>
+		<?php echo form_input("phone",set_value("phone"),'placeholder="Введите свой телефон" class="text"'); ?></td>
+	  </tr>
+	</table>
+
+		<h3 class="reg">Учетная запись</h3>
+        <table width="500px" border="0" cellspacing="4" cellpadding="0">
+  <tr>
+    <td width="200px">Логин:</td>
+    <td width="300px"><?php echo form_error("r_login"); ?>
+					  <?php echo form_input("r_login",set_value("r_login"),'placeholder="Введите имя" class="text"'); ?></td>
+  </tr>
+  <tr>
+    <td>Email :</td>
+    <td><?php echo $invite->email; ?></td>
+  </tr>
+  <tr>
+    <td>Пароль:</td>
+    <td><?php echo form_error("r_password"); ?> 
+		<?php echo form_password("r_password",set_value("r_password"),'placeholder="Введите свой пароль" class="text"'); ?></td>
+  </tr>
+  <tr>
+    <td>Повторите пароль:</td>
+    <td><?php echo form_error("r_re_password"); ?>
+		<?php echo form_password("r_re_password","",'placeholder="Повторите ввод пароля" class="text"'); ?></td>
+  </tr>
+</table>
+<table width="500px" border="0" cellspacing="4" cellpadding="0">
+  <tr>
+    <td width="235" align="center" valign="bottom"><input class="button" type="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ" /></td>
+  </tr>
+</table>
+<?php echo form_close(); ?>
