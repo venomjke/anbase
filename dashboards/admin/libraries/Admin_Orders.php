@@ -125,7 +125,7 @@ class Admin_Orders
 			/*
 			* стандартное редактирование
 			*/
-			$data = array_intersect_key($this->ci->input->post(), array_flip237($order_field));
+			$data = array_intersect_key($this->ci->input->post(), array_flip($order_field));
 			if(!empty($data))
 				$this->ci->m_admin_order->update($this->ci->input->post('id'),$data,true);
 			return;

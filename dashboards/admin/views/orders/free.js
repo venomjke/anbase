@@ -79,6 +79,7 @@ $(function(){
 		* Обработка события изменения ячейки
 		*/
 		grid.onCellChange.subscribe(function(e,handle){
+			var act = 'edit';
 			var data = {};
 			var item = handle.item;
 			var cell = handle.cell;
@@ -96,9 +97,14 @@ $(function(){
 			if(field == "regions"){
 				data["any_region"] = item["any_region"];
 			}
+
+			if(field == "user_id"){
+				act = 'delegate';
+				data["order_id"] = item["id"];
+			}
 			
 			$.ajax({
-				url:admin.baseUrl+'/?act=edit',
+				url:admin.baseUrl+'/?act='+act,
 				type:'POST',
 				dataType:'json',
 				data:data,

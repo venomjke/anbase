@@ -19,7 +19,7 @@ $(function(){
 			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer,sortable:true},	
 			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:200, formatter:Slick.Formatters.Description, editor:Slick.Editors.LongText},
 			{id: "phone", name:"Телефон", field:"phone", width:100,  editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone },
-			{id: "agent", name:"Агент", field:"user_id", formatter:Slick.Formatters.Agent},
+			{id: "agent", name:"Агент", field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent},
 			{id:"finish_date", name:"Дата завершения", field:"finish_date", width:90, editor:Slick.Editors.Date}
 		]);	
 
@@ -80,6 +80,7 @@ $(function(){
 		* Обработка события изменения ячейки
 		*/
 		grid.onCellChange.subscribe(function(e,handle){
+			var act = 'edit';
 			var data = {};
 			var item = handle.item;
 			var cell = handle.cell;
@@ -97,9 +98,14 @@ $(function(){
 			if(field == "regions"){
 				data["any_region"] = item["any_region"];
 			}
-			
+
+			if(field == "user_id"){
+				act = 'delegate';
+				data["order_id"] = item["id"];
+			}
+
 			$.ajax({
-				url:admin.baseUrl+'/?act=edit',
+				url:admin.baseUrl+'/?act='+act,
 				type:'POST',
 				dataType:'json',
 				data:data,
