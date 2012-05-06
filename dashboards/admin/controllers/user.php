@@ -547,10 +547,12 @@ class User extends MX_Controller
 			}catch(ValidationException $ve){
 
 				$response['code'] = 'error_send_invite';
+				$response['data']['errorType'] = 'validation';
 				$response['data']['errors'] = $ve->get_error_messages();
 
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_send_invite';
+				$response['data']['errorType'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
 			}
 
@@ -584,10 +586,12 @@ class User extends MX_Controller
 			}catch(ValidationException $ve){
 
 				$response['code'] = 'error_send_invite';
+				$response['data']['errorType'] = 'validation';
 				$response['data']['errors'] = $ve->get_error_messages();
 
 			}catch(AnbaseRuntimeException $re){
 				$response['code'] = 'error_send_invite';
+				$response['data'] = 'runtime';
 				$response['data']['errors'] = array($re->get_error_message());
 			}
 

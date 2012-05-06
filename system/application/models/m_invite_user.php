@@ -43,7 +43,7 @@ class M_Invite_user extends MY_Model
 		* Правила валидации
 		*/
 		$this->validate = array(
-			array('field'=>'email', 'label'=>'lang:label_email', 'rules'=>'required|xss_clean|valid_email|max_length[100]|is_email_available'),
+			array('field'=>'email', 'label'=>'lang:label_email', 'rules'=>'required|xss_clean|max_length[100]|valid_email|is_email_available'),
 			array('field'=>'manager_id', 'label'=>'Manager Id', 'rules'=>'is_natural|is_manager_org')
 		);
 	}
