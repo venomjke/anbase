@@ -251,7 +251,7 @@ class Agent_Users extends Users{
 		/*
 		* Наши данные
 		*/
-		$fields = array('login','password','name','middle_name','last_name','phone');
+		$fields = array('r_login','r_password','r_re_password','name','middle_name','last_name','phone');
 
 		/*
 		* Валидация данных
@@ -260,13 +260,15 @@ class Agent_Users extends Users{
 		$register_data = array();
 
 		if($this->ci->form_validation->run($this->ci->m_agent)){
-
 			/*
-			*
 			* Выбираем наши данные
 			*/
-			$register_data = array_intersect_key($this->ci->input->post(), array_flip($fields));
-			
+			$register_data['login']  = $this->ci->input->post('r_login');
+			$register_data['password'] = $this->ci->input->post('r_password');
+			$register_data['name'] = $this->ci->input->post('name');
+			$register_data['middle_name'] = $this->ci->input->post('middle_name');
+			$register_data['last_name'] = $this->ci->input->post('last_name');
+			$register_data['phone'] = $this->ci->input->post('phone');			
 			$register_data['email']  = $invite->email;
 			$register_data['org_id'] = $invite->org_id;
 			$register_data['role']   = $invite->role;

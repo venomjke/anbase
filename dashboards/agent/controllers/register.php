@@ -25,7 +25,7 @@ class Register extends MX_Controller
 		*
 		*/
 		if($this->agent_users->is_logged_in() or !$this->agent_users->has_invite()){
-			redirect();
+			redirect('');
 		}
 		/*
 		* Загрузка пакета сообщений
@@ -66,7 +66,7 @@ class Register extends MX_Controller
 		$data = array();
 
 		$data['invite'] = $invite;
-
+		$this->template->set('loginBox',$this->load->view('users/login',array(),true));
 		try{
 
 			/*
@@ -86,9 +86,6 @@ class Register extends MX_Controller
 					redirect('');
 				}
 			}else{
-				/*
-				* Отображение формы
-				*/
 				$this->template->build('register',$data);
 			}
 		}catch(ValidationException $ve){

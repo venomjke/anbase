@@ -207,11 +207,8 @@ class Users {
 				$this->ci->config->item('phpass_hash_portable', 'users'));
 
 		/*
-		*
 		*	Составляем пачку данных для регистрации пользователя
-		*
 		*/
-
 		$register_data['password'] = $hasher->HashPassword($register_data['password']);
 
 		if (($res = $this->ci->m_user->insert($register_data,true))) {
