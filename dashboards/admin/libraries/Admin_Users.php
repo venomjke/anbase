@@ -348,7 +348,6 @@ class Admin_Users extends Users{
                		if(!$this->is_admin($employee_id)){
 						/*
 						* Обычный админ может поменять должность на любую отличную от админ.
-						*
 						*/
 						if($role != M_User::USER_ROLE_ADMIN){
 							$this->ci->m_admin->change_position($employee_id,$this->get_user_role($employee_id),$role);

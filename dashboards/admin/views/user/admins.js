@@ -2,7 +2,7 @@ $(function(){
     /*
     * Настройки грида
     */
-    var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true,enableTextSelectionOnCells:true};
+    var options = {enableCellNavigation: true,rowHeight:25,editable:true,autoEdit:false,forceFitColumns:true,enableTextSelectionOnCells:true};
     var checkboxSelector = new Slick.CheckboxSelectColumn({
         cssClass: "slick-cell-checkboxsel"
     });
@@ -14,7 +14,8 @@ $(function(){
         {id: "name", name:"Имя", field:"name"},
         {id: "middle_name", name:"Отчество", field:"middle_name"},
         {id: "phone", name:"Телефон", field:"phone", formatter:Slick.Formatters.Phone},
-        {id: "email", name:"Email", field:"email"}      
+        {id: "email", name:"Email", field:"email"},
+        {id: "role", name:"Должность", field:"role", editor:Slick.Editors.AnbaseRole}
     ]);  
 
     /*
@@ -48,6 +49,85 @@ $(function(){
         common.hideAjaxIndicator();
     });
 
+
+ /*
+    * Сохраняем backup значение
+    */
+    grid.onBeforeEditCell.subscribe(function(e,handle){
+        handle.item.backupFieldValue = handle.item[handle.column.field]; 
+    });
+
+    /*
+    * Обработка события изменения ячейки
+    */
+    grid.onCellChange.subscribe(function(e,handle){
+
+        var act  = 'edit';
+        var data = {};
+        var item = handle.item;
+        var cell = handle.cell;
+        var field = grid.getColumns()[cell].field;
+
+        data['id']  = item.id;
+        data[field] = item[field];
+
+        switch(field){
+            case "role":
+                act = "change_position";
+                break;
+        }
+        
+        $.ajax({
+            url:admin.baseUrl+'/admins/?act='+act,
+            type:'POST',
+            dataType:'json',
+            data:data,
+            success:function(response){
+                if(response.code && response.data){
+                    switch(response.code){
+                        case 'success_edit_user':
+                            common.showResultMsg(response.data);
+                            vp = grid.getViewport();
+                            modelUser.reloadAll(vp.top,vp.bottom);
+                        break;
+                        case 'error_edit_user':
+                            /*
+                            * Восстанавливаем старое значение
+                            */
+                            item[field] = item.backupFieldValue;
+                            grid.updateRow(handle.row);
+                            
+                            /*
+                            * Выводим сообщение об ошибке.
+                            * Если ошибка уровня валидации, то дя поля выводим ошибку. Если ошибка уровня системы, то просто выводим ошибку
+                            */
+                            if(response.data.errors[field] && typeof response.data.errors[field] == "string"){
+                                common.showResultMsg(response.data.errors[field]);
+                            }else{
+                                common.showResultMsg(response.data.errors[0]);
+                            }
+                            return false;
+                        break;
+                    }
+                }
+            },
+            beforeSend:function(){
+                common.showAjaxIndicator();
+            },
+            complete:function(){
+                common.hideAjaxIndicator();
+            }
+        });
+    });
+
+    /*
+    * Обработка события неверного редактирования ячейки
+    */
+    grid.onValidationError.subscribe(function(e,handle){
+        var column = handle.column;
+        var validationResults = handle.validationResults;
+        common.showResultMsg(validationResults.msg);
+    });
     /*
     * Удаление пользователей
     */

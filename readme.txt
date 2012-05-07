@@ -3,3 +3,11 @@ Slickgrid - это Widget grid'a на базе framework jquery. Этот grid �
 2. Поддержка ajax
 3. Поддеркжа celFormatters и celEditors
 4. развитый API
+
+[production]
+	Структура приложения в режиме production следующая
+	- dashboards
+	- system
+	- themes
+	.htaccess
+	.index.php

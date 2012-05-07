@@ -145,5 +145,11 @@ var common = {
 	},
 	hide_full_text:function(event,row,cell){
 	  $('#tooltip_'+row+'_'+cell).remove();
+	},
+	make_official_name:function(name,middle_name,last_name){
+	  	name = name.charAt(0).toUpperCase();
+	  	middle_name = middle_name.charAt(0).toUpperCase();
+		last_name = last_name.charAt(0).toUpperCase()+last_name.substr(1,last_name.length);
+		return last_name+' '+name+'.'+middle_name;
 	}
 }

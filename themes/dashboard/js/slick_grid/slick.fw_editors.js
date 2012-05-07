@@ -12,11 +12,123 @@
 				"AnbaseCategory":AnbaseCategoryEditor,
 				"AnbaseDealType":AnbaseDealTypeEditor,
 				"AnbaseRegions":AnbaseRegionsEditor,
-				"AnbaseMetros":AnbaseMetrosEditor
+				"AnbaseMetros":AnbaseMetrosEditor,
+				"AnbaseRole":AnbaseRoleEditor,
+				"AnbaseUser":AnbaseUserEditor
 			}
 		}
 	});
 
+	function AnbaseUserEditor(args){
+		if(!common.staff_list){
+			this.cancel();
+		}
+
+		var $select;
+		var defaultValue;
+		var scope = this;
+
+		this.init = function(){
+			$select = $("<SELECT tabindex='0' class='editor-category'><option value=\"-1\">- Нету -</option></SELECT>");
+			for(var i in common.staff_list){
+				var empl = common.staff_list[i];
+
+				if(empl.role == common.role_list['USER_ROLE_MANAGER']){
+					var $opt = $('<option value="'+empl.id+'">'+common.make_official_name(empl.name,empl.middle_name,empl.last_name)+'</option>');
+					$select.append($opt);
+				}
+			}
+
+			$select.appendTo(args.container);
+			$select.focus();
+		};
+
+		this.destroy = function(){
+			$select.remove();
+		};
+
+		this.focus = function(){
+			$select.focus();
+		};
+		this.loadValue = function(item){
+			$select.val((defaultValue = item[args.column.field]));
+			$select.select();
+		};
+
+		this.serializeValue = function(){
+			return $select.val();
+		};
+
+		this.applyValue = function(item,state){
+			item[args.column.field] = state;
+		};
+
+		this.isValueChanged = function(){
+			return ($select.val() != defaultValue );
+		};
+
+		this.validate = function(){
+			return {
+				valid:true,
+				msg:null
+			};
+		};
+
+		this.init();
+	}
+
+	function AnbaseRoleEditor(args){
+		if(!common.role_list){
+			this.cancel();
+		}
+
+		var $select;
+		var defaultValue;
+		var scope = this;
+
+		this.init = function(){
+			$select = $("<SELECT tabindex='0' class='editor-category'></SELECT>");
+			for(var i in common.role_list){
+				var $opt = '<option value="'+common.role_list[i]+'">'+common.role_list[i]+'</option>';
+				$select.append($opt);
+			}
+			$select.appendTo(args.container);
+			$select.focus();
+		};
+
+		this.destroy = function(){
+			$select.remove();
+		};
+
+		this.focus = function(){
+			$select.focus();
+		};
+		this.loadValue = function(item){
+			$select.val((defaultValue = item[args.column.field]));
+			$select.select();
+		};
+
+		this.serializeValue = function(){
+			return $select.val();
+		};
+
+		this.applyValue = function(item,state){
+			item[args.column.field] = state;
+		};
+
+		this.isValueChanged = function(){
+			return ($select.val() != defaultValue );
+		};
+
+		this.validate = function(){
+			return {
+				valid:true,
+				msg:null
+			};
+		};
+
+		this.init();
+	}
 
 	function AnbaseAgentEditor(args){
 		if(!common.staff_list){

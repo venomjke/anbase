@@ -318,13 +318,13 @@ class User extends MX_Controller
 			try{
 
 				$this->admin_users->assign_manager_agent();
-				$response['code']='success_assign_manager_agent';
+				$response['code']='success_edit_user';
 				$response['data']=lang('success_assign_manager_agent'); 
 			}catch(ValidationException $ve){
-				$response['code']='error_assign_manager_agent';
+				$response['code']='error_edit_user';
 				$response['data']['errors']=$ve->get_error_messages();
 			}catch(AnbaseRuntimeException $re){
-				$response['code']='error_assign_manager_agent';
+				$response['code']='error_edit_user';
 				$response['data']['errors']=array($re->get_error_message());
 			}
 			$this->ajax->build_json($response);
@@ -380,13 +380,13 @@ class User extends MX_Controller
 			*/
 			try{
 				$this->admin_users->change_position_employee();
-				$response['code'] = 'success_change_position_employee';
+				$response['code'] = 'success_edit_user';
 				$response['data'] = lang('success_change_position_employee');
 			}catch(ValidationException $ve){
-				$response['code'] = 'error_change_position_employee';
+				$response['code'] = 'error_edit_user';
 				$response['data']['errors'] = $ve->get_error_messages();
 			}catch( AnbaseRuntimeException $re){
-				$response['code'] = 'error_change_position_employee';
+				$response['code'] = 'error_edit_user';
 				$response['data']['errors'] = array($re->get_error_message());
 			}
 			$this->ajax->build_json($response);

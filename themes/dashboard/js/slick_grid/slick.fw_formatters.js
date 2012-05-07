@@ -12,7 +12,8 @@
         "Phone":PhoneFormatter,
         "Agent":AgentFormatter,
         "Description":DescriptionFormatter,
-        "InviteKey":InviteKeyFormatter
+        "InviteKey":InviteKeyFormatter,
+        "Manager":ManagerFormatter
       }
     }
   });
@@ -169,10 +170,8 @@
     */
       if(!agent_id || agent_id == -1)
         return '<a href="#" onclick="return false;">Назначить</a>';
-      var agent_name = dataContext.user_name.charAt(0).toUpperCase();
-      var agent_middle_name = dataContext.user_middle_name.charAt(0).toUpperCase();
-      var agent_last_name = dataContext.user_last_name.charAt(0).toUpperCase()+dataContext.user_last_name.substr(1,dataContext.user_last_name.length);
-      return '<a href="#" onclick="return false;">'+agent_last_name+' '+agent_name+'.'+agent_middle_name+'</a>';
+
+      return '<a href="#" onclick="return false;">'+common.make_official_name(dataContext.user_name,dataContext.user_middle_name,dataContext.user_last_name)+'</a>';
   }
 
     /*
@@ -204,4 +203,13 @@
       return url;
     }
 
+    /*
+    * Форматирование менеджера
+    */
+    function ManagerFormatter(row,cell,value,columnDef,dataContext){
+      if(value && dataContext.manager_name && dataContext.manager_middle_name && dataContext.manager_last_name){
+        return common.make_official_name(dataContext.manager_name,dataContext.manager_middle_name,dataContext.manager_last_name);
+      }
+      return "";
+    }
 })(jQuery);
