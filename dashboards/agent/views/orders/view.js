@@ -4,7 +4,7 @@ $(function(){
 		*/
 		var options = {enableCellNavigation:true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"Номер", field:"number", sortable:true},
+			{id: "number", name:"№", field:"number",width:40,sortable:true},
 			{id: "create_date", name:"Дата создания", field:"create_date",sortable:true},
 			{id: "category", name:"Тип объекта", field:"category", editor:Slick.Editors.AnbaseCategory},
 			{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
@@ -17,7 +17,7 @@ $(function(){
 
 		/*
 		* некоторые данные
-		*/	
+		*/
 		var region_widget;
 		var metro_widget;
 		var regions = [];
@@ -26,7 +26,7 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=my',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=my',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
 		common.grid = grid;
 
@@ -115,7 +115,7 @@ $(function(){
 			}
 
 			$.ajax({
-				url:manager.baseUrl+'/?act=edit',
+				url:agent.baseUrl+'/?act=edit',
 				type:'POST',
 				dataType:'json',
 				data:data,
@@ -171,6 +171,7 @@ $(function(){
 		model.onDataLoading.subscribe(function(){
 			common.showAjaxIndicator();
 		});
+
 		/*
 		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
 		*/
@@ -196,6 +197,7 @@ $(function(){
 				}
 			}
 		});
+
 		/*
 		* Обработчики фильтра
 		*/
@@ -360,7 +362,7 @@ $(function(){
 			vp = grid.getViewport();
 			model.applyFilter(vp.top,vp.bottom);
 		});
-		
+
 		$('#reset_filter_btn').click(function(){
 			model.resetFilter();
 			$('#f_phone').val('');
@@ -391,5 +393,5 @@ $(function(){
 			common.hideAjaxIndicator();
 		});
 		grid.onViewportChanged.notify();
-		manager.orders.grid = grid;
+		agent.orders.grid = grid;
 	});

@@ -2,34 +2,35 @@ $(function(){
 		/*
 		* Настройки грида
 		*/
-		var options = {enableCellNavigation:true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
+		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"Номер", field:"number", sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date",sortable:true},
-			{id: "category", name:"Тип объекта", field:"category", editor:Slick.Editors.AnbaseCategory},
-			{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
-			{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
-			{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
-			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer, sortable:true},	
-			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description, editor:Slick.Editors.LongText},
-			{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer}
+			{id: "number", name:"№", field:"number", width:40, sortable:true},
+			{id: "create_date", name:"Дата создания", field:"create_date", width:63, sortable:true},
+			{id: "category", name:"Объект", field:"category", width:60},
+			{id: "deal_type", name:"Сделка", field:"deal_type", width:60},
+			{id: "regions",  name:"Район", field:"regions", formatter:Slick.Formatters.RegionsList, width:55},
+			{id: "metros", name:"Метро", field:"metros",  formatter:Slick.Formatters.MetrosList, width:55},
+			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true, width:70},	
+			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
 		];
+
 
 		/*
 		* некоторые данные
-		*/	
+		*/
 		var region_widget;
 		var metro_widget;
 		var regions = [];
 		var metros  = {};
 
-		/*
-		* Создание грида
-		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=my',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=free',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
 		common.grid = grid;
 
+		grid.onViewportChanged.subscribe(function(e,args){
+			var vp = grid.getViewport();
+			model.ensureData(vp.top,vp.bottom);
+		});
 		/*
 		* Событие сортировки
 		*/
@@ -56,121 +57,56 @@ $(function(){
 			}
 		});
 
-		/*
-		* Сохраняем backup значение
-		*/
-		grid.onBeforeEditCell.subscribe(function(e,handle){
-			handle.item.backupFieldValue = handle.item[handle.column.field]; 
-		});
-		
-		/*
-		[my_notice:] Комментирую тебя бро до наилучших времен, я обязательно тебя включу
-		grid.onHeaderClick.subscribe(function(e,columnHandle){
-			if(columnHandle){
-				switch(columnHandle.column.field){
-					case 'metros':
+		grid.onClick.subscribe(function(e,columnHandle){
+			var columns = grid.getColumns();
+			switch(columns[columnHandle.cell].field){
+				case "metros":
 						if(!metro_widget){
-							metro_widget = common.widgets.metro_map({metros:metros,onSave:metroOnSave,onCancel:metroOnCancel});
+							metro_widget = common.widgets.metro_map({
+								metros:grid.getDataItem(columnHandle.row).metros,
+								onCancel:function(){
+									metro_widget.destroy();
+									metro_widget = undefined;
+								},
+								needButtons:false
+							});
 							metro_widget.init();
 							metro_widget.load();
 						}else{
-							metroOnSave();
+							metro_widget.destroy();
+							metro_widget = undefined;
 						}
 					break;
-					case 'regions':
+				case "regions":
 						if(!region_widget){
-							region_widget = common.widgets.region_map({onSave:regionOnSave,onCancel:regionOnCancel});
+							region_widget = common.widgets.region_map({
+								onCancel:function(){
+									region_widget.destroy();
+									region_widget = undefined;
+								},
+								needButtons:false
+							});
 							region_widget.init();
-							region_widget.load(regions);
+							region_widget.load(grid.getDataItem(columnHandle.row).regions);
 						}else{
-							regionOnCancel();
+							region_widget.destroy();
+							region_widget = undefined;
 						}
 					break;
-				}
-			}
-		});
-		*/
-
-		/*
-		* Обработка события изменения ячейки
-		*/
-		grid.onCellChange.subscribe(function(e,handle){
-			var data = {};
-			var item = handle.item;
-			var cell = handle.cell;
-			var field = grid.getColumns()[cell].field;
-
-			data['id']  = item.id;
-			data[field] = item[field];
-
-			/*
-			* [my_notice]Наверно, стоит подумать над тем как нормально сохранять эти данные
-			*/
-			if(field == "metros"){
-				data["any_metro"] = item["any_metro"];
-			}
-
-			if(field == "regions"){
-				data["any_region"] = item["any_region"];
-			}
-
-			$.ajax({
-				url:manager.baseUrl+'/?act=edit',
-				type:'POST',
-				dataType:'json',
-				data:data,
-				success:function(response){
-					if(response.code && response.data){
-						switch(response.code){
-							case 'success_edit_order':
-								common.showSuccessMsg(response.data);
-							break;
-							case 'error_edit_order':
-								/*
-								* Восстанавливаем старое значение
-								*/
-								item[field] = item.backupFieldValue;
-								grid.updateRow(handle.row);
-								
-								/*
-								* Выводим сообщение об ошибке.
-								* Если ошибка уровня валидации, то дя поля выводим ошибку. Если ошибка уровня системы, то просто выводим ошибку
-								*/
-								if(response.data.errors[field] && typeof response.data.errors[field] == "string"){
-									common.showErrorMsg(response.data.errors[field]);
-								}else{
-									common.showErrorMsg(response.data.errors[0]);
-								}
-								return false;
-							break;
-						}
+				default:
+					if(metro_widget){
+						metro_widget.destroy();
+						metro_widget = undefined;
 					}
-				},
-				beforeSend:function(){
-					common.showAjaxIndicator();
-				},
-				complete:function(){
-					common.hideAjaxIndicator();
-				}
-			});
-		});
-		/*
-		* Обработка события неверного редактирования ячейки
-		*/
-		grid.onValidationError.subscribe(function(e,handle){
-			var column = handle.column;
-			var validationResults = handle.validationResults;
-			common.showResultMsg(validationResults.msg);
+
+					if(region_widget){
+						region_widget.destroy();
+						region_widget = undefined;
+					}
+					break;
+			}
 		});
 
-		grid.onViewportChanged.subscribe(function(e,args){
-			var vp = grid.getViewport();
-			model.ensureData(vp.top,vp.bottom);
-		});
-
-		model.onDataLoading.subscribe(function(){
-			common.showAjaxIndicator();
-		});
 		/*
 		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
 		*/
@@ -185,17 +121,25 @@ $(function(){
 					metro_widget.destroy();
 					metro_widget = undefined;
 				}
-
-				/*
-				* Закрываем редактор
-				*/
-				var c = grid.getActiveCell();
-				var e = grid.getCellEditor(c);
-				if(e){
-					e.cancel();
-				}
 			}
+		})
+		/*
+		* события модели
+		*/
+		model.onDataLoading.subscribe(function(){
+			common.showAjaxIndicator();
 		});
+
+
+		model.onDataLoaded.subscribe(function(e,args){
+			for (var i = args.from; i <= args.to; i++) {
+		    	grid.invalidateRow(i);
+		  	}
+		  	grid.updateRowCount();
+		  	grid.render();
+			common.hideAjaxIndicator();
+		});
+
 		/*
 		* Обработчики фильтра
 		*/
@@ -217,22 +161,10 @@ $(function(){
 				event.preventDefault();
 				vp = grid.getViewport();
 				model.setNumber($(this).val());
-				model.setPhone($('#f_phone').val());
 				model.applyFilter(vp.top,vp.bottom);
 			}
 		});
 		
-		$('#f_phone').keyfilter(/[\+\d]/);
-		$('#f_phone').keydown(function(event){
-			if(event.which == 13){
-				event.preventDefault();
-				vp = grid.getViewport();
-				model.setPhone($(this).val());
-				model.setNumber($('#f_number').val());
-				model.applyFilter(vp.top,vp.bottom);
-			}
-		});
-
 		$('#f_price_to').keyfilter(/[\d\.]/);
 		$('#f_price_to').keydown(function(event){
 			if(event.which == 13){
@@ -256,6 +188,7 @@ $(function(){
 				event.preventDefault();
 			}
 		});
+
 		$('#f_createdate_to').change(function(event){
 			vp = grid.getViewport();
 			model.setCreateDateTo($(this).val());
@@ -269,8 +202,8 @@ $(function(){
 			model.applyFilter(vp.top,vp.bottom);
 		});
 
-
 		$('#description').keydown(function(event){
+
 		});
 
 		function regionOnSave(event){
@@ -336,8 +269,8 @@ $(function(){
 			}
 		});
 
-		$('#search_btn').click(function(event){
 
+		$('#search_btn').click(function(event){
 			model.setNumberTo($('#f_number_to').val());
 			model.setNumberFrom($('#f_number_from').val());
 			model.setCategory($('#f_category').val());
@@ -348,7 +281,6 @@ $(function(){
 			model.setCreateDateFrom($('#f_createdate_from').val());
 			model.setDescription($('#f_description').val());
 
-			model.setDescriptionType($('input[name=f_description_type]:checked').val());
 			if(metros){
 				model.setMetros(metros)
 			}
@@ -360,10 +292,8 @@ $(function(){
 			vp = grid.getViewport();
 			model.applyFilter(vp.top,vp.bottom);
 		});
-		
 		$('#reset_filter_btn').click(function(){
 			model.resetFilter();
-			$('#f_phone').val('');
 			$('#f_number').val('');
 			$('#f_number_to').val('');
 			$('#f_number_from').val('');
@@ -381,15 +311,7 @@ $(function(){
 			model.applyFilter(vp.top,vp.bottom);
 
 		});
-
-		model.onDataLoaded.subscribe(function(e,args){
-			for (var i = args.from; i <= args.to; i++) {
-		    	grid.invalidateRow(i);
-		  	}
-		  	grid.updateRowCount();
-		  	grid.render();
-			common.hideAjaxIndicator();
-		});
+		agent.orders.grid = grid;
 		grid.onViewportChanged.notify();
-		manager.orders.grid = grid;
+
 	});

@@ -119,7 +119,7 @@ class Manager_Orders
 		/*
 		* правила валидации для полей
 		*/
-		$order_field = array('number','create_date','deal_type','category','price','description','phone','any_region','any_metro');
+		$order_field = array('deal_type','category','price','description','phone','any_region','any_metro');
 		$metro_field = array('metros');
 		$region_field = array('regions');
 

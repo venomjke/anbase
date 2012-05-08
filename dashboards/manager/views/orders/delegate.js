@@ -2,22 +2,23 @@ $(function(){
 		/*
 		* Настройки грида
 		*/
-		var options = {enableCellNavigation:true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
+		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
 		var columns = [
 			{id: "number", name:"Номер", field:"number", sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date",sortable:true},
-			{id: "category", name:"Тип объекта", field:"category", editor:Slick.Editors.AnbaseCategory},
-			{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
-			{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
-			{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
-			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer, sortable:true},	
-			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description, editor:Slick.Editors.LongText},
-			{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer}
-		];
-
+			{id: "create_date", name:"Дата создания", field:"create_date", sortable:true},
+			{id: "category", name:"Объект", field:"category"},
+			{id: "deal_type", name:"Сделка", field:"deal_type"},
+			{id: "regions",  name:"Район", field:"regions",formatter:Slick.Formatters.RegionsList},
+			{id: "metros", name:"Метро", field:"metros",formatter:Slick.Formatters.MetrosList},
+			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true},	
+			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description},
+			{id: "agent", name:"Агент", field:"user_id",formatter:Slick.Formatters.Agent},
+			{id: "phone", name:"Телефон", field:"phone", formatter:Slick.Formatters.Phone}
+		];	
+		
 		/*
 		* некоторые данные
-		*/	
+		*/
 		var region_widget;
 		var metro_widget;
 		var regions = [];
@@ -26,7 +27,7 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=my',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=delegate',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
 		common.grid = grid;
 
@@ -90,70 +91,6 @@ $(function(){
 			}
 		});
 		*/
-
-		/*
-		* Обработка события изменения ячейки
-		*/
-		grid.onCellChange.subscribe(function(e,handle){
-			var data = {};
-			var item = handle.item;
-			var cell = handle.cell;
-			var field = grid.getColumns()[cell].field;
-
-			data['id']  = item.id;
-			data[field] = item[field];
-
-			/*
-			* [my_notice]Наверно, стоит подумать над тем как нормально сохранять эти данные
-			*/
-			if(field == "metros"){
-				data["any_metro"] = item["any_metro"];
-			}
-
-			if(field == "regions"){
-				data["any_region"] = item["any_region"];
-			}
-
-			$.ajax({
-				url:manager.baseUrl+'/?act=edit',
-				type:'POST',
-				dataType:'json',
-				data:data,
-				success:function(response){
-					if(response.code && response.data){
-						switch(response.code){
-							case 'success_edit_order':
-								common.showSuccessMsg(response.data);
-							break;
-							case 'error_edit_order':
-								/*
-								* Восстанавливаем старое значение
-								*/
-								item[field] = item.backupFieldValue;
-								grid.updateRow(handle.row);
-								
-								/*
-								* Выводим сообщение об ошибке.
-								* Если ошибка уровня валидации, то дя поля выводим ошибку. Если ошибка уровня системы, то просто выводим ошибку
-								*/
-								if(response.data.errors[field] && typeof response.data.errors[field] == "string"){
-									common.showErrorMsg(response.data.errors[field]);
-								}else{
-									common.showErrorMsg(response.data.errors[0]);
-								}
-								return false;
-							break;
-						}
-					}
-				},
-				beforeSend:function(){
-					common.showAjaxIndicator();
-				},
-				complete:function(){
-					common.hideAjaxIndicator();
-				}
-			});
-		});
 		/*
 		* Обработка события неверного редактирования ячейки
 		*/
@@ -171,31 +108,7 @@ $(function(){
 		model.onDataLoading.subscribe(function(){
 			common.showAjaxIndicator();
 		});
-		/*
-		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
-		*/
-		$(window).keydown(function(e){
-			if(e.keyCode == 27){
-				if(region_widget){
-					region_widget.destroy();
-					region_widget = undefined;
-				}
 
-				if(metro_widget){
-					metro_widget.destroy();
-					metro_widget = undefined;
-				}
-
-				/*
-				* Закрываем редактор
-				*/
-				var c = grid.getActiveCell();
-				var e = grid.getCellEditor(c);
-				if(e){
-					e.cancel();
-				}
-			}
-		});
 		/*
 		* Обработчики фильтра
 		*/
@@ -232,6 +145,12 @@ $(function(){
 				model.applyFilter(vp.top,vp.bottom);
 			}
 		});
+
+		$('#f_user_id').change(function(event){
+			vp = grid.getViewport();
+			model.setUserId($(this).val());
+			model.applyFilter(vp.top,vp.bottom);
+		})
 
 		$('#f_price_to').keyfilter(/[\d\.]/);
 		$('#f_price_to').keydown(function(event){
@@ -360,9 +279,9 @@ $(function(){
 			vp = grid.getViewport();
 			model.applyFilter(vp.top,vp.bottom);
 		});
-		
 		$('#reset_filter_btn').click(function(){
 			model.resetFilter();
+			$('#f_user_id').val('');
 			$('#f_phone').val('');
 			$('#f_number').val('');
 			$('#f_number_to').val('');
