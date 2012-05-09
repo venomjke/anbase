@@ -24,7 +24,7 @@ $(function(){
 			/*
 			* Выбор любого района или нет
 			*/
-			needAnyRegion:true,
+			needAnyRegion:false,
 			/*
 			* Список районов
 			*/
@@ -102,6 +102,21 @@ $(function(){
 			region_click($area.data('region_id'));
 		}
 
+		function isRegionListChanged(){
+			if(options.regions.length != selected_regions.length){
+				return true;
+			}
+
+			for(var i in selected_regions){
+				if(options.regions.indexOf(selected_regions[i]) == -1){
+					return true;
+				}
+			}
+		}
+
+		function isAnyRegionChanged(){
+			return $any_region_checkbox.val() != options.any_region;
+		}
 
 		/*
 		* Типа конструктор, создадим определение редактора и вернем его.
@@ -263,6 +278,7 @@ $(function(){
 			},
 			load:function(regions,any_region){
 				options.regions = regions;
+				options.any_region = any_region;
 				for(var i in options.regions){
 					$('#region-'+options.regions[i]).click();
 				}
@@ -271,19 +287,13 @@ $(function(){
 				if(any_region == "1") $any_region_checkbox.attr('checked','checked');
 			},
 			serialize:function(){
-				return selected_regions;
+				if(options.needAnyRegion)
+					return {"selected_regions":selected_regions,"any_region":$any_region_checkbox.val()};
+				else
+					return selected_regions;
 			},
 			isValueChanged:function(){
-
-				if(options.regions.length != selected_regions.length){
-					return true;
-				}
-
-				for(var i in selected_regions){
-					if(options.regions.indexOf(selected_regions[i]) == -1){
-						return true;
-					}
-				}
+				return isAnyRegionChanged() || isRegionListChanged();
 			}
 		};
 	}

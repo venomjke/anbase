@@ -17,6 +17,13 @@ $(function(){
 
 
 		var def_options = {
+
+			/*
+			* Выбор любое метро
+			*/
+			needAnyMetro:false,
+
+			any_metro:"0",
 			/*
 			* Видимость кнопок
 			*/
@@ -46,6 +53,7 @@ $(function(){
 		var $list;
 		var $list_td;
 		var $list_wrapper;
+		var $any_metro_checkbox;
 
 		var metro_list  = common.metros_images['metro-list'];
 		var selected_metros = {};
@@ -266,7 +274,42 @@ $(function(){
 			}
 		}
 
+		function isChangedMetroList(){
+			// #баный фиктивный пустой объект. то есть, если мы при старте получили его, и ничего не выбрали на карте, то по финишу selected_metros пуст 
+			if(options.metros["0"] && common.isEmptyObj(selected_metros)){
+				return false;
+			}
 
+			if(!common.isEmptyObj(options.metros) && common.isEmptyObj(selected_metros)){
+				return true;
+			}
+
+			//если число линий различно, то тоже меняем
+			if(common.count_props(options.metros) != common.count_props(selected_metros)){
+				return true;
+			}
+
+			for(var i in selected_metros){
+				if(options.metros.hasOwnProperty(i)){	
+					// если мы во время работы по убирали checkpoint'ы, то линия останется живой, но будет пустой.
+					if(!selected_metros[i] || selected_metros[i].length != options.metros[i].length)
+						return true;
+
+					for(var j in selected_metros[i]){
+						if(options.metros[i].indexOf(selected_metros[i][j]) == -1){
+							return true;
+						}	
+					}
+				}else{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		function isChangedAnyMetro(){
+			return $any_metro_checkbox.val() != options.any_metro;
+		}
 		/*
 		* Типа конструктор, создадим определение редактора и вернем его.
 		*/
@@ -294,6 +337,23 @@ $(function(){
 					$wrapper.append($reset_btn);
 				}				
 				
+				if(options.needAnyMetro){
+
+					$any_metro_label    = $('<label for="any_metro_checkbox">Любое</label>')
+					$any_metro_checkbox = $('<input id="any_metro_checkbox" type="checkbox" value=""/>');
+
+					$any_metro_checkbox.click(function(){
+						if($(this).val()=="1"){
+							$(this).val("0");
+						}else{
+							$(this).val("1");
+						}
+					});
+
+					$wrapper.append($any_metro_checkbox);
+					$wrapper.append($any_metro_label);
+				}
+
 				$closeImg = $('<img title="Закрыть без сохранения" style="position:relative; top:0; left:71%; cursor:pointer;" src="'+common.baseUrl+'themes/dashboard/images/delete.png" />');
 				$closeImg.click(function(){
 					cancel_btn(event);
@@ -467,6 +527,10 @@ $(function(){
 			},
 			load:function(){
 				for(var i in options.metros){
+
+					// пустые не берем
+					if(i == "0") continue;
+
 					for(var j in options.metros[i]){
 						if(!selected_metros[i]){
 							selected_metros[i] = [];
@@ -478,42 +542,20 @@ $(function(){
 						push_point_list($area);
 					}
 				}
+
+				if(options.needAnyMetro){
+					$any_metro_checkbox.val(options.any_metro);
+					if(options.any_metro == "1") $any_metro_checkbox.attr('checked','checked');
+				}
 			},
 			serialize:function(){
-				return selected_metros;
+				if(options.needAnyMetro)
+					return {selected_metros:selected_metros,any_metro:$any_metro_checkbox.val()};
+				else
+					return selected_metros;
 			},
 			isValueChanged:function(){
-				
-				// #баный фиктивный пустой объект. то есть, если мы при старте получили его, и ничего не выбрали на карте, то по финишу selected_metros пуст 
-				if(options.metros["0"] && common.isEmptyObj(selected_metros)){
-					return false;
-				}
-
-				if(!common.isEmptyObj(options.metros) && common.isEmptyObj(selected_metros)){
-					return true;
-				}
-
-				//если число линий различно, то тоже меняем
-				if(common.count_props(options.metros) != common.count_props(selected_metros)){
-					return true;
-				}
-
-				for(var i in selected_metros){
-					if(options.metros.hasOwnProperty(i)){	
-						// если мы во время работы по убирали checkpoint'ы, то линия останется живой, но будет пустой.
-						if(!selected_metros[i] || selected_metros[i].length != options.metros[i].length)
-							return true;
-
-						for(var j in selected_metros[i]){
-							if(options.metros[i].indexOf(selected_metros[i][j]) == -1){
-								return true;
-							}	
-						}
-					}else{
-						return true;
-					}
-				}
-				return false;
+				return isChangedMetroList() || isChangedAnyMetro();
 			}
 		};
 	}
