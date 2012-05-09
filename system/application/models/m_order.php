@@ -106,10 +106,9 @@ class M_Order extends MY_Model{
 		*/
 		$this->table       = 'orders';
 		$this->primary_key = 'id';
-		$this->fileds      = array('id','number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id','any_metro');
+		$this->fields      = array('id','number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id','any_metro');
 		$this->result_mode = 'object';
 		/*
-		*
 		*	Правила валидации
 		*/
 		$this->validate = array();

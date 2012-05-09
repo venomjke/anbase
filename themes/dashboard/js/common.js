@@ -151,5 +151,81 @@ var common = {
 	  	middle_name = middle_name.charAt(0).toUpperCase();
 		last_name = last_name.charAt(0).toUpperCase()+last_name.substr(1,last_name.length);
 		return last_name+' '+name+'.'+middle_name;
+	},
+
+	/*
+	* Загрузка формы
+	*/
+	load_form:function(hash,form){
+		if( !hash || typeof hash != "object" ||!form || typeof form != "string")
+			return false;			
+
+		hash[form] = {};
+
+		$('#'+form+' input').each(function(){
+
+			/*
+			* Т.к все элементы формы у нас либо просто text,либо password, 
+			* то считываем name и value и сохраняем их в hash_form для последующей обработки
+			*/
+			var name  = $(this).attr('name');
+			var value = $(this).attr('value');
+			hash[form][name] = value;
+		});
+
+		$('#'+form+' select').each(function(){
+			var name = $(this).attr('name');
+			var value = $(this).val();
+			hash[form][name] = value;
+		});
+	},
+	/*
+	* Сохранение формы, если произошли изменения внутри формы
+	*/
+	save_form:function(hash,form,callback){
+		if( !hash || typeof hash !="object" || !form || typeof form != "string")
+				return false;
+
+		var data = {};
+		var cnt  = 0; // кол-во полей для изменения.
+		$('#'+form+' input').each(function(){
+
+			var name = $(this).attr('name');
+			var value = $(this).attr('value');
+
+			if(hash[form][name] != value){
+				data[name] = value;
+				++cnt;
+			}
+		});
+
+		$('#'+form+' select').each(function(){
+			var name = $(this).attr('name');
+			var value = $(this).val();
+
+			if(hash[form][name] != value){
+				data[name] = value;
+				++cnt;
+			}
+		})
+
+		/*
+		* если сохранять нечего, то выходим
+		*/
+		if(cnt == 0){
+			return false;
+		}
+		callback(form,data);
+	},
+
+	/*
+	* Переключатель с одного значения на другое
+	*/
+	switch:function($input,first,second){
+		if($input.val() == first){
+			$input.val(second);
+		}else{
+			$input.val(first);
+		}
 	}
 }

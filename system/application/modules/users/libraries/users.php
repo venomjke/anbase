@@ -136,6 +136,8 @@ class Users {
 	function register($register_data = array())
 	{
 		$this->ci->load->model('m_organization');
+		$this->ci->load->model('m_settings_org');
+
 		// Hash password using phpass
 		$hasher = new PasswordHash(
 				$this->ci->config->item('phpass_hash_strength', 'users'),
@@ -168,15 +170,22 @@ class Users {
 			if(($res = $this->ci->m_organization->insert($org_data,true))) {
 
 				/**
-				*
 				*	Добавляем юзера и org_id в таблицу user_orgs, чтобы юзер мог свободно заходить в систему
 				*	будем думать, что это пройдет без проблем...
-				*
 				*/
-				if($this->ci->m_user_organization->insert(array('user_id'=>$register_data['user_id'], 'org_id' => $res),true)){
+				if(!$this->ci->m_user_organization->insert(array('user_id'=>$register_data['user_id'], 'org_id' => $res),true)){
+					$this->error = array('register_org_error'=>'register_org_error');
+				}
 
+				$default_settings = array();
+				$default_settings['org_id'] = $res;
+
+				if(!$this->ci->m_settings_org->insert($default_settings)){
+					$this->error = array('register_org_error'=>'register_org_error');
+				}else{
 					return $register_data;
 				}
+
 				/*
 				* достаточно удалить пользователя, к нему привязана организация, и она будет автоматом удалена
 				*/

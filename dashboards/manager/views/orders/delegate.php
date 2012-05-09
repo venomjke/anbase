@@ -12,5 +12,5 @@
 </div>
 
 <script type="text/javascript">
-	<?php $this->load->view('orders/delegate.js',array(),true); ?>
+	<?php echo $this->load->view('orders/delegate.js',array(),true); ?>
 </script>

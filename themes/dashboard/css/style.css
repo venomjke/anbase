@@ -213,6 +213,9 @@ span.minus{
 .conteiner .menu .item4 a {
 	background-image: url(../images/zayavki.png);
 }
+.conteiner .menu .item5 a{
+	background-image: url(../images/6.png);
+}
 .conteiner .filter {
 	margin-right: 16px;
 	margin-bottom: 16px;

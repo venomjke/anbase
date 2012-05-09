@@ -18,59 +18,14 @@ var admin = {
 	profile:{
 		init:function(){
 			admin.profile.hash_form = {};
-			admin.profile.load_form('personal');
-			admin.profile.load_form('system');
-			admin.profile.load_form('organization');
+			common.load_form(admin.profile.hash_form,'personal');
+			common.load_form(admin.profile.hash_form,'system');
+			common.load_form(admin.profile.hash_form,'organization');
 		},
-		/*
-		* Загрузка формы
-		*/
-		load_form:function(form){
-			if(!form || typeof form != "string")
-				return false;			
-			admin.profile.hash_form[form] = {};
-
-			$('#'+form+' input').each(function(){
-				if($(this).attr('type') != 'text' && $(this).attr('type') != 'password')
-					return false;
-				/*
-				* Т.к все элементы формы у нас либо просто text,либо password, 
-				* то считываем name и value и сохраняем их в hash_form для последующей обработки
-				*/
-				var name  = $(this).attr('name');
-				var value = $(this).attr('value');
-				admin.profile.hash_form[form][name] = value;
-			})
-		},
-		/*
-		* Сохранение формы
-		*/
 		save_form:function(form){
-			if( !form || typeof form != "string")
-				return false;
-			var data = {};
-			var cnt  = 0; // кол-во полей для изменения.
-			$('#'+form+' input').each(function(){
-				if($(this).attr('type') != 'text' && $(this).attr('type') != 'password')
-					return false;
-
-				var name = $(this).attr('name');
-				var value = $(this).attr('value');
-
-				if(admin.profile.hash_form[form][name] != value){
-					data[name] = value;
-					++cnt;
-
-				}
-			});
-
-			/*
-			* если сохранять нечего, то выходим
-			*/
-			if(cnt == 0){
-				return false;
-			}
-
+			common.save_form(admin.profile.hash_form,form,admin.profile.save_form_callback)
+		},
+		save_form_callback:function(form,data){
 			/*
 			* Отправляем форму.
 			*/
@@ -626,6 +581,62 @@ var admin = {
 			}else{
 				$('#add_manager_dialog').dialog('open');
 			}
+		}
+	},
+	settings:{
+		init:function(){
+			admin.settings.hash_form = {};
+			common.load_form(admin.settings.hash_form,'cols');
+			common.load_form(admin.settings.hash_form,'default');
+		},
+		save_form:function(form){
+			common.save_form(admin.settings.hash_form,form,admin.settings.save_form_callback)
+		},
+		save_form_callback:function(form,data){
+			/*
+			* Отправляем форму.
+			*/
+			$.ajax({
+				url:admin.baseUrl+'/edit',
+				type:'POST',
+				dataType:'json',
+				data:data,
+				beforeSend:function(){
+					common.showAjaxIndicator();
+				},
+				complete:function(){
+					common.hideAjaxIndicator();
+				},
+				success:function(response){
+					if(response.code && response.data){
+						switch(response.code){
+							case 'success_edit_settings':
+								common.showSuccessMsg(response.data);
+								for(var i in data){
+									admin.settings.hash_form[form][i] = data[i];
+								}
+							break;
+							case 'error_edit_profile':
+								if(response.data.errors && response.data.errorType){
+									if(response.data.errorType == 'validation'){
+										for(var i in response.data.errors){
+											$('#settings').find('input[name="'+i+'"]').parent().prepend('<div class="error">'+response.data.errors[i]+'</div>');
+										}
+										setTimeout(function(){
+											$('#profile .error').remove();
+										},5000);
+									}else{
+										common.showErrorMsg(response.data.errors[0]);
+									}
+								}
+							break;
+						}
+					}
+				}
+			});
+		},
+		switch:function(jinput){
+			common.switch(jinput,1,0);
 		}
 	}
 }

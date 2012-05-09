@@ -54,6 +54,16 @@ $lang['success_del_staff']  = 'Член(ы) персонала успешно у
 $lang['success_del_admins'] = 'Администратор(ы) успешно удален(ы)';
 
 /*
+* Настройки
+*/
+$lang['sett_default_category'] = 'Категория по умолчанию';
+$lang['sett_default_dealtype'] = 'Тип сделки по умолчанию';
+$lang['sett_price_col']		   = 'Колонка цены';
+$lang['sett_regions_col']	   = 'Колонка района';
+$lang['sett_metros_col']	   = 'Колонка метро';
+$lang['sett_phone_col']  	   = 'Колонка телефона';
+$lang['success_edit_settings'] = 'Изменения сохранены';
+/*
 * Регистрация админа
 */
 $lang['success_register_admin'] = 'Поздравляем, Вы успешно зарегистрировались как администратор';
@@ -73,3 +83,5 @@ $lang['error_finish_data'] = 'Возникли ошибки';
 
 $lang['success_restore_data'] = 'Изменения сохранены';
 $lang['error_finish_data'] = 'Возникли ошибки';
+
+

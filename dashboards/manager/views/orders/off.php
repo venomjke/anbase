@@ -14,5 +14,5 @@
 </div>
 
 <script type="text/javascript">
-	<?php $this->load->view('orders/off.js',array(),true); ?>
+	<?php echo $this->load->view('orders/off.js',array(),true); ?>
 </script>
