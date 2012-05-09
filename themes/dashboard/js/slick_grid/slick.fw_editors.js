@@ -29,7 +29,7 @@
 		var scope = this;
 
 		this.init = function(){
-			$select = $("<SELECT tabindex='0' class='editor-category'><option value=\"-1\">- Нету -</option></SELECT>");
+			$select = $("<SELECT tabindex='0' style=\"width:100%;\" class='editor-category'><option value=\"-1\">- Нету -</option></SELECT>");
 			for(var i in common.staff_list){
 				var empl = common.staff_list[i];
 
@@ -87,7 +87,7 @@
 		var scope = this;
 
 		this.init = function(){
-			$select = $("<SELECT tabindex='0' class='editor-category'></SELECT>");
+			$select = $("<SELECT tabindex='0' style=\"width:100%;\" class='editor-category'></SELECT>");
 			for(var i in common.role_list){
 				var $opt = '<option value="'+common.role_list[i]+'">'+common.role_list[i]+'</option>';
 				$select.append($opt);
@@ -237,7 +237,7 @@
 		var scope = this;
 
 		this.init = function(){
-			$select = $("<SELECT tabindex='0' class='editor-category'> <OPTION value='Жилая'>Жилая</OPTION><OPTION>Загородная</OPTION><OPTION>Коммерческая</OPTION></SELECT>");
+			$select = $("<SELECT tabindex='0' style=\"width:100%;\" class='editor-category'> <OPTION value='Жилая'>Жилая</OPTION><OPTION>Загородная</OPTION><OPTION>Коммерческая</OPTION></SELECT>");
 			$select.appendTo(args.container);
 			$select.focus();
 		};
@@ -282,7 +282,7 @@
 		var scope = this;
 
 		this.init = function(){
-			$select = $('<SELECT tabindex="0" class="deal_type"><OPTION value="Куплю">Куплю</OPTION><OPTION value="Продам">Продам</OPTION><OPTION value="Сниму">Сниму</OPTION><OPTION value="Сдам">Сдам</OPTION></SELECT>');
+			$select = $('<SELECT tabindex="0" style=\"width:100%;\" class="deal_type"><OPTION value="Куплю">Куплю</OPTION><OPTION value="Продам">Продам</OPTION><OPTION value="Сниму">Сниму</OPTION><OPTION value="Сдам">Сдам</OPTION></SELECT>');
 			$select.appendTo(args.container);
 			$select.focus();
 		};

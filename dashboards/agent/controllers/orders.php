@@ -28,6 +28,7 @@ class Orders extends MX_Controller
 		*/
 		$this->load->library("agent/Agent_Users");
 		$this->load->library("agent/Agent_Orders");
+		$this->load->library("Settings_Organization");
 		$this->load->library("Ajax");
 
 		if(!$this->agent_users->is_logged_in_as_agent()){
@@ -52,23 +53,46 @@ class Orders extends MX_Controller
 		$this->template->set_partial('dashboard_user','dashboard/dashboard_user');
 		$this->template->set_partial('dashboard_menu','dashboard/dashboard_menu');
 
+
+
+		$this->_load_app_assets();
+		
+		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"></script>');
+		$this->template->append_metadata('<script type="text/javascript">$(function(){agent.init({baseUrl:"'.site_url("agent/orders").'"});agent.orders.init();});</script>');
+
+	}
+
+	private function _load_app_assets()
+	{
+
 		/*
-		* [my_notice: Не знаю, как лучше обыграть эту задачу, но пока так.]
+		* [my_notice: Не знаю, как лучше обыграть задачу загрузки ресурсов, но пока так.]
 		*/
+		$settings_org = json_encode($this->settings_organization->get_settings_org());
+		$assets[] = "common.settings_org=".$settings_org;
+
 		$regions = $this->m_region->get_region_list("json");
+		$assets[] = "common.regions=".$regions;
+
 		$metros  = $this->m_metro->get_metro_list("json");
+		$assets[] = "common.metros=".$metros;
+
 		$metros_images = $this->m_metro_image->get_images();
+		$assets[] = "common.metros_images=".$metros_images;
+
 		$regions_images = $this->m_region_image->get_images();
+		$assets[] = "common.regions_images=".$regions_images;
+
+		/*
+		* это дополнительно, чтобы в конце был знак ;
+		*/
+		$assets[]="";
 
 		/*
 		* Подключение скриптов
 		*/
 		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/slick_grid/slick.remotemodel.js"></script>');
-		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.'; common.metros='.$metros.'; common.metros_images = '.$metros_images.'; common.regions_images = '.$regions_images.';</script>');
-
-		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"></script>');
-		$this->template->append_metadata('<script type="text/javascript">$(function(){agent.init({baseUrl:"'.site_url("agent/orders").'"});agent.orders.init();});</script>');
-
+		$this->template->append_metadata('<script type="text/javascript">common.regions='.implode(';',$assets).'</script>');
 	}
 
 	/**
