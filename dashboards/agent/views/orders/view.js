@@ -8,26 +8,26 @@ $(function(){
 		* Добавляем поля из настроек
 		*/
 		var columns = [
-			{id: "number", name:"№", field:"number",width:40,sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date",sortable:true},
-			{id: "category", name:"Тип объекта", field:"category", editor:Slick.Editors.AnbaseCategory},
-			{id: "deal_type", name:"Сделка", field:"deal_type", editor:Slick.Editors.AnbaseDealType},
+			{id: "number", name:"№", field:"number",width:30,sortable:true},
+			{id: "create_date", name:"Дата создания", width:55, field:"create_date",sortable:true},
+			{id: "category", name:"Тип объекта",width:55, field:"category", editor:Slick.Editors.AnbaseCategory},
+			{id: "deal_type", name:"Сделка", field:"deal_type",width:50, editor:Slick.Editors.AnbaseDealType}
 		];
 
 		if(common.settings_org.regions_col == "1"){
 			var region_widget;
 			var regions = [];
-			$.merge(columns,[{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList}]);
+			$.merge(columns,[{id: "regions",  name:"Район",width:60, field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList}]);
 		}
 
 		if(common.settings_org.metros_col == "1"){
 			var metro_widget;
 			var metros  = {};
-			$.merge(columns,[{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList}]);
+			$.merge(columns,[{id: "metros", name:"Метро", width:60, field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList}]);
 		}
 
 		if(common.settings_org.price_col == "1"){
-			$.merge(columns,[{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer, sortable:true}]);
+			$.merge(columns,[{id: "price", name:"Цена",width:60, field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer, sortable:true}]);
 		}
 
 		$.merge(columns,[{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description, editor:Slick.Editors.LongText}

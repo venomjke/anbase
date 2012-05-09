@@ -65,10 +65,11 @@ class Orders extends MX_Controller
 	private function _load_app_assets()
 	{
 
+		$this->settings_org = $this->settings_organization->get_settings_org();
 		/*
 		* [my_notice: Не знаю, как лучше обыграть задачу загрузки ресурсов, но пока так.]
 		*/
-		$settings_org = json_encode($this->settings_organization->get_settings_org());
+		$settings_org = json_encode($this->settings_org);
 		$assets[] = "common.settings_org=".$settings_org;
 
 		$regions = $this->m_region->get_region_list("json");
@@ -120,6 +121,7 @@ class Orders extends MX_Controller
 				* задаем текущую секцию, и загружаем вкладки.
 				*/
 				$this->template->set('current',$section);
+				$this->template->set('settings_org',$this->settings_org);
 				$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
 				$this->template->set_partial('dashboard_filter','dashboard/dashboard_filter');
 				switch ($section) {

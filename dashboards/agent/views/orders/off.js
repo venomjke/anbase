@@ -4,26 +4,39 @@ $(function(){
 		*/
 		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"Номер", field:"number", width:40, sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date", sortable:true},
-			{id: "category", name:"Объект", field:"category"},
-			{id: "deal_type", name:"Сделка", field:"deal_type"},
-			{id: "regions",  name:"Район", field:"regions", formatter:Slick.Formatters.RegionsList},
-			{id: "metros", name:"Метро", field:"metros",  formatter:Slick.Formatters.MetrosList},
-			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true},	
-			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description},
-			{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone},
-			{id: "finish_date", name:"Дата завершения", field:"finish_date"}
+			{id: "number", name:"Номер", field:"number", width:30 , sortable:true},
+			{id: "create_date", name:"Дата создания",  width:65, field:"create_date", sortable:true},
+			{id: "category", name:"Объект", field:"category", width:55},
+			{id: "deal_type", name:"Сделка", field:"deal_type", width:50}
 		];
 
 
-		/*
-		* некоторые данные
-		*/
-		var region_widget;
-		var metro_widget;
-		var regions = [];
-		var metros  = {};
+		if(common.settings_org.regions_col == "1"){
+			var region_widget;
+			var regions = [];
+			$.merge(columns,[{id: "regions",  name:"Район",width:60, field:"regions", formatter:Slick.Formatters.RegionsList}]);
+		}
+
+		if(common.settings_org.metros_col == "1"){
+			var metro_widget;
+			var metros  = {};
+			$.merge(columns,[{id: "metros", name:"Метро", width:60, field:"metros", formatter:Slick.Formatters.MetrosList}]);
+		}
+
+		if(common.settings_org.price_col == "1"){
+			$.merge(columns,[{id: "price", name:"Цена", width:60, field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
+		}
+
+		$.merge(columns,[{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
+		]);
+
+		if(common.settings_org.phone_col == "1"){
+			$.merge(columns,[{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone}]);
+		}
+
+
+		$.merge(columns,[{id: "finish_date", name:"Дата завершения", field:"finish_date"}]);
+
 
 		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=off',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
