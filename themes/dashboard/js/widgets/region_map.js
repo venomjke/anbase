@@ -57,6 +57,17 @@ $(function(){
 			options.onCancel();
 		}
 
+		function push_item_list(region_id){
+
+			$('#region-item-'+region_id).find('a').css('color','#FFFFFF');
+			$('#region-item-'+region_id).css('background-color','#666666');	
+		}
+
+		function pop_item_list(region_id){
+			$('#region-item-'+region_id).find('a').css('color','#333333');
+			$('#region-item-'+region_id).css('background-color','#fff');
+		}
+
 		function reset_btn(event){
 
 
@@ -66,18 +77,22 @@ $(function(){
 			selected_regions = [];
 		}
 
+		function selected(region_id){
+			return selected_regions.indexOf(region_id) != -1;
+		}
+
 		/*
 		* Обобщая функция для клика по area и item
 		*/
 		function region_click(region_id){
 			var idx_region_id = -1;
 			if( (idx_region_id = selected_regions.indexOf(region_id)) != -1){
-				$('#region-item-'+region_id).css('background-color','#fff');
 				selected_regions.splice(idx_region_id,1);
+				pop_item_list(region_id);
 			}else{
-				$('#region-item-'+region_id).css('background-color','#f7f21a');
 				selected_regions.push(region_id);
 				$('#region-'+region_id).mouseover();
+				push_item_list(region_id);
 			}
 		}
 
@@ -143,14 +158,30 @@ $(function(){
 				/*
 				* Элемент списка
 				*/
-				$li = $('<li id="region-item-'+element.region_id+'" style="margin:5px;"><a href="#" onclick="return false;">'+element.region_name+'</a></li>');
+				$li = $('<li id="region-item-'+element.region_id+'" style="padding-top: 1px;padding-bottom: 1px;margin-top:2px;margin-bottom:2px;padding-left: 4px;" onclick="return false;"><a href="#" style="color:#333;">'+element.region_name+'</a></li>');
 				$li.data('region_id',element.region_id);
 
 				$li.hover(
 					function(){
+						var region_id = $(this).data('region_id');
+
+						$(this).find('a').css('text-decoration','none');
+
+						if(!selected(region_id)){
+							$(this).find('a').css('color','#FFFFFF');
+							$(this).css('background-color','#666666');	
+						}
+
 						$('#region-'+$(this).data('region_id')).trigger('mouseover');
 					},
 					function(){
+						var region_id = $(this).data('region_id');
+
+						if(!selected(region_id)){
+							$(this).find('a').css('color','#333333');
+							$(this).css('background-color','#fff');
+						}
+
 						$('#region-'+$(this).data('region_id')).trigger('mouseout');
 					}
 				);
