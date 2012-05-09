@@ -22,6 +22,10 @@ $(function(){
 			*/
 			needButtons:true,
 			/*
+			* Выбор любого района или нет
+			*/
+			needAnyRegion:true,
+			/*
 			* Список районов
 			*/
 			regions:[], 
@@ -43,6 +47,7 @@ $(function(){
 		var $img;
 		var $map;
 		var $region_wrapper;
+		var $any_region_checkbox;
 
 		var region_normal = common.regions_images['regions-normal'];
 		var selected_regions = [];
@@ -58,7 +63,6 @@ $(function(){
 		}
 
 		function push_item_list(region_id){
-
 			$('#region-item-'+region_id).find('a').css('color','#FFFFFF');
 			$('#region-item-'+region_id).css('background-color','#666666');	
 		}
@@ -69,8 +73,6 @@ $(function(){
 		}
 
 		function reset_btn(event){
-
-
 			while(selected_regions.length>0){
 				$('#region-'+selected_regions[(selected_regions.length-1)]).click();
 			}
@@ -119,6 +121,10 @@ $(function(){
 			$closeImg.click(function(){
 				cancel_btn(event);
 			});
+
+			$any_region_label    = $('<label for="any_region_checkbox">Любой</label>')
+			$any_region_checkbox = $('<input id="any_region_checkbox" type="checkbox" value=""/>');
+
 			$wrapper.append($closeImg);
 
 			if(options.needButtons){
@@ -141,6 +147,20 @@ $(function(){
 				$wrapper.append($save_btn);
 				$wrapper.append($cancel_btn);
 				$wrapper.append($reset_btn);	
+			}
+
+			if(options.needAnyRegion){
+				$wrapper.append($any_region_checkbox);
+				$wrapper.append($any_region_label);
+
+
+				$any_region_checkbox.click(function(){
+					if($(this).val()=="1"){
+						$(this).val("0");
+					}else{
+						$(this).val("1");
+					}
+				});
 			}
 			
 
@@ -241,11 +261,14 @@ $(function(){
 
 			focus:function(){
 			},
-			load:function(regions){
+			load:function(regions,any_region){
 				options.regions = regions;
 				for(var i in options.regions){
 					$('#region-'+options.regions[i]).click();
 				}
+
+				$any_region_checkbox.val(any_region);
+				if(any_region == "1") $any_region_checkbox.attr('checked','checked');
 			},
 			serialize:function(){
 				return selected_regions;

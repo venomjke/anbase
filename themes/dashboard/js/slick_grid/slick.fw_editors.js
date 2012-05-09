@@ -463,60 +463,38 @@
 		var defaultValue;
 		var scope = this;
 		var widget;
-		var $wrapper;
-		var $any_region_checkbox;
-
-		var isChangedAnyRegion = false;
-		var isChangedRegionList = false;
+		//var $wrapper;
 
 		this.init = function(){
 
 			var $container = $('body');
-			$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'><button id='region-map'>По карте</button></div>").appendTo($container);
+			//$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'><button id='region-map'>По карте</button></div>").appendTo($container);
 
-			$any_region_label    = $('<label for="any_region_checkbox">Любой</label>')
-			$any_region_checkbox = $('<input id="any_region_checkbox" type="checkbox" value="'+args.item.any_region+'"/>');
-			if(args.item.any_region == "1"){
-				$any_region_checkbox.attr('checked','checked');
+			if(!widget){
+				widget = common.widgets.region_map({onSave:scope.save,onCancel:scope.cancel});
+				widget.init();
+				widget.load();
 			}
+			
 
-			$any_region_checkbox.click(function(){
-				if($(this).val()=="1"){
-					$(this).val("0");
-				}else{
-					$(this).val("1");
-				}
-			});
-
-			$wrapper.append($any_region_checkbox);
-			$wrapper.append($any_region_label);
-
-			$wrapper.find('#region-map').click(function(){
-				if(!widget){
-					widget = common.widgets.region_map({onSave:scope.save,onCancel:scope.cancel});
-					widget.init();
-					widget.load(args.item.regions);
-				}
-			});
-
-			$wrapper.css('top',args.position.top);
-			$wrapper.css('left',args.position.left);
+			//$wrapper.css('top',args.position.top);
+			//$wrapper.css('left',args.position.left);
 		};
 
 		this.show = function(){
-			$wrapper.show();
+			//$wrapper.show();
 			if(widget)
 				widget.show();
 		};
 
 		this.hide = function(){
-			$wrapper.hide();
+			//$wrapper.hide();
 			if(widget)
 				widget.hide();
 		};
 
 		this.destroy = function(){
-			$wrapper.remove();
+			//$wrapper.remove();
 			if(widget)
 				widget.destroy();
 		};
@@ -534,6 +512,9 @@
 
 		this.loadValue = function(item){
 			defaultValue = item.regions;
+			if(widget){
+				widget.load(item.regions,item.any_region);
+			}
 		};
 
 		this.serializeValue = function(){
@@ -544,15 +525,16 @@
 		};
 
 		this.applyValue = function(item,state){
+			/*
 			if(isChangedRegionList){
 				delete item.regions;
 				item.regions = widget.serialize().slice(0);
-				/*
+				*//*
 				* [my_notice: Не самое лучшее решение на мой взгляд, нужно подумать еще]
 				* В чем суть.
 				* Когда мы обнуляем текущий список выбранных метро, то нужно "что-то" отправить на сервер, что бы там
 				* удалить список выбранных метро, и ничего не записывать.
-				*/
+				*//*
 				if(item.regions.length == 0){
 					item.regions = [0];
 				}				
@@ -560,10 +542,11 @@
 
 			if(isChangedAnyRegion){
 				item.any_region = $any_region_checkbox.val();
-			}
+			}*/
 		};
 
 		this.isValueChanged = function(){
+			/*
 			if($any_region_checkbox.val() != args.item.any_region){
 				isChangedAnyRegion = true;
 			}
@@ -571,7 +554,8 @@
 			if(widget && widget.isValueChanged()){
 				isChangedRegionList = true
 			}
-			return isChangedAnyRegion || isChangedRegionList;		
+			*/
+			return false;		
 		};
 
 		this.validate = function(){
