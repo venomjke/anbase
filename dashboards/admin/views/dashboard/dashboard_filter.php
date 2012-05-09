@@ -3,8 +3,10 @@
     <tr>
       <td><b>Фильтр</b>&nbsp;по&nbsp;номеру:</td>
       <td><input style="width:100px" type="text" id="f_number" /></td>
-      <td> по&nbsp;телефону:</td>
-      <td><input type="text" name="phone" id="f_phone" /></td>
+        <?php /*в свободных заявках отключаем фильтр по телефонам */if($current != 'free' and $settings_org->phone_col): ?>
+        <td> по&nbsp;телефону:</td>
+        <td><input type="text" name="phone" id="f_phone" /></td>
+      <?php endif; ?>
       <?php if($current == "all" or $current == "delegate" or $current=="off"): ?>
       <td> по&nbsp;сотруднику: </td>
       <td>  <select style="width:130px" name="user_id" id="f_user_id"> 
@@ -23,15 +25,24 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
       <tr>
         <td colspan="2"><strong>Категория</strong></td>
-        <td colspan="2" class="l"><strong>Цена</strong></td>
+         <?php if($settings_org->price_col):?>
+          <td colspan="2" class="l"><strong>Цена</strong></td>
+        <?php endif; ?>
         <td colspan="2" class="l"><strong>Дата</strong></td>
         <td class="l"><strong>Описание</strong></td>
+        <?php if($settings_org->metros_col or $settings_org->regions_col): ?>
         <td valign="top" rowspan="4" style="width:10%">
+            <?php if($settings_org->metros_col): ?>
             <strong>Метро</strong><br/>
             <span id="metro_btn" class="plus" style="margin-top:5px"><a href="#" onclick="return false;">Выбрать</a></span><br/><br/>
-            <strong>Район</strong><br/>
-            <span id="region_btn" class="plus" style="margin-top:5px"><a href="#" onclick="return false;">Выбрать</a></span><br/> 
+            <?php endif; ?>
+
+            <?php if($settings_org->regions_col): ?>
+              <strong>Район</strong><br/>
+              <span id="region_btn" class="plus" style="margin-top:5px"><a href="#" onclick="return false;">Выбрать</a></span><br/> 
+            <?php endif; ?>
         </td>
+        <?php endif;?>
         <td class="l" colspan="2"><strong>Номер</strong></td>
       </tr>
       <tr>
@@ -46,8 +57,10 @@
           }  
         ?>
         </select></td>
-        <td class="l">От:</td>
-        <td><input tabindex="7" style="width:100px" type="text" id="f_price_from"/></td>
+        <?php if($settings_org->price_col): ?>
+          <td class="l">От:</td>
+          <td><input tabindex="7" style="width:100px" type="text" id="f_price_from"/></td>
+        <?php endif;?>
         <td class="l">С:</td>
         <td><input tabindex="9" style="width:130px" type="text" class="date" id="f_createdate_from"/></td>
         <td tabindex="11" width="50%" rowspan="2" valign="top" class="l"><textarea id="f_description" style="width:90%" rows="3"></textarea></td>
@@ -66,8 +79,10 @@
           }
         ?>
         </select></td>
-        <td class="l">До:</td>
-        <td><input tabindex="8" type="text" style="width:100px" id="f_price_to"/></td>
+        <?php if($settings_org->price_col): ?>
+          <td class="l">До:</td>
+          <td><input tabindex="8" type="text" style="width:100px" id="f_price_to"/></td>
+        <?php endif; ?>
         <td class="l">До:</td>
         <td><input tabindex="10" style="width:130px" type="text" class="date" id="f_createdate_to"/></td>
         <td>До:</td>
@@ -76,7 +91,9 @@
       <tr>
         <td><input id="search_btn" type="button"  style="cursor:pointer; padding:5px" value="подобрать" /></td>
         <td><input id="reset_filter_btn" type="button" style="cursor:pointer; padding:5px" value="очистить"/> </td>
-        <td colspan="2">&nbsp;</td>
+         <?php if($settings_org->price_col): ?>
+          <td colspan="2">&nbsp;</td>
+        <?php endif;?>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td class="l" valign="top"><label for="f_description_full">Точное совпадение</label><input checked="checked" type="radio" id="f_description_full" name="f_description_type" value="full"/><label for="f_description_each">По каждому слову</label><input type="radio" id="f_description_each" name="f_description_type" value="each"/></td>

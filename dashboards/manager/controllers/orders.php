@@ -28,6 +28,7 @@ class Orders extends MX_Controller
 		*/
 		$this->load->library("Manager_Users");
 		$this->load->library("Manager_Orders");
+		$this->load->library("Settings_Organization");
 		$this->load->library("Ajax");
 
 		if(!$this->manager_users->is_logged_in_as_manager()){
@@ -55,23 +56,44 @@ class Orders extends MX_Controller
 		$this->template->set_partial("dashboard_user","dashboard/dashboard_user");
 		$this->template->set_partial("dashboard_menu","dashboard/dashboard_menu");
 
-		/*
-		* Подключение скриптов
-		*/
-		$regions = $this->m_region->get_region_list("json");
-		$metros  = $this->m_metro->get_metro_list("json");
-		$metros_images = $this->m_metro_image->get_images();
-		$regions_images = $this->m_region_image->get_images();
 
-		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/slick_grid/slick.remotemodel.js"></script>');
-		$this->template->append_metadata('<script type="text/javascript">common.regions='.$regions.'; common.metros='.$metros.'; common.metros_images = '.$metros_images.'; common.regions_images = '.$regions_images.';</script>');
-
+		$this->_load_app_assets();
+		
 
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/manager/js/manager.js").'"></script>');
 		$this->template->append_metadata('<script type="text/javascript">$(function(){manager.init({baseUrl:"'.site_url('manager/orders').'"});manager.orders.init(); });</script>');
 	}
 
+	private function _load_app_assets()
+	{
+		$this->settings_org = $this->settings_organization->get_settings_org();
+		/*
+		* [my_notice: Не знаю, как лучше обыграть задачу загрузки ресурсов, но пока так.]
+		*/
+		$settings_org = json_encode($this->settings_org);
+		$assets[] = "common.settings_org=".$settings_org;
 
+		$regions = $this->m_region->get_region_list("json");
+		$assets[] = "common.regions=".$regions;
+
+		$metros  = $this->m_metro->get_metro_list("json");
+		$assets[] = "common.metros=".$metros;
+
+		$metros_images = $this->m_metro_image->get_images();
+		$assets[] = "common.metros_images=".$metros_images;
+
+		$regions_images = $this->m_region_image->get_images();
+		$assets[] = "common.regions_images=".$regions_images;
+
+		/*
+		* это дополнительно, чтобы в конце был знак ;
+		*/
+		$assets[]="";
+
+		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/slick_grid/slick.remotemodel.js"></script>');
+		$this->template->append_metadata('<script type="text/javascript">'.implode(';',$assets).'</script>');
+
+	}
 	/**
 	 * Маленький маршрутизатор
 	 *
@@ -90,6 +112,7 @@ class Orders extends MX_Controller
 				*/
 				$section = $this->input->get('s')?$this->input->get('s'):'my';
 				$this->template->set('current',$section);
+				$this->template->set('settings_org',$this->settings_org);
 				$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
 				$this->template->set_partial('dashboard_filter','dashboard/dashboard_filter',array('manager_agents'=>$this->manager_users->get_manager_agents()));
 				switch ($section) {

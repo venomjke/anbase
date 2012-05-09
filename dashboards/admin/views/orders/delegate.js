@@ -10,26 +10,38 @@ $(function(){
 		columns.push(checkboxSelector.getColumnDefinition());
 
 		$.merge(columns,[
-			{id: "number", name:"№", field:"number", width:40, editor:Slick.Editors.Integer,sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date",  editor:Slick.Editors.Date,sortable:true},
-			{id: "category", name:"Объект", field:"category", width:55, editor:Slick.Editors.AnbaseCategory},
-			{id: "deal_type", name:"Сделка", field:"deal_type", width:55, editor:Slick.Editors.AnbaseDealType},
-			{id: "regions",  name:"Район", field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList},
-			{id: "metros", name:"Метро", field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList},
-			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer,sortable:true},	
-			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:200, formatter:Slick.Formatters.Description, editor:Slick.Editors.LongText},
-			{id: "phone", name:"Телефон", field:"phone", width:115, editor:Slick.Editors.Integer, formatter:Slick.Formatters.Phone },
-			{id: "agent", name:"Агент", field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent },
-			{id:"delegate_date", name:"Дата делегирования", width:95, field:"delegate_date", editor:Slick.Editors.Date}
-		]);	
+			{id: "number", name:"№", field:"number",width:30, editor:Slick.Editors.Integer,sortable:true},
+			{id: "create_date", name:"Дата создания", field:"create_date", width:55, editor:Slick.Editors.Date,sortable:true},
+			{id: "category", name:"Объект", field:"category", width:55,editor:Slick.Editors.AnbaseCategory},
+			{id: "deal_type", name:"Сделка", field:"deal_type",width:50, editor:Slick.Editors.AnbaseDealType}
+		]);
 
-		/*
-		* некоторые данные
-		*/
-		var region_widget;
-		var metro_widget;
-		var regions = [];
-		var metros  = {};
+		if(common.settings_org.regions_col == "1"){
+			var region_widget;
+			var regions = [];
+			$.merge(columns,[{id: "regions",  name:"Район",width:60, field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList}]);
+		}
+
+		if(common.settings_org.metros_col == "1"){
+			var metro_widget;
+			var metros  = {};
+			$.merge(columns,[{id: "metros", name:"Метро", width:60, field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList}]);
+		}
+
+		if(common.settings_org.price_col == "1"){
+			$.merge(columns,[{id: "price", name:"Цена",width:60, field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer, sortable:true}]);
+		}
+
+		$.merge(columns,[{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:200, formatter:Slick.Formatters.Description, editor:Slick.Editors.LongText}
+		]);
+
+		if(common.settings_org.phone_col == "1"){
+			$.merge(columns,[{id: "phone", name:"Телефон", field:"phone", width:95, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer}]);
+		}
+
+		$.merge(columns,[{id: "agent", name:"Агент", field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent }]);	
+		$.merge(columns,[{id:"delegate_date", name:"Дата делегирования", field:"delegate_date", width:90, editor:Slick.Editors.Date}]);
+
 
 		/*
 		* Создание грида

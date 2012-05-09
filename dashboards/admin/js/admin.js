@@ -175,11 +175,24 @@ var admin = {
 			left_table['category'] = { 
 					label:$('<label>Тип объекта</label>'),
 					input:$('<select style="width:170px"></select>')
-			},
+			};
+			
+			for(var i in common.category_list){
+				var $opt = $('<option value="'+common.category_list[i]+'">'+common.category_list[i]+'</option>');
+				if(common.settings_org.default_category == common.category_list[i])
+					$opt.attr('selected','selected');
+				left_table['category'].input.append($opt);
+			}
 
 			left_table['dealtype'] = {
 				label:$('<label>Тип сделки</label>'),
 				input:$('<select style="width:170px"></select>')
+			}
+			for(var i in common.dealtype_list){
+				var $opt = $('<option value="'+common.dealtype_list[i]+'">'+common.dealtype_list[i]+'</option>');
+				if(common.settings_org.default_dealtype == common.dealtype_list[i])
+					$opt.attr('selected','selected');
+				left_table['dealtype'].input.append($opt);
 			}
 
 			left_table['regions'] = {
@@ -238,15 +251,7 @@ var admin = {
 				var $left = $('<table cellspacing="0" cellpadding="0" style="float:left">');
 				var $right = $('<table cellspacing="0" cellpadding="0">');
 
-				for(var i in common.category_list){
-					var $opt = $('<option value="'+common.category_list[i]+'">'+common.category_list[i]+'</option>');
-					left_table['category'].input.append($opt);
-				}
 
-				for(var i in common.dealtype_list){
-					var $opt = $('<option value="'+common.dealtype_list[i]+'">'+common.dealtype_list[i]+'</option>');
-					left_table['dealtype'].input.append($opt);
-				}
 
 				fill_table($right,right_table);
 				fill_table($left,left_table);

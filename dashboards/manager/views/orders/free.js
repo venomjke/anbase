@@ -4,24 +4,30 @@ $(function(){
 		*/
 		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"Номер", field:"number", sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date", sortable:true},
-			{id: "category", name:"Объект", field:"category"},
-			{id: "deal_type", name:"Сделка", field:"deal_type"},
-			{id: "regions",  name:"Район", field:"regions", formatter:Slick.Formatters.RegionsList},
-			{id: "metros", name:"Метро", field:"metros",  formatter:Slick.Formatters.MetrosList},
-			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true},	
-			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description},
+			{id: "number", name:"№", field:"number", width:40, sortable:true},
+			{id: "create_date", name:"Дата создания", field:"create_date", width:63, sortable:true},
+			{id: "category", name:"Объект", field:"category", width:60},
+			{id: "deal_type", name:"Сделка", field:"deal_type", width:60}
 		];
 
+		if(common.settings_org.regions_col == "1"){
+			var region_widget;
+			var regions = [];
+			$.merge(columns,[{id: "regions",  name:"Район",width:60, field:"regions", formatter:Slick.Formatters.RegionsList}]);
+		}
 
-		/*
-		* некоторые данные
-		*/
-		var region_widget;
-		var metro_widget;
-		var regions = [];
-		var metros  = {};
+		if(common.settings_org.metros_col == "1"){
+			var metro_widget;
+			var metros  = {};
+			$.merge(columns,[{id: "metros", name:"Метро", width:60, field:"metros", formatter:Slick.Formatters.MetrosList}]);
+		}
+
+		if(common.settings_org.price_col == "1"){
+			$.merge(columns,[{id: "price", name:"Цена",width:60, field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
+		}
+
+		$.merge(columns,[{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
+		]);
 
 		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=free',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);

@@ -7,7 +7,7 @@
 		<?php load_partial_template($template,'dashboard_tabs'); ?>
 	    <div class="tablica" id="orders_grid" style="height:550px; border:1px #8AA1BC solid;">
 	    </div>
-	    <div class="nastroiki"><a href="111">Настройки таблицы</a></div>
+	    <div class="nastroiki"><?php echo anchor("admin/settings","Настройки таблицы"); ?></div>
   	</div>
   	<div class="podval">© <a href="111">copyright 2012 Flyweb inc.</a>	</div>
 </div>

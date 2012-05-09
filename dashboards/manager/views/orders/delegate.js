@@ -3,26 +3,42 @@ $(function(){
 		* Настройки грида
 		*/
 		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
-		var columns = [
-			{id: "number", name:"Номер", field:"number", sortable:true},
-			{id: "create_date", name:"Дата создания", field:"create_date", sortable:true},
-			{id: "category", name:"Объект", field:"category"},
-			{id: "deal_type", name:"Сделка", field:"deal_type"},
-			{id: "regions",  name:"Район", field:"regions",formatter:Slick.Formatters.RegionsList},
-			{id: "metros", name:"Метро", field:"metros",formatter:Slick.Formatters.MetrosList},
-			{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true},	
-			{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description},
-			{id: "agent", name:"Агент", field:"user_id",formatter:Slick.Formatters.Agent},
-			{id: "phone", name:"Телефон", field:"phone", formatter:Slick.Formatters.Phone}
-		];	
-		
 		/*
-		* некоторые данные
+		* Добавляем поля из настроек
 		*/
-		var region_widget;
-		var metro_widget;
-		var regions = [];
-		var metros  = {};
+		var columns = [
+			{id: "number", name:"№", field:"number",width:30,sortable:true},
+			{id: "create_date", name:"Дата создания", width:55, field:"create_date",sortable:true},
+			{id: "category", name:"Тип объекта",width:40, field:"category"},
+			{id: "deal_type", name:"Сделка", field:"deal_type",width:40,}
+		];
+
+		if(common.settings_org.regions_col == "1"){
+			var region_widget;
+			var regions = [];
+			$.merge(columns,[{id: "regions",  name:"Район",width:60, field:"regions", formatter:Slick.Formatters.RegionsList}]);
+		}
+
+		if(common.settings_org.metros_col == "1"){
+			var metro_widget;
+			var metros  = {};
+			$.merge(columns,[{id: "metros", name:"Метро", width:60, field:"metros",formatter:Slick.Formatters.MetrosList}]);
+		}
+
+		if(common.settings_org.price_col == "1"){
+			$.merge(columns,[{id: "price", name:"Цена",width:60, field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
+		}
+
+		$.merge(columns,[{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
+		]);
+
+		$.merge(columns,[{id: "agent", name:"Агент", field:"user_id",formatter:Slick.Formatters.Agent}]);
+
+		if(common.settings_org.phone_col == "1"){
+			$.merge(columns,[{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone}]);
+		}
+
+
 
 		/*
 		* Создание грида

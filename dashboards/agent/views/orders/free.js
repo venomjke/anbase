@@ -13,17 +13,17 @@ $(function(){
 		if(common.settings_org.regions_col == "1"){
 			var region_widget;
 			var regions = [];
-			$.merge(columns,[{id: "regions",  name:"Район", field:"regions", formatter:Slick.Formatters.RegionsList}]);
+			$.merge(columns,[{id: "regions",  name:"Район",width:60, field:"regions", formatter:Slick.Formatters.RegionsList}]);
 		}
 
 		if(common.settings_org.metros_col == "1"){
 			var metro_widget;
 			var metros  = {};
-			$.merge(columns,[{id: "metros", name:"Метро", field:"metros", formatter:Slick.Formatters.MetrosList}]);
+			$.merge(columns,[{id: "metros", name:"Метро", width:60, field:"metros", formatter:Slick.Formatters.MetrosList}]);
 		}
 
 		if(common.settings_org.price_col == "1"){
-			$.merge(columns,[{id: "price", name:"Цена", field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
+			$.merge(columns,[{id: "price", name:"Цена",width:60, field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
 		}
 
 		$.merge(columns,[{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}

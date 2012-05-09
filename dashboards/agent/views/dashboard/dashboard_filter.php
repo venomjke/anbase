@@ -26,10 +26,15 @@
 
         <?php if($settings_org->metros_col or $settings_org->regions_col): ?>
         <td valign="top" rowspan="4" style="width:10%">
+            <?php if($settings_org->metros_col): ?>
             <strong>Метро</strong><br/>
             <span id="metro_btn" class="plus" style="margin-top:5px"><a href="#" onclick="return false;">Выбрать</a></span><br/><br/>
-            <strong>Район</strong><br/>
-            <span id="region_btn" class="plus" style="margin-top:5px"><a href="#" onclick="return false;">Выбрать</a></span><br/> 
+            <?php endif; ?>
+
+            <?php if($settings_org->regions_col): ?>
+              <strong>Район</strong><br/>
+              <span id="region_btn" class="plus" style="margin-top:5px"><a href="#" onclick="return false;">Выбрать</a></span><br/> 
+            <?php endif; ?>
         </td>
         <?php endif;?>
 
