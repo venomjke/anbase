@@ -321,3 +321,6 @@ input.button:hover    {
 	width:290px;
 	overflow:hidden;
 }
+.error{
+	color:#ff2400;
+}

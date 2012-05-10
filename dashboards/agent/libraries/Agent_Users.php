@@ -292,15 +292,15 @@ class Agent_Users extends Users{
 		}
 
 		$errors_validation = array();
+
 		/*
 		* Из-за того, что form_validation не имеет методов, позволяющих проверить, были ли ошибки, приходится вот так изгалаться
-		*
 		*/
 		if(has_errors_validation($fields,$errors_validation)){
 			throw new ValidationException($errors_validation);
 		}	
+		
 		/*
-		* 
 		*  Ничего не произошло... ничего не делаем
 		*/
 		return false;

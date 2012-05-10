@@ -17,16 +17,6 @@ class Register extends MX_Controller
 		*/
 		$this->load->library('agent/Agent_Users');
 		$this->load->library('Ajax');
-
-		/*
-		*
-		* Обычных агентов мы сюда не пускаем, только тех, кто хочет зарегистрироваться, 
-		* а их мы определяем по инвайтам
-		*
-		*/
-		if($this->agent_users->is_logged_in() or !$this->agent_users->has_invite()){
-			redirect('');
-		}
 		/*
 		* Загрузка пакета сообщений
 		*
@@ -54,8 +44,19 @@ class Register extends MX_Controller
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	public function _remap()
+	public function index()
 	{
+
+		/*
+		*
+		* Обычных агентов мы сюда не пускаем, только тех, кто хочет зарегистрироваться, 
+		* а их мы определяем по инвайтам
+		*
+		*/
+		if($this->agent_users->is_logged_in() or !$this->agent_users->has_invite()){
+			redirect('');
+		}
+
 		/*
 		* Загрузка инвайта
 		*/
@@ -73,39 +74,26 @@ class Register extends MX_Controller
 			* Если пользователь попал сюда первый раз, то ему надо отобразить форму
 			*/
 			if($this->agent_users->register($invite)){
-				/*
-				*
-				* Если запрос аяксовый, то отправляем код об успешной регистрации, если нет, redirect на главную
-				*
-				*/
-				if($this->ajax->is_ajax_request()){
-					$response['code'] = 'success_register_agent';
-					$response['data'] = lang('success_register_agent');
-					$this->ajax->build_json($response);
-				}else{
-					redirect('');
-				}
+				$this->session->set_flashdata('redirect',true);
+				redirect('agent/register/redirect');
 			}else{
 				$this->template->build('register',$data);
 			}
 		}catch(ValidationException $ve){
-			if($this->ajax->is_ajax_request()){
-				$response['code'] = 'error_register_agent';
-				$response['data']['errors'] = $ve->get_error_messages();
-				$this->ajax->build_json($response);
-			}else{
-				$this->template->build('register',$data);
-			}
+			$this->template->build('register',$data);
 		}catch(RuntimeException $re){
+			$data['runtime_error'] = $re->get_error_message();
+			$this->template->build('register',$data);
+		}
+	}
 
-			if($this->ajax->is_ajax_request()){
-				$response['code'] = 'error_register_agent';
-				$response['data']['errors'] = array($re->get_error_message());
-				$this->ajax->build_json($response);
-			}else{
-				$data['runtime_error'] = $re->get_error_message();
-				$this->template->build('register',$data);
-			}
+
+	public function redirect(){
+		if($this->session->flashdata('redirect')){
+			$this->template->set('loginBox',$this->load->view('users/login',array(),true));
+			$this->template->build('register/redirect');
+		}else{
+			redirect('');
 		}
 	}
 }// END Register class
