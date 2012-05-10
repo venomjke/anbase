@@ -127,8 +127,25 @@ var admin = {
 		init:function(){
 		},
 		init_add_order_dialog:function(model){
+
+			/*
+			* [my_notice] Временное решение, перенести надо будет в базу
+			*/
+			var buildings = {};
+			buildings['Жилая'] = ['комната','1к.кв',"2к.кв","3к.кв","4к.кв","5к.кв и более"];
+			buildings['Коммерческая'] = ['Офис',"Общепит","Магазин","Производство","Склад"];
+			buildings['Загородная'] = ['Коттедж',"Дом","Участок","Часть дома"]; 
+
+			var choose_buildings = function(category){
+				$building.empty();
+				for(var i in buildings[category]){
+					var $opt = $('<option value="'+buildings[category][i]+'">'+buildings[category][i]+'</option>');
+					$building.append($opt);
+				}
+			}
+
 			$d = $('#add_order_dialog');
-			$d.dialog({autoOpen:false,width:600});
+			$d.dialog({autoOpen:false,width:600,closeOnEscape:false});
 
 			if(!common.category_list || !common.dealtype_list){
 				return false;
@@ -154,9 +171,12 @@ var admin = {
 
 			for(var i in common.category_list){
 				var $opt = $('<option value="'+common.category_list[i]+'">'+common.category_list[i]+'</option>');
-				if(common.settings_org.default_category == common.category_list[i])
+				if(common.settings_org.default_category == common.category_list[i]){
 					$opt.attr('selected','selected');
+					choose_buildings(common.category_list[i]);
+				}
 				$category.append($opt);
+				$category.change(function(){choose_buildings($(this).val())});
 			}
 
 			for(var i in common.dealtype_list){
@@ -225,6 +245,7 @@ var admin = {
 
 			function clear_form(){
 				$category.val(common.settings_org.default_category);
+				$category.trigger('change');
 				$dealtype.val(common.settings_org.default_dealtype);
 				$price.val('');
 				$phone.val('');
@@ -243,9 +264,10 @@ var admin = {
 						break;
 					case 'error':
 						if(data.errorType == "validation")
-							console.debug(data.errors);
+							for(var i in data.errors)
+								common.showNotyErrorMsg(data.errors[i])
 						else if(data.errorType == "runtime")
-							common.showErrorMsg(data.errors[0]);
+							common.showNotyErrorMsg(data.errors[0]);
 						break;	
 				}
 			}

@@ -87,6 +87,18 @@ class Admin_Orders
 		$items        = $this->ci->orders_organization->get_all_off_orders_org($this->ci->admin_users->get_org_id(),$order_fields);
 		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_off_orders_org($this->ci->admin_users->get_org_id()),'items' =>$items );	
 	}
+
+	/**
+	 * Выбор следующего за последним номера
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function get_next_number()
+	{
+		$max_number = $this->ci->m_order->get_max_number($this->ci->admin_users->get_org_id());
+	return $max_number + 1;
+	}
 	/**
 	 * Редактирование заявки.
 	 *
@@ -158,6 +170,7 @@ class Admin_Orders
 			*/
 			$insert_data = array_intersect_key($this->ci->input->post(),array_flip($insert_fields));
 			$insert_data['org_id'] = $this->ci->admin_users->get_org_id();
+			$insert_data['number'] = $this->ci->admin_orders->get_next_number();
 			if( ($org_id = $this->ci->m_admin_order->insert($insert_data,true))){
 
 				/*

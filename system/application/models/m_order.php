@@ -150,6 +150,18 @@ class M_Order extends MY_Model{
 	{
 		return array(M_Order::ORDER_DEAL_TYPE_SELL,M_Order::ORDER_DEAL_TYPE_BUY,M_Order::ORDER_DEAL_TYPE_TAKEOFF,M_Order::ORDER_DEAL_TYPE_RENT);
 	}
+
+	public function get_max_number($org_id)
+	{
+		$this->db->select("MAX(number) as max_number");
+		$this->db->where('org_id',$org_id);
+		$this->db->limit(1);
+		$result = $this->db->get($this->table);
+		if($result->num_rows() == 1)
+			return $result->row()->max_number;
+		return 0;
+
+	}
 	/**
 	 * Заполнить поля по умолчанию, если они не заданы
 	 *

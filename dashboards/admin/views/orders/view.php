@@ -18,6 +18,7 @@
 
 
 <!-- Форма добавления заявки -->
+
 <div id="add_order_dialog">
 	<table cellspacing="0" cellpadding="6" style="float:left">
 		<tbody>
@@ -34,10 +35,12 @@
 					<label for="add_order_building" style="font-weight:bold">Тип помещения</label>
 					<br/>
 					<select style="width:170px" multiple id="add_order_building">
+						<option value="комната">комната</option>
 						<option value="1к.кв">1к.кв</option>
 						<option value="2к.кв">2к.кв</option>
 						<option value="3к.кв">3к.кв</option>
-						<option value="4к.кв и более"> 4к.кв и более </option>
+						<option value="4к.кв"> 4к.кв </option>
+						<option value="5к.кв и более"> 5к.кв и более </option>
 					</select>
 				</td>
 			</tr>
