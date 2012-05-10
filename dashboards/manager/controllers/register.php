@@ -22,21 +22,9 @@ class Register extends MX_Controller
 		$this->load->library('Ajax');
 
 		/*
-		* К регистрации допускаются только "обычные" люди
-		*/
-		if($this->manager_users->is_logged_in() or !$this->manager_users->has_invite()){
-			redirect('');
-		}
-
-		/*
 		* Загрузка пакета сообщений
 		*/
 		$this->load->language('manager/messages');
-
-		/*
-		*
-		* Настройка шаблона
-		*/
 
 		/*
 		*
@@ -59,8 +47,16 @@ class Register extends MX_Controller
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	public function _remap()
+	public function index()
 	{
+
+		/*
+		* К регистрации допускаются только "обычные" люди
+		*/
+		if($this->manager_users->is_logged_in() or !$this->manager_users->has_invite()){
+			redirect('');
+		}
+
 		/*
 		* Загрузка инвайта
 		*/
@@ -78,40 +74,30 @@ class Register extends MX_Controller
 		*/
 		$response = array();
 		try{
-
 			/*
 			* Если пользователь только попал на страницу, то он получит форму для регистрации
 			*/
 			if($this->manager_users->register($invite)){
-
-				if($this->ajax->is_ajax_request()){
-					$response['code'] = 'success_register_manager';
-					$response['data'] = lang('success_register_manager');
-					$this->ajax->build_json($response);
-				}else{
-					redirect('');
-				}
+				$this->session->set_flashdata('redirect',true);
+				redirect('manager/register/redirect');
 			}else{
 				$this->template->build('register',$data);
 			}
 		}catch(ValidationException $ve){
-			if($this->ajax->is_ajax_request()){
-				$response['code'] = 'error_register_manager';
-				$response['data']['errors'] = $ve->get_error_messages();
-				$this->ajax->build_json($response);
-			}else{
-				$this->template->build('register',$data);
-			}
+			$this->template->build('register',$data);
 		}catch(RuntimeException $re){
-			if($this->ajax->is_ajax_request()){
-				$response['code'] = 'error_register_manager';
-				$response['data']['errors'] = array($re->get_error_message());
-				$this->ajax->build_json($response);
-			}else{
-				$data['runtime_error'] = $re->get_error_message();
-				$this->template->build('register',$data);
-			}
+			$data['runtime_error'] = $re->get_error_message();
+			$this->template->build('register',$data);
 		}
-	
+	}
+
+	public function redirect()
+	{
+		if($this->session->flashdata('redirect')){
+			$this->template->set('loginBox',$this->load->view('users/login',array(),true));
+			$this->template->build('register/redirect');
+		}else{
+			redirect('');
+		}
 	}
 }// END Register class 
