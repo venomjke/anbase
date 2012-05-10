@@ -126,11 +126,74 @@ var admin = {
 	orders:{
 		init:function(){
 		},
-		add_order:function(grid,model){
+		init_add_order_dialog:function(model){
+			$d = $('#add_order_dialog');
+			$d.dialog({autoOpen:false,width:600});
+
 			if(!common.category_list || !common.dealtype_list){
 				return false;
 			}
 
+
+			var $d;
+			var $category = $('#add_order_category');
+			var $dealtype = $('#add_order_dealtype');
+			var $regions  = $('#add_order_regions');
+			var $metros   = $('#add_order_metros');
+			var $price    = $('#add_order_price');
+			var $phone    = $('#add_order_phone');
+			var $description= $('#add_order_description');
+			var $category = $('#add_order_category');
+			var $dealtype = $('#add_order_dealtype');
+			var $building = $('#add_order_building');
+
+			var regions = [];
+			var region_widget;
+			var metros  = {};
+			var metro_widget;
+
+			for(var i in common.category_list){
+				var $opt = $('<option value="'+common.category_list[i]+'">'+common.category_list[i]+'</option>');
+				if(common.settings_org.default_category == common.category_list[i])
+					$opt.attr('selected','selected');
+				$category.append($opt);
+			}
+
+			for(var i in common.dealtype_list){
+				var $opt = $('<option value="'+common.dealtype_list[i]+'">'+common.dealtype_list[i]+'</option>');
+				if(common.settings_org.default_dealtype == common.dealtype_list[i])
+					$opt.attr('selected','selected');
+				$dealtype.append($opt);
+			}
+
+			/*
+			* Виджеты  района
+			*/
+
+			function regionOnSave(){
+				if(region_widget.isValueChanged()){
+					regions = region_widget.serialize().splice(0);
+				}
+				region_widget = undefined;
+			}
+			function regionOnCancel(){
+				region_widget = undefined;
+			}
+
+			$regions.click(function(){
+				if(!region_widget){
+					region_widget = common.widgets.region_map({onSave:regionOnSave,onCancel:regionOnCancel});
+					region_widget.init();
+					region_widget.load(regions);
+				}else{
+					region_widget.destroy();
+					region_widget = undefined;
+				}
+			});
+
+			/*
+			* Виджет метро
+			*/
 			function metroOnSave(){
 				if(metro_widget.isValueChanged()){
 					serializeValue = metro_widget.serialize();
@@ -149,86 +212,7 @@ var admin = {
 			function metroOnCancel(){
 				metro_widget = undefined;
 			}
-
-			function regionOnSave(){
-				if(region_widget.isValueChanged()){
-					regions = region_widget.serialize().splice(0);
-				}
-				region_widget = undefined;
-			}
-			function regionOnCancel(){
-				region_widget = undefined;
-			}
-
-			function fill_table(table,body){
-				for(var i in body){
-					$tr = $('<tr>');
-					$td = $('<td>');
-					$td.append(body[i].label).append('<br/>').append(body[i].input);
-					table.append($tr.append($td));
-				}
-			}
-
-			var $d;
-			var left_table = {};
-			
-			left_table['category'] = { 
-					label:$('<label>Тип объекта</label>'),
-					input:$('<select style="width:170px"></select>')
-			};
-			
-			for(var i in common.category_list){
-				var $opt = $('<option value="'+common.category_list[i]+'">'+common.category_list[i]+'</option>');
-				if(common.settings_org.default_category == common.category_list[i])
-					$opt.attr('selected','selected');
-				left_table['category'].input.append($opt);
-			}
-
-			left_table['dealtype'] = {
-				label:$('<label>Тип сделки</label>'),
-				input:$('<select style="width:170px"></select>')
-			}
-			for(var i in common.dealtype_list){
-				var $opt = $('<option value="'+common.dealtype_list[i]+'">'+common.dealtype_list[i]+'</option>');
-				if(common.settings_org.default_dealtype == common.dealtype_list[i])
-					$opt.attr('selected','selected');
-				left_table['dealtype'].input.append($opt);
-			}
-
-			left_table['regions'] = {
-				label:$('<label>Районы</label>'),
-				input:$('<a href="#" onclick="return false;">Выбрать</a>')
-			};
-
-			left_table['metros']  = {
-				label:$('<label>Метро</label>'),
-				input:$('<a href="#" onclick="return false;">Выбрать</a>')
-			} 
-
-			left_table['price'] = {
-				label:$('<label>Цена</label>'),
-				input:$('<input type="text"/>')
-			}
-
-			left_table['phone'] = {
-				label:$('<label>Телефон</label>'),
-				input:$('<input type="text"/>')
-			}
-			/*
-			* Виджеты метро и региона
-			*/
-			left_table['regions'].input.click(function(){
-				if(!region_widget){
-					region_widget = common.widgets.region_map({onSave:regionOnSave,onCancel:regionOnCancel});
-					region_widget.init();
-					region_widget.load(regions);
-				}else{
-					region_widget.destroy();
-					region_widget = undefined;
-				}
-			});
-
-			left_table['metros'].input.click(function(){
+			$metros.click(function(){
 				if(!metro_widget){
 					metro_widget = common.widgets.metro_map({metros:metros,onSave:metroOnSave,onCancel:regionOnSave});
 					metro_widget.init();
@@ -239,80 +223,70 @@ var admin = {
 				}
 			});
 
-			var right_table = {};
-
-			right_table['description'] = {
-				label:$('<label>Описание</label>'),
-				input:$('<textarea style="width:350px; height:90px"></textarea>')
+			function clear_form(){
+				$category.val(common.settings_org.default_category);
+				$dealtype.val(common.settings_org.default_dealtype);
+				$price.val('');
+				$phone.val('');
+				$description.val('');
+				$building.val('');
+				regions = [];
+				metros = {};
 			}
 
-			if($('#add_order_dialog').length == 0){
-				$d = $('<div id="add_order_dialog" style="width:400px">').dialog({autoOpen:false,width:600});
-				var $left = $('<table cellspacing="0" cellpadding="0" style="float:left">');
-				var $right = $('<table cellspacing="0" cellpadding="0">');
-
-
-
-				fill_table($right,right_table);
-				fill_table($left,left_table);
-
-				var regions = [];
-				var region_widget;
-				var metros  = {};
-				var metro_widget;
-
-				var callback_add_order = function(add_result,data){
-					switch(add_result){
-						case 'success':
-							common.showSuccessMsg(data);
-							$d.dialog('close');
-							break;
-						case 'error':
-							if(data.errorType == "validation")
-								console.debug(data.errors);
-							else if(data.errorType == "runtime")
-								common.showErrorMsg(data.errors[0]);
-							break;	
-					}
-				};
-
-
-				$d.append($left);
-				$d.append($right);
-
-				$d.dialog('option','modal',true);
-				$d.dialog('option','title','Добавление заявки');
-				$d.dialog('option','buttons',{
-					'Добавить':function(){
-						var data = {};
-
-						data['category'] = left_table['category'].input.val();
-						data['deal_type']= left_table['dealtype'].input.val();
-						data['price']    = left_table['price'].input.val();
-						data['phone']    = left_table['phone'].input.val();
-						data['description'] = right_table['description'].input.val();
-
-						if(region_widget){
-							metroOnSave();
-						}
-						data['regions'] = regions;
-
-						if(metro_widget){
-							regionOnSave();
-						}
-						data['metros'] = metros;
-
-						model.addOrder(data,callback_add_order);
-					},
-					'Отмена':function(){
+			var callback_add_order = function(add_result,data){
+				switch(add_result){
+					case 'success':
+						common.showSuccessMsg(data);
+						clear_form();
 						$d.dialog('close');
-					}
-				});
-				$d.dialog('open');
-			}else{
-				$('#add_order_dialog').dialog('open');
+						break;
+					case 'error':
+						if(data.errorType == "validation")
+							console.debug(data.errors);
+						else if(data.errorType == "runtime")
+							common.showErrorMsg(data.errors[0]);
+						break;	
+				}
 			}
 
+			$d.dialog('option','modal',true);
+			$d.dialog('option','title','Добавление заявки');
+			$d.dialog('option','buttons',{
+				'Добавить':function(){
+					var data = {};
+
+					var txt = $description.val();
+					var buildings = $building.val();
+					var s = '';
+					for(var i in buildings) s += buildings[i]+' ';
+					$description.val(s+' '+txt); 
+
+					data['category'] = $category.val();
+					data['deal_type']= $dealtype.val();;
+					data['price']    = $price.val();
+					data['phone']    = $phone.val();
+					data['description'] = $description.val();;
+
+					if(region_widget){
+						regionOnSave();
+					}
+					data['regions'] = regions;
+
+					if(metro_widget){
+						metroOnSave();
+					}
+					data['metros'] = metros;
+
+					model.addOrder(data,callback_add_order);
+				},
+				'Отмена':function(){
+					$d.dialog('close');
+				}
+			});
+		},
+		add_order:function(){
+			$('#add_order_dialog').dialog('open');
 		},
 		del_orders:function(grid,model){
 			var ids = [];

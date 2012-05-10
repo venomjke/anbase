@@ -183,8 +183,10 @@ $(function(){
 		/*
 		* Обработчик создания записи
 		*/
+
+		admin.orders.init_add_order_dialog(model);
 		$('#add_order').click(function(){
-			admin.orders.add_order(grid,model);
+			admin.orders.add_order();
 		});
 		model.onDataCreating.subscribe(function(e,args){
 			common.showAjaxIndicator();

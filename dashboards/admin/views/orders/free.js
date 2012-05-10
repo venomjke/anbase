@@ -183,8 +183,9 @@ $(function(){
 		/*
 		* Обработчик создания записи
 		*/
+		admin.orders.init_add_order_dialog(model)
 		$('#add_order').click(function(){
-			model.addOrder();
+			admin.orders.add_order();
 		});
 		model.onDataCreating.subscribe(function(e,args){
 			common.showAjaxIndicator();
