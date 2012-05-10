@@ -3,7 +3,7 @@
    	<div class="date"><div><img src="<?php echo site_url("themes/start")?>/images/6.png" /></div></div>
         <h1><a href="111"> Регистрация</a></h1>
             Регистрация необходима для работы в системе. <br />
-        Все поля обязательны для заполнения
+       Обязательные поля отмечены звездочкой
 </div>
 	<h3 class="reg">Организация</h3>
 <?php
@@ -12,6 +12,11 @@
 	};
 ?>
 <table width="500px" border="0" cellspacing="4" cellpadding="0">
+  <tr>
+    <td width="200px" colspan="2">
+      <div style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 10px;color: #333;">Данные для связи агента с диспетчером</div>
+    </td>
+  </tr>
   <tr>
     <td width="200px">Название организации:</td>
     <td width="300px"><?php echo form_error("org_name"); ?>
@@ -34,7 +39,11 @@
 			echo $errors['register_user_error'];
 		};
 	?>
-        <table width="500px" border="0" cellspacing="4" cellpadding="0">
+  <table width="500px" border="0" cellspacing="4" cellpadding="0">
+  <tr>
+   <td width="200px" colspan="2"><div style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 10px;color: #333;">Данные для связи с представителем вашего агентства</div>
+   </td>
+  </tr>
   <tr>
     <td width="200px">Фамилия:</td>
     <td width="300px"><?php echo form_error("last_name"); ?>
@@ -58,7 +67,12 @@
   </tr>
 </table>
 			<h3 class="reg">Учетная запись</h3>
-        <table width="500px" border="0" cellspacing="4" cellpadding="0">
+<table width="500px" border="0" cellspacing="4" cellpadding="0">
+  <tr>
+    <td width="200px" colspan="2">
+      <div style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 10px;color: #333;">Данные для для последующего входа в систему</div>
+    </td>
+  </tr>
   <tr>
     <td width="200px">Логин:</td>
     <td width="300px"><?php echo form_error("r_login"); ?>
