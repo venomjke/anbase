@@ -52,6 +52,7 @@ $route['company'] = 'site/company';
 $route['faq']     = 'site/faq'; 
 
 $route['logout(.*)']       = 'users/auth/logout$1';
+$route['redirect(.*)']     = 'users/auth/redirect$1';
 $route['register(.*)']     = 'users/auth/register$1';
 $route['login(.*)']        = 'site/index$1';
 

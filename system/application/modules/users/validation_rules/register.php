@@ -20,7 +20,7 @@ $this->form_validation->set_rules('r_re_password', 'Копия пароля', 't
 $this->form_validation->set_rules('name','Имя','trim|required|xss_clean|min_length[3]|max_length[15]');
 $this->form_validation->set_rules('middle_name','Отчество','trim|required|xss_clean|min_length[3]|max_length[15]');
 $this->form_validation->set_rules('last_name','Фамилия','trim|required|xss_clean|min_length[3]|max_length[15]');
-$this->form_validation->set_rules('phone','Телефон','required|trim|valid_phone');
+$this->form_validation->set_rules('phone','Телефон','valid_phone');
 
 /*
 *

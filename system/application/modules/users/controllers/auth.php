@@ -146,7 +146,7 @@ class Auth extends MX_Controller{
 					'name'        => $this->input->post('name'),
 					'middle_name' => $this->input->post('middle_name'),
 					'last_name'   => $this->input->post('last_name'),
-					'phone'		  => $this->input->post('phone'),
+					'phone'		  => $this->input->post('phone')?$this->input->post('phone'):'',
 					'org_name'    => $this->input->post('org_name'),
 					'org_phone'   => $this->input->post('org_phone'),
 					'org_email'   => $this->input->post('org_email')
@@ -156,7 +156,8 @@ class Auth extends MX_Controller{
 					// success и отображение register_finish
 					//$data['success']['register'] = lang('sucess_register'); 
 					// пока редирект на главную страницу
-					redirect('');
+					$this->session->set_flashdata('redirect',true);
+					redirect('redirect');
 				} else {
 
 					$errors = $this->users->get_error_message();
@@ -166,7 +167,6 @@ class Auth extends MX_Controller{
 			}
 
 			/*
-			*	
 			*	Настройки шаблона
 			*/
 			$this->template->set_theme('start');
@@ -178,6 +178,17 @@ class Auth extends MX_Controller{
 
 	}
 
+	public function redirect()
+	{
+		if($this->session->flashdata('redirect')){
+			$this->template->set_theme('start');
+			$this->template->set_partial('menu','common/menu');
+			$this->template->set('loginBox',$this->load->view('users/login',array(),true));
+			$this->template->build('redirect');
+		}else{
+			redirect('');
+		}
+	}
 
 	/**
 	 * Create reCAPTCHA JS and non-JS HTML to verify user as a human
