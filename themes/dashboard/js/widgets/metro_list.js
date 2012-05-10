@@ -335,13 +335,11 @@ $(function(){
 					$wrapper.append($save_btn);
 					$wrapper.append($cancel_btn);
 					$wrapper.append($reset_btn);
-				}				
-				
+				}
+								
+				$any_metro_label    = $('<label for="any_metro_checkbox">Любое</label>')
+				$any_metro_checkbox = $('<input id="any_metro_checkbox" type="checkbox" value=""/>');
 				if(options.needAnyMetro){
-
-					$any_metro_label    = $('<label for="any_metro_checkbox">Любое</label>')
-					$any_metro_checkbox = $('<input id="any_metro_checkbox" type="checkbox" value=""/>');
-
 					$any_metro_checkbox.click(function(){
 						if($(this).val()=="1"){
 							$(this).val("0");
