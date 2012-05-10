@@ -38,5 +38,36 @@
 				© <a href="111">copyright 2012 Flyweb inc.</a>	</div>
 			</div>
 		</div>
+		<?php  if($this->session->userdata('browser') == 'bad'): ?>
+
+			<div id="main_overlay" style="position:absolute;top:0px;left:0px;z-index:9999;width:100%;background-color:#0099cc;opacity:0.1"> 
+			</div>
+			<div style="position:absolute;top:45%;left:32%;background-color:#fff;color:#000;z-index:99999;margin:auto;padding:10px;border: 3px #09C solid;opacity:0.95">
+				<p style="text-align:justify;">
+					<img src="<?php echo base_url(); ?>themes/dashboard/images/browsers/alert.png" align="left"/>
+					Ваш браузер не входит в число рекомендуемых к использованию. <br/> Настоятельно рекомендуем установить себе следующие браузеры.
+				</p>
+				<div style="overflow:auto;">
+					<div style="float:left;text-align:center;margin-left:30px">
+						<img src="<?php echo base_url();?>themes/dashboard/images/browsers/browser_chrome.png" style="height:128px;width:128px;"/> <br/>
+						<?php echo anchor("https://www.google.com/chrome/?installdataindex=nosearch&hl=ru&brand=CHMA&utm_campaign=ru&utm_source=ru-ha-emea-ru-bk&utm_medium=ha","Скачать",'target="blank"'); ?>
+					</div>
+					<div style="float:left;text-align:center;margin-left:45px">
+						<img src="<?php echo base_url();?>themes/dashboard/images/browsers/browser_opera.png" style="height:128px;width:128px;" /> <br/>
+						<?php echo anchor("http://ru.opera.com/download/","Скачать",'target="blank"'); ?>
+					</div>
+					<div style="float:left;text-align:center;margin-left:40px">
+						<img src="<?php echo base_url();?>themes/dashboard/images/browsers/browser_firefox.png" style="height:128px;width:128px;" /> <br/>
+						<?php echo anchor("http://www.mozilla.org/ru/firefox/new/","Скачать",'target="blank"'); ?>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				$(function(){
+					var overlay = document.getElementById('main_overlay');
+					overlay.style.height = document.body.scrollHeight+'px';
+				})
+			</script>
+		<?php  endif; ?>
 	</body>
 </html>

@@ -10,6 +10,11 @@
 |
 */
 
+$hook['pre_controller'][] = array(
+	'function' => 'check_browser',
+	'filename' => 'useragent.php',
+	'filepath' => 'hooks'
+);
 
 
 /* End of file hooks.php */
