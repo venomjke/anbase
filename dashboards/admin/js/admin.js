@@ -106,9 +106,9 @@ var admin = {
 			if(ids.length){
 				$d = $('<div>');
 				$d.dialog({
-					'title':'Вы точно желаете удалить записи?',
+					'title':'Вы точно желаете уволить сотрудника(ов)?',
 					'modal':true,
-					'width':300,
+					'width':'auto',
 					'buttons':{
 						'Удалить':function(){
 							model.delUsers(ids);
@@ -410,7 +410,7 @@ var admin = {
 				$d.dialog({
 					'title':'Вы точно желаете удалить записи?',
 					'modal':true,
-					'width':300,
+					'width':'auto',
 					'buttons':{
 						'Удалить':function(){
 							model.delInvites(ids);
@@ -465,7 +465,7 @@ var admin = {
 			};
 
 			if($('#add_agent_dialog').length == 0){
-				var $d = $('<div id="add_agent_dialog">').dialog({autoOpen:false,width:280,modal:true});
+				var $d = $('<div id="add_agent_dialog">').dialog({autoOpen:false,width:'auto',modal:true});
 				var $form = $('<table cellpadding="0" align="center" cellspacing="0"></table>');
 				var table = {};
 
@@ -518,7 +518,7 @@ var admin = {
 			};
 
 			if($('#add_manager_dialog').length == 0){
-				var $d = $('<div id="add_manager_dialog">').dialog({autoOpen:false,width:280,modal:true});
+				var $d = $('<div id="add_manager_dialog">').dialog({autoOpen:false,width:'auto',modal:true});
 				var $form = $('<table cellpadding="0" align="center" cellspacing="0"></table>');
 				var table = {};
 
@@ -555,7 +555,7 @@ var admin = {
 			};
 
 			if($('#add_manager_dialog').length == 0){
-				var $d = $('<div id="add_manager_dialog">').dialog({autoOpen:false,width:280,modal:true});
+				var $d = $('<div id="add_manager_dialog">').dialog({autoOpen:false,width:'auto',modal:true});
 				var $form = $('<table cellpadding="0" align="center" cellspacing="0"></table>');
 				var table = {};
 
