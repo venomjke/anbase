@@ -155,11 +155,68 @@
 				var $nobody_opt = $('<option value="-1"></option>');
 				$select.append($nobody_opt);
 
+				var manager_agents = {};
+				
+				for(var i in common.staff_list){
+					var empl = common.staff_list[i];
+					if(empl.role == common.role_list['USER_ROLE_MANAGER']){
+
+						if(manager_agents[empl.id]){
+							manager_agents[empl.id].user = empl;
+						}else{
+							manager_agents[empl.id] = {};
+							manager_agents[empl.id].user = empl;
+							manager_agents[empl.id].agents = [];
+						}
+
+					}else{
+
+						if(empl.manager_id){
+							/*
+							* Присоединяем агента к менеджеру
+							*/
+							if(manager_agents[empl.manager_id]){
+								manager_agents[empl.manager_id].agents.push(empl);
+							}else{
+								manager_agents[empl.manager_id]={};
+								manager_agents[empl.manager_id].agents = [];
+								manager_agents[empl.manager_id].agents.push(empl);
+							}
+
+						}else{
+							/*
+							* Задаем просто агента, который без всех работает
+							*/
+							manager_agents[empl.id] = {};
+							manager_agents[empl.id].user = empl;
+						}
+
+					}
+				}
+
+				for(var i in manager_agents){
+					var empl = manager_agents[i].user;
+					if(empl.role == common.role_list['USER_ROLE_MANAGER']){
+						var $opt = $('<option value="'+empl.id+'" style="font-weight:bold;">->'+empl.last_name+' '+empl.name+' '+empl.middle_name+'</option>');
+						$select.append($opt);
+						for(var j in manager_agents[i].agents){
+							var agent = manager_agents[i].agents[j];
+							var $agent_opt = $('<option value="'+agent.id+'"> &nbsp&nbsp&nbsp&nbsp&nbsp'+agent.last_name+' '+agent.name+' '+agent.middle_name+'</option>');
+							$select.append($agent_opt);
+						}
+					}else{
+						var $opt = $('<option value="'+empl.id+'"> '+empl.last_name+' '+empl.name+' '+empl.middle_name+'</option>');
+						$select.append($opt);
+					}
+				}
+
+				/*
 				for(var i in common.staff_list){
 					var employee = common.staff_list[i];
 					var $opt = $('<option value="'+employee.id+'">'+employee.last_name+' '+employee.name+' '+employee.middle_name+'</option>');
 					$select.append($opt);
-				}
+				}*/
+
 
 
 				$wrapper.append($select);

@@ -93,6 +93,9 @@ class Orders extends MX_Controller
 		$staff_list  = json_encode($this->admin_users->get_list_staff());
 		$assets[] = "common.staff_list=".$staff_list;
 
+		$role_list  = json_encode($this->m_user->get_assoc_role_list());
+		$assets[] = "common.role_list=".$role_list; 
+
 		$category_list = json_encode($this->m_order->get_category_list());
 		$assets[] = "common.category_list=".$category_list;
 
