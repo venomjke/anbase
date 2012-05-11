@@ -407,7 +407,7 @@ var admin = {
 					'modal':true,
 					'width':400,
 					'buttons':{
-						'Завершить':function(){
+						'Возобновить':function(){
 							model.restoreOrders(ids);
 							$d.dialog('close');
 						},
