@@ -581,8 +581,8 @@ var admin = {
 				admin.invites.callback($d,code,data,table);
 			};
 
-			if($('#add_manager_dialog').length == 0){
-				var $d = $('<div id="add_manager_dialog">').dialog({autoOpen:false,width:'auto',modal:true});
+			if($('#add_admin_dialog').length == 0){
+				var $d = $('<div id="add_admin_dialog">').dialog({autoOpen:false,width:'auto',modal:true});
 				var $form = $('<table cellpadding="0" align="center" cellspacing="0"></table>');
 				var table = {};
 
@@ -607,7 +607,7 @@ var admin = {
 				});
 				$d.dialog('open');
 			}else{
-				$('#add_manager_dialog').dialog('open');
+				$('#add_admin_dialog').dialog('open');
 			}
 		}
 	},
