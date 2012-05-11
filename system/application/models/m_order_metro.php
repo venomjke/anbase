@@ -56,23 +56,42 @@ class M_Order_metro extends MY_Model
 	 * @return array
 	 * @author alex.strigin
 	 **/
-	public function get_order_metros($order_id,$in_array=true)
+	public function get_order_metros($order_id,$in_array=true,$with_names=false)
 	{
-		$this->select("orders_metros.order_id");
-		$this->select("orders_metros.metro_id");
-		$this->select("metros.line");
+		$metros;
+		if(!$with_names){
+			$this->select("orders_metros.order_id");
+			$this->select("orders_metros.metro_id");
+			$this->select("metros.line");
 
-		$this->join("metros","orders_metros.metro_id = metros.id");
+			$this->join("metros","orders_metros.metro_id = metros.id");
 
-		$metros = $this->get_all(array("order_id"=>$order_id));
+			$metros = $this->get_all(array("order_id"=>$order_id));
 
-		if($in_array){
-			$metros_ids = array();
-			foreach($metros as $metro){
-				$metros_ids[$metro->line][] = $metro->metro_id;
+			if($in_array){
+				$metros_ids = array();
+				foreach($metros as $metro){
+					$metros_ids[$metro->line][] = $metro->metro_id;
+				}
+				return $metros_ids;
+			}	
+		}else{
+			$this->select("metros.line");
+			$this->select("metros.name");
+
+			$this->join("metros","orders_metros.metro_id = metros.id");
+
+			$metros = $this->get_all(array("order_id"=>$order_id));
+
+			if($in_array){
+				$metros_names = array();
+				foreach($metros as $metro){
+					$metros_names[$metro->line][] = $metro->name;
+				}
+				return $metros_names;
 			}
-			return $metros_ids;
 		}
+		
 		return $metros;
 	}
 

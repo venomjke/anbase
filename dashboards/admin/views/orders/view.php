@@ -16,7 +16,7 @@
 	<?php echo $this->load->view('orders/'.$section.'.js',array(),true); ?>
 </script>
 
-
+<?php if($current != 'off'): ?>
 <!-- Форма добавления заявки -->
 
 <div id="add_order_dialog">
@@ -99,3 +99,4 @@
 		</tbody>
 	</table>
 </div>
+<?php endif; ?>

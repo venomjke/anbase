@@ -310,6 +310,33 @@ var admin = {
 		add_order:function(){
 			$('#add_order_dialog').dialog('open');
 		},
+		print_orders:function(grid,model){
+			var ids = [];
+			var SelectedRows = grid.getSelectedRows();
+
+			for(var i in SelectedRows){
+				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
+					ids.push(grid.getDataItem(SelectedRows[i]).id);
+				}
+			}
+			if(ids.length){
+				$d = $('<div>');
+				$d.dialog({
+					'title':'Вы точно желаете распечатать записи?',
+					'modal':true,
+					'width':'auto',
+					'buttons':{
+						'Распечатать':function(){
+							model.printOrders(ids);
+							$d.dialog('close');
+						},
+						'Отмена':function(){
+							$d.dialog('close');
+						}
+					}
+				});		
+			}
+		},
 		del_orders:function(grid,model){
 			var ids = [];
 			var SelectedRows = grid.getSelectedRows();

@@ -55,16 +55,24 @@ class M_Order_region extends MY_Model
 	 * @return array
 	 * @author alex.strigin
 	 **/
-	public function get_order_regions($order_id,$in_array=true)
+	public function get_order_regions($order_id,$in_array=true,$with_names=false)
 	{
-		$regions = $this->get_all(array('order_id'=>$order_id));
+		$regions;
 
-		if($in_array){
-			$regions_ids = array();
-			foreach($regions as $region){
-				$regions_ids[] = $region->region_id;
-			}
-			return $regions_ids;
+		if(!$with_names){
+			$regions = $this->get_all(array('order_id'=>$order_id));
+
+			if($in_array){
+				$regions_ids = array();
+				foreach($regions as $region){
+					$regions_ids[] = $region->region_id;
+				}
+				return $regions_ids;
+			}	
+		}else{
+			$this->select('regions.name');
+			$this->join("regions","regions.id = orders_regions.region_id");
+			$regions = $this->get_all(array('order_id'=>$order_id));
 		}
 		return $regions;
 	}

@@ -12,7 +12,8 @@
       AddUrl:'',
       DeleteUrl:'',
       finishUrl:'',
-      RestoreUrl:''
+      RestoreUrl:'',
+      PrintUrl:''
     };
     options = $.extend(true,def_options,options);
 
@@ -283,6 +284,10 @@
       ensureData(from, to);
     }
 
+    function printOrders(ids){
+      document.location.replace(options.PrintUrl+'&'+$.param({'orders':ids}));
+    }
+
     function delOrders(ids){
       onDataDeleting.notify();
       $.ajax({
@@ -414,6 +419,7 @@
       "delOrders":delOrders,
       "finishOrders":finishOrders,
       "restoreOrders":restoreOrders,
+      "printOrders":printOrders,
       // methods
       "clear": clear,
       "isDataLoaded": isDataLoaded,
