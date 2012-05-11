@@ -17,8 +17,7 @@ var common = {
 			textAlign:'left',
 			animateOpen:{opacity:'show'},
 			animateClose:{opacity:'hide'},
-			type:'success',
-			theme:'noty_theme_mitgux'
+			type:'success'
 		}
 		options = $.extend(def_options,options);
 		if(text){

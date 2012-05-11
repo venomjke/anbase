@@ -19,7 +19,6 @@
 
 		<?php echo link_tag("themes/dashboard/css/noty/jquery.noty.css"); ?>
 		<?php echo link_tag("themes/dashboard/css/noty/noty_theme_default.css"); ?>
-		<?php echo link_tag("themes/dashboard/css/noty/noty_theme_mitgux.css"); ?>
 
 		<?php echo link_tag("themes/dashboard/css/slick.grid.css"); ?>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/jquery.event.drag-2.0.min.js"> </script>
