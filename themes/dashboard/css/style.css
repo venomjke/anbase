@@ -433,8 +433,10 @@ div.zagolovok   {
 }
 
 .print_table td{
+	vertical-align:top;
 	border-left:1px #e1e1e1 solid;
 	border-top:1px #e1e1e1 solid;
+	font-size:11px;
 }
 .print_table tr td:last-child{
 	border-right:1px #e1e1e1 solid;
