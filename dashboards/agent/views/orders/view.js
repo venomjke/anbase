@@ -4,15 +4,21 @@ $(function(){
 		*/
 		var options = {enableCellNavigation:true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true};
 
+		var checkboxSelector = new Slick.CheckboxSelectColumn({
+      		cssClass: "slick-cell-checkboxsel"
+    	});
+    	var columns = [];
+		columns.push(checkboxSelector.getColumnDefinition());
+
 		/*
 		* Добавляем поля из настроек
 		*/
-		var columns = [
+		$.merge(columns,[
 			{id: "number", name:"№", field:"number",width:30,sortable:true},
 			{id: "create_date", name:"Дата создания", width:55, field:"create_date",sortable:true},
 			{id: "category", name:"Тип объекта",width:55, field:"category", editor:Slick.Editors.AnbaseCategory},
 			{id: "deal_type", name:"Сделка", field:"deal_type",width:50, editor:Slick.Editors.AnbaseDealType}
-		];
+		]);
 
 		if(common.settings_org.regions_col == "1"){
 			var region_widget;
@@ -40,8 +46,10 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=my',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=my',PrintUrl:agent.baseUrl+'?act=print',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
+	    grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
+	    grid.registerPlugin(checkboxSelector);
 		common.grid = grid;
 
 		/*
@@ -186,6 +194,13 @@ $(function(){
 			common.showAjaxIndicator();
 		});
 
+
+		/*
+		* Распечатать заявки
+		*/
+		$('#print_order').click(function(){
+			agent.orders.print_orders(grid,model);
+		});
 		/*
 		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
 		*/

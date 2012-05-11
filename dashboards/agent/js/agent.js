@@ -125,6 +125,33 @@ var agent = {
 	*/
 	orders:{
 		init:function(options){
+		},
+		print_orders:function(grid,model){
+			var ids = [];
+			var SelectedRows = grid.getSelectedRows();
+
+			for(var i in SelectedRows){
+				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
+					ids.push(grid.getDataItem(SelectedRows[i]).id);
+				}
+			}
+			if(ids.length){
+				$d = $('<div>');
+				$d.dialog({
+					'title':'Вы точно желаете распечатать записи?',
+					'modal':true,
+					'width':'auto',
+					'buttons':{
+						'Распечатать':function(){
+							model.printOrders(ids);
+							$d.dialog('close');
+						},
+						'Отмена':function(){
+							$d.dialog('close');
+						}
+					}
+				});		
+			}
 		}
 	},
 	user:{

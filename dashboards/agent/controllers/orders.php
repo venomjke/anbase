@@ -152,6 +152,12 @@ class Orders extends MX_Controller
 				*/
 				$this->_edit_order();
 				break;
+			case 'print':
+				/*
+				* Распечатываем заявки ( мои )
+				*/
+				$this->_print_orders();
+				break;
 		}
 	}
 
@@ -274,6 +280,20 @@ class Orders extends MX_Controller
 			$this->ajax->build_json($response);
 		}else{
 			redirect($this->agent_users->get_home_page());
+		}
+	}
+
+
+	private function _print_orders()
+	{
+		$this->load->library('table');
+		try{
+			$orders = $this->agent_orders->get_print_orders();
+			$this->template->build('orders/print',array('orders'=>$orders));
+		}catch(AnbaseRuntimeException $re){
+			redirect($this->admin_users->get_home_page());
+		}catch(ValidationException $ve){
+			redirect($this->admin_users->get_home_page());
 		}
 	}
 

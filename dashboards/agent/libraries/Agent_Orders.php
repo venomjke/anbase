@@ -142,4 +142,37 @@ class Agent_Orders
 		}
 	}
 
+	/**
+	 * Подготовка и выбор заявок на распечатку
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function get_print_orders()
+	{
+		$this->ci->load->model('m_order_user');
+		$this->ci->load->model('m_order_region');
+		$this->ci->load->model('m_order_metro');
+
+		$orders = $this->ci->input->get('orders');
+
+		if(!empty($orders) && is_array($orders)){
+
+			$valid_orders = array();
+
+			foreach($orders as $order_id){
+				if(is_numeric($order_id) and $order_id > 0 and $this->ci->m_order_user->does_order_belong_user($order_id,$this->ci->agent_users->get_user_id())){
+					
+					$order = $this->ci->m_order->get($order_id);
+					$order->regions = $this->ci->m_order_region->get_order_regions($order_id,false,true);
+					$order->metros = $this->ci->m_order_metro->get_order_metros($order_id,true,true);
+					$valid_orders[] = $order;
+				}
+			}
+
+			if(!empty($valid_orders)) return $valid_orders;
+		}
+
+		throw new AnbaseRuntimeException(lang("common.not_legal_data"));
+	}
 } // END class Agent_Orders
