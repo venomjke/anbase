@@ -132,6 +132,7 @@ class Orders extends MX_Controller
 				$this->template->set('current',$section);
 				$this->template->set('settings_org',$this->settings_org);
 				$this->template->set_partial('dashboard_tabs','dashboard/dashboard_tabs');
+				$this->template->set_partial('dashboard_toolbar','dashboard/dashboard_toolbar');
 				$this->template->set_partial('dashboard_filter','dashboard/dashboard_filter');
 
 				switch ($section) {

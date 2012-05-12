@@ -5,6 +5,8 @@
 	<?php load_partial_template($template,'dashboard_filter'); ?>
 	<div class="content">
 		<?php load_partial_template($template,'dashboard_tabs'); ?>
+		<div class="clier"></div>
+		<?php load_partial_template($template,'dashboard_toolbar'); ?>
 	    <div class="tablica" id="orders_grid" style="height:550px; border:1px #8AA1BC solid;">
 	    </div>
 	    <div class="nastroiki"><?php echo anchor("admin/settings","Настройки таблицы"); ?></div>

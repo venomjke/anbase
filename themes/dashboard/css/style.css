@@ -407,6 +407,11 @@ div.zagolovok   {
 	background-image: url(../images/bg_button2.png);
 	cursor: pointer;
 }
+#dashboard_toolbar{
+	background-color:#8AA1BC;
+	padding-bottom:6px;
+	padding-left:8px;
+}
 .cell_tooltip{
 	background-color: #fff;
 	border:1px #b4b4b4 solid;
