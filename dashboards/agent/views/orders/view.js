@@ -283,8 +283,6 @@ $(function(){
 				model.setPriceFrom($(this).val());
 				model.setPriceTo($('#f_price_to').val())
 				model.applyFilter(vp.top,vp.bottom);
-			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
-				event.preventDefault();
 			}
 		});
 		$('#f_createdate_to').change(function(event){
