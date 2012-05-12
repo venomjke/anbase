@@ -30,7 +30,7 @@
   <tr>
     <td>* Телефон организации (диспетчера)</td>
     <td><?php echo form_error("org_phone",'<div class="error">',"</div>"); ?>
-		<?php echo form_input("org_phone",set_value("org_phone"),'placeholder="Введите телефон организации" class="text"'); ?><br/>
+		<?php echo form_input("org_phone",set_value("org_phone"),'placeholder="Введите телефон организации" class="text phone"'); ?><br/>
         <span> Пример: +79219995544 </span></td>
   </tr>
 </table>
@@ -64,7 +64,7 @@
     <td>Телефон:</td>
     <td>
 	<?php echo form_error("phone",'<div class="error">',"</div>"); ?>
-	<?php echo form_input("phone",set_value("phone"),'placeholder="Введите свой телефон" class="text"'); ?><br/>
+	<?php echo form_input("phone",set_value("phone"),'placeholder="Введите свой телефон" class="text phone"'); ?><br/>
         <span> Пример: +79219995544 </span>
   </td>
   </tr>
@@ -114,3 +114,8 @@
 </table>
 -->
 <?php echo form_close(); ?>
+<script type="text/javascript">
+  $(function(){
+      $('.phone').keyfilter(/[\+\d]/);
+  });
+</script>
