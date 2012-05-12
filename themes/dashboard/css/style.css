@@ -228,6 +228,14 @@ span.minus{
 	font-size: 12px;
 }
 
+.conteiner .filter .filter_select{
+	width:130px;
+}
+
+.conteiner .filter .filter_input{
+	width:100px;
+}
+
 td.left{
 	border-left-width: 1px;
 	border-left-style: solid;

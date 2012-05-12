@@ -10,7 +10,7 @@
       <?php endif; ?>
       <?php /*в заявках агентов выводим фильтр по агентам*/ if($current == 'delegate'): ?>
       <td> по&nbsp;агенту: </td>
-      <td>  <select style="width:130px" name="user_id" id="f_user_id">
+      <td>  <select  name="user_id" id="f_user_id">
                 <option value=""></option> 
         <?php foreach($manager_agents as $manager_agent): ?>
           <option value="<?php echo $manager_agent->id; ?>"><?php echo make_official_name($manager_agent->name,$manager_agent->middle_name,$manager_agent->last_name); ?></option>
@@ -48,7 +48,7 @@
       </tr>
       <tr>
         <td>Объект:</td>
-        <td><select tabindex="5" style="width:120px" id="f_category">
+        <td><select tabindex="5" class="filter_select" id="f_category">
             <option value=""></option>
         <?php 
           foreach($this->m_order->get_category_list() as $category){
@@ -60,17 +60,17 @@
         </select></td>
        <?php if($settings_org->price_col): ?>
           <td class="l">От:</td>
-          <td><input tabindex="7" style="width:100px" type="text" id="f_price_from"/></td>
+          <td><input tabindex="7" class="filter_input" type="text" id="f_price_from"/></td>
         <?php endif;?>
         <td class="l">С:</td>
-        <td><input tabindex="9" style="width:130px" type="text" class="date" id="f_createdate_from"/></td>
+        <td><input tabindex="9" class="filter_input date" type="text" id="f_createdate_from"/></td>
         <td tabindex="11" width="50%" rowspan="2" valign="top" class="l"><textarea id="f_description" style="width:90%" rows="3"></textarea></td>
         <td>От:</td>
-        <td><input tabindex="12" type="text" id="f_number_from" style="width:100px"/></td>
+        <td><input tabindex="12" type="text" id="f_number_from" class="filter_input"/></td>
       </tr>
       <tr>
         <td>Вид&nbsp;сделки:</td>
-        <td><select tabindex="6" style="width:120px" id="f_dealtype">
+        <td><select tabindex="6" class="filter_select" id="f_dealtype">
             <option value=""></option>
         <?php 
           foreach($this->m_order->get_dealtype_list() as $deal_type){
@@ -82,12 +82,12 @@
         </select></td>
         <?php if($settings_org->price_col): ?>
           <td class="l">До:</td>
-          <td><input tabindex="8" type="text" style="width:100px" id="f_price_to"/></td>
+          <td><input tabindex="8" type="text" class="filter_input" id="f_price_to"/></td>
         <?php endif; ?>
         <td class="l">До:</td>
-        <td><input tabindex="10" style="width:130px" type="text" class="date" id="f_createdate_to"/></td>
+        <td><input tabindex="10" class="filter_input date" type="text" id="f_createdate_to"/></td>
         <td>До:</td>
-        <td><input tabindex="13" type="text" id="f_number_to" style="width:100px"/></td>
+        <td><input tabindex="13" type="text" id="f_number_to" class="filter_input"/></td>
       </tr>
       <tr>
         <td><input id="search_btn" type="button"  style="cursor:pointer; padding:5px" value="подобрать" /></td>
