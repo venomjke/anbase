@@ -55,7 +55,7 @@
     var almoustReady= resultPrice.join( "" ); //Склеиваем массив
     if ( price_penny )  almoustReady+= "."+price_penny; //Если есть копейки - прибавляем и их
     
-    return almoustReady+" руб.";
+    return almoustReady;
   };
 
   /*
@@ -155,12 +155,12 @@
       return phone.substr(0,3)+"-"+phone.substr(3,2)+"-"+phone.substr(5,2);
     }else if(phone.length <= 10){
       var len_code = phone.length-7;
-      return "+7"+" ("+phone.substr(0,len_code)+") "+phone.substr(len_code,3)+"-"+phone.substr(len_code+3,2)+"-"+phone.substr(len_code+5,2);
+      return "+7"+"("+phone.substr(0,len_code)+")"+phone.substr(len_code,3)+"-"+phone.substr(len_code+3,2)+"-"+phone.substr(len_code+5,2);
     }else if(phone.length > 10){
       var len_code = phone.length-10;
       var code = phone.substr(0,len_code);
       if(code == "7") code = "+"+code;
-      return code+" ("+phone.substr(len_code,3)+") "+phone.substr(len_code+3,3)+"-"+phone.substr(len_code+6,2)+"-"+phone.substr(len_code+8,2);
+      return code+"("+phone.substr(len_code,3)+")"+phone.substr(len_code+3,3)+"-"+phone.substr(len_code+6,2)+"-"+phone.substr(len_code+8,2);
     }
   }
 

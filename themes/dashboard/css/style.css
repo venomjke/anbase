@@ -433,6 +433,7 @@ div.zagolovok   {
 #orders_grid .slick-cell.selected{
 	background-color: beige;
 }
+
 .error{
 	color:red;
 }

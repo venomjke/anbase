@@ -42,6 +42,9 @@
 
 		<script type="text/javascript">
 			common.baseUrl = '<?php echo base_url(); ?>';
+			if(window.screen.width <= 1024){
+				document.write ('<link href="<?php echo base_url();?>themes/dashboard/css/slick1024.grid.css" rel="stylesheet" type="text/css">'); 
+			}
 		</script>
 		<?php echo $template['metadata']; ?>
 	</head>
