@@ -68,6 +68,28 @@
 					overlay.style.height = document.body.scrollHeight+'px';
 				})
 			</script>
-		<?php  endif; ?>
+		<?php endif; ?>
+		<?php 
+			/*
+			* В Production версии добавляем код отслеживания
+			*/
+			if(ENVIRONMENT == ANBASE_PROD):
+				?>
+			<script type="text/javascript">
+
+			  var _gaq = _gaq || [];
+			  _gaq.push(['_setAccount', 'UA-31646688-1']);
+			  _gaq.push(['_trackPageview']);
+
+			  (function() {
+			    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			  })();
+
+			</script>
+			<?php
+			endif;
+		?>
 	</body>
 </html>
