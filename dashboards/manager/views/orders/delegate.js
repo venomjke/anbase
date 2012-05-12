@@ -187,8 +187,6 @@ $(function(){
 				model.setPriceFrom($(this).val());
 				model.setPriceTo($('#f_price_to').val())
 				model.applyFilter(vp.top,vp.bottom);
-			}else if(!(event.which >= 48 && event.which <= 57 || event.which == 8 || event.which == 9)){
-				event.preventDefault();
 			}
 		});
 		$('#f_createdate_to').change(function(event){
@@ -205,6 +203,25 @@ $(function(){
 		});
 
 
+		$('#f_number_from').keyfilter(/[\d]/);
+		$('#f_number_from').keydown(function(event){
+			if(event.which == 13){
+				vp = grid.getViewport();
+				model.setNumberFrom($(this).val());
+				model.setNumberTo($('#f_number_to').val());
+				model.applyFilter(vp.top,vp.bottom);
+			}
+		});
+
+		$('#f_number_to').keyfilter(/[\d]/);
+		$('#f_number_to').keydown(function(event){
+			if(event.which == 13){
+				vp = grid.getViewport();
+				model.setNumberFrom($('#f_number_from').val());
+				model.setNumberTo($(this).val());
+				model.applyFilter(vp.top,vp.bottom);
+			}
+		});
 		$('#description').keydown(function(event){
 		});
 

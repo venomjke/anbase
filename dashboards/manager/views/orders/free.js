@@ -203,6 +203,25 @@ $(function(){
 			model.applyFilter(vp.top,vp.bottom);
 		});
 
+		$('#f_number_from').keyfilter(/[\d]/);
+		$('#f_number_from').keydown(function(event){
+			if(event.which == 13){
+				vp = grid.getViewport();
+				model.setNumberFrom($(this).val());
+				model.setNumberTo($('#f_number_to').val());
+				model.applyFilter(vp.top,vp.bottom);
+			}
+		});
+
+		$('#f_number_to').keyfilter(/[\d]/);
+		$('#f_number_to').keydown(function(event){
+			if(event.which == 13){
+				vp = grid.getViewport();
+				model.setNumberFrom($('#f_number_from').val());
+				model.setNumberTo($(this).val());
+				model.applyFilter(vp.top,vp.bottom);
+			}
+		});
 		$('#description').keydown(function(event){
 
 		});
