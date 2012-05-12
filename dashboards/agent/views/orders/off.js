@@ -4,7 +4,7 @@ $(function(){
 		*/
 		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"Номер", field:"number", width:30 , sortable:true},
+			{id: "number", name:"№", field:"number", width:30 , sortable:true},
 			{id: "create_date", name:"Дата создания",  width:65, field:"create_date", sortable:true},
 			{id: "category", name:"Объект", field:"category", width:55},
 			{id: "deal_type", name:"Сделка", field:"deal_type", width:50}
