@@ -85,7 +85,7 @@
 									</tr>
 									<tr>
 										 <td class="l">Телефон:</td>
-						    			 <td><input class="text" type="text" name="phone" value="<?php echo htmlspecialchars($this->manager_users->get_user_phone()); ?>" required/>
+						    			 <td><input class="text phone" type="text" name="phone" value="<?php echo htmlspecialchars($this->manager_users->get_user_phone()); ?>" required/>
 									        <input type="submit" style="position:absolute; top:-9999999px;left:-999999999px"/>      
 						    			 </td>
 									</tr>
@@ -129,3 +129,8 @@
 		    </div>
 			<div class="podval">© <a href="111">copyright 2012 Flyweb inc.</a>	</div>
 </div>
+<script type="text/javascript">
+  $(function(){
+      $('.phone').keyfilter(/[\+\d]/);
+  });
+</script>
