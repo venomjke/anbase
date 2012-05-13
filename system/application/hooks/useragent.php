@@ -5,7 +5,7 @@ function check_browser(){
 	/*
 	* Определить модель браузера. Сверить с заранее рекомендуемыми, и вывеси предупреждение в случае необходимости
 	*/
-	$available_browsers = array('Chrome','Opera','Firefox');
+	$available_browsers = array('Chrome','Opera','Firefox','Safari');
 	$app = get_instance();
 	$app->load->library('user_agent');
 
