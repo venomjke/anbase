@@ -17,9 +17,9 @@ class M_Invite_user extends MY_Model
 	private $_gc_probability = 30;
 	/*
 	* Время жизни инвайта
-	* ( 7 дней )
+	* ( 1 день )
 	*/
-	private $_expiration_time  = 604800;
+	private $_expiration_time  = 86400;
 	/**
 	 * Конструктор
 	 *
@@ -43,11 +43,22 @@ class M_Invite_user extends MY_Model
 		* Правила валидации
 		*/
 		$this->validate = array(
-			array('field'=>'email', 'label'=>'lang:label_email', 'rules'=>'required|xss_clean|max_length[100]|valid_email|is_email_available'),
+			array('field'=>'email', 'label'=>'lang:label_email', 'rules'=>'required|xss_clean|max_length[100]|valid_email|is_email_available|callback_is_invite_available'),
 			array('field'=>'manager_id', 'label'=>'Manager Id', 'rules'=>'is_natural|is_manager_org')
 		);
 	}
 
+	public function is_invite_available($email='')
+	{
+		$app = get_instance();
+		if(!empty($email)){
+			if($this->count_all_results(array('email'=>$email)) == 0){
+				return TRUE;
+			}
+		}
+		$app->form_validation->set_message('is_invite_available',lang('invites.email_not_available'));
+		return FALSE;
+	}
 	/**
 	 * Сборщик устаревших инвайтов
 	 *

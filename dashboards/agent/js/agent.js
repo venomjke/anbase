@@ -136,21 +136,7 @@ var agent = {
 				}
 			}
 			if(ids.length){
-				$d = $('<div>');
-				$d.dialog({
-					'title':'Вы точно желаете распечатать записи?',
-					'modal':true,
-					'width':'auto',
-					'buttons':{
-						'Распечатать':function(){
-							model.printOrders(ids);
-							$d.dialog('close');
-						},
-						'Отмена':function(){
-							$d.dialog('close');
-						}
-					}
-				});		
+				model.printOrders(ids);
 			}
 		}
 	},

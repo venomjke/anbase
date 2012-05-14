@@ -671,19 +671,17 @@ class Admin_Users extends Users{
 			$insert_data['org_id']= $this->get_org_id();
 			if( ( $invite_id = $this->ci->m_invite_user->insert($insert_data,true)) )
 			{
-				/*
-				*
-				*	отправка почтой
-				*/
-				/*
-				$this->ci->load->library('email');
 
-				$this->ci->email->to('mail');
-				$this->ci->email->from('mail');
-				$this->ci->email->subject('blabla');
-				$this->ci->email->message('messages');
-				$this->ci->email->send();
-				*/
+				$messageTxt = "Здравствуйте, на Ваш email было отправлено письмо со ссылкой на регистрацию в системе Anbase.<br/>Проследуйте по указанной ссылке для регистрации в системе: ".site_url("$uri/?key={$insert_data['key_id']}&email=".$this->ci->input->post('email'));
+				$this->ci->load->library('email');
+				$this->ci->email->set_newline("\r\n");
+				$this->ci->email->from('no-reply@anbase.ru', 'anbase project');
+				$this->ci->email->to($this->ci->input->post('email')); 
+				$this->ci->email->subject('Приглашение на регистрацию в системе Anbase.ru');
+				$this->ci->email->message($messageTxt);	
+				// Set to, from, message, etc.
+
+				$result = $this->ci->email->send();
 				return; 
 			}
 

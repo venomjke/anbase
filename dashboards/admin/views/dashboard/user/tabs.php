@@ -2,7 +2,7 @@
 	<ul class="zakladki uzers">
   		<li class="item1 <?php echo $current=="staff"?"curent":""; ?>"><a href="<?php echo site_url("admin/user/staff/?act=view");?>">Сотрудники</a></li>
     	<li class="<?php echo $current=="admins"?"curent":""; ?>"><a href="<?php echo site_url("admin/user/admins/?act=view");?>">Руководители</a></li>
-    	<li class="<?php echo $current=="invites"?"curent":""; ?>"><a href="<?php echo site_url("admin/user/invites/?act=view");?>">Инвайты</a></li>
+    	<li class="<?php echo $current=="invites"?"curent":""; ?>"><a href="<?php echo site_url("admin/user/invites/?act=view");?>">Приглашения</a></li>
 
 
     	<?php if($current == "invites"): ?>

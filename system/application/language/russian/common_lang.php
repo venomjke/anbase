@@ -42,6 +42,11 @@ $lang['order.validation.valid_state'] = 'Поле "%s" содержит неве
 $lang['order.validation.valid_dealtype'] = 'Поле "%s" содержит неверный вид сделки';
 $lang['order.validation.valid_category'] = 'Поле "%s" содержит неверную категорию';
 $lang['order.validation.valid_order_id'] = 'Поле "%s" содержит неправильный id заявки';
+
+/*
+* Инвайты
+*/
+$lang['invites.email_not_available'] = 'Указанный в поле "%s" адрес уже используется.';
 /*
 *
 * Валидация

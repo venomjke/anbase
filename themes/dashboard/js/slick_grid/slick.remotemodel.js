@@ -285,7 +285,7 @@
     }
 
     function printOrders(ids){
-      document.location.replace(options.PrintUrl+'&'+$.param({'orders':ids}));
+      window.open(options.PrintUrl+'&'+$.param({'orders':ids}),'_blank');
     }
 
     function delOrders(ids){

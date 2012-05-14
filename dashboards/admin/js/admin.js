@@ -320,21 +320,7 @@ var admin = {
 				}
 			}
 			if(ids.length){
-				$d = $('<div>');
-				$d.dialog({
-					'title':'Вы точно желаете распечатать записи?',
-					'modal':true,
-					'width':'auto',
-					'buttons':{
-						'Распечатать':function(){
-							model.printOrders(ids);
-							$d.dialog('close');
-						},
-						'Отмена':function(){
-							$d.dialog('close');
-						}
-					}
-				});		
+				model.printOrders(ids);
 			}
 		},
 		del_orders:function(grid,model){
@@ -482,6 +468,7 @@ var admin = {
 					}
 					break;
 			}
+			$(".ui-dialog-buttonpane button").button("enable");
 		},
 		add_agent:function(grid,model){
 			if(!common.staff_list){
@@ -525,6 +512,7 @@ var admin = {
 						var data = {};
 						data['manager_id'] = table['managers'].input.val();
 						data['email']	   = table['email'].input.val();
+						$(".ui-dialog-buttonpane button").button("disable");
 						model.add_agent(data,callback);
 					},
 					'Отмена':function(){
@@ -562,6 +550,7 @@ var admin = {
 					'Добавить':function(){
 						var data = {};
 						data['email']	   = table['email'].input.val();
+						$(".ui-dialog-buttonpane button").button("disable");
 						model.add_manager(data,callback);
 					},
 					'Отмена':function(){
@@ -599,6 +588,7 @@ var admin = {
 					'Добавить':function(){
 						var data = {};
 						data['email']	   = table['email'].input.val();
+						$(".ui-dialog-buttonpane button").button("disable");
 						model.add_admin(data,callback);
 					},
 					'Отмена':function(){

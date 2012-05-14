@@ -25,33 +25,6 @@ class Site extends MX_Controller {
 			$this->template->set('loginBox',$loginBox);
 		}
 	}
-	public function email(){
-		/*
-		$config = array(
-		    'protocol' => 'smtp',
-		    'smtp_host' => 'ssl://smtp.googlemail.com',
-		    'smtp_port' => 465,
-		    'smtp_user' => 'no-reply@anbase.ru',
-		    'smtp_pass' => 'NO_REPLY()(%',
-		    'mailtype'  => 'html'
-		);
-
-		$this->load->library('email', $config);
-		$this->email->set_newline("\r\n");
-
-		$this->email->from('no-reply@anbase.ru', 'anbase project');
-		$to = array('soldatovadim@gmail.com','support@anbase.ru');
-		$this->email->to($to); 
-
-		$this->email->subject('Тестовое сообщение');
-		$this->email->message('Все должно работать brother <br/> Yeah!');	
-		// Set to, from, message, etc.
-
-		$result = $this->email->send();
-
-		echo $result;
-		*/
-	}
 	public function migration()
 	{
 		$this->load->library('migration');
