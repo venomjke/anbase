@@ -190,6 +190,51 @@ class Auth extends MX_Controller{
 		}
 	}
 
+	public function forget_password($act = 'view')
+	{
+		switch($act){
+			case 'view':
+				/*
+				* Определяем, можно ли сбросить пароль, и оптравляем ссылку сброса пароля на почту.
+				*/
+				$this->_send_email_forget_password();
+				break;
+			case 'reset':
+				/*
+				* Определяем возможность сброса пароля
+				*/
+				$this->_reset_forget_password();
+				break;
+		}
+	}
+
+	private function _send_email_forget_password()
+	{
+		/*
+		*	Настройки шаблона
+		*/
+		$this->template->set_theme('start');
+		$this->template->set_partial('menu','common/menu');
+		$this->template->set('loginBox',$this->load->view('users/login',array(),true));
+		
+		try{
+			if($this->users->send_email_forget_password()){
+				$this->template->build('forget_password/send_mail',array('success_send'=>true));
+			}else{
+				$this->template->build('forget_password/send_mail');
+			}
+		}catch(AnbaseRuntimeException $re){
+			$this->template->build('forget_password/send_mail',array('runtime_error'=>$re->get_error_message()));
+		}catch(ValidationException $ve){
+			$this->template->build('forget_password/send_mail');
+		}
+	}
+
+	private function _reset_forget_password()
+	{
+		
+	}
+
 	/**
 	 * Create reCAPTCHA JS and non-JS HTML to verify user as a human
 	 *

@@ -55,6 +55,7 @@ $route['logout(.*)']       = 'users/auth/logout$1';
 $route['redirect(.*)']     = 'users/auth/redirect$1';
 $route['register(.*)']     = 'users/auth/register$1';
 $route['login(.*)']        = 'site/index$1';
+$route['forget_password(.*)'] = 'users/auth/forget_password$1';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

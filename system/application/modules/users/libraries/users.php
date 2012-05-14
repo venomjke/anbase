@@ -245,6 +245,27 @@ class Users {
 		$this->ci->session->sess_destroy();
 	}
 
+	/**
+	 * Отправка письма с ссылкой о сбросе пароля
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function send_email_forget_password()
+	{
+		return false;
+	}
+
+	/**
+	 * Сброс пароля
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function reset_forget_password()
+	{
+
+	}
 
 	/**
 	 * Сохранение данных  - user's autologin
