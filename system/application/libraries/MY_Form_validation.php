@@ -4,6 +4,17 @@ class MY_Form_validation extends CI_Form_validation
 {
 
 
+	public function exists_email($email){
+		$this->CI->load->model("m_user");
+
+		if($this->CI->m_user->exists_email($email)){
+			return TRUE;
+		}
+
+		$this->set_message('exists_email',lang('common.validation.exists_email'));
+		return FALSE;
+	}
+
 	/**
 	 * Валидный номер телефона.
 	 * Мнимальная длина номера - 7 цифр.

@@ -394,4 +394,25 @@ class M_User extends MY_Model{
 		$this->db->where_in('id',$ids);
 		$this->db->delete($this->table);
 	}
+
+
+	public function exists_email($email)
+	{
+		return $this->count_all_results(array('users.email'=>$email))==1;
+	}
+	public function send_email_forget_password($email,$key)
+	{
+		$this->db->where('users.email',$email);
+		$this->db->update($this->table,array('forget_password_key'=>$key));
+	
+	}
+	public function has_access_reset_password($email,$key)
+	{
+		return $this->count_all_results(array('email'=>$email,'forget_password_key'=>$key))==1;
+	}
+	public function change_password($email,$password)
+	{
+		$this->db->where('users.email',$email);
+		$this->db->update($this->table,array('password'=>$password,'forget_password_key'=>''));
+	}
 }

@@ -253,6 +253,58 @@ class Users {
 	 **/
 	public function send_email_forget_password()
 	{
+		$validation_rules = array(
+			array('field'=>'email','label'=>'Адрес электронной почты','rules'=>'required|valid_email|exists_email')
+		);
+
+		$this->ci->form_validation->set_rules($validation_rules);
+
+		if($this->ci->form_validation->run()){
+
+			/*
+			* [my_notice]Я думаю, что стоит придумать более эффективный алгоритм для генерации ключа
+			*/
+			$key = substr(md5(uniqid(rand())), 0, 24); // generate key;
+			$this->ci->m_user->send_email_forget_password($this->ci->input->post('email'),$key);
+			$url = site_url("forget_password/reset/?key=$key&email=".$this->ci->input->post('email'));
+
+			$messageTxt = "Уважаемый, пользователь!<br/><br/>Кто-то, возможно Вы, запросил восстановление пароля к аккаунту на сайте anbase.ru <br/><br/> Если Это были Вы, то для восстановления пароля перейдите пожалуйста по ссылке $url <br/><br/>Если это были не Вы, то ничего не делайте и проигнорируйте это письмо.<br/><br/>C уважением,<br/>anbase.ru<br/>---------------------------<br/>Это письмо создано роботом и не требует ответа!<br/>Адрес службы технической поддержки - support@anbase.ru";
+
+			$this->ci->load->library('email');
+			$this->ci->email->set_newline("\r\n");
+			$this->ci->email->from('no-reply@anbase.ru', 'anbase project');
+			$this->ci->email->to($this->ci->input->post('email')); 
+			$this->ci->email->subject('Восстановление пароля для входа на сайт - http://anbase.ru/');
+			$this->ci->email->message($messageTxt);	
+			// Set to, from, message, etc.
+
+			$result = $this->ci->email->send();
+			return true;
+		}
+
+		$errors_validation = array();
+
+		if(has_errors_validation(array('email'),$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Проверка того, что пользователь имеет доступ к смене пароля
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function has_access_reset_password()
+	{
+		$key = $this->ci->input->get('key');
+		$email = $this->ci->input->get('email');
+
+		if(!empty($key) and strlen($key)==24 && !empty($email)){
+			return $this->ci->m_user->has_access_reset_password($email,$key);
+		}
 		return false;
 	}
 
@@ -262,9 +314,36 @@ class Users {
 	 * @return void
 	 * @author alex.strigin
 	 **/
-	public function reset_forget_password()
+	public function reset_forget_password($email)
 	{
+		$validation_rules = array(
+			array('field'=>'f_password','label'=>'Новый пароль','rules'=>'trim|required|xss_clean|min_length[6]|max_length[200]|alpha_dash'),
+			array('field'=>'f_re_password','label'=>'Копия пароля','rules'=>'trim|required|xss_clean|matches[f_password]')
+		);
 
+		$this->ci->form_validation->set_rules($validation_rules);
+
+		if($this->ci->form_validation->run()){
+			$hasher = new PasswordHash(
+				$this->ci->config->item('phpass_hash_strength', 'users'),
+				$this->ci->config->item('phpass_hash_portable', 'users'));
+
+			/*
+			*	Составляем пачку данных для регистрации пользователя
+			*/
+			$password = $hasher->HashPassword($this->ci->input->post('f_password'));
+
+			$this->ci->m_user->change_password($email,$password);
+			return true;
+		}
+
+		$errors_validation = array();
+
+		if(has_errors_validation(array('f_password','f_re_password'),$errors_validation)){
+			throw new ValidationException($errors_validation);
+		}
+
+		return false;
 	}
 
 	/**

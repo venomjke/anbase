@@ -61,3 +61,4 @@ $lang['common.validation.valid_order_category'] = $lang['order.validation.valid_
 $lang['common.validation.valid_order_deal_type'] = $lang['order.validation.valid_dealtype'];
 $lang['common.validation.convert_valid_date'] = 'Поле "%s" содержит не валидную дату';
 $lang['common.validation.valid_phone'] = 'Поле "%s" содержит неправильный номер телефона';
+$lang['common.validation.exists_email'] = 'Пользователя с указанным адресом электронной почты не существует';

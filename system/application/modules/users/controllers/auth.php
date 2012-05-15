@@ -192,6 +192,8 @@ class Auth extends MX_Controller{
 
 	public function forget_password($act = 'view')
 	{
+		if($this->users->is_logged_in()) redirect('');
+
 		switch($act){
 			case 'view':
 				/*
@@ -232,6 +234,33 @@ class Auth extends MX_Controller{
 
 	private function _reset_forget_password()
 	{
+		if(!$this->users->has_access_reset_password()){
+			redirect('');
+		}
+
+		/*
+		*	Настройки шаблона
+		*/
+		$this->template->set_theme('start');
+		$this->template->set_partial('menu','common/menu');
+		$this->template->set('loginBox',$this->load->view('users/login',array(),true));
+
+		$data['email'] = $this->input->get('email');
+		$data['key']   = $this->input->get('key');
+		try{
+			$email = $this->input->get('email');
+			if($this->users->reset_forget_password($email)){
+				$data['success_reset'] = true;
+				$this->template->build('forget_password/reset',$data);
+			}else{
+				$this->template->build('forget_password/reset',$data);
+			}
+		}catch(AnbaseRuntimeException $re){
+			$data['runtime_error'] = $re->get_error_message();
+			$this->template->build('forget_password/reset',$data);
+		}catch(ValidationException $ve){
+			$this->template->build('forget_password/reset',$data);
+		}
 		
 	}
 
