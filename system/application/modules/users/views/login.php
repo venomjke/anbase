@@ -1,6 +1,6 @@
 
 <div class="zagolovok"><h3>Вход в панель</h3></div>
-	<?php if(!empty($errors)): ?>
+<?php if(!empty($errors)): ?>
 	<?php foreach($errors as $error): ?>
 	<p class="error">
 		<?php echo $error; ?>
@@ -9,12 +9,12 @@
 <?php endif; ?>
 <?php echo form_open("login"); ?>
 	 Логин  <br/>
-	<?php echo form_error('login'); ?>
-	<?php echo form_input("login","",'placeholder="Логин" class="text"'); ?>
+	<?php echo form_error('login','<div class="error">','</div>'); ?>
+	<?php echo form_input("login","",'placeholder="Логин" class="text" required'); ?>
 
 	Пароль <br/>
-	<?php echo form_error('password'); ?>
-	<?php echo form_password("password","",'placeholder="******" class="text"'); ?>
+	<?php echo form_error('password','<div class="error">','</div>'); ?>
+	<?php echo form_password("password","",'placeholder="******" class="text" required'); ?>
 
 	<?php if(!empty($recaptcha_html)): ?>
 	<div class="loginField">
@@ -22,7 +22,7 @@
 	</div>
 	<?php endif; ?>
 	<br/>
-	  <input name="remember" type="checkbox" value="1" />Запомнить меня<br />
+	  <input name="remember" type="checkbox" id="remember" value="1" /> <label for="remember">Запомнить меня</label><br />
 	  <input class="button" type="submit" value="ВОЙТИ" /> <br/>
 <?php echo form_close(); ?>
 &nbsp;&nbsp;<a href="<?php echo site_url("forget_password"); ?>">Забыли пароль</a> / <a href="<?php echo site_url("register");?>">Регистрация</a>

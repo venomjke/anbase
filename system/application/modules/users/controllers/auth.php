@@ -58,9 +58,9 @@ class Auth extends MX_Controller{
 		} else {
 
 			$data = array();
-			$this->form_validation->set_rules('login', 'Login', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('remember', 'Remember me', 'integer');
+			$this->form_validation->set_rules('login', 'Логин', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('password', 'Пароль', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('remember', 'Запомнить', 'integer');
 
 			// Get login for counting attempts to login
 			if ($this->config->item('login_count_attempts', 'users') AND
