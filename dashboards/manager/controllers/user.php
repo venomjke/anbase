@@ -81,7 +81,6 @@ class User extends MX_Controller
 			default:
 				/*
 				* Отображение списка сотрудников
-				*
 				*/
 				$this->_view_staff();
 				break;
@@ -113,6 +112,32 @@ class User extends MX_Controller
 		}
 	
 	}
+
+
+	/**
+	 * Управление разделом агенты
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function agents()
+	{
+		$this->template->set_partial('dashboard_tabs','dashboard/user/tabs',array('current'=>'agents'));
+		$section = $this->input->get('act')?$this->input->get('act'):'view';
+
+		switch ($section) {
+			case 'view':
+			default:
+				/*
+				* Отображение списка администраторов
+				*
+				*/
+				$this->_view_agents();
+				break;
+		}
+	
+	}
+
 
 	/**
 	 * Вывод списка администраторов
@@ -167,4 +192,32 @@ class User extends MX_Controller
 		}
 		$this->template->build('user/staff');
 	}
+
+
+	/**
+	 * Вывод списка членов агентов
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	private function _view_agents()
+	{
+		if($this->ajax->is_ajax_request()){
+			$response = array();
+			try{
+				$staff = $this->manager_users->get_manager_agents();	
+				$response['code'] = 'success_view_user';
+				$response['data'] = $staff;
+			}catch(ValidationException $ve){
+				$response['code'] = 'error_view_user';
+				$response['data'] = $ve->get_error_message();
+			}catch(AnbaseRuntimeException $re){
+				$response['code'] = 'error_view_user';
+				$response['data'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+			return;
+		}
+		$this->template->build('user/agents');
+	}	
 }// END User class
