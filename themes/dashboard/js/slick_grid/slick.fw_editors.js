@@ -20,27 +20,27 @@
 	});
 
 	function AnbaseUserEditor(args){
-		if(!common.staff_list){
-			this.cancel();
-		}
 
 		var $select;
 		var defaultValue;
 		var scope = this;
 
 		this.init = function(){
-			$select = $("<SELECT tabindex='0' style=\"width:100%;\" class='editor-category'><option value=\"-1\">- Нету -</option></SELECT>");
-			for(var i in common.staff_list){
-				var empl = common.staff_list[i];
+			$select = $("<SELECT tabindex='0' style=\"width:100%;\" class='editor-category'></SELECT>");
+			if(args.item.role != common.role_list['USER_ROLE_MANAGER']){
+				$select.append('<option value=\"-1\">- Нету -</option>');
+				for(var i in common.staff_list){
+					var empl = common.staff_list[i];
 
-				if(empl.role == common.role_list['USER_ROLE_MANAGER']){
-					var $opt = $('<option value="'+empl.id+'">'+common.make_official_name(empl.name,empl.middle_name,empl.last_name)+'</option>');
-					$select.append($opt);
+					if(empl.role == common.role_list['USER_ROLE_MANAGER']){
+						var $opt = $('<option value="'+empl.id+'">'+common.make_official_name(empl.name,empl.middle_name,empl.last_name)+'</option>');
+						$select.append($opt);
+					}
 				}
-			}
 
-			$select.appendTo(args.container);
-			$select.focus();
+				$select.appendTo(args.container);
+				$select.focus();	
+			}
 		};
 
 		this.destroy = function(){
@@ -64,6 +64,7 @@
 		};
 
 		this.isValueChanged = function(){
+			var val = $select.val();
 			return ($select.val() != defaultValue );
 		};
 
@@ -73,14 +74,11 @@
 				msg:null
 			};
 		};
-
+	
 		this.init();
 	}
 
 	function AnbaseRoleEditor(args){
-		if(!common.role_list){
-			this.cancel();
-		}
 
 		var $select;
 		var defaultValue;
@@ -131,10 +129,6 @@
 	}
 
 	function AnbaseAgentEditor(args){
-		if(!common.staff_list){
-			this.cancel();
-			console.log('Ошибка: список сотрудников не задан');
-		}
 
 		var $wrapper;
 		var $select;
