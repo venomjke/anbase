@@ -7,7 +7,7 @@
 			<div class="tablica2" id="profile">
     			<table width="100%" border="0" cellpadding="" cellspacing="0">
 					<tr>	
-					    <td width="33%">АККАУНТ</td>
+					    <td  style="padding-left:6px" width="33%">АККАУНТ</td>
 					    <td class="l left" width="33%">ЛИЧНЫЕ ДАННЫЕ</td>
 					    <td class="l left" width="33%">ОРГАНИЗАЦИЯ</td>
 					</tr>
@@ -97,15 +97,15 @@
 								<table width="100%" border="0" cellpadding="4px" cellspacing="0px">
 									<tr>
 										<td class="l">Название:</td>
-						   				 <td><input type="text" name="name" value="<?php echo htmlspecialchars($this->admin_users->get_org_name());?>" /></td>
+						   				 <td><input type="text" name="name" class="text" value="<?php echo htmlspecialchars($this->admin_users->get_org_name());?>" /></td>
 									</tr>
 									<tr>
 										<td class="l">Диспетчер:</td>
-					    				<td><input type="text" name="phone" class="phone" value="<?php echo htmlspecialchars($this->admin_users->get_callmanager_phone());?>" /></td>
+					    				<td><input type="text" name="phone" class="text phone" value="<?php echo htmlspecialchars($this->admin_users->get_callmanager_phone());?>" /></td>
 									</tr>
 									<tr>
 										<td class="l">Email:</td>
-						    			<td><input type="text" name="email" value="<?php echo htmlspecialchars($this->admin_users->get_org_email());?>" />
+						    			<td><input type="text" name="email"  class="text" value="<?php echo htmlspecialchars($this->admin_users->get_org_email());?>" />
 						    				<input type="submit" style="position:absolute; top:-9999999px;left:-99999999px"/>
 						    			</td>
 									</tr>

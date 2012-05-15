@@ -15,8 +15,9 @@
 			<div class="tablica2" id="settings">
     			<table width="100%" border="0" cellpadding="" cellspacing="0">
 					<tr>	
-					    <td width="33%">КОЛОНКИ</td>
+					    <td style="padding-left:6px" width="33%">КОЛОНКИ</td>
 					    <td class="l left" width="33%">ПО УМОЛЧАНИЮ</td>
+					    <td class="l left" width="33%">&nbsp;</td>
 					</tr>
 					<tr>
 						<td valign="top">
@@ -69,6 +70,7 @@
 							</form>
 						</td>
 						<td valign="top" class="left">
+							&nbsp;
 						</td>
 					</tr>
 					<tr>
@@ -83,6 +85,7 @@
 		    				</span>
 		    			</td>						
 		    			<td>
+		    				&nbsp;
 		    			</td>
 					</tr>	  
 				</table>

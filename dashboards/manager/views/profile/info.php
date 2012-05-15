@@ -7,7 +7,7 @@
 			<div class="tablica2" id="profile">
     			<table width="100%" border="0" cellpadding="" cellspacing="0">
 					<tr>	
-					    <td width="33%">АККАУНТ</td>
+					    <td  style="padding-left:6px" width="33%">АККАУНТ</td>
 					    <td class="l left" width="33%">ЛИЧНЫЕ ДАННЫЕ</td>
 					    <td class="l left" width="33%">ОРГАНИЗАЦИЯ</td>
 					</tr>
