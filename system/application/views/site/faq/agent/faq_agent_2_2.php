@@ -1,3 +1,5 @@
+<?php load_partial_template($template,'faq_navigation'); ?>
+
 <span align="center" style="color:#06C;"><h3>2.2 Работа с фильтрами. Поиск заявок.</h3></span>
 <p align="center"><img src="<?php echo base_url(); ?>themes/start/images/faq/agent/agent3.jpg" width="100%"><p> 
  <p align="center">рис.3 Таблица с открытыми фильтрами</p>

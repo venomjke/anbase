@@ -1,3 +1,5 @@
+<?php load_partial_template($template,'faq_navigation'); ?>
+
 <span align="center" style="color:#06C;"><h3>2. Работа с заявками</h3></span>
 <span align="center" style="color:#06C;"><h3>2.1 Описание таблиц.</h3></span>
 
