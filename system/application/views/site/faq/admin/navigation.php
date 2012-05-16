@@ -6,7 +6,7 @@
          <li><a href="<?php echo site_url("faq/admin/?page=faq_admin_2_1"); ?>">2.1.Описание таблиц</a></li> 
          <li><a href="<?php echo site_url("faq/admin/?page=faq_admin_2_2"); ?>">2.2.Настройка таблиц</a></li> 
 		 <li><a href="<?php echo site_url("faq/admin/?page=faq_admin_2_3"); ?>">2.3.Добавление заявок</a></li>
-		 <li><a href="<?php echo site_url("faq/admin/?page=faq_admin_2_4"); ?>">2.4.Присваивание заявки агентами</a></li>
+		 <li><a href="<?php echo site_url("faq/admin/?page=faq_admin_2_4"); ?>">2.4.Присваивание заявки агентам</a></li>
 		 <li><a href="<?php echo site_url("faq/admin/?page=faq_admin_2_5"); ?>">2.5.Удаление заявок</a></li>
 		 <li><a href="<?php echo site_url("faq/admin/?page=faq_admin_2_6"); ?>">2.6.Присвоение заявке статуса "завершена"</a></li>
 		 <li><a href="<?php echo site_url("faq/admin/?page=faq_admin_2_7"); ?>">2.7.Работа с фильтрами. Поиск заявок.</a></li>
