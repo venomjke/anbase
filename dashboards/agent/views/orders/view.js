@@ -114,6 +114,18 @@ $(function(){
 		*/
 
 		/*
+		* Обработка события клика по body. Если где-то открыт редактор ячейки, то мы его закрываем
+		*/
+		/*
+		$('body').click(function(){
+			editor = grid.getEditorLock();
+			console.debug(editor);
+			if(editor){
+				console.debug(editor.isActive());
+			}
+		});
+		*/
+		/*
 		* Обработка события изменения ячейки
 		*/
 		grid.onCellChange.subscribe(function(e,handle){
