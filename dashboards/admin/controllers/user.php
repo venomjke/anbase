@@ -345,13 +345,13 @@ class User extends MX_Controller
 			try{
 
 				$this->admin_users->unbind_manager();
-				$response['code'] = 'success_unbind_manager';
+				$response['code'] = 'success_edit_user';
 				$response['data'] = lang('success_unbind_manager');
 			}catch(ValidationException $ve){
-				$response['code'] = 'error_unbind_manager';
+				$response['code'] = 'error_edit_user';
 				$response['data']['errors'] = $ve->get_error_messages();
 			}catch(AnbaseRuntimeException $re){
-				$response['code'] = 'error_unbind_manager';
+				$response['code'] = 'error_edit_user';
 				$response['data']['errors'] = array($re->get_error_message());
 			}
 			$this->ajax->build_json($response);
@@ -419,26 +419,19 @@ class User extends MX_Controller
 				switch($for){
 					case 'agents':
 						/*
-						*
 						*	Инвайты агентам
-						*	
 						*/
 						$this->_agents_invites();
 						break;
 					case 'managers':
 						/*
-						*
 						*  Инвайты менеджерам
-						*
 						*/
 						$this->_managers_invites();
 					break;
 					case 'admins':
 						/*
-						*
-						*
 						* Инвайты админам
-						*
 						*/
 						$this->_admins_invites();
 					break;

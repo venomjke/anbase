@@ -75,7 +75,8 @@ $(function(){
                 act = "change_position";
                 break;
             case "manager_id":
-                act = "assign_manager";
+                if(item[field] == -1) act = 'unbind_manager';
+                else act = "assign_manager";
                 data['manager_id'] = item.manager_id;
                 data['user_id'] = item.id; 
                 break;
