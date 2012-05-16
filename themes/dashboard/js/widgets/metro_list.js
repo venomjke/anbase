@@ -352,7 +352,7 @@ $(function(){
 					$wrapper.append($any_metro_label);
 				}
 
-				$closeImg = $('<img title="Закрыть без сохранения" style="position:relative; top:0; left:71%; cursor:pointer;" src="'+common.baseUrl+'themes/dashboard/images/delete.png" />');
+				$closeImg = $('<img title="Закрыть без сохранения" style="position:relative; top:0; left:65%; cursor:pointer;" src="'+common.baseUrl+'themes/dashboard/images/delete.png" />');
 				$closeImg.click(function(){
 					cancel_btn(event);
 				});
