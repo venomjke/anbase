@@ -118,12 +118,19 @@ class Site extends MX_Controller {
 		$this->template->build("site/faq/$section/$page");
 	}
 
+	/**
+	 * Страницы демо аккаунтов
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function demo()
+	{
+		$this->template->build('site/demo');
+	}
 
 	/*
-	*
 	*	handler 404 request
-	*
-	*
 	*/
 	public function page404(){
 		$this->template->build('site/404');

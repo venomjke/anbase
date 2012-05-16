@@ -7,14 +7,14 @@
 	</p>
 	<?php endforeach; ?>
 <?php endif; ?>
-<?php echo form_open("login"); ?>
+<?php echo form_open("login",'id="login_form"'); ?>
 	 Логин  <br/>
 	<?php echo form_error('login','<div class="error">','</div>'); ?>
-	<?php echo form_input("login","",'placeholder="Логин" class="text" required'); ?>
+	<?php echo form_input("login","",'id="login" placeholder="Логин" class="text" required'); ?>
 
 	Пароль <br/>
 	<?php echo form_error('password','<div class="error">','</div>'); ?>
-	<?php echo form_password("password","",'placeholder="******" class="text" required'); ?>
+	<?php echo form_password("password","",'id="password" placeholder="******" class="text" required'); ?>
 
 	<?php if(!empty($recaptcha_html)): ?>
 	<div class="loginField">
