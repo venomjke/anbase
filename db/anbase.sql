@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Май 09 2012 г., 23:33
+-- Время создания: Май 16 2012 г., 16:14
 -- Версия сервера: 5.5.16
 -- Версия PHP: 5.3.8
 
@@ -324,6 +324,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `last_ip` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `modifed` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `forget_password_key` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_idx` (`login`),
   UNIQUE KEY `email_idx` (`email`)
@@ -412,8 +413,8 @@ ALTER TABLE `organizations`
 -- Ограничения внешнего ключа таблицы `regions_images_elements`
 --
 ALTER TABLE `regions_images_elements`
-  ADD CONSTRAINT `regions_images_elements_ibfk_2` FOREIGN KEY (`region_image_id`) REFERENCES `regions_images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `regions_images_elements_ibfk_1` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+  ADD CONSTRAINT `regions_images_elements_ibfk_1` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION,
+  ADD CONSTRAINT `regions_images_elements_ibfk_2` FOREIGN KEY (`region_image_id`) REFERENCES `regions_images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `settings_org`
