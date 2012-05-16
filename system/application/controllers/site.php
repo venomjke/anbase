@@ -74,11 +74,48 @@ class Site extends MX_Controller {
 
 
 	/*
-	*
 	*	faq всякий
 	*/
-	public function faq(){
-		$this->template->build('site/faq');
+	public function faq($section='admin'){
+		$this->load->helper('directory');
+
+		$sections = array('agent','manager','admin');
+
+		/*
+		* Основные данные
+		*/
+		if(!in_array($section,$sections)){
+			$section = 'admin';
+		}
+
+		/*
+		* В директории $section будут находится только файлы
+		*/
+		$section_map = directory_map(APPPATH."views/site/faq/$section");
+
+		$page = $this->input->get('page')?$this->input->get('page'):'main.html';
+
+		if(!in_array($page.EXT,$section_map)){
+			$page = 'main';
+		}
+
+		/*
+		* Загружаем шаблон и все с ним связанное
+		*/
+		$this->template->set_partial('faq_navigation','site/faq/faq_navigation');
+		switch($section){
+			case 'admin':
+				$this->template->set('loginBox',$this->load->view("site/faq/$section/navigation",array(),true));
+				break;
+			case 'manager':
+				$this->template->set('loginBox',$this->load->view("site/faq/$section/navigation",array(),true));
+				break;
+			case 'agent':
+				$this->template->set('loginBox',$this->load->view("site/faq/$section/navigation",array(),true));
+				break;
+		}
+
+		$this->template->build("site/faq/$section/$page");
 	}
 
 
@@ -89,7 +126,8 @@ class Site extends MX_Controller {
 	*
 	*/
 	public function page404(){
-		$this->load->view('site/404');
+		$this->template->build('site/404');
+		// $this->load->view('site/404');
 	}
 
 }

@@ -20,17 +20,17 @@
   <tr>
     <td width="200px">* Название организации:</td>
     <td width="300px"><?php echo form_error("org_name",'<div class="error">',"</div>"); ?>
-		<?php echo form_input("org_name",set_value("org_name"),'placeholder="Введите название организации" class="text"'); ?></td>
+		<?php echo form_input("org_name",set_value("org_name"),'placeholder="Введите название организации" class="text" required'); ?></td>
   </tr>
   <tr>
     <td>* Email организации:</td>
     <td><?php echo form_error("org_email",'<div class="error">',"</div>"); ?>
-		<?php echo form_input("org_email",set_value("org_email"),'placeholder="Введите email организации" class="text"'); ?></td>
+		<?php echo form_input("org_email",set_value("org_email"),'placeholder="Введите email организации" class="text" required'); ?></td>
   </tr>
   <tr>
     <td>* Телефон организации (диспетчера)</td>
     <td><?php echo form_error("org_phone",'<div class="error">',"</div>"); ?>
-		<?php echo form_input("org_phone",set_value("org_phone"),'placeholder="Введите телефон организации" class="text phone"'); ?><br/>
+		<?php echo form_input("org_phone",set_value("org_phone"),'placeholder="Введите телефон организации" class="text phone" required'); ?><br/>
         <span> Пример: +79219995544 </span></td>
   </tr>
 </table>
@@ -48,17 +48,17 @@
   <tr>
     <td width="200px">* Фамилия:</td>
     <td width="300px"><?php echo form_error("last_name",'<div class="error">',"</div>"); ?>
-		<?php echo form_input("last_name",set_value("last_name"),'placeholder="Введите свою фамилию" class="text"'); ?></td>
+		<?php echo form_input("last_name",set_value("last_name"),'placeholder="Введите свою фамилию" class="text" required'); ?></td>
   </tr>
   <tr>
     <td>* Имя:</td>
     <td><?php echo form_error("name",'<div class="error">',"</div>"); ?>
-		<?php echo form_input("name",set_value("name"),'placeholder="Введите свое имя" class="text"'); ?></td>
+		<?php echo form_input("name",set_value("name"),'placeholder="Введите свое имя" class="text" required'); ?></td>
   </tr>
   <tr>
     <td>* Отчество:</td>
     <td><?php echo form_error("middle_name",'<div class="error">',"</div>"); ?>
-		<?php echo form_input("middle_name",set_value("middle_name"),'placeholder="Введите свое отчество" class="text"'); ?></td>
+		<?php echo form_input("middle_name",set_value("middle_name"),'placeholder="Введите свое отчество" class="text" required'); ?></td>
   </tr>
   <tr>
     <td>Телефон:</td>
@@ -79,22 +79,23 @@
   <tr>
     <td width="200px">* Логин:</td>
     <td width="300px"><?php echo form_error("r_login",'<div class="error">',"</div>"); ?>
-					<?php echo form_input("r_login",set_value("r_login"),'placeholder="Введите логин" class="text"'); ?></td>
+					<?php echo form_input("r_login",set_value("r_login"),'placeholder="Введите логин" class="text" required'); ?></td>
   </tr>
   <tr>
     <td>* Email :</td>
     <td><?php echo form_error("r_email",'<div class="error">',"</div>"); ?>  
-		<?php echo form_input("r_email",set_value("r_email"),'placeholder="Введите свой email" class="text"'); ?></td>
+      <input type="email" name="r_email" value="<?php echo set_value("r_email"); ?>" placeholder="Введите свой email" class="text" required />
+    </td>
   </tr>
   <tr>
     <td>* Пароль:</td>
     <td><?php echo form_error("r_password",'<div class="error">',"</div>"); ?> 
-		<?php echo form_password("r_password",set_value("r_password"),'placeholder="Введите свой пароль" class="text"'); ?></td>
+		<?php echo form_password("r_password",set_value("r_password"),'placeholder="Введите свой пароль" class="text" required'); ?></td>
   </tr>
   <tr>
     <td>* Повторите пароль:</td>
     <td><?php echo form_error("r_re_password",'<div class="error">',"</div>"); ?>
-		<?php echo form_password("r_re_password","",'placeholder="Повторите ввод пароля" class="text"'); ?></td>
+		<?php echo form_password("r_re_password","",'placeholder="Повторите ввод пароля" class="text" required'); ?></td>
   </tr>
 </table>
 <?php echo form_error("recaptcha_response_field"); ?>

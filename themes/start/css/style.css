@@ -324,3 +324,28 @@ input.button:hover    {
 .error{
 	color:#ff2400;
 }
+.sf_action {
+	display: block;
+	padding: 2px;
+	background: #B3CEE9 url(../images/actionfon.gif);
+	font-size: 16px;
+	text-align: center;
+	color: white;
+	overflow: hidden;
+	margin-top: 6px;
+	cursor: pointer;
+	border: 1px solid #84AFDA;
+	border-radius: 4px;
+}
+.sf_action:hover {
+	border: 1px solid #06C;
+	color: #8DB7DA;
+}
+.sf_action.small {
+	font-size: 14px;
+	height: 20px;
+	padding: 3px 1px 1px 1px;
+	width: 105px;
+	float: left;
+	margin: 5px;
+}

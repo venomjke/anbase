@@ -49,7 +49,7 @@ $route['404_override'] = 'site/page404';
 $route['about']   = 'site/about';
 $route['prices']  = 'site/prices';
 $route['company'] = 'site/company';
-$route['faq']     = 'site/faq'; 
+$route['faq(.*)']  = 'site/faq$1'; 
 
 $route['logout(.*)']       = 'users/auth/logout$1';
 $route['redirect(.*)']     = 'users/auth/redirect$1';

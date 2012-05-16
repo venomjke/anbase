@@ -1,7 +1,7 @@
 <?php if(!empty($success_reset)&&$success_reset): ?>
 	Пароль успешно изменен.
 <?php else: ?>
-<span style="border-bottom: 1px #06D solid;display: block;">
+<span style="border-bottom: 1px #A9C4D1 solid;display: block;">
 	Введите, пожалуйста, свой новый пароль, он станет основным.
  </span>
  <div class="forget_password" style="width: 400px;margin: 18px auto;">
