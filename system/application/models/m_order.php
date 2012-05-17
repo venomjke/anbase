@@ -762,7 +762,7 @@ class M_Order extends MY_Model{
 	public function finish_orders($ids)
 	{
 		$this->where_in('id',$ids);
-		$this->db->update($this->table,array('state'=>M_Order::ORDER_STATE_OFF,'finish_date'=>date('Y-m-d')));
+		$this->db->update($this->table,array('state'=>M_Order::ORDER_STATE_OFF,'finish_date'=>date('Y-m-d'),'finished'=>date('Y-m-d H:i:s')));
 	}
 
 	public function restore_orders($ids){
