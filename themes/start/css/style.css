@@ -36,9 +36,10 @@ div.clear {
 	float: left;
 }
 .shapka .slogan {
-	float: right;
+	float: left;
 	font-size: 23px;
 	margin-top: 70px;
+	margin-left:50px;
 }
 .menu {
 	width: 978px;

@@ -214,7 +214,8 @@ span.minus{
 	background-image: url(../images/zayavki.png);
 }
 .conteiner .menu .item5 a{
-	background-image: url(../images/6.png);
+	background-image: url(../images/analytics.png);
+	padding-left:32px;
 }
 .conteiner .filter {
 	margin-right: 16px;
@@ -380,6 +381,19 @@ div.zagolovok   {
 	vertical-align: middle;
 	margin-left: 16px;
 	padding-left: 18px;
+	padding-top: 8px;
+	color: #0066CC;
+	text-transform: uppercase;
+}
+
+div.title_analytics{
+	height: 22px;
+	background-image: url(../images/analytics.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+	vertical-align: middle;
+	margin-left: 16px;
+	padding-left: 24px;
 	padding-top: 8px;
 	color: #0066CC;
 	text-transform: uppercase;

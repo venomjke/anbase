@@ -2,6 +2,11 @@
 <html>
 	<head>
 		<?php echo meta('Content-type','text/html; charset=utf-8','equiv'); ?>
+
+	  	<meta http-equiv="keywords" name="keywords" content="система для учета заявок агентств недвижимости, персональная база для агентств недвижимости,база заявок для агентств недвижимости,crm для агентства недвижимости, crm для риэлторов база недвижимости программа, программа для агентства недвижимости, программа для реелторов, программа для риелторов, программа недвижимость,программа по продаже недвижимости,программа учета недвижимости, управление недвижимостью программа,софт для агентства недвижимости, "/>
+
+		<meta http-equiv="description" name="description" content="Сервис и программа для автоматизации бизнеса агентства недвижимости, строительных компании, жилищно строительных кооперативов"/>
+
 		<?php echo link_tag('themes/start/images/an.ico', 'shortcut icon', 'image/ico'); ?>
 		<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/cupertino/jquery-ui.css"); ?>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -20,7 +25,7 @@
 			<div class="shapka">
 		  		<a href="<?php echo site_url("");?>">
 		  			<img src="<?php echo site_url("themes/start/images/logo.png");?>" width="232" height="84" /></a>
-		    	<div class="slogan">персональная база заявок для агентств недвижимости</div>
+		    	<div class="slogan">система учета заявок для агентств недвижимости</div>
 			</div>
 			<div class="menu">
 				<?php load_partial_template($template,'menu'); ?>

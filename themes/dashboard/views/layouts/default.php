@@ -6,10 +6,8 @@
 		<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/smoothness/jquery-ui.css"); ?>
 		<?php echo link_tag("themes/dashboard/css/style.css"); ?>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-		<script type="text/javascript">
-			google.load("jquery","1.7.1");
-			google.load("jqueryui","1.8");
-		</script>
+		<script type="text/javascript">google.load("jquery","1.7.1");google.load("jqueryui","1.8");</script>
+
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/common.js"> </script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_map.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_list.js"></script>
@@ -42,6 +40,9 @@
 
 		<script type="text/javascript">
 			common.baseUrl = '<?php echo base_url(); ?>';
+			/*
+			* Для разрешения 1024*(x)
+			*/
 			if(window.screen.width <= 1024){
 				document.write ('<link href="<?php echo base_url();?>themes/dashboard/css/slick1024.grid.css" rel="stylesheet" type="text/css">'); 
 			}
@@ -88,7 +89,6 @@
 			if(ENVIRONMENT == ANBASE_PROD):
 				?>
 			<script type="text/javascript">
-
 			  var _gaq = _gaq || [];
 			  _gaq.push(['_setAccount', 'UA-31646688-1']);
 			  _gaq.push(['_trackPageview']);
@@ -98,7 +98,6 @@
 			    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			  })();
-
 			</script>
 			<?php
 			endif;
