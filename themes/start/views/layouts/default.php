@@ -14,7 +14,7 @@
 			google.load("jquery","1.7.1");
 			google.load("jqueryui","1.8");
 		</script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.keyfilter.js ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.keyfilter.js"></script>
 		<?php
 			echo link_tag('themes/start/css/style.css');
 			echo $template['metadata'];

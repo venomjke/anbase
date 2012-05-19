@@ -36,7 +36,7 @@
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.ui.datepicker-ru.js"> </script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.center.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.maphilight.min.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.keyfilter.js?>"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.keyfilter.js"></script>
 
 		<script type="text/javascript">
 			common.baseUrl = '<?php echo base_url(); ?>';
