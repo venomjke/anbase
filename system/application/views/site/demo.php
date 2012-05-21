@@ -1,3 +1,15 @@
+<div class="zagolovok"> 
+<div class="date">
+<div>
+<img src="<?php echo base_url();?>themes/start/images/6.png">
+</div>
+</div> 
+<h1>
+<a href="<?php echo site_url("demo"); ?>"> Демо </a>
+</h1>
+Категория: Демо
+</div>
+
 <div>
 	<h3> Администратор </h3>
 	<span> Логин: </span> demo_admin <span> Пароль: </span> demo_admin <a href="#" id="demo_admin"> Войти </a> 

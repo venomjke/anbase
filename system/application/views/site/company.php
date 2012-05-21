@@ -1,7 +1,7 @@
 <div class="zagolovok"> 
 <div class="date">
 <div>
-<img src="http://anbase.local/themes/start/images/6.png">
+<img src="<?php echo base_url();?>themes/start/images/6.png">
 </div>
 </div> 
 <h1>
