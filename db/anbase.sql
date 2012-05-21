@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Май 16 2012 г., 16:14
+-- Время создания: Май 21 2012 г., 21:59
 -- Версия сервера: 5.5.16
 -- Версия PHP: 5.3.8
 
@@ -163,11 +163,11 @@ CREATE TABLE IF NOT EXISTS `migrations` (
 --
 
 CREATE TABLE IF NOT EXISTS `orders` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `number` int(10) unsigned NOT NULL DEFAULT '0',
   `create_date` date NOT NULL DEFAULT '0000-00-00',
   `deal_type` enum('Куплю','Сниму','Сдам','Продам') NOT NULL DEFAULT 'Сдам',
-  `price` float unsigned NOT NULL DEFAULT '0',
+  `price` decimal(12,0) unsigned NOT NULL,
   `description` mediumtext NOT NULL,
   `delegate_date` date NOT NULL DEFAULT '0000-00-00',
   `finish_date` date NOT NULL DEFAULT '0000-00-00',
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 --
 
 CREATE TABLE IF NOT EXISTS `orders_metros` (
-  `order_id` int(10) unsigned NOT NULL,
+  `order_id` bigint(20) unsigned NOT NULL,
   `metro_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`order_id`,`metro_id`),
   KEY `metro_id` (`metro_id`)
@@ -205,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `orders_metros` (
 --
 
 CREATE TABLE IF NOT EXISTS `orders_regions` (
-  `order_id` int(10) unsigned NOT NULL,
+  `order_id` bigint(20) unsigned NOT NULL,
   `region_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`order_id`,`region_id`),
   KEY `region_id` (`region_id`)
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `orders_regions` (
 CREATE TABLE IF NOT EXISTS `orders_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `order_id` int(10) unsigned NOT NULL,
+  `order_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`),
   KEY `order_id` (`order_id`)
@@ -386,22 +386,22 @@ ALTER TABLE `orders`
 -- Ограничения внешнего ключа таблицы `orders_metros`
 --
 ALTER TABLE `orders_metros`
-  ADD CONSTRAINT `orders_metros_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `orders_metros_ibfk_2` FOREIGN KEY (`metro_id`) REFERENCES `metros` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orders_metros_ibfk_2` FOREIGN KEY (`metro_id`) REFERENCES `metros` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_metros_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `orders_regions`
 --
 ALTER TABLE `orders_regions`
-  ADD CONSTRAINT `orders_regions_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `orders_regions_ibfk_2` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orders_regions_ibfk_2` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_regions_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `orders_users`
 --
 ALTER TABLE `orders_users`
-  ADD CONSTRAINT `orders_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `orders_users_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orders_users_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `organizations`
