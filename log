@@ -208,4 +208,5 @@ s
 21.05.2012
   * поменял тип Primary_key order_id с INT на BIGINT
   * пересохранил dumpbd
-  * 
+22.05.2012
+  * Удалил primary_key в таблицах отношений orders_users,users_organizations,managers_users 

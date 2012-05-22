@@ -26,8 +26,8 @@ class M_Order_user extends MY_Model
 		* Задаем структуру модели
 		*/
 		$this->table       = 'orders_users';
-		$this->primary_key = 'id';
-		$this->fields      = array('id','order_id','user_id');
+		$this->primary_key = 'order_id';
+		$this->fields      = array('order_id','user_id');
 
 		$this->result_mode = 'object';
 

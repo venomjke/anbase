@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Май 21 2012 г., 21:59
+-- Время создания: Май 22 2012 г., 07:07
 -- Версия сервера: 5.5.16
 -- Версия PHP: 5.3.8
 
@@ -92,13 +92,11 @@ CREATE TABLE IF NOT EXISTS `invites_users` (
 --
 
 CREATE TABLE IF NOT EXISTS `managers_users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `manager_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
   KEY `idx_manager_id` (`manager_id`),
   KEY `idx_user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -218,13 +216,11 @@ CREATE TABLE IF NOT EXISTS `orders_regions` (
 --
 
 CREATE TABLE IF NOT EXISTS `orders_users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `order_id` bigint(20) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`),
   KEY `order_id` (`order_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -337,14 +333,12 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 CREATE TABLE IF NOT EXISTS `users_organizations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `org_id` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
   UNIQUE KEY `user_id_org_id` (`user_id`,`org_id`),
   KEY `org_id` (`org_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
@@ -400,8 +394,8 @@ ALTER TABLE `orders_regions`
 -- Ограничения внешнего ключа таблицы `orders_users`
 --
 ALTER TABLE `orders_users`
-  ADD CONSTRAINT `orders_users_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `orders_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orders_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_users_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `organizations`

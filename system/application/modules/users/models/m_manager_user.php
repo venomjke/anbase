@@ -33,8 +33,8 @@ class M_Manager_user extends MY_Model
 		*
 		*/
 		$this->table = 'managers_users';
-		$this->primary_key = 'id';
-		$this->fields = array('id','user_id','manager_id');
+		$this->primary_key = 'user_id';
+		$this->fields = array('user_id','manager_id');
 
 		$this->result_mode = 'object';
 

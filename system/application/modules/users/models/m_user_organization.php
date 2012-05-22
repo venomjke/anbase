@@ -22,8 +22,8 @@ class M_User_organization extends MY_Model{
 		*
 		*/
 		$this->table 	   = 'users_organizations';
-		$this->primary_key = 'id';
-		$this->fields      = array('id','org_id','user_id');
+		$this->primary_key = 'user_id';
+		$this->fields      = array('org_id','user_id');
 		$this->result_mode = 'object';
 
 		/*
