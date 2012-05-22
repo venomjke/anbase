@@ -23,7 +23,19 @@ div.clier {
 
 
 span.plus {
-	/*background-color: #eeeeee;*/
+	background-color: #eeeeee;
+	height: 18px;
+	padding-right: 10px;
+	padding-left: 24px;
+	background-repeat: no-repeat;
+	background-position: 4px center;
+	padding-top: 2px;
+	-moz-border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius: 4px 4px 4px 4px;
+	border-radius: 4px 4px 4px 4px;
+	display: inline-block;
+}
+span.plusplus{
 	background-color:#C5C8CC;
 	height: 18px;
 	padding-right: 10px;
