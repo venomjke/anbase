@@ -58,6 +58,9 @@ span.plus a:hover {
 span.plus {
 	background-image: url(../images/plus.png);
 }
+span.plusplus{
+	background-image: url(../images/plus.png);	
+}
 span.minus{
 	background-image: url(../images/minus.png);
 }
