@@ -17,14 +17,14 @@ class M_Order extends MY_Model{
 	*/
 	const ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE = 'Коммерческая';
 	const ORDER_CATEGORY_COUNTRY_REAL_ESTATE    = 'Загородная';
-	const ORDER_CATEGORY_LIVING_REAL_ESTATE		= 'Жилая';
+	const ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE	= 'Жилая';
 
 	/*
 	*
 	* Типы сделки
 	*/	
 	const ORDER_DEAL_TYPE_RENT    = 'Сдам';
-	const ORDER_DEAL_TYPE_TAKEOFF = 'Сниму';
+	const ORDER_DEAL_TYPE_GET = 'Сниму';
 	const ORDER_DEAL_TYPE_BUY     = 'Куплю';
 	const ORDER_DEAL_TYPE_SELL    = 'Продам';
 
@@ -137,7 +137,7 @@ class M_Order extends MY_Model{
 	 **/
 	public function get_category_list()
 	{
-		return array(M_Order::ORDER_CATEGORY_LIVING_REAL_ESTATE,M_Order::ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE,M_Order::ORDER_CATEGORY_COUNTRY_REAL_ESTATE);
+		return array(M_Order::ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE,M_Order::ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE,M_Order::ORDER_CATEGORY_COUNTRY_REAL_ESTATE);
 	}
 
 	/**
@@ -148,7 +148,7 @@ class M_Order extends MY_Model{
 	 **/
 	public function get_dealtype_list()
 	{
-		return array(M_Order::ORDER_DEAL_TYPE_SELL,M_Order::ORDER_DEAL_TYPE_BUY,M_Order::ORDER_DEAL_TYPE_TAKEOFF,M_Order::ORDER_DEAL_TYPE_RENT);
+		return array(M_Order::ORDER_DEAL_TYPE_SELL,M_Order::ORDER_DEAL_TYPE_BUY,M_Order::ORDER_DEAL_TYPE_GET,M_Order::ORDER_DEAL_TYPE_RENT);
 	}
 
 	public function get_max_number($org_id)
@@ -188,7 +188,7 @@ class M_Order extends MY_Model{
 
 	public function check_category($category)
 	{
-		if(in_array($category,array(M_Order::ORDER_CATEGORY_LIVING_REAL_ESTATE,M_Order::ORDER_CATEGORY_COUNTRY_REAL_ESTATE,M_Order::ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE))){
+		if(in_array($category,array(M_Order::ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE,M_Order::ORDER_CATEGORY_COUNTRY_REAL_ESTATE,M_Order::ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE))){
 			return true;
 		}
 		return false;
@@ -196,7 +196,7 @@ class M_Order extends MY_Model{
 
 	public function check_deal_type($deal_type)
 	{
-		if(in_array($deal_type,array(M_Order::ORDER_DEAL_TYPE_SELL,M_Order::ORDER_DEAL_TYPE_BUY,M_Order::ORDER_DEAL_TYPE_TAKEOFF,M_Order::ORDER_DEAL_TYPE_RENT))){
+		if(in_array($deal_type,array(M_Order::ORDER_DEAL_TYPE_SELL,M_Order::ORDER_DEAL_TYPE_BUY,M_Order::ORDER_DEAL_TYPE_GET,M_Order::ORDER_DEAL_TYPE_RENT))){
 			return true;
 		}
 		return false;
@@ -542,7 +542,7 @@ class M_Order extends MY_Model{
 	protected function get_count_result()
 	{
 		$result = $this->db->get($this->table);
-		if($result){
+		if($result->num_rows() == 1){
 			$cnt_res = $result->row();
 			return $cnt_res->_cnt;
 		}
