@@ -23,7 +23,8 @@ div.clier {
 
 
 span.plus {
-	background-color: #eeeeee;
+	/*background-color: #eeeeee;*/
+	background-color:#C5C8CC;
 	height: 18px;
 	padding-right: 10px;
 	padding-left: 24px;
@@ -339,7 +340,7 @@ ul.uzers  li.curent  a {
 .conteiner .content .tablica {
 	border: 1px solid #8AA1BC;
 	background-color: #FFFFFF;
-	margin-top: 16px;
+	margin-top: 5px;
 	margin-right: 16px;
 	margin-left: 16px;
 }
@@ -430,8 +431,16 @@ div.title_analytics{
 	cursor: pointer;
 }
 #dashboard_toolbar{
-	background-color:#8AA1BC;
-	padding-bottom:6px;
+	/*background-color:#8AA1BC;*/
+background: #f2f2f6; /* Old browsers */
+background: -moz-linear-gradient(top,  #f2f2f6 1%, #e6eff6 50%, #e6eff6 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#f2f2f6), color-stop(50%,#e6eff6), color-stop(100%,#e6eff6)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #f2f2f6 1%,#e6eff6 50%,#e6eff6 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #f2f2f6 1%,#e6eff6 50%,#e6eff6 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #f2f2f6 1%,#e6eff6 50%,#e6eff6 100%); /* IE10+ */
+background: linear-gradient(top,  #f2f2f6 1%,#e6eff6 50%,#e6eff6 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f6', endColorstr='#e6eff6',GradientType=0 ); /* IE6-9 */
+	padding-bottom:0px;
 	padding-left:8px;
 }
 .cell_tooltip{
