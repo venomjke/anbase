@@ -171,11 +171,8 @@ class Users {
 
 				/**
 				*	Добавляем юзера и org_id в таблицу user_orgs, чтобы юзер мог свободно заходить в систему
-				*	будем думать, что это пройдет без проблем...
 				*/
-				if(!$this->ci->m_user_organization->insert(array('user_id'=>$register_data['user_id'], 'org_id' => $res),true)){
-					$this->error = array('register_org_error'=>'register_org_error');
-				}
+				$this->ci->m_user_organization->insert(array('user_id'=>$register_data['user_id'], 'org_id' => $res),true);				
 
 				$default_settings = array();
 				$default_settings['org_id'] = $res;
@@ -221,10 +218,8 @@ class Users {
 		$register_data['password'] = $hasher->HashPassword($register_data['password']);
 
 		if (($res = $this->ci->m_user->insert($register_data,true))) {
-			if(	$this->ci->m_user_organization->insert(array('user_id'=>$res, 'org_id' => $register_data['org_id'])) ){
-				return $res;
-			}
-			$this->ci->m_user->delete($res);
+			$this->ci->m_user_organization->insert(array('user_id'=>$res, 'org_id' => $register_data['org_id']));
+			return $res;
 		}
 
 		$this->error = array('register_user_error');
