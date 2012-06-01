@@ -166,16 +166,16 @@ class Admin_Orders
 
 		if($this->ci->form_validation->run($this->ci->m_admin_order)){
 			/*
-			* Валидацию прошли, теперь можем наши данные собрать воедино вместе с пред. определенными
-			*/
+			 * Валидацию прошли, теперь можем наши данные собрать воедино вместе с пред. определенными
+			 */
 			$insert_data = array_intersect_key($this->ci->input->post(),array_flip($insert_fields));
 			$insert_data['org_id'] = $this->ci->admin_users->get_org_id();
 			$insert_data['number'] = $this->ci->admin_orders->get_next_number();
 			if( ($org_id = $this->ci->m_admin_order->insert($insert_data,true))){
 
 				/*
-				* Добавляем метро, если указано
-				*/
+				 * Добавляем станцию метрополитена, если указана
+				 */
 				if($this->ci->input->post('metros')){
 					/*
 					* обращаемся к orders_metros
