@@ -13,21 +13,17 @@ class M_User extends MY_Model{
 
 
 	/*
-	*
 	*	Возможные состояния пользователя
-	*
 	*/
 	const USER_ACTIVE	   = 1;
 	const USER_NON_ACTIVE  = 0;
 	
 	/*
-	*
 	*	Основные роли пользователей
-	*
 	*/
-	const USER_ROLE_ADMIN 	= 'Админ';
-	const USER_ROLE_MANAGER = 'Менеджер';
-	const USER_ROLE_AGENT   = 'Агент';
+	const USER_ROLE_ADMIN 	= 0x01;
+	const USER_ROLE_MANAGER = 0x02;
+	const USER_ROLE_AGENT   = 0x03;
 
 
 	public function __construct(){

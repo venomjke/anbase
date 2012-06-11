@@ -29,6 +29,13 @@ $lang['label_phone']	= 'Телефон';
 $lang['label_role']		= 'Роль';
 
 /*
+* Модель M_User, обозначения ролей
+*/
+$lang['user.user_role_admin'] = 'Администратор';
+$lang['user.user_role_manager'] = 'Менеджер';
+$lang['user.user_role_agent'] = 'Агент';
+
+/*
 *
 * M_User:callbacks и правила валидации для user
 *

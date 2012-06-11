@@ -27,6 +27,9 @@
 
 		this.init = function(){
 			$select = $("<SELECT tabindex='0' style=\"width:100%;\" class='editor-category'></SELECT>");
+			/*
+			* Менеджера можно назначить только агенту, для остальных ролей редактор не открываем.
+			*/
 			if(args.item.role != common.role_list['USER_ROLE_MANAGER']){
 				$select.append('<option value=\"-1\">- Нету -</option>');
 				for(var i in common.staff_list){
@@ -154,7 +157,9 @@
 				for(var i in common.staff_list){
 					var empl = common.staff_list[i];
 					if(empl.role == common.role_list['USER_ROLE_MANAGER']){
-
+						/*
+						* Если список агентов менеджера уже определен, то просто до определяем менеджера.
+						*/
 						if(manager_agents[empl.id]){
 							manager_agents[empl.id].user = empl;
 						}else{
