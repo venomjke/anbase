@@ -197,9 +197,9 @@
       if(!value || !common.role_list)
         return "";
       var url = "register/?key="+value+"&email="+dataContext.email;
-      if(parseInt(dataContext.role) == 0x01) url = "agent/"+url;
+      if(parseInt(dataContext.role) == 0x03) url = "agent/"+url;
       else if(parseInt(dataContext.role) == 0x02) url = "manager/"+url;
-      else if(parseInt(dataContext.role) == 0x03) url = "admin/"+url;
+      else if(parseInt(dataContext.role) == 0x01) url = "admin/"+url;
       return url;
     }
 
