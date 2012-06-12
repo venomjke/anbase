@@ -226,5 +226,17 @@ var common = {
 		}else{
 			$input.val(first);
 		}
+	},
+
+	/*
+	* Выбор значения Роли
+	*/
+	getRoleName:function(role){
+		if(role == common.role_list['USER_ROLE_ADMIN']) return lang['user.user_role_admin'];
+		else if(role == common.role_list['USER_ROLE_MANAGER']) return lang['user.user_role_manager'];
+		else if( role == common.role_list['USER_ROLE_AGENT']) return lang['user.user_role_agent'];
+
+		return lang['user.undefined_role'];
 	}
+
 }

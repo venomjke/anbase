@@ -15,7 +15,7 @@ $(function(){
         {id: "middle_name", name:"Отчество", field:"middle_name"},
         {id: "phone", name:"Телефон", field:"phone", formatter:Slick.Formatters.Phone},
         {id: "email", name:"Email", field:"email"},
-        {id: "role", name:"Должность", field:"role", editor:Slick.Editors.AnbaseRole}
+        {id: "role", name:"Должность", field:"role", formatter:Slick.Formatters.Role, editor:Slick.Editors.AnbaseRole}
     ]);  
 
     /*

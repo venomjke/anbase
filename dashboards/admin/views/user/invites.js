@@ -11,7 +11,7 @@ $(function(){
 	$.merge(columns,[
 		{id:"register_url",name:"Url регистрации",field:"key_id",width:400, formatter:Slick.Formatters.InviteKey },
 		{id:"email", name:"Email", field:"email"},
-		{id:"role", name:"Должность", field:"role"},
+		{id:"role", name:"Должность", field:"role",formatter:Slick.Formatters.Role},
 		{id:"created",name:"Дата создания", field:"created"}	
 	]);	
 

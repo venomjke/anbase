@@ -13,7 +13,8 @@
         "Agent":AgentFormatter,
         "Description":DescriptionFormatter,
         "InviteKey":InviteKeyFormatter,
-        "Manager":ManagerFormatter
+        "Manager":ManagerFormatter,
+        "Role":RoleFormatter
       }
     }
   });
@@ -197,9 +198,9 @@
       if(!value || !common.role_list)
         return "";
       var url = "register/?key="+value+"&email="+dataContext.email;
-      if(parseInt(dataContext.role) == 0x03) url = "agent/"+url;
-      else if(parseInt(dataContext.role) == 0x02) url = "manager/"+url;
-      else if(parseInt(dataContext.role) == 0x01) url = "admin/"+url;
+      if(parseInt(dataContext.role) == common.role_list['USER_ROLE_AGENT']) url = "agent/"+url;
+      else if(parseInt(dataContext.role) == common.role_list['USER_ROLE_MANAGER']) url = "manager/"+url;
+      else if(parseInt(dataContext.role) == common.role_list['USER_ROLE_ADMIN']) url = "admin/"+url;
       return url;
     }
 
@@ -211,5 +212,19 @@
         return common.make_official_name(dataContext.manager_name,dataContext.manager_middle_name,dataContext.manager_last_name);
       }
       return "";
+    }
+
+    /*
+    * Обозначения ролей
+    */
+    function RoleFormatter(row,cell,value,columnDef,dataContext){
+      value = parseInt(value);
+      if(value && typeof value =="number"){
+        if(value == common.role_list['USER_ROLE_ADMIN']) return lang['user.user_role_admin'];
+        else if(value == common.role_list['USER_ROLE_MANAGER']) return lang['user.user_role_manager'];
+        else if(value == common.role_list['USER_ROLE_AGENT']) return lang['user.user_role_agent'];
+        else return lang['user.undefined_role'];
+      }
+      return lang['user.undefined_role'];
     }
 })(jQuery);

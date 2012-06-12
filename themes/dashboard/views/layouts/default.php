@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/region_map.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.noty.js"> </script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.center.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/lang.js"></script>
 
 		<?php echo link_tag("themes/dashboard/css/noty/jquery.noty.css"); ?>
 		<?php echo link_tag("themes/dashboard/css/noty/noty_theme_default.css"); ?>

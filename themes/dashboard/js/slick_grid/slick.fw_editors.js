@@ -90,7 +90,7 @@
 		this.init = function(){
 			$select = $("<SELECT tabindex='0' style=\"width:100%;\" class='editor-category'></SELECT>");
 			for(var i in common.role_list){
-				var $opt = '<option value="'+common.role_list[i]+'">'+common.role_list[i]+'</option>';
+				var $opt = '<option value="'+common.role_list[i]+'">'+common.getRoleName(common.role_list[i])+'</option>';
 				$select.append($opt);
 			}
 			$select.appendTo(args.container);
