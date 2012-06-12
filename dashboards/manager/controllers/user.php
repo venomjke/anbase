@@ -13,9 +13,7 @@ class User extends MX_Controller
 	function __construct()
 	{
 		/*
-		*
 		* Загрузка либ
-		*
 		*/
 		$this->load->library('manager/Manager_Users');
 		$this->load->library('Ajax');
@@ -25,32 +23,38 @@ class User extends MX_Controller
 		}
 
 		/*
-		*
 		* Загрузка пакета сообщений
-		*
 		*/
 		$this->load->language('manager/messages');
 
 
 		/*
-		*
 		* Настройка шаблона
-		*
 		*/
 		$this->template->set_theme('dashboard');
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
 		$this->template->set_partial('dashboard_user','dashboard/dashboard_user');
 		$this->template->set_partial('dashboard_menu','dashboard/dashboard_menu');
 
-
+		$this->_load_app_assets();
 		/*
-		*
 		*	Загрузка скриптов и всякой другой мета инфы
-		*
 		*/
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/manager/js/manager.js").'"></script>');
 		$this->template->append_metadata('<script type="text/javascript">$(function(){manager.init({ baseUrl:"'.site_url("manager/user").'"});});</script>');
 
+	}
+
+	private function _load_app_assets()
+	{
+		$this->load->model('m_user');
+
+		$role_list  = json_encode($this->m_user->get_assoc_role_list());
+		$assets[] = "common.role_list=".$role_list; 	
+
+		$assets[] = ";";
+
+		$this->template->append_metadata('<script type="text/javascript">'.implode(';',$assets).'</script>');	
 	}
 
 	/**

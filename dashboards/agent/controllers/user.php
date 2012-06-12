@@ -41,16 +41,31 @@ class User extends MX_Controller
 		$this->template->set_partial('dashboard_head','dashboard/dashboard_head');
 		$this->template->set_partial('dashboard_user','dashboard/dashboard_user');
 		$this->template->set_partial('dashboard_menu','dashboard/dashboard_menu');
+
+		$this->_load_app_assets();
+
 		/*
-		*
 		*	Загрузка скриптов и всякой другой мета инфы
-		*
 		*/
 		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/agent.js").'"></script>');
 		$this->template->append_metadata('<script type="text/javascript">$(function(){agent.init({ baseUrl:"'.site_url("agent/user").'"})});</script>');
 
 	}
 
+
+	private function _load_app_assets()
+	{
+	
+		$this->load->model('m_user');
+
+		$role_list  = json_encode($this->m_user->get_assoc_role_list());
+		$assets[] = "common.role_list=".$role_list; 	
+
+		$assets[] = ";";
+
+		$this->template->append_metadata('<script type="text/javascript">'.implode(';',$assets).'</script>');
+
+	}
 
 	/**
 	 * Редирект на user/staff/
