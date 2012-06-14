@@ -13,7 +13,7 @@ $(function(){
 		$.merge(columns,[
 			{id: "number", name:"№", field:"number",width:30, editor:Slick.Editors.Integer,sortable:true},
 			{id: "create_date", name:"Дата создания", field:"create_date", width:55, editor:Slick.Editors.Date,sortable:true},
-			{id: "category", name:"Объект", field:"category", width:55,editor:Slick.Editors.AnbaseCategory},
+			{id: "category", name:"Объект", field:"category", width:55,editor:Slick.Editors.AnbaseCategory,formatter:Slick.Formatters.Category},
 			{id: "deal_type", name:"Сделка", field:"deal_type",width:50, editor:Slick.Editors.AnbaseDealType}
 		]);
 

@@ -84,6 +84,13 @@ class Orders extends MX_Controller
 		$regions_images = $this->m_region_image->get_images();
 		$assets[] = "common.regions_images=".$regions_images;
 
+		$this->load->model('m_order');
+		$category_list = json_encode($this->m_order->get_category_list());
+		$assets[] = "common.category_list=".$category_list;
+
+		$dealtype_list = json_encode($this->m_order->get_dealtype_list());
+		$assets[] = "common.dealtype_list=".$dealtype_list;
+
 		/*
 		* это дополнительно, чтобы в конце был знак ;
 		*/

@@ -43,6 +43,10 @@ $lang['order.validation.valid_dealtype'] = 'Поле "%s" содержит не�
 $lang['order.validation.valid_category'] = 'Поле "%s" содержит неверную категорию';
 $lang['order.validation.valid_order_id'] = 'Поле "%s" содержит неправильный id заявки';
 
+$lang['order.order_category_residental_real_estate'] = 'Жилая';
+$lang['order.order_category_commercial_real_estate'] = 'Коммерческая';
+$lang['order.order_category_country_real_estate']    = 'Загородная';
+$lang['order.order_category_undefined'] = 'Неопределенная категория';
 /*
 * Инвайты
 */

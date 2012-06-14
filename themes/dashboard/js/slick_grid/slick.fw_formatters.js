@@ -14,7 +14,8 @@
         "Description":DescriptionFormatter,
         "InviteKey":InviteKeyFormatter,
         "Manager":ManagerFormatter,
-        "Role":RoleFormatter
+        "Role":RoleFormatter,
+        "Category":CategoryFormatter
       }
     }
   });
@@ -227,4 +228,13 @@
       }
       return lang['user.undefined_role'];
     }
+
+
+  function CategoryFormatter(row,cell,value,columnDef,dataContext){
+    value = parseInt(value);
+    if(value && typeof value == "number"){
+      return common.getCategoryName(value);
+    } 
+    return lang['order.category_undefined'];
+  }
 })(jQuery);

@@ -47,7 +47,7 @@
         <?php 
           foreach($this->m_order->get_category_list() as $category){
             ?>
-              <option value="<?php echo $category ?>"> <?php echo $category;?> </option>
+              <option value="<?php echo $category ?>"> <?php echo $this->m_order->get_category_name($category);?> </option>
             <?php
           }  
         ?>

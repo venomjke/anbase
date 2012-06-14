@@ -6,7 +6,7 @@ $(function(){
 		var columns = [
 			{id: "number", name:"№", field:"number", width:40, sortable:true},
 			{id: "create_date", name:"Дата создания", field:"create_date", width:63, sortable:true},
-			{id: "category", name:"Объект", field:"category", width:60},
+			{id: "category", name:"Объект", field:"category", width:60, formatter:Slick.Formatters.Category},
 			{id: "deal_type", name:"Сделка", field:"deal_type", width:60}
 		];
 

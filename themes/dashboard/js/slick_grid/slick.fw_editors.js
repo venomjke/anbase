@@ -293,7 +293,11 @@
 		var scope = this;
 
 		this.init = function(){
-			$select = $("<SELECT tabindex='0' style=\"width:100%;\" class='editor-category'> <OPTION value='Жилая'>Жилая</OPTION><OPTION>Загородная</OPTION><OPTION>Коммерческая</OPTION></SELECT>");
+			$select = $("<SELECT tabindex='0' style=\"width:100%;\" class='editor-category'></SELECT>");
+			for(var i in common.category_list){
+				$opt = $('<option value="'+common.category_list[i]+'">'+common.getCategoryName(common.category_list[i])+'</option>');
+				$select.append($opt);
+			}
 			$select.appendTo(args.container);
 			$select.focus();
 		};

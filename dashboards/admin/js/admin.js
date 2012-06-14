@@ -132,9 +132,9 @@ var admin = {
 			* [my_notice] Временное решение, перенести надо будет в базу
 			*/
 			var buildings = {};
-			buildings['Жилая'] = ['комната','1к.кв',"2к.кв","3к.кв","4к.кв","5к.кв и более"];
-			buildings['Коммерческая'] = ['Офис',"Общепит","Магазин","Производство","Склад"];
-			buildings['Загородная'] = ['Коттедж',"Дом","Участок","Часть дома"]; 
+			buildings[common.category_list['ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE']] = ['комната','1к.кв',"2к.кв","3к.кв","4к.кв","5к.кв и более"];
+			buildings[common.category_list['ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE']] = ['Офис',"Общепит","Магазин","Производство","Склад"];
+			buildings[common.category_list['ORDER_CATEGORY_COUNTRY_REAL_ESTATE']] = ['Коттедж',"Дом","Участок","Часть дома"]; 
 
 			var choose_buildings = function(category){
 				$building.empty();
@@ -170,7 +170,7 @@ var admin = {
 			var metro_widget;
 
 			for(var i in common.category_list){
-				var $opt = $('<option value="'+common.category_list[i]+'">'+common.category_list[i]+'</option>');
+				var $opt = $('<option value="'+common.category_list[i]+'">'+common.getCategoryName(common.category_list[i])+'</option>');
 				if(common.settings_org.default_category == common.category_list[i]){
 					$opt.attr('selected','selected');
 					choose_buildings(common.category_list[i]);

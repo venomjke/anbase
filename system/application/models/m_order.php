@@ -12,15 +12,13 @@ class M_Order extends MY_Model{
 
 
 	/*
-	*
 	*  Категории
 	*/
-	const ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE = 'Коммерческая';
-	const ORDER_CATEGORY_COUNTRY_REAL_ESTATE    = 'Загородная';
-	const ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE	= 'Жилая';
+	const ORDER_CATEGORY_COUNTRY_REAL_ESTATE    = 0x03;
+	const ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE = 0x02;
+	const ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE	= 0x01;
 
 	/*
-	*
 	* Типы сделки
 	*/	
 	const ORDER_DEAL_TYPE_RENT    = 'Сдам';
@@ -29,14 +27,12 @@ class M_Order extends MY_Model{
 	const ORDER_DEAL_TYPE_SELL    = 'Продам';
 
 	/*
-	*
 	* Состояния
 	*/
 	const ORDER_STATE_ON	= 'on';
 	const ORDER_STATE_OFF	= 'off';
 
 	/*
-	*
 	* Правила валидации "создание" записи
 	* чисто формальные, фактически для каждой панели должны будут быть свои правила
 	*/
@@ -137,9 +133,24 @@ class M_Order extends MY_Model{
 	 **/
 	public function get_category_list()
 	{
-		return array(M_Order::ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE,M_Order::ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE,M_Order::ORDER_CATEGORY_COUNTRY_REAL_ESTATE);
+		return array('ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE'=>M_Order::ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE,
+			         'ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE'=>M_Order::ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE,
+			         'ORDER_CATEGORY_COUNTRY_REAL_ESTATE'=>M_Order::ORDER_CATEGORY_COUNTRY_REAL_ESTATE);
 	}
 
+	/**
+	* Выбор обозначения категории по её значению
+	* @return string
+	* @author alex.strigin
+	*/
+	public function get_category_name($category)
+	{
+		if($category == M_Order::ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE) return lang('order.order_category_residental_real_estate');
+		else if ($category == M_Order::ORDER_CATEGORY_COUNTRY_REAL_ESTATE) return lang('order.order_category_country_real_estate');
+		else if ($category == M_Order::ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE) return lang('order.order_category_commercial_real_estate');
+
+		return $lang['order.order_category_undefined'];
+	}
 	/**
 	 * Получить список типов сделок
 	 *

@@ -5,10 +5,9 @@
 */
 var common = {
 	baseUrl:'',
+
 	/**
-	*
 	* Методы уведомления о чем либо
-	*
 	**/
 	showMsg:function(text,options){
 		var def_options = {
@@ -78,6 +77,7 @@ var common = {
 		}
 	},
 
+
 	/*
 	* Отключить Ajax индикатор загрузки
 	*/
@@ -88,6 +88,7 @@ var common = {
 		options = $.extend(true,def_options,options);
 		$('#'+options.id).animate({"top":"-=20px"},"fast",function(){$(this).remove();})
 	},
+
 	/*
 	* Сравнение массивов
 	*/
@@ -116,6 +117,7 @@ var common = {
 		}
 		return true;
 	},
+
 
 	/*
 	* Подсчет общего числа свойств
@@ -151,7 +153,6 @@ var common = {
 		last_name = last_name.charAt(0).toUpperCase()+last_name.substr(1,last_name.length);
 		return last_name+' '+name+'.'+middle_name;
 	},
-
 	/*
 	* Загрузка формы
 	*/
@@ -237,6 +238,16 @@ var common = {
 		else if( role == common.role_list['USER_ROLE_AGENT']) return lang['user.user_role_agent'];
 
 		return lang['user.undefined_role'];
-	}
+	},
 
+	/*
+	* Выбор значения категории
+	*/
+	getCategoryName:function(category){
+		if(category == common.category_list['ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE']) return lang['order.order_category_residental_real_estate'];
+        else if(category == common.category_list['ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE']) return lang['order.order_category_commercial_real_estate'];
+        else if(category == common.category_list['ORDER_CATEGORY_COUNTRY_REAL_ESTATE']) return lang['order.order_category_country_real_estate'];
+
+        return lang['order.undefined_cateogry'];
+	}
 }

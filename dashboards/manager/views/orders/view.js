@@ -16,7 +16,7 @@ $(function(){
 		$.merge(columns,[
 			{id: "number", name:"№", field:"number",width:30,sortable:true},
 			{id: "create_date", name:"Дата создания", width:55, field:"create_date",sortable:true},
-			{id: "category", name:"Тип объекта",width:40, field:"category", editor:Slick.Editors.AnbaseCategory},
+			{id: "category", name:"Тип объекта",width:40, field:"category", editor:Slick.Editors.AnbaseCategory, formatter:Slick.Formatters.Category},
 			{id: "deal_type", name:"Сделка", field:"deal_type",width:40, editor:Slick.Editors.AnbaseDealType}
 		]);
 
