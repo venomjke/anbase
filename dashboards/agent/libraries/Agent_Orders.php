@@ -1,21 +1,6 @@
 <?php defined("BASEPATH") or die("No direct access to script");
 
 
-
-/*
-*
-* Подключение исключений
-*
-*/
-if(!class_exists("ValidationException")){
-	require_once APPPATH."exceptions/ValidationException.php";
-}
-
-if(!class_exists("AnbaseRuntimeException")){
-	require_once APPPATH."exceptions/AnbaseRuntimeException.php";
-}
-
-
 /**
  * Класс для управления заявками агента.
  *
@@ -39,9 +24,21 @@ class Agent_Orders
 	{	
 		$this->ci = get_instance();
 
+		/*
+		* Подключение исключений
+		*/
+		$this->ci->load->exception('ValidationException');
+		$this->ci->load->exception('AnbaseRuntimeException');
+
+		/*
+		* Полкючение библиотек
+		*/
 		$this->ci->load->library('agent/Agent_Users');
 		$this->ci->load->library('Orders_Organization');
 
+		/*
+		* Подключение моделей
+		*/
 		$this->ci->load->model('m_agent_order');
 		$this->ci->load->model('m_order_region');
 		$this->ci->load->model('m_order_metro');

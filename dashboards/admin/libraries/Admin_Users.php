@@ -7,18 +7,6 @@
 */
 if(!class_exists("Users"))
 	require_once APPPATH."modules/users/libraries/users.php";
-/*
-*
-* Подключение исключений
-*
-*/
-if(!class_exists("ValidationException")){
-	require_once APPPATH."exceptions/ValidationException.php";
-}
-
-if(!class_exists("AnbaseRuntimeException")){
-	require_once APPPATH."exceptions/AnbaseRuntimeException.php";
-}
 
 
 /**
@@ -34,9 +22,13 @@ class Admin_Users extends Users{
 		parent::__construct();
 		
 		/*
-		*
+		* Загрузка исключение
+		*/
+		$this->ci->load->exception('AnbaseRuntimeException');
+		$this->ci->load->exception('ValidationException');
+
+		/*
 		*	Загрузка моделей
-		*
 		*/
 		$this->ci->load->model('admin/m_admin');
 		$this->ci->load->model('m_order');

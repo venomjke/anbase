@@ -25,6 +25,13 @@ class Orders_Organization
 	public function __construct()
 	{
 		$this->ci = get_instance();
+
+		/*
+		* Загрузка исключений
+		*/
+		$this->ci->load->exception('AnbaseRuntimeException');
+		$this->ci->load->exception('ValidationException');
+		
 		/*
 		* Загрузка модели m_order
 		*/

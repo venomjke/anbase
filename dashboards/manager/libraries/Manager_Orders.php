@@ -1,18 +1,5 @@
 <?php defined("BASEPATH") or die("No direct access to script");
 
-/*
-*
-* Подключение исключений
-*
-*/
-if(!class_exists("ValidationException")){
-	require_once APPPATH."exceptions/ValidationException.php";
-}
-
-if(!class_exists("AnbaseRuntimeException")){
-	require_once APPPATH."exceptions/AnbaseRuntimeException.php";
-}
-
 
 /**
  * Класс, отвечающий за реализацию операций над заявками в панели manager
@@ -31,9 +18,21 @@ class Manager_Orders
 	{
 		$this->ci = get_instance();
 
+		/*
+		* Подключение исключение
+		*/
+		$this->ci->load->exception('AnbaseRuntimeException');
+		$this->ci->load->exception('ValidationException');
+		
+		/*
+		* Подключение библиотек
+		*/
 		$this->ci->load->library('manager/Manager_Users');
 		$this->ci->load->library('Orders_Organization');
 
+		/*
+		* Подключение моделей
+		*/
 		$this->ci->load->model('m_manager_order');	
 		$this->ci->load->model('m_order_region');
 		$this->ci->load->model('m_order_metro');

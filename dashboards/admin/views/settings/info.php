@@ -60,7 +60,7 @@
 										<td> <select name="default_dealtype" style="width:150px"><?php
 											foreach($this->admin_users->get_dealtype_list() as $dealtype):
 												?>
-												<option value="<?php echo $dealtype; ?>" <?php if( $dealtype == $settings->default_dealtype ): echo "selected"; endif; ?>> <?php echo $this->m_order->get_dealtype_name($deal_type); ?></option>
+												<option value="<?php echo $dealtype; ?>" <?php if( $dealtype == $settings->default_dealtype ): echo "selected"; endif; ?>> <?php echo $this->m_order->get_dealtype_name($dealtype); ?></option>
 											<?php
 												endforeach;
 											?></select>

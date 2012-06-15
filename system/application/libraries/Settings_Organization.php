@@ -1,17 +1,6 @@
 <?php defined("BASEPATH") or die("No direct access to script");
 
 
-/*
-* Подключение исключений
-*/
-if(!class_exists("ValidationException")){
-	require_once APPPATH."exceptions/ValidationException.php";
-}
-
-if(!class_exists("AnbaseRuntimeException")){
-	require_once APPPATH."exceptions/AnbaseRuntimeException.php";
-}
-
 /**
  * Класс, скрывающий логику действий над моделью настроек
  *
@@ -27,6 +16,15 @@ class Settings_Organization
 	{
 		$this->ci = get_instance();
 
+		/*
+		* Подключение исключение
+		*/
+		$this->ci->load->exception('AnbaseRuntimeException');
+		$this->ci->load->exception('ValidationException');
+
+		/*
+		* библиотека
+		*/
 		$this->ci->load->library("users/users");
 		/*
 		* Модели

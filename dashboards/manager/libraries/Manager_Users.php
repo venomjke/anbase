@@ -7,19 +7,6 @@
 if(!class_exists("Users"))
 	require_once APPPATH."modules/users/libraries/users.php";
 
-/*
-*
-* Подключение исключений
-*
-*/
-if(!class_exists("ValidationException")){
-	require_once APPPATH."exceptions/ValidationException.php";
-}
-
-if(!class_exists("AnbaseRuntimeException")){
-	require_once APPPATH."exceptions/AnbaseRuntimeException.php";
-}
-
 /**
 * @author  Alex.strigin <apstrigin@gmail.com>
 * @company Flyweb
@@ -32,7 +19,12 @@ class Manager_Users extends Users
 		parent::__construct();
 
 		/*
-		*
+		* Подключение исключение
+		*/
+		$this->ci->load->exception('AnbaseRuntimeException');
+		$this->ci->load->exception('ValidationException');
+		
+		/*
 		*	Загрузка моделей
 		*/
 		$this->ci->load->model('manager/m_manager');

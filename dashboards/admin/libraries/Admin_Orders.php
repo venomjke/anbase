@@ -1,17 +1,6 @@
 <?php defined("BASEPATH") or die("No direct access to script");
 
 
-/*
-* Подключение исключений
-*/
-if(!class_exists("ValidationException")){
-	require_once APPPATH."exceptions/ValidationException.php";
-}
-
-if(!class_exists("AnbaseRuntimeException")){
-	require_once APPPATH."exceptions/AnbaseRuntimeException.php";
-}
-
 
 /**
  * Класс, управляющий заявками админа
@@ -30,9 +19,21 @@ class Admin_Orders
 	{
 		$this->ci = get_instance();
 
+		/*
+		* Загрузка исключение
+		*/
+		$this->ci->load->exception('ValidationException');
+		$this->ci->load->exception('AnbaseRuntimeException');
+
+		/*
+		* Загрузка библиотек
+		*/
 		$this->ci->load->library("admin/Admin_Users");
 		$this->ci->load->library("Orders_Organization");
 
+		/*
+		* Загрузка моделей
+		*/
 		$this->ci->load->model("m_admin_order");
 		$this->ci->load->model("m_order_region");
 		$this->ci->load->model("m_order_metro");

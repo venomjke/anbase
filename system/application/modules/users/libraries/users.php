@@ -2,14 +2,6 @@
 
 require_once('phpass-0.1/PasswordHash.php');
 
-if(!class_exists("ValidationException")){
-	include APPPATH."exceptions/ValidationException.php";
-}
-
-if(!class_exists("AnbaseRuntimeException")){
-	include APPPATH."exceptions/AnbaseRuntimeException.php";
-}
-
 
 /**
 *
@@ -31,9 +23,13 @@ class Users {
 		$this->ci = get_instance();
 
 		/*
-		*
+		* Загрузка исключение
+		*/
+		$this->ci->load->exception('AnbaseRuntimeException');
+		$this->ci->load->exception('ValidationException');
+
+		/*
 		*	Загрузка config
-		*
 		*/
 		$this->ci->load->config('users/users',TRUE);
 
