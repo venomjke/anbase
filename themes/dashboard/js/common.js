@@ -261,5 +261,31 @@ var common = {
 		else if(dealtype == common.dealtype_list['ORDER_DEAL_TYPE_BUY']) return lang['order.order_deal_type_buy'];
 
 		return lang['order.undefined_deal_type'];
+	},
+	/*
+	* Выбор значения Статуса завершения
+	*/
+	getFinishStatusName:function(finish_status,deal_type){
+
+	    function check_status(finish_status,success,failure){
+	      if(finish_status == 	common.finishstatus_list['ORDER_FINISH_STATUS_SUCCESS']){
+	        return success;
+	      }
+	      return failure;
+	    }
+      switch(parseInt(deal_type)){
+        case common.dealtype_list['ORDER_DEAL_TYPE_RENT']: // Сдать
+            return check_status(finish_status,lang['finish_status.rent.success'],lang['finish_status.rent.failure']);
+          break;
+        case common.dealtype_list['ORDER_DEAL_TYPE_SELL']: // Продать
+            return check_status(finish_status,lang['finish_status.sell.success'],lang['finish_status.sell.failure']);
+          break;
+        case common.dealtype_list['ORDER_DEAL_TYPE_GET']: // Снять
+            return check_status(finish_status,lang['finish_status.get.success'],lang['finish_status.get.failure']);
+          break;
+        case common.dealtype_list['ORDER_DEAL_TYPE_BUY']: // Купить
+            return check_status(finish_status,lang['finish_status.buy.success'],lang['finish_status.buy.failure']);
+          break;
+      }
 	}
 }

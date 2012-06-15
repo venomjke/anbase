@@ -360,9 +360,9 @@ var admin = {
 				}
 			}
 			if(ids.length){
-				$d = $('<div>');
+				$d = $('<div></div>');
 				$d.dialog({
-					'title':'Вы точно желаете завершить записи?',
+					'title':lang['prompt_finish_orders'],
 					'modal':true,
 					'width':400,
 					'buttons':{

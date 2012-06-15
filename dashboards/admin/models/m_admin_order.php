@@ -29,7 +29,8 @@ class M_Admin_order extends M_Order
 		array('field'=>'phone','label'=>'lang:order.label_phone','rules' =>'trim|valid_phone'),
 		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'any_metro','label'=>'lang:order.label_any_metro','rules'=>'callback_valid_any_metro'),
-		array('field'=>'any_region','label'=>'lang:order.label_any_region','rules'=>'callback_valid_any_region')
+		array('field'=>'any_region','label'=>'lang:order.label_any_region','rules'=>'callback_valid_any_region'),
+		array('field'=>'finish_status','label'=>'lang:order.label_finish_status', 'rules' => 'valid_order_finish_status')
 	);
 
 	public $add_order_validation_rules = array(

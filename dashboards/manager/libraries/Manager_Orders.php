@@ -75,8 +75,8 @@ class Manager_Orders
 	 **/
 	public function get_all_off_orders()
 	{
-		$order_fields = array('number','create_date','finish_date','category','deal_type','description','price','phone','any_metro','any_region');
-		$items        = $this->ci->orders_organization->get_all_off_orders($this->ci->agent_users->get_user_id(),$order_fields);
+		$order_fields = array('number','create_date','finish_date','finish_status','category','deal_type','description','price','phone','any_metro','any_region');
+		$items        = $this->ci->orders_organization->get_all_off_orders($this->ci->manager_users->get_user_id(),$order_fields);
 		return array('count' => count($items), 'total'=>$this->ci->orders_organization->count_all_off_orders($this->ci->manager_users->get_user_id()),'items'=>$items);
 	}
 	/**

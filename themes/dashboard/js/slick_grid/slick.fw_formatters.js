@@ -16,7 +16,8 @@
         "Manager":ManagerFormatter,
         "Role":RoleFormatter,
         "Category":CategoryFormatter,
-        "Dealtype":DealtypeFormatter
+        "Dealtype":DealtypeFormatter,
+        "FinishStatus":FinishStatusFormatter
       }
     }
   });
@@ -245,5 +246,15 @@
       return common.getDealtypeName(value);
     } 
     return lang['order.deal_type_undefined']; 
+  }
+
+  function FinishStatusFormatter(row,cell,value,columnDef,dataContext){
+    value = parseInt(value);
+
+
+    if(value && typeof value == "number"){
+      return common.getFinishStatusName(value,dataContext.deal_type);
+    }
+    return value;
   }
 })(jQuery);

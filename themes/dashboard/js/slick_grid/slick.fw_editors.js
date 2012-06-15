@@ -14,7 +14,8 @@
 				"AnbaseRegions":AnbaseRegionsEditor,
 				"AnbaseMetros":AnbaseMetrosEditor,
 				"AnbaseRole":AnbaseRoleEditor,
-				"AnbaseUser":AnbaseUserEditor
+				"AnbaseUser":AnbaseUserEditor,
+				"FinishStatus":FinishStatusEditor
 			}
 		}
 	});
@@ -345,6 +346,59 @@
 			$select = $('<SELECT tabindex="0" style=\"width:100%;\" class="deal_type"></SELECT>');
 			for(var i in common.dealtype_list){
 				$opt = $('<option value="'+common.dealtype_list[i]+'">'+common.getDealtypeName(common.dealtype_list[i])+'</option>');
+				$select.append($opt);
+			}
+			$select.appendTo(args.container);
+			$select.focus();
+		};
+
+		this.destroy = function(){
+			$select.remove();
+		};
+
+		this.focus = function(){
+			$select.select();
+		};
+
+		this.loadValue = function(item){
+			$select.val((defaultValue = item[args.column.field]));
+		};
+
+		this.serializeValue = function(){
+			return $select.val();
+		};
+
+		this.applyValue = function(item,state){
+			item[args.column.field] = state;
+		};
+
+		this.isValueChanged = function(){
+			return defaultValue != $select.val();
+		};
+
+		this.validate = function(){
+			return {
+				valid:true,
+				msg:null
+			};
+		};
+
+		this.init();	
+	};
+
+	function FinishStatusEditor(args){
+		var $select;
+		var defaultValue;
+		var scope = this;
+
+		function getFinishStatusName(finish_status,deal_type){
+
+		}
+
+		this.init = function(){
+			$select = $('<SELECT tabindex="0" style=\"width:100%;\" class="finish_status"></SELECT>');
+			for(var i in common.finishstatus_list){
+				$opt = $('<option value="'+common.finishstatus_list[i]+'">'+common.getFinishStatusName(common.finishstatus_list[i],args.item.deal_type)+'</option>');
 				$select.append($opt);
 			}
 			$select.appendTo(args.container);

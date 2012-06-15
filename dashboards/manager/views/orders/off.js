@@ -47,7 +47,9 @@
 		}
 
 
-		$.merge(columns,[{id: "finish_date", name:"Дата завершения", field:"finish_date"}]);
+		$.merge(columns,[{id: "finish_date", name:"Дата завершения", field:"finish_date"}, 
+			             {id:"finish_status", name:lang['finish_status'], field:"finish_status", formatter:Slick.Formatters.FinishStatus }
+			]);
 
 		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=off',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);

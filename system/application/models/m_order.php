@@ -33,6 +33,12 @@ class M_Order extends MY_Model{
 	const ORDER_STATE_OFF	= 'off';
 
 	/*
+	* Состояния завершения заявки
+	*/
+	const ORDER_FINISH_STATUS_SUCCESS = 0x01;
+	const ORDER_FINISH_STATUS_FAILURE = 0x02;
+
+	/*
 	* Правила валидации "создание" записи
 	* чисто формальные, фактически для каждой панели должны будут быть свои правила
 	*/
@@ -102,7 +108,7 @@ class M_Order extends MY_Model{
 		*/
 		$this->table       = 'orders';
 		$this->primary_key = 'id';
-		$this->fields      = array('id','number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id','any_metro','any_region','created','delegated','finished');
+		$this->fields      = array('id','number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id','any_metro','any_region','created','delegated','finished','finish_status');
 		$this->result_mode = 'object';
 		/*
 		*	Правила валидации
@@ -181,6 +187,19 @@ class M_Order extends MY_Model{
 		return $lang['order.undefined_deal_type'];
 	}
 
+	/**
+	 * Получить список статусов завершения заявки
+	 *
+	 * @return number
+	 * @author alex.strigin
+	 **/
+	public function get_finishstatus_list()
+	{
+		return array( 'ORDER_FINISH_STATUS_SUCCESS' => M_Order::ORDER_FINISH_STATUS_SUCCESS,
+			          'ORDER_FINISH_STATUS_FAILURE' => M_Order::ORDER_FINISH_STATUS_FAILURE
+		);
+	}
+
 	public function get_max_number($org_id)
 	{
 		$this->db->select("MAX(number) as max_number");
@@ -218,7 +237,7 @@ class M_Order extends MY_Model{
 
 	public function check_category($category)
 	{
-		if(in_array($category,array(M_Order::ORDER_CATEGORY_RESIDENTAL_REAL_ESTATE,M_Order::ORDER_CATEGORY_COUNTRY_REAL_ESTATE,M_Order::ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE))){
+		if(in_array($category,$this->get_category_list())){
 			return true;
 		}
 		return false;
@@ -226,7 +245,15 @@ class M_Order extends MY_Model{
 
 	public function check_deal_type($deal_type)
 	{
-		if(in_array($deal_type,array(M_Order::ORDER_DEAL_TYPE_SELL,M_Order::ORDER_DEAL_TYPE_BUY,M_Order::ORDER_DEAL_TYPE_GET,M_Order::ORDER_DEAL_TYPE_RENT))){
+		if(in_array($deal_type,$this->get_dealtype_list())){
+			return true;
+		}
+		return false;
+	}
+
+	public function check_finish_status($finish_status)
+	{
+		if(in_array($finish_status,$this->get_finishstatus_list())){
 			return true;
 		}
 		return false;
@@ -249,6 +276,7 @@ class M_Order extends MY_Model{
 			return 0;
 		}
 	}
+
 	/**
 	 * Проверка состояния
 	 *
@@ -531,7 +559,7 @@ class M_Order extends MY_Model{
 		/*
 		* Можно указывать какие поля нужно выбрать. По умолчанию выбираются все.
 		*/
-		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','any_metro','any_region');
+		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','any_metro','any_region','finish_status');
 		$fields = array_flip(array_intersect_key(array_flip($fields),array_flip($allow_fields)));
 
 		if(empty($fields)) $fields = $allow_fields;

@@ -27,3 +27,38 @@ lang['order.order_deal_type_get']  = 'Сниму';
 lang['order.order_deal_type_sell'] = 'Продам';
 lang['order.order_deal_type_buy']  = 'Куплю';
 lang['order.deal_type_undefined']  = 'Неопределенный тип сделки';
+
+/*
+* Завершение заявки
+*/
+lang['prompt_finish_orders'] = 'Вы точно желаете завершить заявку?';
+
+
+/*
+* Заголовки таблицы
+*/
+lang['grid.title.number']        = '№';
+lang['grid.title.create_date']   = 'Дата создания';
+lang['grid.title.category']      = 'Объект';
+lang['grid.title.deal_type']     = 'Сделка';
+lang['grid.title.price']         = 'Цена';
+lang['grid.title.regions']       = 'Районы';
+lang['grid.title.metros']        = 'Метро';
+lang['grid.title.phone']         = 'Телефон';
+lang['grid.title.description']   = 'Описание';
+lang['grid.title.agent']         = 'Агент';
+lang['grid.title.finish_status'] = 'Статус';
+lang['grid.title.finish_date']   = 'Дата завершения';
+
+
+/*
+* Статус завершения
+*/
+lang['finish_status.rent.success'] = 'Сдал';
+lang['finish_status.rent.failure'] = 'Не сдал';
+lang['finish_status.get.success']  = 'Сдал';
+lang['finish_status.get.failure']  = 'Не сдал';
+lang['finish_status.sell.success'] = 'Продал';
+lang['finish_status.sell.failure'] = 'Не продал';
+lang['finish_status.buy.success']  = 'Продал';
+lang['finish_status.buy.failure']  = 'Не продал';

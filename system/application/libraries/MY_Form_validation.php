@@ -323,6 +323,24 @@ class MY_Form_validation extends CI_Form_validation
 		$this->set_message('valid_order_deal_type',lang('common.validation.valid_order_deal_type'));
 		return false;
 	}
+
+	/**
+	 * Валидный статус завершения заявки
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function valid_order_finish_status($finish_status)
+	{
+		$this->CI->load->model('m_order');
+		if(!empty($finish_status)){
+			if($this->CI->m_order->check_finish_status($finish_status)){
+				return true;
+			}
+		}
+		$this->set_message('valid_order_finish_status',lang('common.validation.valid_order_finish_status'));
+		return false;
+	}
 	
     function run($module = NULL, $group = '') {        
         if (is_object($module)) $this->CI =& $module;

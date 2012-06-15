@@ -37,6 +37,7 @@ $lang['order.label_finish_date'] = 'Дата закрытия';
 $lang['order.label_phone'] = 'Телефон';
 $lang['order.label_state'] = 'Состояние';
 $lang['order.label_any_metro'] = 'Любое метро';
+$lang['order.label_finish_status'] = 'Статус завершения';
 
 $lang['order.validation.valid_state'] = 'Поле "%s" содержит неверное состояние';
 $lang['order.validation.valid_dealtype'] = 'Поле "%s" содержит неверный вид сделки';
@@ -72,3 +73,4 @@ $lang['common.validation.valid_order_deal_type'] = $lang['order.validation.valid
 $lang['common.validation.convert_valid_date'] = 'Поле "%s" содержит не валидную дату';
 $lang['common.validation.valid_phone'] = 'Поле "%s" содержит неправильный номер телефона';
 $lang['common.validation.exists_email'] = 'Пользователя с указанным адресом электронной почты не существует';
+$lang['common.validation.valid_order_finish_status'] = 'Поле "%s" содержит неверный статус завершения';

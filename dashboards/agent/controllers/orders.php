@@ -91,6 +91,8 @@ class Orders extends MX_Controller
 		$dealtype_list = json_encode($this->m_order->get_dealtype_list());
 		$assets[] = "common.dealtype_list=".$dealtype_list;
 
+		$finishstatus_list = json_encode($this->m_order->get_finishstatus_list());
+		$assets[] = "common.finishstatus_list=".$finishstatus_list;
 		/*
 		* это дополнительно, чтобы в конце был знак ;
 		*/
