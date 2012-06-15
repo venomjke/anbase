@@ -249,5 +249,17 @@ var common = {
         else if(category == common.category_list['ORDER_CATEGORY_COUNTRY_REAL_ESTATE']) return lang['order.order_category_country_real_estate'];
 
         return lang['order.undefined_cateogry'];
+	},
+
+	/*
+	* Выбор значения типа сделки
+	*/
+	getDealtypeName:function(dealtype){
+		if(dealtype == common.dealtype_list['ORDER_DEAL_TYPE_RENT']) return lang['order.order_deal_type_rent'];
+		else if(dealtype == common.dealtype_list['ORDER_DEAL_TYPE_GET']) return lang['order.order_deal_type_get'];
+		else if(dealtype == common.dealtype_list['ORDER_DEAL_TYPE_SELL']) return lang['order.order_deal_type_sell'];
+		else if(dealtype == common.dealtype_list['ORDER_DEAL_TYPE_BUY']) return lang['order.order_deal_type_buy'];
+
+		return lang['order.undefined_deal_type'];
 	}
 }

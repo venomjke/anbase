@@ -15,7 +15,8 @@
         "InviteKey":InviteKeyFormatter,
         "Manager":ManagerFormatter,
         "Role":RoleFormatter,
-        "Category":CategoryFormatter
+        "Category":CategoryFormatter,
+        "Dealtype":DealtypeFormatter
       }
     }
   });
@@ -236,5 +237,13 @@
       return common.getCategoryName(value);
     } 
     return lang['order.category_undefined'];
+  }
+
+  function DealtypeFormatter(row,cell,value,columnDef,dataContext){
+   value = parseInt(value);
+    if(value && typeof value == "number"){
+      return common.getDealtypeName(value);
+    } 
+    return lang['order.deal_type_undefined']; 
   }
 })(jQuery);

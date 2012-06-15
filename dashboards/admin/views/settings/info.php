@@ -50,7 +50,7 @@
 										<td> <select name="default_category" style="width:150px"><?php 
 											foreach($this->admin_users->get_category_list() as $category):
 												?>
-												<option value="<?php echo $category; ?>" <?php if( $category == $settings->default_category ):  echo "selected"; endif; ?>> <?php echo $category; ?> </option>
+												<option value="<?php echo $category; ?>" <?php if( $category == $settings->default_category ):  echo "selected"; endif; ?>> <?php echo $this->m_order->get_category_name($category); ?> </option>
 											<?php
 											endforeach;
 										 ?></select> </td>
@@ -60,7 +60,7 @@
 										<td> <select name="default_dealtype" style="width:150px"><?php
 											foreach($this->admin_users->get_dealtype_list() as $dealtype):
 												?>
-												<option value="<?php echo $dealtype; ?>" <?php if( $dealtype == $settings->default_dealtype ): echo "selected"; endif; ?>> <?php echo $dealtype; ?></option>
+												<option value="<?php echo $dealtype; ?>" <?php if( $dealtype == $settings->default_dealtype ): echo "selected"; endif; ?>> <?php echo $this->m_order->get_dealtype_name($deal_type); ?></option>
 											<?php
 												endforeach;
 											?></select>

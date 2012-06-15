@@ -69,7 +69,7 @@
         <?php 
           foreach($this->m_order->get_dealtype_list() as $deal_type){
             ?>
-              <option value="<?php echo $deal_type?>"> <?php echo $deal_type;?></option>
+              <option value="<?php echo $deal_type?>"> <?php echo $this->m_order->get_dealtype_name($deal_type);?></option>
             <?php
           }
         ?>

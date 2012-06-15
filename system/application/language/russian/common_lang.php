@@ -47,6 +47,12 @@ $lang['order.order_category_residental_real_estate'] = 'Жилая';
 $lang['order.order_category_commercial_real_estate'] = 'Коммерческая';
 $lang['order.order_category_country_real_estate']    = 'Загородная';
 $lang['order.order_category_undefined'] = 'Неопределенная категория';
+
+$lang['order.order_deal_type_rent'] = 'Сдам';
+$lang['order.order_deal_type_get']  = 'Сниму';
+$lang['order.order_deal_type_buy']  = 'Куплю';
+$lang['order.order_deal_type_sell'] = 'Продам';
+$lang['order.undefined_deal_type']  = 'Неопределенный тип сделки';
 /*
 * Инвайты
 */

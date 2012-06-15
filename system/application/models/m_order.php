@@ -21,10 +21,10 @@ class M_Order extends MY_Model{
 	/*
 	* Типы сделки
 	*/	
-	const ORDER_DEAL_TYPE_RENT    = 'Сдам';
-	const ORDER_DEAL_TYPE_GET = 'Сниму';
-	const ORDER_DEAL_TYPE_BUY     = 'Куплю';
-	const ORDER_DEAL_TYPE_SELL    = 'Продам';
+	const ORDER_DEAL_TYPE_RENT    = 0x01;
+	const ORDER_DEAL_TYPE_GET     = 0x02;
+	const ORDER_DEAL_TYPE_BUY     = 0x03;
+	const ORDER_DEAL_TYPE_SELL    = 0x04;
 
 	/*
 	* Состояния
@@ -159,7 +159,26 @@ class M_Order extends MY_Model{
 	 **/
 	public function get_dealtype_list()
 	{
-		return array(M_Order::ORDER_DEAL_TYPE_SELL,M_Order::ORDER_DEAL_TYPE_BUY,M_Order::ORDER_DEAL_TYPE_GET,M_Order::ORDER_DEAL_TYPE_RENT);
+		return array( 'ORDER_DEAL_TYPE_GET'  => M_Order::ORDER_DEAL_TYPE_GET,
+			          'ORDER_DEAL_TYPE_RENT' => M_Order::ORDER_DEAL_TYPE_RENT,
+			          'ORDER_DEAL_TYPE_SELL' => M_Order::ORDER_DEAL_TYPE_SELL,
+			          'ORDER_DEAL_TYPE_BUY'  => M_Order::ORDER_DEAL_TYPE_BUY);
+	}
+
+	/**
+	 * Выбор обозначения "Типа сделки" по его значению
+	 *
+	 * @return string
+	 * @author alex.strigin
+	 **/
+	public function get_dealtype_name($dealtype)
+	{
+		if($dealtype == M_Order::ORDER_DEAL_TYPE_RENT) return lang('order.order_deal_type_rent');
+		else if($dealtype == M_Order::ORDER_DEAL_TYPE_BUY) return lang('order.order_deal_type_buy');
+		else if($dealtype == M_Order::ORDER_DEAL_TYPE_SELL) return lang('order.order_deal_type_sell');
+		else if($dealtype == M_Order::ORDER_DEAL_TYPE_GET) return lang('order.order_deal_type_get');
+
+		return $lang['order.undefined_deal_type'];
 	}
 
 	public function get_max_number($org_id)

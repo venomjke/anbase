@@ -342,7 +342,11 @@
 		var scope = this;
 
 		this.init = function(){
-			$select = $('<SELECT tabindex="0" style=\"width:100%;\" class="deal_type"><OPTION value="Куплю">Куплю</OPTION><OPTION value="Продам">Продам</OPTION><OPTION value="Сниму">Сниму</OPTION><OPTION value="Сдам">Сдам</OPTION></SELECT>');
+			$select = $('<SELECT tabindex="0" style=\"width:100%;\" class="deal_type"></SELECT>');
+			for(var i in common.dealtype_list){
+				$opt = $('<option value="'+common.dealtype_list[i]+'">'+common.getDealtypeName(common.dealtype_list[i])+'</option>');
+				$select.append($opt);
+			}
 			$select.appendTo(args.container);
 			$select.focus();
 		};
