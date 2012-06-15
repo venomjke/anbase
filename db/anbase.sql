@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Май 22 2012 г., 07:07
+-- Время создания: Июн 15 2012 г., 11:48
 -- Версия сервера: 5.5.16
 -- Версия PHP: 5.3.8
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `attempts_login_users` (
   `login` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `login_idx` (`login`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -76,11 +76,11 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
 CREATE TABLE IF NOT EXISTS `invites_users` (
   `key_id` char(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `org_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `role` enum('Админ','Менеджер','Агент') NOT NULL DEFAULT 'Агент',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `manager_id` int(10) unsigned DEFAULT '0',
   `email` varchar(100) NOT NULL,
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `role` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_org_id` (`org_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
@@ -164,7 +164,6 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `number` int(10) unsigned NOT NULL DEFAULT '0',
   `create_date` date NOT NULL DEFAULT '0000-00-00',
-  `deal_type` enum('Куплю','Сниму','Сдам','Продам') NOT NULL DEFAULT 'Сдам',
   `price` decimal(12,0) unsigned NOT NULL,
   `description` mediumtext NOT NULL,
   `delegate_date` date NOT NULL DEFAULT '0000-00-00',
@@ -172,12 +171,13 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `phone` varchar(20) NOT NULL,
   `state` enum('on','off') NOT NULL DEFAULT 'on',
   `org_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `category` enum('Жилая','Коммерческая','Загородная') NOT NULL DEFAULT 'Жилая',
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `delegated` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `finished` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `any_metro` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `any_region` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `category` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `deal_type` tinyint(3) unsigned NOT NULL DEFAULT '2',
   PRIMARY KEY (`id`),
   KEY `idx_number` (`number`),
   KEY `idx_org_id` (`org_id`)
@@ -289,12 +289,12 @@ CREATE TABLE IF NOT EXISTS `regions_images_elements` (
 CREATE TABLE IF NOT EXISTS `settings_org` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `org_id` int(10) unsigned NOT NULL,
-  `default_category` enum('Жилая','Коммерческая','Загородная') NOT NULL DEFAULT 'Жилая',
-  `default_dealtype` enum('Куплю','Сниму','Сдам','Продам') NOT NULL DEFAULT 'Сниму',
   `price_col` tinyint(4) NOT NULL DEFAULT '1',
   `regions_col` tinyint(4) NOT NULL DEFAULT '1',
   `metros_col` tinyint(4) NOT NULL DEFAULT '1',
   `phone_col` tinyint(4) NOT NULL DEFAULT '1',
+  `default_category` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `default_dealtype` tinyint(3) unsigned NOT NULL DEFAULT '2',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_org_id` (`org_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
@@ -314,13 +314,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `middle_name` varchar(15) NOT NULL,
   `last_name` varchar(15) NOT NULL,
   `phone` varchar(20) NOT NULL,
-  `role` enum('Админ','Менеджер','Агент') NOT NULL DEFAULT 'Агент',
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_login` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_ip` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `modifed` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `forget_password_key` varchar(32) NOT NULL,
+  `role` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_idx` (`login`),
   UNIQUE KEY `email_idx` (`email`)
@@ -380,15 +380,15 @@ ALTER TABLE `orders`
 -- Ограничения внешнего ключа таблицы `orders_metros`
 --
 ALTER TABLE `orders_metros`
-  ADD CONSTRAINT `orders_metros_ibfk_2` FOREIGN KEY (`metro_id`) REFERENCES `metros` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `orders_metros_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orders_metros_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_metros_ibfk_2` FOREIGN KEY (`metro_id`) REFERENCES `metros` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `orders_regions`
 --
 ALTER TABLE `orders_regions`
-  ADD CONSTRAINT `orders_regions_ibfk_2` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `orders_regions_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orders_regions_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_regions_ibfk_2` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `orders_users`
