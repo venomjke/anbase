@@ -7,35 +7,35 @@ $(function(){
 		* Добавляем поля из настроек
 		*/
 		var columns = [
-			{id: "number", name:"№", field:"number",width:30,sortable:true},
-			{id: "create_date", name:"Дата создания", width:55, field:"create_date",sortable:true},
-			{id: "category", name:"Тип объекта",width:40, field:"category", formatter:Slick.Formatters.Category},
-			{id: "deal_type", name:"Сделка", field:"deal_type",width:40, formatter:Slick.Formatters.Dealtype}
+			{id: "number", name:lang['grid.title.number'], field:"number",width:30,sortable:true},
+			{id: "create_date", name:lang['grid.title.create_date'], width:55, field:"create_date",sortable:true},
+			{id: "category", name:lang['grid.title.category'],width:40, field:"category", formatter:Slick.Formatters.Category},
+			{id: "deal_type", name:lang['grid.title.deal_type'], field:"deal_type",width:40, formatter:Slick.Formatters.Dealtype}
 		];
 
 		if(common.settings_org.regions_col == "1"){
 			var region_widget;
 			var regions = [];
-			$.merge(columns,[{id: "regions",  name:"Район",width:60, field:"regions", formatter:Slick.Formatters.RegionsList}]);
+			$.merge(columns,[{id: "regions",  name:lang['grid.title.regions'],width:60, field:"regions", formatter:Slick.Formatters.RegionsList}]);
 		}
 
 		if(common.settings_org.metros_col == "1"){
 			var metro_widget;
 			var metros  = {};
-			$.merge(columns,[{id: "metros", name:"Метро", width:60, field:"metros",formatter:Slick.Formatters.MetrosList}]);
+			$.merge(columns,[{id: "metros", name:lang['grid.title.metros'], width:60, field:"metros",formatter:Slick.Formatters.MetrosList}]);
 		}
 
 		if(common.settings_org.price_col == "1"){
-			$.merge(columns,[{id: "price", name:"Цена",width:60, field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
+			$.merge(columns,[{id: "price", name:lang['grid.title.price'],width:60, field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
 		}
 
-		$.merge(columns,[{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
+		$.merge(columns,[{id: "description", name:lang['grid.title.description'], field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
 		]);
 
-		$.merge(columns,[{id: "agent", name:"Агент", field:"user_id",formatter:Slick.Formatters.Agent}]);
+		$.merge(columns,[{id: "agent", name:lang['grid.title.agent'], field:"user_id",formatter:Slick.Formatters.Agent}]);
 
 		if(common.settings_org.phone_col == "1"){
-			$.merge(columns,[{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone}]);
+			$.merge(columns,[{id: "phone", name:lang['grid.title.phone'], field:"phone", width:115, formatter:Slick.Formatters.Phone}]);
 		}
 
 

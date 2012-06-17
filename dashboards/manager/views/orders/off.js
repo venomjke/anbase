@@ -16,39 +16,39 @@
 		*/
 		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
 		var columns = [
-			{id: "number", name:"№", field:"number", width:30 , sortable:true},
-			{id: "create_date", name:"Дата создания",  width:65, field:"create_date", sortable:true},
-			{id: "category", name:"Объект", field:"category", width:55, formatter:Slick.Formatters.Category},
-			{id: "deal_type", name:"Сделка", field:"deal_type", width:50, formatter:Slick.Formatters.Dealtype}
+			{id: "number", name:lang['grid.title.number'], field:"number", width:30 , sortable:true},
+			{id: "create_date", name:lang['grid.title.create_date'],  width:65, field:"create_date", sortable:true},
+			{id: "category", name:lang['grid.title.category'], field:"category", width:55, formatter:Slick.Formatters.Category},
+			{id: "deal_type", name:lang['grid.title.deal_type'], field:"deal_type", width:50, formatter:Slick.Formatters.Dealtype}
 		];
 
 
 		if(common.settings_org.regions_col == "1"){
 			var region_widget;
 			var regions = [];
-			$.merge(columns,[{id: "regions",  name:"Район",width:60, field:"regions", formatter:Slick.Formatters.RegionsList}]);
+			$.merge(columns,[{id: "regions",  name:lang['grid.title.regions'],width:60, field:"regions", formatter:Slick.Formatters.RegionsList}]);
 		}
 
 		if(common.settings_org.metros_col == "1"){
 			var metro_widget;
 			var metros  = {};
-			$.merge(columns,[{id: "metros", name:"Метро", width:60, field:"metros", formatter:Slick.Formatters.MetrosList}]);
+			$.merge(columns,[{id: "metros", name:lang['grid.title.metros'], width:60, field:"metros", formatter:Slick.Formatters.MetrosList}]);
 		}
 
 		if(common.settings_org.price_col == "1"){
-			$.merge(columns,[{id: "price", name:"Цена", width:60, field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
+			$.merge(columns,[{id: "price", name:lang['grid.title.price'], width:60, field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
 		}
 
-		$.merge(columns,[{id: "description", name:"Описание", field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
+		$.merge(columns,[{id: "description", name:lang['grid.title.description'], field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
 		]);
 
 		if(common.settings_org.phone_col == "1"){
-			$.merge(columns,[{id: "phone", name:"Телефон", field:"phone", width:115, formatter:Slick.Formatters.Phone}]);
+			$.merge(columns,[{id: "phone", name:lang['grid.title.phone'], field:"phone", width:115, formatter:Slick.Formatters.Phone}]);
 		}
 
 
-		$.merge(columns,[{id: "finish_date", name:"Дата завершения", field:"finish_date"}, 
-			             {id:"finish_status", name:lang['finish_status'], field:"finish_status", formatter:Slick.Formatters.FinishStatus }
+		$.merge(columns,[{id: "finish_date", name:lang['grid.title.finish_date'], field:"finish_date"}, 
+			             {id:"finish_status", name:lang['grid.title.finish_status'], field:"finish_status", formatter:Slick.Formatters.FinishStatus }
 			]);
 
 		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=off',PageSize:200});	

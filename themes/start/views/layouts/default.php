@@ -40,8 +40,8 @@
 				<div class="clear"></div>
 			</div>
 			<div class="podval">
-				<div><img src="<?php echo site_url("themes/start"); ?>/images/logo_flyweb.png" width="117" height="35" />	<br />
-				© <a href="111">copyright 2012 Flyweb inc.</a>	</div>
+				<div><img src="<?php echo site_url("themes/start"); ?>/images/logo_flyweb.png" width="117" height="35" style="cursor:pointer;" onclick="document.location='http://flywebstudio.ru/'" />	<br />
+				© <a href="http://flywebstudio.ru">copyright 2012 Flyweb inc.</a>	</div>
 			</div>
 		</div>
 		<?php  if($this->session->userdata('browser') == 'bad'): ?>

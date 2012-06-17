@@ -49,7 +49,7 @@ lang['grid.title.description']   = 'Описание';
 lang['grid.title.agent']         = 'Агент';
 lang['grid.title.finish_status'] = 'Статус';
 lang['grid.title.finish_date']   = 'Дата завершения';
-
+lang['grid.title.delegate_date'] = 'Дата делегирования';
 
 /*
 * Статус завершения
