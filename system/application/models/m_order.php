@@ -824,8 +824,10 @@ class M_Order extends MY_Model{
 	*/
 	public function finish_orders($ids)
 	{
-		$this->where_in('id',$ids);
-		$this->db->update($this->table,array('state'=>M_Order::ORDER_STATE_OFF,'finish_date'=>date('Y-m-d'),'finished'=>date('Y-m-d H:i:s')));
+		foreach($ids as $id=>$status){
+			$this->db->where('id',$id);
+			$this->db->update($this->table,array('state'=>M_Order::ORDER_STATE_OFF,'finish_status'=>$status,'finish_date'=>date('Y-m-d'),'finished'=>date('Y-m-d H:i:s')));
+		}
 	}
 
 	/**

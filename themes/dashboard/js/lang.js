@@ -32,7 +32,7 @@ lang['order.deal_type_undefined']  = 'Неопределенный тип сде
 * Завершение заявки
 */
 lang['prompt_finish_orders'] = 'Вы точно желаете завершить заявку?';
-
+lang['prompt_finish_order_set_status'] = 'Статус завершения заявки';
 
 /*
 * Заголовки таблицы

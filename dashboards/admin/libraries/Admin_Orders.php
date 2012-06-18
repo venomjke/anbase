@@ -265,10 +265,10 @@ class Admin_Orders
 		$orders_ids = $this->ci->input->post('orders');
 		$valid_ids = array();
 		if(is_array($orders_ids)){
-			foreach($orders_ids as $order_id){
+			foreach($orders_ids as $order_id=>$order_status){
 
-				if(is_numeric($order_id) && $this->ci->m_order->is_exists($order_id,$this->ci->admin_users->get_org_id())) {
-					$valid_ids[] = $order_id;
+				if(is_numeric($order_id) && $this->ci->m_order->is_exists($order_id,$this->ci->admin_users->get_org_id()) && $this->ci->m_order->check_finish_status($order_status)) {
+					$valid_ids[$order_id]=$order_status;
 				}
 			}
 			$this->ci->m_order->finish_orders($valid_ids);

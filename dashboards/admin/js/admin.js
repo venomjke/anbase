@@ -180,7 +180,7 @@ var admin = {
 			}
 
 			for(var i in common.dealtype_list){
-				var $opt = $('<option value="'+common.dealtype_list[i]+'">'+common.dealtype_list[i]+'</option>');
+				var $opt = $('<option value="'+common.dealtype_list[i]+'">'+common.getDealtypeName(common.dealtype_list[i])+'</option>');
 				if(common.settings_org.default_dealtype == common.dealtype_list[i])
 					$opt.attr('selected','selected');
 				$dealtype.append($opt);
@@ -351,14 +351,37 @@ var admin = {
 			}
 		},
 		finish_orders:function(grid,model){
-			var ids = [];
+			var ids = {};
+			var cnt = 0;
 			var SelectedRows = grid.getSelectedRows();
+			var $promptDialog = $('<div></div>');
+			$promptDialog.dialog({
+				'title':lang['prompt_finish_order_set_status'],
+				'modal':true,
+				'width':'auto',
+				'autoOpen':false
+			});
 
 			for(var i in SelectedRows){
 				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
-					ids.push(grid.getDataItem(SelectedRows[i]).id);
+					++cnt;
+					/*
+					$promptDialog.dialog('options','buttons',{
+						'Успешно':function(){
+							ids[grid.getDataItem(SelectedRows[i]).id] = common.finishstatus_list['ORDER_FINISH_STATUS_SUCCESS'];
+							$promptDialog.dialog('close');
+						},
+						'Неуспешно':function(){
+							ids[grid.getDataItem(SelectedRows[i]).id] = common.finishstatus_list['ORDER_FINISH_STATUS_FAILURE'];
+							$promptDialog.dialog('close');
+						}
+					});
+					$promptDialog.dialog('open');*/
+					ids[grid.getDataItem(SelectedRows[i]).id] = common.finishstatus_list['ORDER_FINISH_STATUS_SUCCESS'];
 				}
 			}
+			ids.length = cnt;
+
 			if(ids.length){
 				$d = $('<div></div>');
 				$d.dialog({
@@ -391,7 +414,7 @@ var admin = {
 				$d.dialog({
 					'title':'Вы точно желаете возобновить записи?',
 					'modal':true,
-					'width':400,
+					'width':'auto',
 					'buttons':{
 						'Возобновить':function(){
 							model.restoreOrders(ids);
