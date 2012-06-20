@@ -52,7 +52,6 @@
 	</head>
 	<body>
 		<?php echo $template['body']; ?>
-		<?php echo $this->benchmark->elapsed_time();?>
 		<script type="text/javascript">
 			$(function(){
 				var $imgToggleUp = $('<img id="panel-collapse-up" src="'+common.baseUrl+'themes/dashboard/images/panel-collapse-up.png" style="cursor:pointer;display:block;width:16px;margin:0 auto;"/>');
@@ -84,6 +83,12 @@
 			});
 		</script>
 		<?php 
+			/*
+			* В debug режиме показываем время вывода страницы
+			*/
+			if(ENVIRONMENT == ANBASE_DEV){
+			   echo $this->benchmark->elapsed_time();
+			}
 			/*
 			* В Production версии добавляем код отслеживания
 			*/
