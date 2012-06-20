@@ -522,7 +522,7 @@ var admin = {
 				for(var i in common.staff_list){
 					var empl = common.staff_list[i];
 
-					if(empl.role==common.role_list['USER_ROLE_MANAER']){
+					if(empl.role==common.role_list['USER_ROLE_MANAGER']){
 						var $opt = $('<option value="'+empl.id+'">'+empl.last_name+' '+empl.name+' '+empl.middle_name+'</option>');
 						table['managers'].input.append($opt);
 					}
