@@ -62,3 +62,22 @@ lang['finish_status.sell.success'] = 'Продал';
 lang['finish_status.sell.failure'] = 'Не продал';
 lang['finish_status.buy.success']  = 'Продал';
 lang['finish_status.buy.failure']  = 'Не продал';
+
+/*
+* Обозначения для графиков из раздела аналитики
+*/
+lang['analytics.label.order'] = 'Заявки';
+lang['analytics.label.number']= 'Число';
+/*
+* График распределения заявок
+*/
+lang['analytics.allocation_chart.title'] = 'Распределение заявок';
+lang['analytics.allocation_chart.free_orders'] = 'Свободные заявки';
+lang['analytics.allocation_chart.finish_orders'] = 'Завершенные заявки';
+lang['analytics.allocation_chart.delegate_orders'] = 'Занятые заявки';
+/*
+* График поступления заявок по датам
+*/
+lang['analytics.line_chart.date'] = 'Дата';
+lang['analytics.line_chart.amount'] = 'Кол-во';
+lang['analytics.line_chart.title']= 'Поступление заявок';

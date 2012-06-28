@@ -28,16 +28,16 @@
 
         // Create the data table.
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Заявки');
-        data.addColumn('number', 'Число');
+        data.addColumn('string', lang['analytics.label.order']);
+        data.addColumn('number', lang['analytics.label.number']);
         data.addRows([
-          ['Свободные заявки', <?php echo $this->org_statistic->count_all_free_orders();?>],
-          ['Звершенные заявки',<?php echo $this->org_statistic->count_all_finish_orders(); ?>],
-          ['Занятые', <?php echo $this->org_statistic->count_all_delegate_orders(); ?>]
+          [lang['analytics.allocation_chart.free_orders'], <?php echo $this->org_statistic->count_all_free_orders();?>],
+          [lang['analytics.allocation_chart.finish_orders'],<?php echo $this->org_statistic->count_all_finish_orders(); ?>],
+          [lang['analytics.allocation_chart.delegate_orders'], <?php echo $this->org_statistic->count_all_delegate_orders(); ?>]
         ]);
 
         // Set chart options
-        var options = {'title':'Расположение заявок',
+        var options = {'title':lang['analytics.allocation_chart.title'],
                        'width':400,
                        'height':250,
                        'chartArea':{left:0,top:25,width:400,height:200},
@@ -56,12 +56,12 @@
         }
 
         var data_line_chart = new google.visualization.DataTable();
-        data_line_chart.addColumn('date','Дата');
-        data_line_chart.addColumn('number','Кол-во');
+        data_line_chart.addColumn('date',lang['analytics.line_chart.date']);
+        data_line_chart.addColumn('number',lang['analytics.line_chart.amount']);
         data_line_chart.addRows(date_parse);
         
         var options = {
-          title: 'Поступление заявок',
+          title: lang['analytics.line_chart.title'],
           width:600,
           backgroundColor:'#e6eff6',
           height:250,
