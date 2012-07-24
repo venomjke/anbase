@@ -82,17 +82,14 @@ class M_Order_user extends MY_Model
 		* Делегировать другому агенту
 		* Поменять дату делегирования в таблице orders
 		*/
-
 		if($user_id == -1){
 			$this->delete(array('order_id'=>$order_id));
 			return true;
 		}else{
 			$this->delete(array('order_id'=>$order_id));
-			if($insert_id = $this->insert(array('order_id'=>$order_id,'user_id'=>$user_id))){
-				$this->db->where('orders.id',$order_id);
-				$this->db->update('orders',array('delegate_date'=>date('Y-m-d'),'delegated'=>date('Y-m-d H:i:s')));
-				return $insert_id;
-			}
+			$this->insert(array('order_id'=>$order_id,'user_id'=>$user_id));
+			$this->db->where('orders.id',$order_id);
+			$this->db->update('orders',array('delegate_date'=>date('Y-m-d'),'delegated'=>date('Y-m-d H:i:s')));
 		}
 		return false;
 	}
