@@ -243,7 +243,8 @@ class Orders_Organization
 
 		$this->fetch_limit($limit,$offset);
 
-		$orders = $this->ci->m_order->get_all_on_orders_org($org_id,$filters,$limit,$offset,$fields);
+
+		$orders = $this->ci->m_order->get_all_orders_org($org_id,$filters,$limit,$offset,$fields);
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);
