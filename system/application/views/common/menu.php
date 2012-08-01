@@ -1,8 +1,6 @@
 <?php
 	/*
-	*
 	*	Генерация меню.
-	*
 	*/
 	$menu = array(
 		anchor("","Главная"),
@@ -11,7 +9,7 @@
 		anchor("about","О системе"),
 		anchor("prices","Цены"),
 		anchor("company","О нас"),
-		anchor("faq","Faq")
+		anchor("wiki","wiki")
 	);
 	echo ul($menu);
 ?>
