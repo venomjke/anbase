@@ -243,12 +243,24 @@ input.text               {
 	-webkit-border-radius: 10px 10px 10px 10px;
 	border-radius: 10px 10px 10px 10px;
 	border: 1px solid #999999;
-	width: 100%;
+	width:240px;
 	height: 26px;
 	margin-top: 4px;
 	margin-bottom: 4px;
 	text-indent: 10px;
 }
+input.success_text {
+	border-color:green;
+}
+input.fail_text {
+	border-color:red;
+}
+
+img.form_input{
+	margin-top:10px;
+	margin-left:10px;
+}
+
 h3.reg {
 	font-size: 16px;
 	border-bottom-width: 1px;
