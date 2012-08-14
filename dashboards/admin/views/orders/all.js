@@ -39,7 +39,10 @@ $(function(){
 			$.merge(columns,[{id: "phone", name:lang['grid.title.phone'], field:"phone", width:95, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer}]);
 		}
 
-		$.merge(columns,[{id: "agent", name:lang['grid.title.agent'], field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent }]);	
+		$.merge(columns,[{id: "agent", name:lang['grid.title.agent'], field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent },
+						 {id:"finish_status", name:lang['grid.title.finish_status'], field:'finish_status', formatter:Slick.Formatters.FinishStatus, editor:Slick.Editors.FinishStatus}
+			]);
+
 
 		/*
 		* Создание грида
