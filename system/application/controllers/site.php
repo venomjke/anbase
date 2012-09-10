@@ -25,61 +25,6 @@ class Site extends MX_Controller {
 			$this->template->set('loginBox',$loginBox);
 		}
 	}
-	public function email()
-	{
-			/********************************************/
-			$from_email = 'ore-4@flywebstudio.ru';
-			$from_pass  = '4cL0cV3g';
-			/********************************************/
-
-
-			$text = "";
-			$subject = '';
-			$file = '../spam/mails1.txt';
-			$fileText = '../spam/mailText.txt';
-			$fileSubject = '../spam/mailSubject.txt';
-
-			$email_content = file_get_contents(FCPATH.$file);
-			if(empty($email_content)){ echo "no content load"; return; }
-
-			$email_content = preg_split('/\s/',$email_content);
-			if(empty($email_content)){ echo "no content after explode"; return; }
-
-			$text = file_get_contents(FCPATH.$fileText);
-			if(empty($text)){ echo "no mail text load"; return;}
-
-
-			$subject = file_get_contents(FCPATH.$fileSubject);
-			if(empty($subject)){ echo "no mail subject load"; return;}
-
-			$this->load->library('email');
-			$config['smtp_host'] = 'smtp.flywebstudio.ru';
-			$config['smtp_port'] = 25;
-			$config['smtp_user'] = $from_email;
-			$config['smtp_pass'] = $from_pass;
-			$this->email->initialize($config);
-
-			foreach($email_content as $email_record){
-				if(!empty($email_record)){
-					echo "email_record is $email_record <br/>";
-					$this->email->set_newline("\r\n");
-					$this->email->from($from_email, '');
-					$this->email->to($email_record); 
-					$this->email->subject($subject);
-					$this->email->message($text);	
-					// Set to, from, message, etc.
-
-					$result = $this->email->send();
-				}
-			}
-			echo "spam finished";
-			
-	}
-	public function migration()
-	{
-		$this->load->library('migration');
-		$this->migration->latest();
-	}
 	/*
 	*	Главная страница:
 	*		- Форма входа

@@ -3,8 +3,20 @@
 	<head>
 		<?php echo meta('Content-type','text/html; charset=utf-8','equiv'); ?>
 		<?php echo link_tag('themes/dashboard/images/an.ico', 'shortcut icon', 'image/ico'); ?>
-		<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/smoothness/jquery-ui.css"); ?>
+
 		<?php echo link_tag("themes/dashboard/css/style.css"); ?>
+
+		<?php if(is_production_mode()): ?>
+
+			<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/smoothness/jquery-ui.css"); ?>
+
+		<?php else: ?>
+			<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>themes/dashboard/js/ui/themes/base/jquery.ui.theme.css" />
+			<script type="text/javascript" src="<?php echo base_url(); ?>themes/dashboard/js/jquery-1.6.1.min.js" > </script>
+			<script type="text/javascript" src="<?php echo base_url(); ?>themes/dashboard/js/ui/jquery-ui-1.8.16.custom.min.js"> </script>
+
+		<?php endif; ?>
+
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script type="text/javascript">google.load("jquery","1.7.1");google.load("jqueryui","1.8");</script>
 
@@ -41,6 +53,7 @@
 
 		<script type="text/javascript">
 			common.baseUrl = '<?php echo base_url(); ?>';
+
 			/*
 			* Для разрешения 1024*(x)
 			*/
@@ -48,16 +61,20 @@
 				document.write ('<link href="<?php echo base_url();?>themes/dashboard/css/slick1024.grid.css" rel="stylesheet" type="text/css">'); 
 			}
 		</script>
+
 		<?php echo $template['metadata']; ?>
 	</head>
 	<body>
 		<?php echo $template['body']; ?>
+		
 		<script type="text/javascript">
 			$(function(){
 				var $imgToggleUp = $('<img id="panel-collapse-up" src="'+common.baseUrl+'themes/dashboard/images/panel-collapse-up.png" style="cursor:pointer;display:block;width:16px;margin:0 auto;"/>');
 				var $imgToggleDown = $('<img id="panel-collapse-down" src="'+common.baseUrl+'themes/dashboard/images/panel-collapse-down.png" style="cursor:pointer;display:none;width:16px;position: absolute;top: 0px;left: 49.4%;"/>');
+				
 				$('.menu').after($imgToggleUp);
 				$('.menu').after($imgToggleDown);
+				
 				$imgToggleUp.click(function(){
 					$('.shapka').slideToggle("fast");
 					$('.user').slideToggle("fast");
@@ -68,6 +85,7 @@
 					if(!$.cookie('toggle'))
 						$.cookie('toggle',1,{path:'/'});
 				});
+
 				$imgToggleDown.click(function(){
 					$('.shapka').slideToggle("fast");
 					$('.user').slideToggle("fast");
@@ -86,27 +104,25 @@
 			/*
 			* В debug режиме показываем время вывода страницы
 			*/
-			if(ENVIRONMENT == ANBASE_DEV){
-			   echo $this->benchmark->elapsed_time();
-			}
-			/*
-			* В Production версии добавляем код отслеживания
-			*/
-			if(ENVIRONMENT == ANBASE_PROD):
-				?>
-			<script type="text/javascript">
-			  var _gaq = _gaq || [];
-			  _gaq.push(['_setAccount', 'UA-31646688-1']);
-			  _gaq.push(['_trackPageview']);
+			if(is_production_mode()):
+			?>
+			
+				<script type="text/javascript">
+				  var _gaq = _gaq || [];
+				  _gaq.push(['_setAccount', 'UA-31646688-1']);
+				  _gaq.push(['_trackPageview']);
 
-			  (function() {
-			    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			  })();
-			</script>
+				  (function() {
+				    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+				  })();
+				</script>
+			
 			<?php
+			else:
+			   echo $this->benchmark->elapsed_time();
 			endif;
-		?>
+			?>
 	</body>
 </html>
