@@ -341,6 +341,41 @@ class MY_Form_validation extends CI_Form_validation
 		$this->set_message('valid_order_finish_status',lang('common.validation.valid_order_finish_status'));
 		return false;
 	}
+
+	/**
+	 * Расширение нативной функции mactches, которое умеет работать с полями массива
+	 *
+	 * @return bool
+	 * @author alex.strigin
+	 **/
+	public function matches2($str,$field)
+	{
+		$preg = '/(\w+)\[(\w+)\]/';
+		$match= array();
+		$val = '';
+		$this->set_message('matches2',lang('common.validation.matches2'));
+
+		if(preg_match($preg,$field,$match)){
+			$field = $match[2];
+			$container = $match[1];
+			if( !isset($_POST[$container]) and !isset($_POST[$container][$field]))
+			{
+				return false;
+			}
+
+			$val = $_POST[$container][$field];
+
+		}else{	
+			if ( ! isset($_POST[$field]))
+			{
+				return FALSE;
+			}
+
+			$val = $_POST[$field];
+		}
+
+		return ($str !== $val) ? FALSE : TRUE;
+	}
 	
     function run($module = NULL, $group = '') {        
         if (is_object($module)) $this->CI =& $module;

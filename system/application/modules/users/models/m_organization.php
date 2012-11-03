@@ -39,22 +39,10 @@ class M_Organization extends MY_Model{
 		*
 		*/
 		$this->validate    = array(
-			array('field'=>'name','label'=>'lang:label_org_name','rules'=>'trim|xss_clean|min_length[3]|max_length[150]'),
-			array('field'=>'email','label'=>'lang:label_org_email','rules'=>'trim|xss_clean|min_length[5]|max_length[100]'),
-			array('field'=>'phone','label'=>'lang:label_org_phone','rules'=>'trim|valid_phone')
+			'name'=>array('field'=>'name','label'=>'lang:label_org_name','rules'=>'required|trim|xss_clean|min_length[1]|max_length[150]'),
+			'email'=>array('field'=>'email','label'=>'lang:label_org_email','rules'=>'required|trim|xss_clean|max_length[100]|valid_email'),
+			'phone'=>array('field'=>'phone','label'=>'lang:label_org_phone','rules'=>'required|trim|valid_phone')
 		);
-	}
-
-
-	/**
-	 * Метод возвращает правила валидации
-	 *
-	 * @return array
-	 * @author alex.strigin
-	 **/
-	public function get_validation_rules()
-	{
-		return $this->validate;
 	}
 
 }

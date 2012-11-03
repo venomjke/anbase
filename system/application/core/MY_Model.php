@@ -425,4 +425,18 @@ class MY_Model extends CI_Model {
         }
         return $this->table;
     }
+
+
+    /**
+     * Возвращает hash table, где:
+     * key   -  название поля, 
+     * value - validation_rule в формате form_validation
+     *
+     * @return array
+     * @author alex.strigin
+     **/
+    public function get_validation_fields()
+    {
+        return $this->validate;
+    }
 }

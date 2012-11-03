@@ -6,20 +6,6 @@
 if(!class_exists("Users"))
 	require_once APPPATH."modules/users/libraries/users.php";
 
-
-/*
-*
-* Подключение исключений
-*
-*/
-if(!class_exists("ValidationException")){
-	include APPPATH."exceptions/ValidationException.php";
-}
-
-if(!class_exists("AnbaseRuntimeException")){
-	include APPPATH."exceptions/AnbaseRuntimeException.php";
-}
-
 /**
 *
 *
@@ -38,9 +24,11 @@ class Agent_Users extends Users{
 	
 		parent::__construct();
 
-		/* 
-		*	 Загрузка либ
+		/*
+		* Подключение исключение
 		*/
+		$this->ci->load->exception('AnbaseRuntimeException');
+		$this->ci->load->exception('ValidationException');
 
 		/*
 		*	Загрузка моделей
