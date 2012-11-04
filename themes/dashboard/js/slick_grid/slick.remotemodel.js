@@ -36,6 +36,7 @@
     var description ='';
     var description_type ='';
     var user_id = '';
+    var agent_order = '';
     var metros = {};
     var regions = [];
 
@@ -129,6 +130,10 @@
       user_id = f_user_id;
     }
 
+    function setAgentOrder(f_agent_order){
+      agent_order = f_agent_order?1:-1;
+    }
+
     function applyFilter(top,bottom){
       clear();
       ensureData(top,bottom);
@@ -151,6 +156,7 @@
         description ='';
         description_type ='';
         user_id = '';
+        agent_order='';
         metros = {};
         regions = [];
     }
@@ -159,6 +165,7 @@
       number_order = '';
       createdate_order = '';
       price_order = '';
+      agent_order='';
     }
 
     function isDataLoaded(from, to) {
@@ -228,6 +235,7 @@
         metros:metros,
         regions:regions,
         user_id:user_id,
+        agent_order:agent_order,
         offset:offset,
         limit:limit
       }
@@ -420,6 +428,7 @@
       "finishOrders":finishOrders,
       "restoreOrders":restoreOrders,
       "printOrders":printOrders,
+      "setAgentOrder":setAgentOrder,
       // methods
       "clear": clear,
       "isDataLoaded": isDataLoaded,

@@ -530,6 +530,14 @@ class M_Order extends MY_Model{
 			$this->db->where("users.id",$value);
 		}
 	}
+
+	public function set_agent_order_filter($value)
+	{
+		if(!empty($value) && is_numeric($value)){
+			if($value >= 1)	$this->db->order_by('users.id','ASC');
+			else $this->db->order_by('users.id','DESC');
+		} 
+	}
 	/**
 	 * Метод проходит по списку полей применяя к каждому свой фильтр
 	 *

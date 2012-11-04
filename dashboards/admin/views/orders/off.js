@@ -40,7 +40,7 @@ $(function(){
 			$.merge(columns,[{id: "phone", name:lang['grid.title.phone'], field:"phone", width:95, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer}]);
 		}
 
-		$.merge(columns,[{id: "agent", name:lang['grid.title.agent'], field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent }]);	
+		$.merge(columns,[{id: "agent", name:lang['grid.title.agent'], field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent, sortable:true }]);	
 		$.merge(columns,[
 			       {id:"finish_date", name:lang['grid.title.finish_date'], field:"finish_date", width:90, editor:Slick.Editors.Date},
 			       {id:"finish_status", name:lang['grid.title.finish_status'], field:"finish_status",width:50, formatter:Slick.Formatters.FinishStatus, editor:Slick.Editors.FinishStatus }
@@ -77,6 +77,11 @@ $(function(){
 					break;
 					case 'create_date':
 						model.setCreateDateOrder(sortHandle.sortAsc);
+						vp = grid.getViewport();
+						model.applyFilter(vp.top,vp.bottom);
+					break;
+					case 'user_id':
+						model.setAgentOrder(sortHandle.sortAsc);
 						vp = grid.getViewport();
 						model.applyFilter(vp.top,vp.bottom);
 					break;
