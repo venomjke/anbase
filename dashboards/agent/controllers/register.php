@@ -27,11 +27,10 @@ class Register extends MX_Controller
 		$this->template->set_partial('menu','common/menu',array('current' => ''));
 
 		/*
-		*
 		* Загрузка мета инфы всякой
-		*
 		*/		
-		$this->template->append_metadata('<script type="text/javascript" src="'.site_url("dashboards/agent/js/register.js").'"> </script>');
+		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/common/register.js'.'"></script>');
+		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'dashboards/agent/js/register.js'.'"> </script>');
 		$this->template->append_metadata('<script type="text/javascript">$(function(){register.init({baseUrl:"'.base_url().'"});});</script>');
 
 	}
@@ -54,7 +53,7 @@ class Register extends MX_Controller
 		*
 		*/
 		if($this->agent_users->is_logged_in() or !$this->agent_users->has_invite()){
-			redirect('');
+			redirect();
 		}
 
 		/*

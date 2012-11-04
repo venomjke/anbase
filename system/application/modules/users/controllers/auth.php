@@ -131,6 +131,8 @@ class Auth extends MX_Controller{
 	*	@author Alex.strigin
 	*/
 	public function register(){
+		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/common/register.js'.'"></script>');
+		
 		if ($this->users->is_logged_in()) {									// logged in
 			redirect();
 		}else {

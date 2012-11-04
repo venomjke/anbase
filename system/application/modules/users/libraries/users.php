@@ -129,9 +129,9 @@ class Users {
 	 * @return array
 	 * @author alex.strigin
 	 **/
-	public function get_register_validation_rules()
+	public function get_register_validation_rules($org=true)
 	{
-		$this->ci->load->model('m_organization');
+		$this->ci->load->model('users/m_organization');
 		$this->ci->load->model('users/m_user');
 
 		$fields = array();
@@ -141,10 +141,14 @@ class Users {
 		unset($user_valid_rules['id']); //id задавать не надо
 		unset($user_valid_rules['role']); // роль устанавливается автоматически
 
-		$org_valid_rules  = $this->ci->m_organization->get_validation_fields();
 
 		build_validation_array($fields,$user_valid_rules,'user');
-		build_validation_array($fields,$org_valid_rules,'org');
+
+		if($org){
+			$org_valid_rules  = $this->ci->m_organization->get_validation_fields();
+			build_validation_array($fields,$org_valid_rules,'org');	
+		}
+		
 		return $fields;
 	}
 
@@ -181,7 +185,7 @@ class Users {
 	 **/
 	function register($register_data = array())
 	{
-		$this->ci->load->model('m_organization');
+		$this->ci->load->model('users/m_organization');
 		$this->ci->load->model('m_settings_org');
 
 		// Hash password using phpass
