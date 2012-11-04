@@ -195,12 +195,12 @@ class Manager_Users extends Users
 		*
 		* Наши данные
 		*/
-		$fields = array('r_login','name','r_password','r_re_password','middle_name','last_name','phone');
+		$fields = array('user[login]','user[password]','user[re_password]','user[name]','user[middle_name]','user[last_name]','user[phone]');
 
 		/*
 		* Валидация данных
 		*/
-		$this->ci->form_validation->set_rules($this->ci->m_manager->register_validation_rules);
+		$this->ci->form_validation->set_rules($this->get_validation_fields());
 
 		$register_data = array();
 
@@ -210,17 +210,14 @@ class Manager_Users extends Users
 		if($this->ci->form_validation->run($this->ci->m_manager)){
 
 			/*
-			* Выбираем наши данные путем пересечения "наших" и "общих"
+			* Извлекаем данные формы
 			*/
-			$register_data['login']  = $this->ci->input->post('r_login');
-			$register_data['password'] = $this->ci->input->post('r_password');
-			$register_data['name'] = $this->ci->input->post('name');
-			$register_data['middle_name'] = $this->ci->input->post('middle_name');
-			$register_data['last_name'] = $this->ci->input->post('last_name');
-			$register_data['phone'] = $this->ci->input->post('phone');
+			$register_data = array();
+			$register_data = $this->get_form_data();
 			$register_data['email']  = $invite->email;
 			$register_data['org_id'] = $invite->org_id;
 			$register_data['role']   = $invite->role;
+
 
 			if (($user_id = $this->simple_register($register_data))) {
 				
@@ -243,6 +240,18 @@ class Manager_Users extends Users
 		}
 		return false;
 	}
+
+	private function get_validation_fields()
+	{
+		return $this->get_register_validation_rules(false); // обращаемся к users за списком правил валидации 
+	}
+
+	private function get_form_data()
+	{
+		return $this->ci->input->post('user');
+	}
+
+
 	/**
 	 * Обновление данных сессии агента
 	 *
