@@ -38,6 +38,8 @@ $(function(){
 			$.merge(columns,[{id: "phone", name:lang['grid.title.phone'], field:"phone", width:115, formatter:Slick.Formatters.Phone}]);
 		}
 
+		$.merge(columns,[{id:"finish_status",name:lang['grid.title.finish_status'],field:"finish_status",formatter:Slick.Formatters.FinishStatus,sortable:true}]);
+
 
 
 		/*
@@ -71,6 +73,11 @@ $(function(){
 					break;
 					case 'user_id':
 						model.setAgentOrder(sortHandle.sortAsc);
+						vp = grid.getViewport();
+						model.applyFilter(vp.top,vp.bottom);
+					break;
+					case 'finish_status':
+						model.setFinishStatusOrder(sortHandle.sortAsc);
 						vp = grid.getViewport();
 						model.applyFilter(vp.top,vp.bottom);
 					break;

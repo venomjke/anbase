@@ -40,7 +40,7 @@ $(function(){
 		}
 
 		$.merge(columns,[{id: "agent", name:lang['grid.title.agent'], field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent, sortable:true },
-						 {id:"finish_status", name:lang['grid.title.finish_status'], field:'finish_status', formatter:Slick.Formatters.FinishStatus, editor:Slick.Editors.FinishStatus}
+						 {id:"finish_status", name:lang['grid.title.finish_status'], field:'finish_status', formatter:Slick.Formatters.FinishStatus, editor:Slick.Editors.FinishStatus, sortable:true}
 			]);
 
 
@@ -80,6 +80,11 @@ $(function(){
 					break;
 					case 'user_id':
 						model.setAgentOrder(sortHandle.sortAsc);
+						vp = grid.getViewport();
+						model.applyFilter(vp.top,vp.bottom);
+					break;
+					case 'finish_status':
+						model.setFinishStatusOrder(sortHandle.sortAsc);
 						vp = grid.getViewport();
 						model.applyFilter(vp.top,vp.bottom);
 					break;

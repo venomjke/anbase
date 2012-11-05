@@ -25,6 +25,16 @@ class Site extends MX_Controller {
 			$this->template->set('loginBox',$loginBox);
 		}
 	}
+
+	public function migration()
+	{
+		$this->load->library('migration');
+
+		if ( ! $this->migration->latest())
+		{
+			show_error($this->migration->error_string());
+		}
+	}
 	/*
 	*	Главная страница:
 	*		- Форма входа

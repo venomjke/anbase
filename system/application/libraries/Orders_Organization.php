@@ -80,7 +80,7 @@ class Orders_Organization
 		/*
 		* Извлекаем параметры фильтра, валидируем их, а потом засовываем в массив
 		*/
-		$filter_fields = array('number','number_from','number_to','number_order','phone','category','dealtype','createdate_from','createdate_to','createdate_order','price_from','price_to','price_order','description','regions','metros','description_type','user_id','agent_order');
+		$filter_fields = array('number','number_from','number_to','number_order','phone','category','dealtype','createdate_from','createdate_to','createdate_order','price_from','price_to','price_order','description','regions','metros','description_type','user_id','agent_order','finishStatusOrder');
 
 		/*
 		* [my_notice] Не самый лучший способ проверить данные фильтра, но другого не придумал.
@@ -106,7 +106,8 @@ class Orders_Organization
 				'regions' => $this->ci->input->post('regions'),
 				'metros'  => $this->ci->input->post('metros'),
 				'user_id' => $this->ci->input->post('user_id'),
-				'agent_order' => $this->ci->input->post('agent_order')
+				'agent_order' => $this->ci->input->post('agent_order'),
+				'finishStatusOrder'=> $this->ci->input->post('finishStatusOrder')
 			);
 		}
 
