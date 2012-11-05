@@ -9,8 +9,8 @@
 		$o = array();
 
 		$building = '';
-		$building .= '<b>Категория:</b>'.$order->category.'<br/>';
-		$building .= '<b>Тип сделки:</b>'.$order->deal_type.'<br/>';
+		$building .= '<b>Категория:</b>'.$this->m_order->get_category_name($order->category).'<br/>';
+		$building .= '<b>Тип сделки:</b>'.$this->m_order->get_dealtype_name($order->deal_type).'<br/>';
 
 		$description = '';
 		$description .= $order->description.'<br/>';
@@ -19,22 +19,26 @@
 		$description .= $order->phone;
 
 		$regions = '';
+		$i = 0;
 		foreach($order->regions as $region){
-			$regions .= $region->name.'<br/>';
-		}
-		/*
-		$metros = '';
-		foreach($order->metros as $k => $v){
-			$metros .= '<b> Линия '.$k.'</b><br/>';
-			foreach($v as $metro){
-				$metros .= $metro.'<br/>';
+			if( $i == 0 ){
+				$regions .= $region->name;
+				++$i;
+				continue;
 			}
-		};
-		*/
+			$regions .= ','.$region->name.'<br/>';
+		}
+
 		$metros = '';
+		$i=0;
 		foreach($order->metros as $v){
 			foreach($v as $metro){
-				$metros .= $metro.' ';
+				if( $i == 0 ){
+					$metros .= $metro;
+					++$i;
+					continue;
+				} 
+				$metros .= ', '.$metro;
 			}
 		}
 
