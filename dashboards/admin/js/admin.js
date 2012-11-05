@@ -355,50 +355,61 @@ var admin = {
 			var cnt = 0;
 			var SelectedRows = grid.getSelectedRows();
 			var $promptDialog = $('<div></div>');
-			$promptDialog.dialog({
-				'title':lang['prompt_finish_order_set_status'],
-				'modal':true,
-				'width':'auto',
-				'autoOpen':false
-			});
 
-			for(var i in SelectedRows){
-				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
-					++cnt;
-					/*
-					$promptDialog.dialog('options','buttons',{
-						'Успешно':function(){
-							ids[grid.getDataItem(SelectedRows[i]).id] = common.finishstatus_list['ORDER_FINISH_STATUS_SUCCESS'];
-							$promptDialog.dialog('close');
-						},
-						'Неуспешно':function(){
-							ids[grid.getDataItem(SelectedRows[i]).id] = common.finishstatus_list['ORDER_FINISH_STATUS_FAILURE'];
-							$promptDialog.dialog('close');
-						}
-					});
-					$promptDialog.dialog('open');*/
-					ids[grid.getDataItem(SelectedRows[i]).id] = common.finishstatus_list['ORDER_FINISH_STATUS_SUCCESS'];
+			function show_prompt(){
+				if(SelectedRows.length){
+					var item = SelectedRows.shift();
+					var itemData = grid.getDataItem(item);
+
+					if(itemData && itemData.id){
+						++cnt;
+						$promptDialog.dialog({
+							'title':lang['prompt_finish_order_set_status']+' #:'+itemData.id,
+							'modal':true,
+							'width':'auto',
+							'autoOpen':false,
+							'buttons':{
+								'Сдал':function(){
+									ids[itemData.id] = common.finishstatus_list['ORDER_FINISH_STATUS_SUCCESS'];
+									$promptDialog.dialog('close');
+									show_prompt();
+								},
+								'Не сдал':function(){
+									ids[itemData.id] = common.finishstatus_list['ORDER_FINISH_STATUS_FAILURE'];
+									$promptDialog.dialog('close');
+									show_prompt();
+								}
+							}
+						});
+						$promptDialog.dialog('open');
+					}
+				}else{
+					finish();
 				}
 			}
-			ids.length = cnt;
 
-			if(ids.length){
-				$d = $('<div></div>');
-				$d.dialog({
-					'title':lang['prompt_finish_orders'],
-					'modal':true,
-					'width':400,
-					'buttons':{
-						'Завершить':function(){
-							model.finishOrders(ids);
-							$d.dialog('close');
-						},
-						'Отмена':function(){
-							$d.dialog('close');
+			function finish(){
+				ids.length = cnt;
+
+				if(ids.length){
+					$d = $('<div></div>');
+					$d.dialog({
+						'title':lang['prompt_finish_orders'],
+						'modal':true,
+						'width':400,
+						'buttons':{
+							'Завершить':function(){
+								model.finishOrders(ids);
+								$d.dialog('close');
+							},
+							'Отмена':function(){
+								$d.dialog('close');
+							}
 						}
-					}
-				});		
-			}	
+					});		
+				}	
+			}
+			show_prompt();	
 		},
 		restore_orders:function(grid,model){
 			var ids = [];

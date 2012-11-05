@@ -124,14 +124,68 @@ class Users {
 	}
 
 	/**
-	 * Функция, выполняющая регистрацию пользователя и организации пользователя
+	 * Функция возвращает список всех правил для первичной регистрации в системе
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_register_validation_rules($org=true)
+	{
+		$this->ci->load->model('users/m_organization');
+		$this->ci->load->model('users/m_user');
+
+		$fields = array();
+
+		$user_valid_rules = $this->ci->m_user->get_validation_fields();
+		$user_valid_rules['re_password'] =array('field'=>'re_password', 'label'=>'lang:label_re_password','rules'=>($user_valid_rules['password']['rules'].'|matches2[user[password]]')); // в форме регистрации появляется доп. поле "повторить пароль"
+		unset($user_valid_rules['id']); //id задавать не надо
+		unset($user_valid_rules['role']); // роль устанавливается автоматически
+
+
+		build_validation_array($fields,$user_valid_rules,'user');
+
+		if($org){
+			$org_valid_rules  = $this->ci->m_organization->get_validation_fields();
+			build_validation_array($fields,$org_valid_rules,'org');	
+		}
+		
+		return $fields;
+	}
+
+	/**
+	 * Функция возвращает список всех правил, для реализации входа в систему
+	 *
+	 * @return array
+	 * @author alex.strigin
+	 **/
+	public function get_login_validation_rules()
+	{
+		$this->ci->load->model('users/m_user');
+
+		$fields = array();
+
+		/*
+		* Для входа в систему достаточно всего два поля login и пароль, при этом у login не должно быть правила is_unique
+		*/
+		$user = $this->ci->m_user->get_validation_fields();
+		$user_fields = array();
+		$user_fields['login']['rules'] = 'required|trim|xss_clean'; // в форме "входа" логин может быть в форме emai.
+		$user_fields['password'] = $user['password'];
+		$user_fields['remember'] = array('field'=>'remember','label'=>'lang:label_remember','rules'=>'integer');
+
+		build_validation_array($fields,$user_fields,'user_login');
+		return $fields;
+	}
+
+	/**
+	 * Функция, выполняющая регистрацию пользователя ( администратора/директора ) и его организации.
 	 *
 	 * @return void
 	 * @author 
 	 **/
 	function register($register_data = array())
 	{
-		$this->ci->load->model('m_organization');
+		$this->ci->load->model('users/m_organization');
 		$this->ci->load->model('m_settings_org');
 
 		// Hash password using phpass
@@ -140,20 +194,15 @@ class Users {
 				$this->ci->config->item('phpass_hash_portable', 'users'));
 
 		/*
-		*
 		*	Составляем пачку данных для регистрации пользователя
-		*
 		*/
-
 		$register_data['password'] = $hasher->HashPassword($register_data['password']);
 		$register_data['role']	   = M_User::USER_ROLE_ADMIN; // делаем его админом
 
 		if (($res = $this->ci->m_user->insert($register_data,true))) {
 
 			/*
-			*
 			*	Составляем пачку данных для регистрации организации
-			*
 			*/
 			$register_data['user_id'] = $res;
 
@@ -173,16 +222,9 @@ class Users {
 				$default_settings = array();
 				$default_settings['org_id'] = $res;
 
-				if(!$this->ci->m_settings_org->insert($default_settings)){
-					$this->error = array('register_org_error'=>'register_org_error');
-				}else{
+				if($this->ci->m_settings_org->insert($default_settings)){
 					return $register_data;
 				}
-
-				/*
-				* достаточно удалить пользователя, к нему привязана организация, и она будет автоматом удалена
-				*/
-				$this->ci->m_user->delete($register_data['user_id']);
 			}
 			$this->ci->m_user->delete($register_data['user_id']);
 

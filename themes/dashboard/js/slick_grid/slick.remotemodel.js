@@ -36,8 +36,10 @@
     var description ='';
     var description_type ='';
     var user_id = '';
+    var agent_order = '';
     var metros = {};
     var regions = [];
+    var finishStatusOrder = '';
 
     // private
     var data = [];
@@ -129,6 +131,14 @@
       user_id = f_user_id;
     }
 
+    function setAgentOrder(f_agent_order){
+      agent_order = f_agent_order?1:-1;
+    }
+
+    function setFinishStatusOrder(f_finishStatusOrder){
+      finishStatusOrder = f_finishStatusOrder?1:-1;
+    }
+
     function applyFilter(top,bottom){
       clear();
       ensureData(top,bottom);
@@ -151,6 +161,8 @@
         description ='';
         description_type ='';
         user_id = '';
+        agent_order='';
+        finishStatusOrder='';
         metros = {};
         regions = [];
     }
@@ -159,6 +171,8 @@
       number_order = '';
       createdate_order = '';
       price_order = '';
+      agent_order='';
+      finishStatusOrder='';
     }
 
     function isDataLoaded(from, to) {
@@ -228,8 +242,10 @@
         metros:metros,
         regions:regions,
         user_id:user_id,
+        agent_order:agent_order,
         offset:offset,
-        limit:limit
+        limit:limit,
+        finishStatusOrder:finishStatusOrder
       }
 
       
@@ -420,6 +436,8 @@
       "finishOrders":finishOrders,
       "restoreOrders":restoreOrders,
       "printOrders":printOrders,
+      "setAgentOrder":setAgentOrder,
+      "setFinishStatusOrder":setFinishStatusOrder,
       // methods
       "clear": clear,
       "isDataLoaded": isDataLoaded,

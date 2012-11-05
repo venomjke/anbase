@@ -1,0 +1,9 @@
+*.*~
+!.gitignore
+!index.html
+
+#Commonly modified files
+system/application/logs/*
+system/application/cache/*
+*.sublime-workspace
+*.sublime-project

@@ -87,10 +87,10 @@ class Manager_Orders
 	 **/
 	public function get_all_delegate_orders()
 	{
-		$orders_fields = array('number','create_date','category','deal_type','description','price','phone','any_region','any_metro');
+		$orders_fields = array('number','create_date','category','deal_type','description','price','phone','any_region','any_metro','finish_status');
 
 		/*
-		* Определяем фильтры, limit, offset
+		* Определяем фильтры limit, offset
 		*/
 		$filter = $this->ci->orders_organization->fetch_filter();
 

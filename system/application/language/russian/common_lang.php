@@ -74,3 +74,4 @@ $lang['common.validation.convert_valid_date'] = 'Поле "%s" содержит 
 $lang['common.validation.valid_phone'] = 'Поле "%s" содержит неправильный номер телефона';
 $lang['common.validation.exists_email'] = 'Пользователя с указанным адресом электронной почты не существует';
 $lang['common.validation.valid_order_finish_status'] = 'Поле "%s" содержит неверный статус завершения';
+$lang['common.validation.matches2'] = 'Поле &quot;%s&quot; должно соответствовать значению в поле &quot;%s&quot;.';

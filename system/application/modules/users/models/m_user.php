@@ -25,7 +25,6 @@ class M_User extends MY_Model{
 	const USER_ROLE_MANAGER = 0x02;
 	const USER_ROLE_AGENT   = 0x03;
 
-
 	public function __construct(){
 
 		parent::__construct();
@@ -45,16 +44,15 @@ class M_User extends MY_Model{
 		*	Правила валидации
 		*/
 		$this->validate = array(
-			array('field' => 'id', 'label' => 'lang:label_user_id', 'rules' => 'integer'),
-			array('field' => 'login', 'label' => 'lang:label_login', 'rules' => 'trim|xss_clean|min_length[3]|max_length[50]|alpha_dash|is_unique[users.login]'),
-			array('field' => 'password', 'label' => 'lang:label_password','rules' => 'trim|xss_clean|min_length[6]|max_length[200]|alpha_dash'),
-			array('field' => 're_password', 'label' => 'lang:label_password','rules'=>'trim|xss_clean|matches[password]'),
-			array('field' => 'email', 'label' => 'lang:label_email', 'rules' => 'trim|xss_clean|valid_email|is_unique[users.email]'),
-			array('field' => 'name', 'label' => 'lang:label_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
-			array('field' => 'middle_name', 'label' => 'lang:label_middle_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
-			array('field' => 'last_name', 'label' => 'lang:label_last_name', 'rules' => 'min_length[1]|max_length[15]|trim|xss_clean'),
-			array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'trim|valid_phone'),
-			array('field' => 'role', 'label' => 'lang:label_role', 'rules'=>'trim|xss_clean|is_valid_user_role')
+			'id'=>array('field' => 'id', 'label' => 'lang:label_user_id', 'rules' => 'integer'),
+			'login'=>array('field' => 'login', 'label' => 'lang:label_login', 'rules' => 'required|trim|xss_clean|min_length[3]|max_length[50]|alpha_dash|is_unique[users.login]'),
+			'email'=>array('field' => 'email', 'label' => 'lang:label_email', 'rules' => 'required|trim|xss_clean|valid_email|is_unique[users.email]'),
+			'password'=>array('field' => 'password', 'label' => 'lang:label_password','rules' => 'required|trim|xss_clean|min_length[6]|max_length[200]|alpha_dash'),
+			'name'=>array('field' => 'name', 'label' => 'lang:label_name', 'rules' => 'required|trim|xss_clean|min_length[1]|max_length[15]'),
+			'middle_name'=>array('field' => 'middle_name', 'label' => 'lang:label_middle_name', 'rules' => 'required|trim|xss_clean|min_length[3]|max_length[15]'),
+			'last_name'=>array('field' => 'last_name', 'label' => 'lang:label_last_name', 'rules' => 'required|trim|xss_clean|min_length[3]|max_length[15]'),
+			'phone'=>array('field' => 'phone', 'label' => 'lang:label_phone','rules'=>'trim|valid_phone'),
+			'role'=>array('field' => 'role', 'label' => 'lang:label_role', 'rules'=>'required|trim|xss_clean|is_valid_user_role')
 		);
 
 		/*

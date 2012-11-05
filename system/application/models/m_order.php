@@ -530,6 +530,21 @@ class M_Order extends MY_Model{
 			$this->db->where("users.id",$value);
 		}
 	}
+
+	public function set_agent_order_filter($value)
+	{
+		if(!empty($value) && is_numeric($value)){
+			if($value >= 1)	$this->db->order_by('users.id','ASC');
+			else $this->db->order_by('users.id','DESC');
+		} 
+	}
+
+	public function set_finishStatusOrder_filter($value)
+	{
+		if(!empty($value) && is_numeric($value)){
+			$value >= 1? $this->db->order_by('orders.finish_status','ASC'):$this->db->order_by('orders.finish_status','DESC');
+		}
+	}
 	/**
 	 * Метод проходит по списку полей применяя к каждому свой фильтр
 	 *
@@ -836,7 +851,7 @@ class M_Order extends MY_Model{
 	*/
 	public function restore_orders($ids){
 		$this->where_in('id',$ids);
-		$this->db->update($this->table,array('state'=>M_Order::ORDER_STATE_ON));
+		$this->db->update($this->table,array('state'=>M_Order::ORDER_STATE_ON,'finish_status'=>0));
 	}
 
 	/**

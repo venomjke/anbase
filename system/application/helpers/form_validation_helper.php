@@ -31,3 +31,24 @@ if (!function_exists("has_errors_validation")) {
 		return $has_errors_validation;
 	}
 }
+
+if(!function_exists("build_validation_array")){
+	/**
+	 * Функция преобразует значения полей из $target, к виду типа $prefix[значение поля]
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	function build_validation_array(&$fields,$target,$prefix)
+	{
+		if(is_array($target)){
+			foreach($target as $field=>$field_def){
+				$buff = array();
+				$buff['field'] = $prefix."[".$field_def['field']."]";
+				$buff['label'] = $field_def['label'];
+				$buff['rules'] = $field_def['rules'];
+				$fields[]=$buff;
+	 		}	
+		}
+	}
+}

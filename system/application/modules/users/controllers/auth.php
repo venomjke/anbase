@@ -22,18 +22,17 @@ class Auth extends MX_Controller{
 		parent::__construct();
 
 		/*
-		*
 		* Установка темы	
 		*/
 		$this->template->set_theme('start');
 
 
 		/*
-		*
 		* Загрузка библиотек	
 		*	[Мб вынести в autoload?]
 		*/
 		$this->load->library('users/users');
+		$this->load->library('ajax');
 		$this->lang->load('users');
 	}
 
@@ -58,30 +57,17 @@ class Auth extends MX_Controller{
 		} else {
 
 			$data = array();
-			$this->form_validation->set_rules('login', 'Логин', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('password', 'Пароль', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('remember', 'Запомнить', 'integer');
 
-			// Get login for counting attempts to login
-			if ($this->config->item('login_count_attempts', 'users') AND
-					($login = $this->input->post('login'))) {
-				$login = $this->security->xss_clean($login);
-			} else {
-				$login = '';
-			}
+			$login_fields = $this->get_login_fields();
 
-			if ($this->users->is_max_login_attempts_exceeded($login)) {
-				$this->form_validation->set_rules('recaptcha_response_field', 'Код подтверждения', 'trim|xss_clean|required|callback__check_recaptcha');
-			}
+			$this->form_validation->set_rules($login_fields);
 
 			$errors = array();
 
-			if ($this->form_validation->run($this)) {								// validation ok
-				if ($this->users->login(
-						$this->form_validation->set_value('login'),
-						$this->form_validation->set_value('password'),
-						$this->form_validation->set_value('remember'))) {
-														// success
+			if ($this->form_validation->run($this)) {	// validation ok
+				$login_data = $this->get_login_data();
+
+				if ($this->users->login($login_data['login'],$login_data['password'],$login_data['remember'])) {// success
 					redirect($this->users->resolve_user_redirect_uri());
 				} else {
 					$errors = $this->users->get_error_message();
@@ -99,10 +85,31 @@ class Auth extends MX_Controller{
 
 			$data['errors']            = $errors;
 			return $this->load->view('users/login',$data,true);
-			
 		}
 	}
 
+	public function get_login_fields()
+	{
+		$fields = $this->users->get_login_validation_rules();
+
+		// Get login for counting attempts to login
+		if ($this->config->item('login_count_attempts', 'users') AND
+				($login = $this->input->post('login'))) {
+			$login = $this->security->xss_clean($login);
+		} else {
+			$login = '';
+		}
+
+		if ($this->users->is_max_login_attempts_exceeded($login)) {
+			$fields[] = array('field'=>'recaptcha_response_field','label'=>'Код подтверждения','rules'=>'trim|xss_clean|required|callback__check_recaptcha');
+		}
+		return $fields;
+	}
+
+	public function get_login_data()
+	{
+		return $this->input->post('user_login');
+	}
 
 	/*
 	*
@@ -112,54 +119,41 @@ class Auth extends MX_Controller{
 	public function logout(){
 		$this->users->logout();
 		// редирект на главную после logout
-		redirect('');
+		redirect();
 	}
 
 
 	/**
-	*
 	*	Ok, you are in my trap=)
+	*
 	*	Регистрация организации и главного пользователя.
-	*	Регистрация остальных участников доступна в соотв. разделах ( Админ, Менеджер, Агент ).*   Регистрация участников разрешена только для тех, кто получил инвайт.
+	*	Регистрация остальных участников доступна в соотв. разделах ( Админ, Менеджер, Агент ).
 	*	@author Alex.strigin
 	*/
 	public function register(){
+		$this->template->append_metadata('<script type="text/javascript" src="'.base_url().'themes/dashboard/js/common/register.js'.'"></script>');
+		
 		if ($this->users->is_logged_in()) {									// logged in
-			redirect('');
+			redirect();
 		}else {
+			$register_fields = $this->get_register_fields(); // получаем преобразованный список полей с правилами валидации для m_user+m_organization
 
-			/*
-			*
-			*	Вынес правила валидации в отдельный файл, так проще.
-			*/
-			include APPPATH."modules/users/validation_rules/register.php";
-			
-			
+			$this->form_validation->set_rules($register_fields);
+
 			$data['errors'] = array();
 
 			if ($this->form_validation->run($this)) {	// validation ok
 
-				$register_data = array(
-					'login'       => $this->input->post('r_login'),
-					'password'    => $this->input->post('r_password'),
-					'email'    	  => $this->input->post('r_email'),
-					'name'        => $this->input->post('name'),
-					'middle_name' => $this->input->post('middle_name'),
-					'last_name'   => $this->input->post('last_name'),
-					'phone'		  => $this->input->post('phone')?$this->input->post('phone'):'',
-					'org_name'    => $this->input->post('org_name'),
-					'org_phone'   => $this->input->post('org_phone'),
-					'org_email'   => $this->input->post('org_email')
-				);
+				$register_data = $this->get_register_data(); // получаем поля для выполнения регистрации
 				
 				if ($this->users->register($register_data)) {
-					// success и отображение register_finish
-					//$data['success']['register'] = lang('sucess_register'); 
 					// пока редирект на главную страницу
 					$this->session->set_flashdata('redirect',true);
 					redirect('redirect');
 				} else {
-
+					/*
+					* Ошибки для каждой секции выводятся отдельно: ошибки регистрации аккаунта, ошибки регистрации организации
+					*/
 					$errors = $this->users->get_error_message();
 					foreach ($errors as $k => $v)	
 						$data['errors'][$k] = $this->lang->line($v);
@@ -178,6 +172,86 @@ class Auth extends MX_Controller{
 
 	}
 
+	private function get_register_fields()
+	{
+		$f = $this->users->get_register_validation_rules();
+		$f[] = array('field'=>'recaptcha_response_field','label'=>'Код подтверждения','rules'=>'trim|xss_clean|required|callback__check_recaptcha');
+		return $f;
+	}
+
+
+	private function get_register_data()
+	{
+		$user_fields = $this->input->post('user');
+		$org_fields  = $this->input->post('org');
+		return array(
+					'login'       => $user_fields['login'],
+					'password'    => $user_fields['password'],
+					'email'    	  => $user_fields['email'],
+					'name'        => $user_fields['name'],
+					'middle_name' => $user_fields['middle_name'],
+					'last_name'   => $user_fields['last_name'],
+					'phone'		  => isset($user_fields['phone'])?$user_fields['phone']:'',
+					'org_name'    => $org_fields['name'],
+					'org_phone'   => $org_fields['phone'],
+					'org_email'   => $org_fields['email']
+				);
+	}
+	/**
+	 * Общая проверка полей необходимых при регистрации пользователя
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function register_ajax_validation()
+	{
+		/*
+		* Подготавливаем полный список полей для валидации
+		*/
+		$fields_validation_rules = $this->get_register_fields();
+		/*
+		* Находим соответствие между списком заданных полей и переданных клиентом
+		*/
+		$fields = array();
+		$search_field = function($validationFields,$field,&$matchField){
+			foreach($validationFields as $validationField){
+				if($validationField['field'] == $field){
+					$matchField = $validationField;
+					return true;
+				}
+			}
+			return false;
+		};
+
+		if($this->input->post('fields') && is_array($this->input->post('fields'))){
+
+			foreach($this->input->post('fields') as $k){
+				$validField = null;
+				if($search_field($fields_validation_rules,$k,$validField)){
+					$fields[] = $validField;
+				}
+			}
+			$this->form_validation->set_rules($fields);
+
+			if($this->form_validation->run()){
+				$response = array();
+				$response['code'] = 'success';
+				$response['fields'] = array();
+				foreach($fields as $field){
+					$response['fields'][$field['field']] = 'success'; 
+				}
+				$this->ajax->build_json($response);
+			}else{
+				$response['code'] = 'error';
+				$response['fields'] = array();
+				foreach($fields as $field){
+					$response['fields'][$field['field']] = $this->form_validation->error($field['field'],'<span class="error">','</span>');
+				}
+				$this->ajax->build_json($response);
+			}
+		}
+	}
+
 	public function redirect()
 	{
 		if($this->session->flashdata('redirect')){
@@ -193,6 +267,13 @@ class Auth extends MX_Controller{
 	public function forget_password($act = 'view')
 	{
 		if($this->users->is_logged_in()) redirect('');
+
+		/*
+		*	Настройки шаблона
+		*/
+		$this->template->set_theme('start');
+		$this->template->set_partial('menu','common/menu');
+		$this->template->set('loginBox',$this->load->view('users/login',array(),true));
 
 		switch($act){
 			case 'view':
@@ -212,13 +293,6 @@ class Auth extends MX_Controller{
 
 	private function _send_email_forget_password()
 	{
-		/*
-		*	Настройки шаблона
-		*/
-		$this->template->set_theme('start');
-		$this->template->set_partial('menu','common/menu');
-		$this->template->set('loginBox',$this->load->view('users/login',array(),true));
-		
 		try{
 			if($this->users->send_email_forget_password()){
 				$this->template->build('forget_password/send_mail',array('success_send'=>true));
@@ -234,22 +308,17 @@ class Auth extends MX_Controller{
 
 	private function _reset_forget_password()
 	{
-		if(!$this->users->has_access_reset_password()){
-			redirect('');
-		}
-
 		/*
-		*	Настройки шаблона
+		* Проверк ключа "key" и "email".
 		*/
-		$this->template->set_theme('start');
-		$this->template->set_partial('menu','common/menu');
-		$this->template->set('loginBox',$this->load->view('users/login',array(),true));
+		if(!$this->users->has_access_reset_password()){
+			redirect();
+		}
 
 		$data['email'] = $this->input->get('email');
 		$data['key']   = $this->input->get('key');
 		try{
-			$email = $this->input->get('email');
-			if($this->users->reset_forget_password($email)){
+			if($this->users->reset_forget_password($this->input->get('email'))){
 				$data['success_reset'] = true;
 				$this->template->build('forget_password/reset',$data);
 			}else{

@@ -8,12 +8,25 @@
 		<meta http-equiv="description" name="description" content="Сервис и программа для автоматизации бизнеса агентства недвижимости, строительных компании, жилищно строительных кооперативов"/>
 
 		<?php echo link_tag('themes/start/images/an.ico', 'shortcut icon', 'image/ico'); ?>
-		<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/cupertino/jquery-ui.css"); ?>
-		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-		<script language="javascript">
-			google.load("jquery","1.7.1");
-			google.load("jqueryui","1.8");
-		</script>
+		
+		<?php if(is_production_mode()): /* в production версии подключаем css и js через google cdn */ ?>
+		
+			<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/cupertino/jquery-ui.css"); ?>
+
+			<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+			<script language="javascript">
+				google.load("jquery","1.7.1");
+				google.load("jqueryui","1.8");
+			</script>
+
+		<?php else: ?>
+
+			<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>themes/dashboard/js/ui/themes/base/jquery.ui.theme.css" />
+			<script type="text/javascript" src="<?php echo base_url(); ?>themes/dashboard/js/jquery-1.6.1.min.js" > </script>
+			<script type="text/javascript" src="<?php echo base_url(); ?>themes/dashboard/js/ui/jquery-ui-1.8.16.custom.min.js"> </script>
+		
+		<?php endif; ?>
+
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.keyfilter.js"></script>
 		<?php
 			echo link_tag('themes/start/css/style.css');
@@ -23,7 +36,7 @@
 	<body>
 		<div class="bg">
 			<div class="shapka">
-		  		<a href="<?php echo site_url("");?>">
+		  		<a href="<?php echo site_url();?>">
 		  			<img src="<?php echo site_url("themes/start/images/logo.png");?>" width="232" height="84" /></a>
 		    	<div class="slogan">система учета заявок для агентств недвижимости</div>
 			</div>
@@ -75,12 +88,11 @@
 				})
 			</script>
 		<?php endif; ?>
-		<?php 
-			/*
-			* В Production версии добавляем код отслеживания
-			*/
-			if(ENVIRONMENT == ANBASE_PROD):
-				?>
+		
+		<?php /* В Production версии добавляем код отслеживания*/
+			  if(is_production_mode()): 
+	    ?>
+
 			<script type="text/javascript">
 
 			  var _gaq = _gaq || [];
@@ -94,8 +106,7 @@
 			  })();
 
 			</script>
-			<?php
-			endif;
-		?>
+
+		<?php endif; ?>
 	</body>
 </html>

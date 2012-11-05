@@ -52,23 +52,19 @@ class M_Manager_order extends M_Order
 	public function get_all_delegate_orders($user_id,$filter=array(),$limit=false,$offset=false,$fields=array())
 	{
 		/*
-		*
 		* метод build_select для  формирования селекта на выбор всех заявок
 		* + join на выбор заявок из managers_users
 		*/
 		$this->build_select($fields);
 		$this->join("managers_users","managers_users.user_id = orders_users.user_id");
+
 		/*
-		*
 		* Установка фильтров 
-		*
 		*/
 		$this->set_filter($filter);
 
 		/*
-		*
 		*	Установка ограничений
-		*
 		*/
 		$this->limit($limit,$offset);
 

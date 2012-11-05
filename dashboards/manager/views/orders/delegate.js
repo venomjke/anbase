@@ -32,11 +32,13 @@ $(function(){
 		$.merge(columns,[{id: "description", name:lang['grid.title.description'], field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
 		]);
 
-		$.merge(columns,[{id: "agent", name:lang['grid.title.agent'], field:"user_id",formatter:Slick.Formatters.Agent}]);
+		$.merge(columns,[{id: "agent", name:lang['grid.title.agent'], field:"user_id",formatter:Slick.Formatters.Agent, sortable:true}]);
 
 		if(common.settings_org.phone_col == "1"){
 			$.merge(columns,[{id: "phone", name:lang['grid.title.phone'], field:"phone", width:115, formatter:Slick.Formatters.Phone}]);
 		}
+
+		$.merge(columns,[{id:"finish_status",name:lang['grid.title.finish_status'],field:"finish_status",formatter:Slick.Formatters.FinishStatus,sortable:true}]);
 
 
 
@@ -66,6 +68,16 @@ $(function(){
 					break;
 					case 'create_date':
 						model.setCreateDateOrder(sortHandle.sortAsc);
+						vp = grid.getViewport();
+						model.applyFilter(vp.top,vp.bottom);
+					break;
+					case 'user_id':
+						model.setAgentOrder(sortHandle.sortAsc);
+						vp = grid.getViewport();
+						model.applyFilter(vp.top,vp.bottom);
+					break;
+					case 'finish_status':
+						model.setFinishStatusOrder(sortHandle.sortAsc);
 						vp = grid.getViewport();
 						model.applyFilter(vp.top,vp.bottom);
 					break;

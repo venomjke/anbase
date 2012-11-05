@@ -27,6 +27,7 @@ $lang['label_middle_name'] = 'Отчество';
 $lang['label_last_name']= 'Фамилия';
 $lang['label_phone']	= 'Телефон';
 $lang['label_role']		= 'Роль';
+$lang['label_re_password'] = 'Повторите пароль';
 
 /*
 * Модель M_User, обозначения ролей
