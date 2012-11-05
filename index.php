@@ -2,7 +2,7 @@
 /*
 * APPLICATION VERSION
 */
-define('ANBASE_VERSION','0.9');
+define('ANBASE_VERSION','0.9.1');
 
 /*
  *---------------------------------------------------------------
