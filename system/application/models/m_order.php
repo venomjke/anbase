@@ -844,7 +844,7 @@ class M_Order extends MY_Model{
 	*/
 	public function restore_orders($ids){
 		$this->where_in('id',$ids);
-		$this->db->update($this->table,array('state'=>M_Order::ORDER_STATE_ON));
+		$this->db->update($this->table,array('state'=>M_Order::ORDER_STATE_ON,'finish_status'=>0));
 	}
 
 	/**

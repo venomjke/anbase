@@ -270,8 +270,10 @@ var common = {
 	    function check_status(finish_status,success,failure){
 	      if(finish_status == 	common.finishstatus_list['ORDER_FINISH_STATUS_SUCCESS']){
 	        return success;
+	      }else if(finish_status == common.finishstatus_list['ORDER_FINISH_STATUS_FAILURE']){
+			return failure;
 	      }
-	      return failure;
+	      return ''; // в том случае, если заявка еще не завершена
 	    }
       switch(parseInt(deal_type)){
         case common.dealtype_list['ORDER_DEAL_TYPE_RENT']: // Сдать

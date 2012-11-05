@@ -252,7 +252,7 @@
     value = parseInt(value);
 
 
-    if(value && typeof value == "number"){
+    if(typeof value == "number"){
       return common.getFinishStatusName(value,dataContext.deal_type);
     }
     return value;
