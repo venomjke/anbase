@@ -133,8 +133,11 @@ class Orders extends MX_Controller
 					case 'free':
 						$this->_free_orders();
 						break;
-					case 'delegate':
-						$this->_delegate_orders();
+					case 'delegate_on':
+						$this->_delegate_orders('on');
+						break;
+					case 'delegate_off':
+						$this->_delegate_orders('off');
 						break;
 					case 'off':
 						$this->_off_orders();
@@ -232,12 +235,12 @@ class Orders extends MX_Controller
 	 * @return void
 	 * @author Alex.strigin
 	 **/
-	private function _delegate_orders()
+	private function _delegate_orders($state = 'on')
 	{
 		if($this->ajax->is_ajax_request()){
 			$response = array();
 			try{
-				$orders = $this->manager_orders->get_all_delegate_orders();	
+				$orders = $this->manager_orders->get_all_delegate_orders($state);	
 				$response['code'] = 'success_load_data';
 				$response['data'] = $orders;
 			}catch(AnbaseRuntimeException $re){
@@ -254,6 +257,16 @@ class Orders extends MX_Controller
 			/*
 			*	Вывод данных
 			*/
+			$section = '';
+			switch($state){
+				case 'on':
+					$section = 'delegate_on';
+					break;
+				case 'off':
+					$section = 'delegate_off';
+					break;
+			}
+			$this->template->set('section',$section);
 			$this->template->build("orders/delegate");
 		}
 	}

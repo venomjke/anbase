@@ -38,8 +38,9 @@ class M_Manager_order extends M_Order
 	{
 		parent::__construct();
 	}
+
 	/**
-	 * Выбор всех заявок агентов, которых курирует данный менеджер
+	 * Выбор всех активных заявок агентов, курируемых данным менеджером
 	 *
 	 * @param int manager_id
 	 * @param int org_id
@@ -49,7 +50,7 @@ class M_Manager_order extends M_Order
 	 * @return array
 	 * @author Alex.strigin
 	 **/
-	public function get_all_delegate_orders($user_id,$filter=array(),$limit=false,$offset=false,$fields=array())
+	public function get_all_delegate_orders($user_id,$filter=array(),$limit=false,$offset=false,$fields=array(),$state=M_Order::ORDER_STATE_ON)
 	{
 		/*
 		* метод build_select для  формирования селекта на выбор всех заявок
@@ -72,14 +73,15 @@ class M_Manager_order extends M_Order
 		*	Выборка.
 		*	Указываем только manager_id, т.к org_id подразумевается верным потому, что manager_id не может быть связан с теми user_id, которые не принадлежат к текущей организации.
 		*/
-		return $this->get_all(array("managers_users.manager_id" => $user_id));
+		return $this->get_all(array("managers_users.manager_id" => $user_id, "orders.state" => $state));
 	}
 
-	public function count_all_delegate_orders($user_id,$filter=array())
+	public function count_all_delegate_orders($user_id,$filter=array(),$state=M_Order::ORDER_STATE_ON)
 	{
 		$this->build_count_select($filter);
 		$this->join("managers_users","managers_users.user_id = orders_users.user_id");
 		$this->db->where("managers_users.manager_id",$user_id);
+		$this->db->where('orders.state',$state);
 		return $this->get_count_result();	
 	}
 

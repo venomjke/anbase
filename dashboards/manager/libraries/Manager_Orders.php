@@ -85,7 +85,7 @@ class Manager_Orders
 	 * @return array
 	 * @author alex.strigin
 	 **/
-	public function get_all_delegate_orders()
+	public function get_all_delegate_orders($state='on')
 	{
 		$orders_fields = array('number','create_date','category','deal_type','description','price','phone','any_region','any_metro','finish_status');
 
@@ -99,11 +99,11 @@ class Manager_Orders
 
 		$orders = $this->ci->orders_organization->fetch_limit($limit,$offset);
 			
-		$orders = $this->ci->m_manager_order->get_all_delegate_orders($this->ci->manager_users->get_user_id(),$filter,$limit,$offset,$orders_fields);
+		$orders = $this->ci->m_manager_order->get_all_delegate_orders($this->ci->manager_users->get_user_id(),$filter,$limit,$offset,$orders_fields,($state=='on'?M_Order::ORDER_STATE_ON:M_Order::ORDER_STATE_OFF));
 		$this->ci->orders_organization->bind_metros($orders);
 		$this->ci->orders_organization->bind_regions($orders);
 
-		return array('count'=>count($orders),'total'=>$this->ci->m_manager_order->count_all_delegate_orders($this->ci->manager_users->get_user_id(),$filter),'items'=>$orders);
+		return array('count'=>count($orders),'total'=>$this->ci->m_manager_order->count_all_delegate_orders($this->ci->manager_users->get_user_id(),$filter,($state=='on'?M_Order::ORDER_STATE_ON:M_Order::ORDER_STATE_OFF)),'items'=>$orders);
 	}
 
 	/**

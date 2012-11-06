@@ -45,7 +45,7 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=delegate',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=<?php echo $section; ?>',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
 		common.grid = grid;
 
