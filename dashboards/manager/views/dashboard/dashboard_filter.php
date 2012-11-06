@@ -8,7 +8,7 @@
         <td> по&nbsp;телефону:</td>
         <td><input type="text" name="phone" id="f_phone" /></td>
       <?php endif; ?>
-      <?php /*в заявках агентов выводим фильтр по агентам*/ if($current == 'delegate'): ?>
+      <?php /*в заявках агентов выводим фильтр по агентам*/ if($current == 'delegate_on' || $current == 'delegate_off'): ?>
       <td> по&nbsp;агенту: </td>
       <td>  <select  name="user_id" id="f_user_id">
                 <option value=""></option> 
