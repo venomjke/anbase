@@ -26,19 +26,15 @@ class Orders_Organization
 	{
 		$this->ci = get_instance();
 
-		/*
-		* Загрузка исключений
-		*/
+		// загрузкая объектов исключений
 		$this->ci->load->exception('AnbaseRuntimeException');
 		$this->ci->load->exception('ValidationException');
 		
-		/*
-		* Загрузка модели m_order
-		*/
+		// загрузка моделей
 		$this->ci->load->model('m_order');
-
 		$this->ci->load->model('m_order_region');
 		$this->ci->load->model('m_order_metro');
+		$this->ci->load->model('m_order_comments');
 
 	}
 
@@ -73,7 +69,7 @@ class Orders_Organization
 		/*
 		* Если get array пуст, то даже и не пытаемся что-то сделать
 		*/
-		if(!$this->ci->input->get()){
+		if( ! $this->ci->input->get()){
 			return array();
 		}
 
@@ -149,6 +145,19 @@ class Orders_Organization
 	}
 
 	/**
+	 * Загрузка комментариев заявки
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function bind_comments(& $orders)
+	{
+		foreach($orders as $order){
+			$order->comments = $this->ci->m_order_comments->get_order_comments($order->id);
+		}
+	}
+
+	/**
 	 * Выбор всех свободных заявок
 	 *
 	 * @return void
@@ -211,6 +220,7 @@ class Orders_Organization
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);
+		$this->bind_comments($orders);
 
 		return $orders;
 	}
@@ -250,6 +260,7 @@ class Orders_Organization
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);
+		$this->bind_comments($orders);
 
 		return $orders;
 	}
@@ -286,15 +297,14 @@ class Orders_Organization
 		$limit  = false;
 		$offset = false;
 
-		//print_r($this->ci->input->get('regions'));
-		//print_r($this->ci->input->get('metros'));
-
 		$this->fetch_limit($limit,$offset);
 
 		$orders = $this->ci->m_order->get_all_orders_user($user_id,$filters,$limit,$offset,$fields);
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);
+		$this->bind_comments($orders);
+
 		return $orders;
 	}
 
@@ -332,6 +342,8 @@ class Orders_Organization
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);
+		$this->bind_comments($orders);
+
 		return $orders;
 	}
 
@@ -363,6 +375,8 @@ class Orders_Organization
 
 		$this->bind_regions($orders);
 		$this->bind_metros($orders);
+		$this->bind_comments($orders);
+
 		return $orders;
 	}
 

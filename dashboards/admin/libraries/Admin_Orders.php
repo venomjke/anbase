@@ -47,14 +47,16 @@ class Admin_Orders
 	 **/
 	public function get_all_orders_org()
 	{
-		/*
-		* Поля, которые нужно выбирать из базы
-		*/
+		// поля, которые нужно выбирать из базы
 		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region','delegate_date','finish_date','finish_status');
-		$items = $this->ci->orders_organization->get_all_orders_org($this->ci->admin_users->get_org_id(),$order_fields);
-		return array('count'=>count($items),'total'=>$this->ci->orders_organization->count_all_orders_org($this->ci->admin_users->get_org_id()),'items'=>$items);
+		$items = $this->ci->orders_organization->get_all_orders_org($this->ci->admin_users->get_org_id(), $order_fields);
+
+		return array('count' => count($items),
+			           'total' => $this->ci->orders_organization->count_all_orders_org($this->ci->admin_users->get_org_id()),
+			           'items'=>$items);
 
 	}
+	
 	/**
 	 * Выбор всех свободных заявок
 	 *

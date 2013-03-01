@@ -130,7 +130,7 @@ var common = {
 		return count_props;
 	},
 
-	show_full_text:function(event,row,cell,value){
+	show_full_text:function(event, row, cell, value){
 		var tooltip_id = '#tooltip_'+row+'_'+cell;
 		if($(tooltip_id).length>0){
 		  $(tooltip_id).css('top',event.pageY-$(tooltip_id).outerHeight(true)-20);

@@ -15,7 +15,7 @@
 </div>
 
 <script type="text/javascript">
-	<?php echo $this->load->view('orders/'.$section.'.js',array(),true); ?>
+	<?php echo $this->load->view('orders/' . $section . '.js',array(),true); ?>
 </script>
 
 <?php if($current != 'off'): ?>

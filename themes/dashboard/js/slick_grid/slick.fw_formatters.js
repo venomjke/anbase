@@ -17,7 +17,8 @@
         "Role":RoleFormatter,
         "Category":CategoryFormatter,
         "Dealtype":DealtypeFormatter,
-        "FinishStatus":FinishStatusFormatter
+        "FinishStatus":FinishStatusFormatter,
+        "Comments": CommentsFormatter
       }
     }
   });
@@ -179,20 +180,37 @@
   }
 
     /*
-    * Мои форматтеры
+    * Форматтер описания. Добавляет внутрь ячейки div, который появляется при наведении на неё
     */
     function DescriptionFormatter(row,cell,value,columnDef,dataContext){
-      if(!value)
-        return "";
-      /*
-      * Доступ к данным через глобальный объект common.grid!
-      */
+      if( ! value)
+        return '';
+      
+      // WARNING: Доступ к данным через глобальный объект common.grid
       var cell_content = $('<div id="cell_description" style="height:40px;overflow:hidden;">').html(value);
-      cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',common.grid.getDataItem('+row+').description);');
-      cell_content.attr('onmouseout','common.hide_full_text(event,'+row+','+cell+');');
+      cell_content.attr('onmousemove','common.show_full_text(event,' + row + ',' + cell + ', common.grid.getDataItem(' + row + ').description);');
+      cell_content.attr('onmouseout','common.hide_full_text(event,' + row + ',' + cell + ');');
       var wrap = $('<div>').html(cell_content);
       return wrap.html();
     };
+
+    function CommentsFormatter (row, cell, value, columnDef, dataContext) {
+      if( ! value || ! value.length) return '';
+
+      var cell_content = $('<div id="cell_description" style="overflow:hidden"></div>');
+
+      for(var i in value){
+        var $item = $('<div/>');
+        $item.append('<b>' + value[i].name + ' ' + value[i].middle_name + ' ' + value[i].last_name + ' (' + value[i].email + ') </b>');
+        $item.append('<div>' + value[i].text + '</div>');
+        cell_content.append($item);
+      }
+      dataContext.comments_content = cell_content.html();
+      cell_content.attr('onmousemove', 'common.show_full_text(event,' + row + ',' + cell + ', common.grid.getDataItem(' + row + ').comments_content);');
+      cell_content.attr('onmouseout', 'common.hide_full_text(event,' + row + ',' + cell +');');
+      var wrap = $('<div>').html(cell_content);
+      return wrap.html();
+    }
 
     /*
     * Преобразование ключа регистрации в понятный для человека вида

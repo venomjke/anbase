@@ -26,6 +26,7 @@ class Migration_Orders_Comments extends CI_Migration{
     );
 
     $this->dbforge->add_field($fields);
+    $this->dbforge->add_field('`date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
     $this->dbforge->add_key('id', true);
 
     if( ! $this->dbforge->create_table("orders_comments", true)){

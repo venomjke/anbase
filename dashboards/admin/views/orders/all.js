@@ -2,55 +2,151 @@ $(function(){
 		/*
 		* Настройки грида
 		*/
-		var options = {enableCellNavigation: true,editable:true,autoEdit:false,rowHeight:25,forceFitColumns:true,enableTextSelectionOnCells:true};
+		var options = {
+			enableCellNavigation: true,
+			editable:true,
+			autoEdit:false,
+			rowHeight:25,
+			forceFitColumns:true,
+			enableTextSelectionOnCells:true
+		};
 		var checkboxSelector = new Slick.CheckboxSelectColumn({
       		cssClass: "slick-cell-checkboxsel"
-    	});
-    	var columns = [];
+    });
+    
+    var columns = [];
 		columns.push(checkboxSelector.getColumnDefinition());
 
 		$.merge(columns,[
-			{id: "number", name:lang['grid.title.number'], field:"number",width:30, editor:Slick.Editors.Integer,sortable:true},
-			{id: "create_date", name:lang['grid.title.create_date'], field:"create_date", width:55, editor:Slick.Editors.Date,sortable:true},
-			{id: "category", name:lang['grid.title.category'], field:"category", width:55,editor:Slick.Editors.AnbaseCategory,formatter:Slick.Formatters.Category},
-			{id: "deal_type", name:lang['grid.title.deal_type'], field:"deal_type",width:50, editor:Slick.Editors.AnbaseDealType, formatter:Slick.Formatters.Dealtype}
+			{ id: "number", 
+			  name:lang['grid.title.number'], 
+			  field:"number",
+			  width:30, 
+			  editor:Slick.Editors.Integer,
+			  sortable:true
+			},
+			{ id: "create_date", 
+				name:lang['grid.title.create_date'], 
+				field:"create_date", 
+				width:55, 
+				editor:Slick.Editors.Date,
+				sortable:true
+			},
+			{ id: "category", 
+				name:lang['grid.title.category'], 
+				field:"category", 
+				width:55,
+				editor:Slick.Editors.AnbaseCategory,
+				formatter:Slick.Formatters.Category
+			},
+			{
+				id: "deal_type", 
+				name:lang['grid.title.deal_type'], 
+				field:"deal_type",
+				width:50, 
+				editor:Slick.Editors.AnbaseDealType, 
+				formatter:Slick.Formatters.Dealtype
+			}
 		]);
 
 		if(common.settings_org.regions_col == "1"){
 			var region_widget;
 			var regions = [];
-			$.merge(columns,[{id: "regions",  name:lang['grid.title.regions'],width:60, field:"regions",  editor:Slick.Editors.AnbaseRegions,formatter:Slick.Formatters.RegionsList}]);
+			$.merge(columns,[
+				{
+					id: "regions",	
+					name: lang['grid.title.regions'],
+					width:60, 
+					field:"regions",  
+					editor:Slick.Editors.AnbaseRegions,
+					formatter:Slick.Formatters.RegionsList
+				}]);
 		}
 
 		if(common.settings_org.metros_col == "1"){
 			var metro_widget;
 			var metros  = {};
-			$.merge(columns,[{id: "metros", name:lang['grid.title.metros'], width:60, field:"metros",  editor:Slick.Editors.AnbaseMetros,formatter:Slick.Formatters.MetrosList}]);
+			$.merge(columns, [
+				{
+					id: "metros", 
+					name: lang['grid.title.metros'], 
+					width: 60, 
+					field: "metros",  
+					editor: Slick.Editors.AnbaseMetros,
+					formatter: Slick.Formatters.MetrosList
+				}]);
 		}
 
 		if(common.settings_org.price_col == "1"){
-			$.merge(columns,[{id: "price", name:lang['grid.title.price'],width:60, field:"price",  formatter:Slick.Formatters.Rubbles,editor:Slick.Editors.Integer, sortable:true}]);
+			$.merge(columns,[
+				{
+					id: "price", 
+					name:lang['grid.title.price'],
+					width:60, 
+					field:"price",  
+					formatter:Slick.Formatters.Rubbles,
+					editor:Slick.Editors.Integer, 
+					sortable:true
+				}]);
 		}
 
-		$.merge(columns,[{id: "description", name:lang['grid.title.description'], field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description, editor:Slick.Editors.LongText}
+		$.merge(columns,[
+			{
+				id: "description", 
+				name: lang['grid.title.description'], 
+				field: "description",
+				cssClass:"cell_description", 
+				width:303, 
+				formatter:Slick.Formatters.Description, 
+				editor:Slick.Editors.LongText
+			}
 		]);
 
 		if(common.settings_org.phone_col == "1"){
-			$.merge(columns,[{id: "phone", name:lang['grid.title.phone'], field:"phone", width:95, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer}]);
+			$.merge(columns,[
+				{
+					id: "phone", 
+					name: lang['grid.title.phone'], 
+					field:"phone", 
+					width:95, 
+					formatter:Slick.Formatters.Phone, 
+					editor:Slick.Editors.Integer
+				}
+			]);
 		}
 
-		$.merge(columns,[{id: "agent", name:lang['grid.title.agent'], field:"user_id", formatter:Slick.Formatters.Agent, editor:Slick.Editors.AnbaseAgent, sortable:true },
-						 {id:"finish_status", name:lang['grid.title.finish_status'], field:'finish_status', formatter:Slick.Formatters.FinishStatus, editor:Slick.Editors.FinishStatus, sortable:true}
-			]);
+		$.merge(columns,[
+			{
+				id: "agent", 
+				name: lang['grid.title.agent'], 
+				field: "user_id", 
+				formatter: Slick.Formatters.Agent, 
+				editor: Slick.Editors.AnbaseAgent, 
+				sortable: true 
+			},
+			{
+				id: "finish_status", 
+				name: lang['grid.title.finish_status'], 
+				field:'finish_status', 
+				formatter:Slick.Formatters.FinishStatus, 
+				editor:Slick.Editors.FinishStatus, 
+				sortable:true
+			},
+			{
+				id: "comments",
+				name: lang['grid.title.comments'],
+				field: 'comments',
+				formatter: Slick.Formatters.Comments,
+				editor: Slick.Editors.Comments
+			}
+		]);
 
 
 		/*
 		* Создание грида
 		*/
 		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',AddUrl:admin.baseUrl+'?act=add',DeleteUrl:admin.baseUrl+'?act=del',finishUrl:admin.baseUrl+'?act=finish',PrintUrl:admin.baseUrl+'?act=print',PageSize:200});	
-		/*
-		* Создание грида
-		*/
+
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
 	    grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
 	    grid.registerPlugin(checkboxSelector);
@@ -113,7 +209,7 @@ $(function(){
 			data['id']  = item.id;
 			data[field] = item[field];
 			/*
-			* [my_notice]Наверно, стоит подумать над тем как нормально сохранять эти данные
+			* TODO Наверно, стоит подумать над тем как нормально сохранять эти данные
 			*/
 			if(field == "metros"){
 				data["any_metro"] = item["any_metro"];
@@ -129,7 +225,7 @@ $(function(){
 			}
 			
 			$.ajax({
-				url:admin.baseUrl+'/?act='+act,
+				url:admin.baseUrl + '/?act='+act,
 				type:'POST',
 				dataType:'json',
 				data:data,

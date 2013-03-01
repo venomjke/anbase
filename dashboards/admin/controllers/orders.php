@@ -58,7 +58,7 @@ class Orders extends MX_Controller
 
 		/*
 		* Загружаем другую метаинфу
-		* [my_notice] Это все ресурсы, используемые во время работы. У меня есть такое мнение, что их стоит выделить 
+		* TODO Это все ресурсы, используемые во время работы. У меня есть такое мнение, что их стоит выделить 
 		* в какой-то класс AppAssets
 		*/
 		$this->_load_app_assets();
@@ -119,12 +119,12 @@ class Orders extends MX_Controller
 
 
 	/*
-	*
 	*	Маленький маршрутизатор
 	*/
 	public function _remap(){
 
 		$action  = $this->input->get('act')?$this->input->get('act'):'view';
+
 		/*
 		* обрабатываем действие
 		*/
@@ -231,7 +231,7 @@ class Orders extends MX_Controller
 
 			$this->ajax->build_json($response);
 		}else{	
-			$this->template->build('orders/view',array('section'=>'all'));
+			$this->template->build('orders/view', array('section'=>'all'));
 		}
 	}
 
