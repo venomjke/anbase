@@ -45,6 +45,7 @@ class M_Admin_order extends M_Order
 		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|valid_phone'),
 		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state')
 	);
+
 	/**
 	 * конструктор
 	 *

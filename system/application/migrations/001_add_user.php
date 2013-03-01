@@ -109,8 +109,8 @@ class Migration_Add_user extends CI_Migration{
 		$this->dbforge->add_key('id',true);
 		if(!$this->dbforge->create_table("users",true)){
 			exit('Something goes wrong in Migration_add_user after dbforge->create_table');
-
 		}
+		
 		/*
 		*
 		*	

@@ -35,6 +35,7 @@ class Site extends MX_Controller {
 			show_error($this->migration->error_string());
 		}
 	}
+
 	/*
 	*	Главная страница:
 	*		- Форма входа
@@ -139,7 +140,6 @@ class Site extends MX_Controller {
 	*/
 	public function page404(){
 		$this->template->build('site/404');
-		// $this->load->view('site/404');
 	}
 
 }

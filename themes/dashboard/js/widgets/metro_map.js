@@ -26,6 +26,7 @@ $(function(){
 			* Выбор любого метро
 			*/
 			needAnyMetro:false,
+			
 			/*
 			* Любое метро
 			*/
@@ -193,7 +194,7 @@ $(function(){
 
 			for(var i in selected_metros){
 				if(options.metros.hasOwnProperty(i)){	
-					// если мы во время работы по убирали checkpoint'ы, то линия останется живой, но будет пустой.
+					// если мы во время работы поубирали checkpoint'ы, то линия останется живой, но будет пустой.
 					if(!selected_metros[i] || selected_metros[i].length != options.metros[i].length)
 						return true;
 

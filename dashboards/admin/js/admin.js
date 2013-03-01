@@ -672,7 +672,7 @@ var admin = {
 								if(response.data.errors && response.data.errorType){
 									if(response.data.errorType == 'validation'){
 										for(var i in response.data.errors){
-											$('#settings').find('input[name="'+i+'"]').parent().prepend('<div class="error">'+response.data.errors[i]+'</div>');
+											$('#settings').find('input[name="' + i + '"]').parent().prepend('<div class="error">' + response.data.errors[i] + '</div>');
 										}
 										setTimeout(function(){
 											$('#profile .error').remove();
