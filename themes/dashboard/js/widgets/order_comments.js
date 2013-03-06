@@ -86,7 +86,8 @@ $(function(){
       var comment = {
         text: text
       };
-      var $comment = $('<div><table style="width:100%"><tbody><tr><td> - </td><td> Вы </td><td><img title="удалить" src="'+ common.baseUrl +'themes/dashboard/images/delete.png"> </td></tr><tr><td colspan="3">' + text + '</td></tr></tbody></table></div>');
+      var now = new Date();
+      var $comment = $('<div><table style="width:100%"><tbody><tr><td style="width:40%"> - </td><td style="width:55%"> Вы </td><td><img title="удалить" src="'+ common.baseUrl +'themes/dashboard/images/delete.png"> </td></tr><tr><td colspan="3">' + text + '</td></tr></tbody></table></div>');
       var $delBtn  = $comment.find('img');
       // Сохраняем dom и обычный объект
       $delBtn.data('$comment', $comment);

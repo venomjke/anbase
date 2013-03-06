@@ -130,14 +130,16 @@ $(function(){
 				field:'finish_status', 
 				formatter:Slick.Formatters.FinishStatus, 
 				editor:Slick.Editors.FinishStatus, 
-				sortable:true
+				sortable:true,
+				width: 50
 			},
 			{
 				id: "comments",
 				name: lang['grid.title.comments'],
 				field: 'comments',
 				formatter: Slick.Formatters.Comments,
-				editor: Slick.Editors.Comments
+				editor: Slick.Editors.Comments,
+				width: 50
 			}
 		]);
 
