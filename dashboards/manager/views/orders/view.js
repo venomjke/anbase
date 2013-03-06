@@ -40,7 +40,14 @@ $(function(){
 		]);
 
 		if(common.settings_org.phone_col == "1"){
-			$.merge(columns,[{id: "phone", name:lang['grid.title.phone'], field:"phone", width:115, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer}]);
+			$.merge(columns,[{id: "phone", name:lang['grid.title.phone'], field:"phone", width:115, formatter:Slick.Formatters.Phone, editor:Slick.Editors.Integer},{
+				id: "comments",
+				name: lang['grid.title.comments'],
+				field: 'comments',
+				formatter: Slick.Formatters.Comments,
+				editor: Slick.Editors.ManagerComments,
+				width: 50
+			}]);
 		}
 
 		/*

@@ -12,6 +12,7 @@ $(function(){
 
 
     var settings = {
+      uri: '',
       // добавление комментариев
       addComments: true,
       // удаление комментариев
@@ -43,7 +44,7 @@ $(function(){
     function save_btn(event){
       // попытка сохранения
       $.ajax({
-        url: common.baseUrl + 'admin/orders/?act=comments',
+        url: common.baseUrl + options.uri,
         type: 'POST',
         dataType:'json',
         data:{

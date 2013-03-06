@@ -159,7 +159,8 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',RestoreUrl:admin.baseUrl+'?act=restore',DeleteUrl:admin.baseUrl+'?act=del',PrintUrl:admin.baseUrl+'?act=print',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',RestoreUrl:admin.baseUrl+'?act=restore',DeleteUrl:admin.baseUrl+'?act=del',PrintUrl:admin.baseUrl+'?act=print',PageSize:200});
+
 		/*
 		* Создание грида
 		*/
@@ -338,6 +339,7 @@ $(function(){
 		$('#print_order').click(function(){
 			admin.orders.print_orders(grid,model);
 		});
+		
 		/*
 		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
 		*/

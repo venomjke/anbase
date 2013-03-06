@@ -26,7 +26,15 @@ $(function(){
 			$.merge(columns,[{id: "price", name:lang['grid.title.price'],width:60, field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
 		}
 
-		$.merge(columns,[{id: "description", name:lang['grid.title.description'], field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
+		$.merge(columns,[{id: "description", name:lang['grid.title.description'], field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description},
+			{
+				id: "comments",
+				name: lang['grid.title.comments'],
+				field: 'comments',
+				formatter: Slick.Formatters.Comments,
+				editor: Slick.Editors.AgentComments,
+				width: 50
+			}
 		]);
 
 

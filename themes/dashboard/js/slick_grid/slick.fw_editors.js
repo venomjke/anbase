@@ -16,7 +16,9 @@
 				"AnbaseRole":AnbaseRoleEditor,
 				"AnbaseUser":AnbaseUserEditor,
 				"FinishStatus":FinishStatusEditor,
-				"Comments": CommentsEditor
+				"Comments": CommentsEditor,
+				"AgentComments": AgentCommentsEditor,
+				"ManagerComments": ManagerCommentsEditor
 			}
 		}
 	});
@@ -440,6 +442,180 @@
 		this.init();	
 	};
 
+	function AdminCommentsEditor (args) {
+		args.comments_uri = 'admin/orders/?act=comments';
+		args.delComments = true;
+		return CommentsEditor(args);
+	}
+
+	function AgentCommentsEditor (args) {
+		var $wrapper;
+		var defaultValue;
+		var scope = this;
+		var widget;
+
+		this.init = function(){
+			var $container = $('body');
+
+			if( ! widget){
+				widget = common.widgets.order_comments({
+					uri: 'agent/orders/?act=comments',
+					delComments: false,
+					onSave:scope.save, 
+					onCancel:scope.cancel,
+				});
+				widget.init();
+			}
+		};
+
+		this.show = function(){
+			if(widget){
+				widget.show();
+			}
+		};
+
+		this.hide = function(){
+			if(widget){
+				widget.hide();
+			}
+		};
+
+		this.destroy = function(){
+			if(widget){
+				widget.destroy();
+			}
+		};
+
+		this.focus = function(){
+
+		};
+
+		this.save = function(){
+			args.commitChanges();
+		};
+
+		this.cancel = function(){
+			args.cancelChanges();
+		};
+
+		this.loadValue = function(item){
+			if(widget){
+				widget.load(item.comments, item.id);
+			}
+		};
+
+		this.serializeValue = function(){
+			if(widget){
+				return widget.serialize();
+			}
+			return {};
+		};
+
+		this.applyValue = function(item, state){
+			item.comments = state.comments;
+		};
+
+		this.isValueChanged = function(){
+			if(widget){
+				return widget.isValueChanged();
+			}
+			return false;
+		};
+
+		this.validate = function(){
+			return {
+				valid: true,
+				msg: null
+			}
+		}
+
+		this.init();
+	}
+
+	function ManagerCommentsEditor (args) {
+		var $wrapper;
+		var defaultValue;
+		var scope = this;
+		var widget;
+
+		this.init = function(){
+			var $container = $('body');
+
+			if( ! widget){
+				widget = common.widgets.order_comments({
+					uri: 'manager/orders/?act=comments',
+					delComments: false,
+					onSave:scope.save, 
+					onCancel:scope.cancel,
+				});
+				widget.init();
+			}
+		};
+
+		this.show = function(){
+			if(widget){
+				widget.show();
+			}
+		};
+
+		this.hide = function(){
+			if(widget){
+				widget.hide();
+			}
+		};
+
+		this.destroy = function(){
+			if(widget){
+				widget.destroy();
+			}
+		};
+
+		this.focus = function(){
+
+		};
+
+		this.save = function(){
+			args.commitChanges();
+		};
+
+		this.cancel = function(){
+			args.cancelChanges();
+		};
+
+		this.loadValue = function(item){
+			if(widget){
+				widget.load(item.comments, item.id);
+			}
+		};
+
+		this.serializeValue = function(){
+			if(widget){
+				return widget.serialize();
+			}
+			return {};
+		};
+
+		this.applyValue = function(item, state){
+			item.comments = state.comments;
+		};
+
+		this.isValueChanged = function(){
+			if(widget){
+				return widget.isValueChanged();
+			}
+			return false;
+		};
+
+		this.validate = function(){
+			return {
+				valid: true,
+				msg: null
+			}
+		}
+
+		this.init();
+	}
+
 	function CommentsEditor (args) {
 		var $wrapper;
 		var defaultValue;
@@ -450,7 +626,11 @@
 			var $container = $('body');
 
 			if( ! widget){
-				widget = common.widgets.order_comments({onSave:scope.save, onCancel:scope.cancel});
+				widget = common.widgets.order_comments({
+					uri: 'admin/orders/?act=comments',
+					onSave:scope.save, 
+					onCancel:scope.cancel,
+				});
 				widget.init();
 			}
 		};

@@ -167,6 +167,9 @@ class Orders extends MX_Controller
 				*/
 				$this->_print_orders();
 				break;
+			case 'comments':
+				$this->_comments();
+				break;
 		}
 	}
 
@@ -303,6 +306,28 @@ class Orders extends MX_Controller
 			redirect($this->admin_users->get_home_page());
 		}catch(ValidationException $ve){
 			redirect($this->admin_users->get_home_page());
+		}
+	}
+
+	private function _comments()
+	{
+		if($this->ajax->is_ajax_request()){
+			try{
+				$comments = $this->agent_orders->update_comments();
+				$response['code'] = 'success_comments';
+				$response['data'] = $comments;
+			}	catch (ValidationException $ve){
+				$response['code'] = 'error_comments';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
+			} catch (AnbaseRuntimeException $re){
+				$response['code'] = 'error_comments';
+				$response['data']['errorType'] = 'runtime';
+				$response['data']['errors'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		} else {
+			redirect($this->agent_users->get_home_page());
 		}
 	}
 

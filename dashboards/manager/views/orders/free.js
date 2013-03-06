@@ -26,7 +26,14 @@ $(function(){
 			$.merge(columns,[{id: "price", name:lang['grid.title.price'],width:60, field:"price",  formatter:Slick.Formatters.Rubbles, sortable:true}]);
 		}
 
-		$.merge(columns,[{id: "description", name:lang['grid.title.description'], field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description}
+		$.merge(columns,[{id: "description", name:lang['grid.title.description'], field:"description",cssClass:"cell_description", width:303, formatter:Slick.Formatters.Description},{
+				id: "comments",
+				name: lang['grid.title.comments'],
+				field: 'comments',
+				formatter: Slick.Formatters.Comments,
+				editor: Slick.Editors.ManagerComments,
+				width: 50
+			}
 		]);
 
 		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=free',PageSize:200});	
@@ -36,6 +43,7 @@ $(function(){
 			var vp = grid.getViewport();
 			model.ensureData(vp.top,vp.bottom);
 		});
+
 		/*
 		* Событие сортировки
 		*/
@@ -61,6 +69,7 @@ $(function(){
 				}
 			}
 		});
+
 		grid.onClick.subscribe(function(e,columnHandle){
 			var columns = grid.getColumns();
 			switch(columns[columnHandle.cell].field){
@@ -110,6 +119,7 @@ $(function(){
 					break;
 			}
 		});
+
  		/*
 		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
 		*/

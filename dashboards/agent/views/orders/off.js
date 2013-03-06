@@ -36,8 +36,16 @@ $(function(){
 
 
 		$.merge(columns,[{id: "finish_date", name:lang['grid.title.finish_date'], field:"finish_date"},
-                         {id: "finish_status", name:lang['grid.title.finish_status'], field:"finish_status", formatter:Slick.Formatters.FinishStatus }
-			  ]);
+                         {id: "finish_status", name:lang['grid.title.finish_status'], field:"finish_status", formatter:Slick.Formatters.FinishStatus },
+			{
+				id: "comments",
+				name: lang['grid.title.comments'],
+				field: 'comments',
+				formatter: Slick.Formatters.Comments,
+				editor: Slick.Editors.AgentComments,
+				width: 50
+			}
+		]);
 
 
 		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=off',PageSize:200});	

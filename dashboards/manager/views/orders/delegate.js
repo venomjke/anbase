@@ -38,7 +38,14 @@ $(function(){
 			$.merge(columns,[{id: "phone", name:lang['grid.title.phone'], field:"phone", width:115, formatter:Slick.Formatters.Phone}]);
 		}
 
-		$.merge(columns,[{id:"finish_status",name:lang['grid.title.finish_status'],field:"finish_status",formatter:Slick.Formatters.FinishStatus,sortable:true}]);
+		$.merge(columns,[{id:"finish_status",name:lang['grid.title.finish_status'],field:"finish_status",formatter:Slick.Formatters.FinishStatus,sortable:true},{
+				id: "comments",
+				name: lang['grid.title.comments'],
+				field: 'comments',
+				formatter: Slick.Formatters.Comments,
+				editor: Slick.Editors.ManagerComments,
+				width: 50
+			}]);
 
 
 
