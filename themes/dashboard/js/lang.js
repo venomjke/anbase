@@ -50,7 +50,12 @@ lang['grid.title.agent']         = 'Агент';
 lang['grid.title.finish_status'] = 'Статус';
 lang['grid.title.finish_date']   = 'Дата завершения';
 lang['grid.title.delegate_date'] = 'Дата делегирования';
-lang['grid.title.comments']      = 'Комментарии'
+lang['grid.title.comments']      = 'Комментарии';
+lang['grid.title.last_name']     = 'Фамилия';
+lang['grid.title.name']          = 'Имя';
+lang['grid.title.middle_name']   = 'Отчество';
+lang['grid.title.role']          = 'Должность';
+lang['grid.title.email']         = 'Email';
 
 /*
 * Статус завершения

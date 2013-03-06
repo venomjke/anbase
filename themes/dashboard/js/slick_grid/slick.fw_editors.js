@@ -15,7 +15,8 @@
 				"AnbaseMetros":AnbaseMetrosEditor,
 				"AnbaseRole":AnbaseRoleEditor,
 				"AnbaseUser":AnbaseUserEditor,
-				"FinishStatus":FinishStatusEditor
+				"FinishStatus":FinishStatusEditor,
+				"Comments": CommentsEditor
 			}
 		}
 	});
@@ -439,6 +440,85 @@
 		this.init();	
 	};
 
+	function CommentsEditor (args) {
+		var $wrapper;
+		var defaultValue;
+		var scope = this;
+		var widget;
+
+		this.init = function(){
+			var $container = $('body');
+
+			if( ! widget){
+				widget = common.widgets.order_comments({onSave:scope.save, onCancel:scope.cancel});
+				widget.init();
+			}
+		};
+
+		this.show = function(){
+			if(widget){
+				widget.show();
+			}
+		};
+
+		this.hide = function(){
+			if(widget){
+				widget.hide();
+			}
+		};
+
+		this.destroy = function(){
+			if(widget){
+				widget.destroy();
+			}
+		};
+
+		this.focus = function(){
+
+		};
+
+		this.save = function(){
+			args.commitChanges();
+		};
+
+		this.cancel = function(){
+			args.cancelChanges();
+		};
+
+		this.loadValue = function(item){
+			if(widget){
+				widget.load(item.comments, item.id);
+			}
+		};
+
+		this.serializeValue = function(){
+			if(widget){
+				return widget.serialize();
+			}
+			return {};
+		};
+
+		this.applyValue = function(item, state){
+			item.comments = state.comments;
+		};
+
+		this.isValueChanged = function(){
+			if(widget){
+				return widget.isValueChanged();
+			}
+			return false;
+		};
+
+		this.validate = function(){
+			return {
+				valid: true,
+				msg: null
+			}
+		}
+
+		this.init();
+	}
+
 	function AnbaseMetrosEditor(args){
 		var $wrapper;
 		var defaultValue;
@@ -561,14 +641,11 @@
 
 			var $container = $('body');
 			//$wrapper = $("<div style='z-index:1000; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'><button id='region-map'>По карте</button></div>").appendTo($container);
-
-			if(!widget){
-				widget = common.widgets.region_map({onSave:scope.save,onCancel:scope.cancel,needAnyRegion:true});
+			if( ! widget){
+				widget = common.widgets.region_map({onSave:scope.save, onCancel:scope.cancel, needAnyRegion:true});
 				widget.init();
-				widget.load();
+				// widget.load();
 			}
-			
-
 			//$wrapper.css('top',args.position.top);
 			//$wrapper.css('left',args.position.left);
 		};
@@ -605,7 +682,7 @@
 		this.loadValue = function(item){
 			defaultValue = item.regions;
 			if(widget){
-				widget.load(item.regions,item.any_region);
+				widget.load(item.regions, item.any_region);
 			}
 		};
 
@@ -616,14 +693,14 @@
 			return {};
 		};
 
-		this.applyValue = function(item,state){
+		this.applyValue = function(item, state){
 			var selected_regions = state.selected_regions;
 
 			delete item.regions;
 			item.regions = selected_regions.slice(0);
 
 			/*
-			* [my_notice: Не самое лучшее решение на мой взгляд, нужно подумать еще]
+			* TODO: Не самое лучшее решение на мой взгляд, нужно подумать еще
 			* В чем суть.
 			* Когда мы обнуляем текущий список выбранных метро, то нужно "что-то" отправить на сервер, что бы там
 			* удалить список выбранных метро, и ничего не записывать.

@@ -17,28 +17,15 @@ $(function(){
 
 
 		var def_options = {
-			/*
-			* Показывать кнопки или нет
-			*/
+			// Показывать кнопки или нет
 			needButtons:true,
-			/*
-			* Выбор любого района или нет
-			*/
+			// Выбор любого района или нет
 			needAnyRegion:false,
-			/*
-			* Список районов
-			*/
+			// Список районов
 			regions:[], 
-
-			/*
-			* Функция, которую нужно выполнить при закрытии редактора
-			*/
-			onSave:function(){
-
-			},
-			onCancel:function(){
-
-			}
+			// callbacks
+			onSave:function(){},
+			onCancel:function(){}
 		};
 
 		options = $.extend(true,def_options,options);
@@ -123,8 +110,6 @@ $(function(){
 		*/
 		return {
 			init:function(){
-
-
 			var $container = $('body');
 			$wrapper = $("<div style='z-index:99999; position:absolute; background-color:#fff; opacity:.95; padding:5px; border:1px #b4b4b4 solid;'></div>").appendTo($container);
 			$region_wrapper = $('<div style="position:relative; width:700px"></div>');
@@ -275,23 +260,28 @@ $(function(){
 			},
 
 			focus:function(){
+
 			},
-			load:function(regions,any_region){
+
+			load:function(regions, any_region){
 				options.regions = regions;
 				options.any_region = any_region;
+				
 				for(var i in options.regions){
-					$('#region-'+options.regions[i]).click();
+					$('#region-' + options.regions[i]).click();
 				}
 
 				$any_region_checkbox.val(any_region);
 				if(any_region == "1") $any_region_checkbox.attr('checked','checked');
 			},
+
 			serialize:function(){
 				if(options.needAnyRegion)
 					return {"selected_regions":selected_regions,"any_region":$any_region_checkbox.val()};
 				else
 					return selected_regions;
 			},
+
 			isValueChanged:function(){
 				return isAnyRegionChanged() || isRegionListChanged();
 			}

@@ -236,8 +236,6 @@ $(function(){
 					$cancel_btn = $('<button id="cancel_btn">Отмена</button>"');
 					$reset_btn= $('<button id="reset">Сбросить</button>');
 
-					
-
 					$save_btn.click(function(event){
 						save_btn(event);
 					});

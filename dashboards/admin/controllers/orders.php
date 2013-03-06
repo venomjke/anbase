@@ -28,12 +28,11 @@ class Orders extends MX_Controller
 		$this->load->library("admin/Admin_Settings");
 		$this->load->library("Ajax");
 
-		if( !$this->admin_users->is_logged_in_as_admin() ){
+		if( ! $this->admin_users->is_logged_in_as_admin() ){
 			redirect("");
 		}
 
 		/*
-		*
 		* Загрузка языковых сообщений
 		*/
 		$this->load->language('admin/messages');
@@ -158,7 +157,6 @@ class Orders extends MX_Controller
 			break;
 			case 'add':
 				/*
-				* 
 				* Обработка добавления объявления
 				*/
 				$this->_add_order();
@@ -166,14 +164,12 @@ class Orders extends MX_Controller
 			case 'edit':
 				/*
 				* обработка редактирования объявления
-				*
 				*/
 				$this->_edit_order();
 			break;
 			case 'del':
 				/*
 				* Обработка удаления объявления
-				*
 				*/
 				$this->_del_orders();
 			break;
@@ -201,6 +197,10 @@ class Orders extends MX_Controller
 				*/
 				$this->_print_orders();
 			break;
+			case 'comments':
+				// добавление и удаление комментариев
+				$this->_comments();
+				break;
 		}
 	}
 
@@ -526,6 +526,28 @@ class Orders extends MX_Controller
 		}catch(AnbaseRuntimeException $re){
 			redirect($this->admin_users->get_home_page());
 		}catch(ValidationException $ve){
+			redirect($this->admin_users->get_home_page());
+		}
+	}
+
+	private function _comments()
+	{
+		if($this->ajax->is_ajax_request()){
+			try{
+				$comments = $this->admin_orders->update_comments();
+				$response['code'] = 'success_comments';
+				$response['data'] = $comments;
+			}	catch (ValidationException $ve){
+				$response['code'] = 'error_comments';
+				$response['data']['errorType'] = 'validation';
+				$response['data']['errors'] = $ve->get_error_messages();
+			} catch (AnbaseRuntimeException $re){
+				$response['code'] = 'error_comments';
+				$response['data']['errorType'] = 'runtime';
+				$response['data']['errors'] = array($re->get_error_message());
+			}
+			$this->ajax->build_json($response);
+		} else {
 			redirect($this->admin_users->get_home_page());
 		}
 	}

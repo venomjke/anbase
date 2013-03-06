@@ -21,6 +21,7 @@
 		<script type="text/javascript">google.load("jquery","1.7.1");google.load("jqueryui","1.8");</script>
 
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/common.js"> </script>
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/order_comments.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_map.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_list.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/region_map.js"></script>

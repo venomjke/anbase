@@ -9,6 +9,10 @@
  **/
 class M_Order_comments extends MY_Model 
 {
+  public $inser_validation_rules = array(
+    'text' => array('field'=>'text','label'=>'lang:order.label_comment.text','rules'=>'trim|xss_clean|html_escape')
+  );
+
   /**
    * Конструктор
    *
@@ -32,18 +36,6 @@ class M_Order_comments extends MY_Model
 
 
   /**
-   * Проверка comment_id
-   *
-   * @return boolean
-   * @author alex.strigin
-   **/
-  public function exists($comment_id)
-  {
-    $this->db->where('id', $comment_id);
-    return $this->db->count_all_results('orders_comments') == 0 ? false : true;
-  }
-
-  /**
    * Выбор всех комментариев связанных с заявкой
    *
    * @param int
@@ -65,6 +57,21 @@ class M_Order_comments extends MY_Model
     $comments = $this->get_all(array("order_id" => $order_id));
     
     return $comments;
+  }
+
+  /**
+   * Проверка валидности переданного id комментария org_id
+   *
+   * @return bool
+   * @author alex.strigin
+   **/
+  public function exists($comment_id, $org_id)
+  {
+    $this->select('COUNT(*)');
+
+    $this->join("orders", "orders.id = orders_comments.order_id");
+    $comments = $this->get_all(array("orders_comments.id" => $comment_id, "orders.org_id" => $org_id));
+    return count($comments);
   }
 
   /**

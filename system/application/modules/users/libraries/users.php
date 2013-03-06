@@ -34,7 +34,6 @@ class Users {
 		$this->ci->load->config('users/users',TRUE);
 
 		/*
-		*
 		*	Загрузка основных моделей.
 		*
 		* [ Мб вынести их в autoload? ]
@@ -46,9 +45,7 @@ class Users {
 		$this->ci->load->model('users/m_manager_user');
 		$this->ci->load->helper("users/users");
 		/*
-		*
 		* Загрузка языка
-		*
 		*/
 		$this->ci->load->language('users/users');
 		// Try to autologin
@@ -142,7 +139,7 @@ class Users {
 		unset($user_valid_rules['role']); // роль устанавливается автоматически
 
 
-		build_validation_array($fields,$user_valid_rules,'user');
+		build_validation_array($fields, $user_valid_rules, 'user');
 
 		if($org){
 			$org_valid_rules  = $this->ci->m_organization->get_validation_fields();

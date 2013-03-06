@@ -2,7 +2,15 @@ $(function(){
     /*
     * Настройки грида
     */
-    var options = {enableCellNavigation: true,rowHeight:25,editable:true,autoEdit:false,forceFitColumns:true,enableTextSelectionOnCells:true};
+    var options = {
+        enableCellNavigation: true,
+        rowHeight:25,
+        editable:true,
+        autoEdit:false,
+        forceFitColumns:true,
+        enableTextSelectionOnCells:true
+    };
+
     var checkboxSelector = new Slick.CheckboxSelectColumn({
         cssClass: "slick-cell-checkboxsel"
     });
@@ -10,19 +18,50 @@ $(function(){
     columns.push(checkboxSelector.getColumnDefinition());
 
     $.merge(columns,[
-        {id: "last_name", name:"Фамилия", field:"last_name"},
-        {id: "name", name:"Имя", field:"name"},
-        {id: "middle_name", name:"Отчество", field:"middle_name"},
-        {id: "phone", name:"Телефон", field:"phone", formatter:Slick.Formatters.Phone},
-        {id: "email", name:"Email", field:"email"},
-        {id: "role", name:"Должность", field:"role", formatter:Slick.Formatters.Role, editor:Slick.Editors.AnbaseRole}
+        {
+            id: "last_name", 
+            name: lang['grid.title.last_name'], 
+            field:"last_name"
+        },
+        {
+            id: "name", 
+            name: lang['grid.title.name'], 
+            field:"name"
+        },
+        {
+            id: "middle_name", 
+            name: lang['grid.title.middle_name'], 
+            field:"middle_name"
+        },
+        {
+            id: "phone", 
+            name: lang['grid.title.phone'], 
+            field:"phone", 
+            formatter:Slick.Formatters.Phone
+        },
+        {
+            id: "email", 
+            name: lang['grid.title.email'], 
+            field:"email"
+        },
+        {
+            id: "role", 
+            name: lang['grid.title.role'], 
+            field:"role", 
+            formatter:Slick.Formatters.Role, 
+            editor:Slick.Editors.AnbaseRole
+        }
     ]);  
 
     /*
     * Создание грида
     */
     var modelInvite = new Slick.Data.InviteModel({AddUrl:admin.baseUrl+'/invites/?act=add'});
-    var modelUser = new Slick.Data.UserModel({BaseUrl:admin.baseUrl+'/admins/?act=view',DeleteUrl:admin.baseUrl+'/admins/?act=del',PageSize:1000});
+    var modelUser = new Slick.Data.UserModel({
+        BaseUrl: admin.baseUrl + '/admins/?act=view',
+        DeleteUrl: admin.baseUrl + '/admins/?act=del',
+        PageSize: 1000
+    });
 
     /*
     * Создание грида
@@ -49,8 +88,7 @@ $(function(){
         common.hideAjaxIndicator();
     });
 
-
- /*
+    /*
     * Сохраняем backup значение
     */
     grid.onBeforeEditCell.subscribe(function(e,handle){

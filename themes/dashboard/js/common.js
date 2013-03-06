@@ -45,10 +45,9 @@ var common = {
 	showResultMsg:function(msg){
 		common.showStatusMsg({id:'result_msg',msg:msg,timeout:3000});
 	},
+
 	/*
-	*  
 	* Показать статусное сообщение
-	* 
 	*/
 	showStatusMsg:function(options){
 
@@ -60,6 +59,7 @@ var common = {
 			msg:'<img src="/themes/dashboard/images/load.gif"/> Загрузка...',
 			timeout:0
 		};
+
 		/*
 		* Сначала закрываем, если был открыт другой индикатор
 		*/
@@ -132,7 +132,7 @@ var common = {
 
 	show_full_text:function(event, row, cell, value){
 		var tooltip_id = '#tooltip_'+row+'_'+cell;
-		if($(tooltip_id).length>0){
+		if($(tooltip_id).length > 0){
 		  $(tooltip_id).css('top',event.pageY-$(tooltip_id).outerHeight(true)-20);
 		  $(tooltip_id).css('left',event.pageX-$(tooltip_id).outerWidth()-20);
 		}else{
@@ -153,11 +153,12 @@ var common = {
 		last_name = last_name.charAt(0).toUpperCase()+last_name.substr(1,last_name.length);
 		return last_name+' '+name+'.'+middle_name;
 	},
+
 	/*
 	* Загрузка формы
 	*/
-	load_form:function(hash,form){
-		if( !hash || typeof hash != "object" ||!form || typeof form != "string")
+	load_form:function(hash, form){
+		if( !hash || typeof hash != "object" || !form || typeof form != "string")
 			return false;			
 
 		hash[form] = {};
@@ -182,7 +183,7 @@ var common = {
 	/*
 	* Сохранение формы, если произошли изменения внутри формы
 	*/
-	save_form:function(hash,form,callback){
+	save_form:function(hash, form, callback){
 		if( !hash || typeof hash !="object" || !form || typeof form != "string")
 				return false;
 

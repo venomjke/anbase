@@ -195,17 +195,17 @@
     };
 
     function CommentsFormatter (row, cell, value, columnDef, dataContext) {
-      if( ! value || ! value.length) return '';
+      if( ! value || ! value.length) return '- Нету -';
 
-      var cell_content = $('<div id="cell_description" style="overflow:hidden"></div>');
-
+      var cell_content = $('<div id="cell_description" style="overflow:hidden">- Есть -</div>');
+      var comments_content = $('<div></div>')
       for(var i in value){
         var $item = $('<div/>');
         $item.append('<b>' + value[i].name + ' ' + value[i].middle_name + ' ' + value[i].last_name + ' (' + value[i].email + ') </b>');
         $item.append('<div>' + value[i].text + '</div>');
-        cell_content.append($item);
+        comments_content.append($item);
       }
-      dataContext.comments_content = cell_content.html();
+      dataContext.comments_content = comments_content.html();
       cell_content.attr('onmousemove', 'common.show_full_text(event,' + row + ',' + cell + ', common.grid.getDataItem(' + row + ').comments_content);');
       cell_content.attr('onmouseout', 'common.hide_full_text(event,' + row + ',' + cell +');');
       var wrap = $('<div>').html(cell_content);

@@ -127,14 +127,14 @@ class Admin_Orders
 				/*
 				* обращаемся к orders_metros
 				*/
-				$this->ci->m_order_metro->bind_order_metros($this->ci->input->post('id'),$this->ci->input->post('metros'));
+				$this->ci->m_order_metro->bind_order_metros($this->ci->input->post('id'), $this->ci->input->post('metros'));
 			}
 
 			if($this->ci->input->post('regions')){
 				/*
 				* обращаемся к orders_regions
 				*/
-				$this->ci->m_order_region->bind_order_regions($this->ci->input->post('id'),$this->ci->input->post('regions'));
+				$this->ci->m_order_region->bind_order_regions($this->ci->input->post('id'), $this->ci->input->post('regions'));
 			}
 
 			/*
@@ -142,7 +142,7 @@ class Admin_Orders
 			*/
 			$data = array_intersect_key($this->ci->input->post(), array_flip($order_field));
 			if(!empty($data))
-				$this->ci->m_admin_order->update($this->ci->input->post('id'),$data,true);
+				$this->ci->m_admin_order->update($this->ci->input->post('id'), $data, true);
 			return;
 		}
 
@@ -345,6 +345,43 @@ class Admin_Orders
 		}
 
 		throw new AnbaseRuntimeException(lang("common.not_legal_data"));
+	}
+
+	/**
+	 * Обновление списка комментариев: добавление или удаление
+	 *
+	 * @return void
+	 * @author alex.strigin
+	 **/
+	public function update_comments()
+	{
+		$this->ci->load->model('m_order_comments');
+
+		$order_id = $this->ci->input->post('order_id');
+		$added_comments = $this->ci->input->post('added_comments');
+		$del_comments   = $this->ci->input->post('del_comments');
+		$comments = array();
+
+		if($this->ci->m_order->is_exists($order_id, $this->ci->admin_users->get_org_id())){
+			if(is_array($added_comments)){
+				foreach($added_comments as $comment){
+					$comment['text'] = trim($comment['text']);
+					$comment['text'] = $this->ci->security->xss_clean($comment['text']);
+					$comment['text'] = htmlspecialchars($comment['text']);
+					$this->ci->m_order_comments->add_order_comment($order_id, $this->ci->admin_users->get_user_id(), $comment['text']);
+				}
+			}
+
+			if(is_array($del_comments)){
+				foreach($del_comments as $comment){
+					if($this->ci->m_order_comments->exists($comment, $this->ci->admin_users->get_org_id())){
+						$this->ci->m_order_comments->del_order_comment($comment);
+					}
+				}
+			}
+			$comments = $this->ci->m_order_comments->get_order_comments($order_id);	
+		}
+		return $comments;
 	}
 
 } // END class Admin_Orders
