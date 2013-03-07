@@ -181,6 +181,8 @@ class Orders_Organization
 		$this->bind_regions($orders);
 
 		$this->bind_metros($orders);
+
+		$this->bind_comments($orders);
 		return $orders;
 	}
 

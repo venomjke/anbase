@@ -109,21 +109,22 @@ $(function(){
     * Вывод комментария
     */
     function add_comment (comment) {
-     var $comment = $('<div><table style="width:100%"><tbody><tr><td> ' + comment.date_created + ' </td><td> ' + comment.last_name + ' ' + comment.middle_name + ' ' + comment.name + ' </td><td><img title="удалить" src="'+ common.baseUrl +'themes/dashboard/images/delete.png"> </td></tr><tr><td colspan="3">' + comment.text + '</td></tr></tbody></table></div>');
-     var $delBtn = $comment.find('img');
+      var delPointer = options.delComments ? '<img title="удалить" src="'+ common.baseUrl +'themes/dashboard/images/delete.png">': '';
+      var $comment = $('<div><table style="width:100%"><tbody><tr><td> ' + comment.date_created + ' </td><td> ' + comment.last_name + ' ' + comment.middle_name + ' ' + comment.name + ' </td><td>' + delPointer + '</td></tr><tr><td colspan="3">' + comment.text + '</td></tr></tbody></table></div>');
+      var $delBtn = $comment.find('img');
 
-     // сохраняем dom и обычный объект
-     $delBtn.data('$comment', $comment);
-     $delBtn.data('comment', comment);
+      // сохраняем dom и обычный объект
+      $delBtn.data('$comment', $comment);
+      $delBtn.data('comment', comment);
 
-     $delBtn.click(function(){
+      $delBtn.click(function(){
         var $comment = $(this).data('$comment');
         var comment  = $(this).data('comment');
         $comment.remove();
         del_comments.push(comment.id);
-     });
+      });
 
-     $comments.append($comment);
+      $comments.append($comment);
     }
 
     return {

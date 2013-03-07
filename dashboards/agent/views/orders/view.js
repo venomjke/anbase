@@ -132,10 +132,14 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:agent.baseUrl+'?act=view&s=my',PrintUrl:agent.baseUrl+'?act=print',PageSize:200});	
+		var model = new Slick.Data.RemoteModel({
+			BaseUrl: agent.baseUrl + '?act=view&s=my',
+			PrintUrl: agent.baseUrl + '?act=print',
+			PageSize:200
+		});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
-	    grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
-	    grid.registerPlugin(checkboxSelector);
+	  grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
+	  grid.registerPlugin(checkboxSelector);
 		common.grid = grid;
 
 		/*
