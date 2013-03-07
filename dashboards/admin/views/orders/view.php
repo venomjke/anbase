@@ -87,6 +87,13 @@
 					<input id="add_order_phone" type="text">
 				</td>
 			</tr>
+			<tr>
+				<td>
+					<label for="add_order_source" style="font-weight:bold">Источник</label>
+					<br/>
+					<input id="add_order_source" type="text">
+				</td>
+			</tr>
 		</tbody>
 	</table>
 	<table cellspacing="0" cellpadding="0">

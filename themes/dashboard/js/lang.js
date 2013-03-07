@@ -56,6 +56,7 @@ lang['grid.title.name']          = 'Имя';
 lang['grid.title.middle_name']   = 'Отчество';
 lang['grid.title.role']          = 'Должность';
 lang['grid.title.email']         = 'Email';
+lang['grid.title.source']        = 'Источник';
 
 /*
 * Статус завершения

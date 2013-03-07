@@ -96,7 +96,7 @@ $(function(){
 				name: lang['grid.title.description'], 
 				field: "description",
 				cssClass:"cell_description", 
-				width:303, 
+				width:250, 
 				formatter:Slick.Formatters.Description, 
 				editor:Slick.Editors.LongText
 			}
@@ -140,6 +140,13 @@ $(function(){
 				formatter: Slick.Formatters.Comments,
 				editor: Slick.Editors.Comments,
 				width: 50
+			},
+			{
+				id: "source",
+				name: lang['grid.title.source'],
+				field: 'source',
+				editor: Slick.Editors.Text,
+				width: 70
 			}
 		]);
 

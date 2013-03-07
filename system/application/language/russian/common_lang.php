@@ -38,6 +38,7 @@ $lang['order.label_state'] = 'Состояние';
 $lang['order.label_any_metro'] = 'Любое метро';
 $lang['order.label_finish_status'] = 'Статус завершения';
 $lang['order.label_comment_text'] = 'Текст комментария';
+$lang['order.label_source'] = 'Источник';
 
 $lang['order.validation.valid_state'] = 'Поле "%s" содержит неверное состояние';
 $lang['order.validation.valid_dealtype'] = 'Поле "%s" содержит неверный вид сделки';

@@ -48,7 +48,7 @@ class Admin_Orders
 	public function get_all_orders_org()
 	{
 		// поля, которые нужно выбирать из базы
-		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region','delegate_date','finish_date','finish_status');
+		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region','delegate_date','finish_date','finish_status', 'source');
 		$items = $this->ci->orders_organization->get_all_orders_org($this->ci->admin_users->get_org_id(), $order_fields);
 
 		return array('count' => count($items),
@@ -65,7 +65,7 @@ class Admin_Orders
 	 **/
 	public function get_all_free_orders()
 	{	
-		$order_fields = array('number','create_date','category','deal_type','description','phone','price','any_metro','any_region');
+		$order_fields = array('number','create_date','category','deal_type','description','phone','price','any_metro','any_region', 'source');
 		$items        = $this->ci->orders_organization->get_all_free_orders($this->ci->admin_users->get_org_id(),$order_fields);
 		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_free_orders($this->ci->admin_users->get_org_id()),'items' =>$items );
 	}
@@ -78,7 +78,7 @@ class Admin_Orders
 	 **/
 	public function get_all_delegate_orders()
 	{
-		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region','delegate_date');
+		$order_fields = array('number','create_date','category','deal_type','description','price','phone','any_metro','any_region', 'delegate_date', 'source');
 		$items        = $this->ci->orders_organization->get_all_delegate_orders($this->ci->admin_users->get_org_id(),$order_fields);
 		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_delegate_orders($this->ci->admin_users->get_org_id()),'items' =>$items );
 	}
@@ -86,7 +86,7 @@ class Admin_Orders
 
 	public function get_all_off_orders()
 	{
-		$order_fields = array('number','create_date','finish_date','finish_status','category','deal_type','description','price','phone','any_metro','any_region');
+		$order_fields = array('number','create_date','finish_date','finish_status','category','deal_type','description','price','phone','any_metro','any_region', 'source');
 		$items        = $this->ci->orders_organization->get_all_off_orders_org($this->ci->admin_users->get_org_id(),$order_fields);
 		return array('count' => count($items),'total'=>$this->ci->orders_organization->count_all_off_orders_org($this->ci->admin_users->get_org_id()),'items' =>$items );	
 	}
@@ -113,7 +113,7 @@ class Admin_Orders
 		/*
 		* правила валидации для полей
 		*/
-		$order_field = array('number','create_date','deal_type','category','price','description','phone','delegate_date','finish_date','state','any_metro','any_region','finish_status');
+		$order_field = array('number','create_date','deal_type','category','price','description','phone','delegate_date','finish_date','state','any_metro','any_region','finish_status', 'source');
 		$metro_field = array('metros');
 		$region_field = array('regions');
 
@@ -163,7 +163,7 @@ class Admin_Orders
 		/*
 		* Устанавливаем правила валидации	
 		*/
-		$insert_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state');
+		$insert_fields = array('number', 'create_date', 'category', 'deal_type', 'price', 'description', 'delegate_date', 'finish_date', 'phone', 'state', 'source');
 
 		$this->ci->form_validation->set_rules($this->ci->m_admin_order->add_order_validation_rules);
 

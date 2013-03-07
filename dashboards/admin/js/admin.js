@@ -163,6 +163,7 @@ var admin = {
 			var $category = $('#add_order_category');
 			var $dealtype = $('#add_order_dealtype');
 			var $building = $('#add_order_building');
+			var $source   = $('#add_order_source');
 
 			var regions = [];
 			var region_widget;
@@ -251,6 +252,7 @@ var admin = {
 				$phone.val('');
 				$description.val('');
 				$building.val('');
+				$source.val('');
 				regions = [];
 				metros = {};
 			}
@@ -288,7 +290,8 @@ var admin = {
 					data['deal_type']= $dealtype.val();;
 					data['price']    = $price.val();
 					data['phone']    = $phone.val();
-					data['description'] = $description.val();;
+					data['description'] = $description.val();
+					data['source']   = $source.val();
 
 					if(region_widget){
 						regionOnSave();

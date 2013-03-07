@@ -52,7 +52,8 @@ class M_Order extends MY_Model{
 		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|valid_phone'),
-		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state')
+		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state'),
+		array('field' => 'source', 'label' => 'lang:order.label_source', 'rules' => 'trim|max_length[512]|xss_clean|html_escape')
 	);
 
 	/*
@@ -71,7 +72,8 @@ class M_Order extends MY_Model{
 		array('field'=>'delegate_date','label'=>'lang:order.label_delegate_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'finish_date','label'=>'lang:order.label_finish_date','rules'=>'valid_date[dd/mm/yyyy]|convert_valid_date[dd/mm/yyyy]'),
 		array('field'=>'phone','label'=>'lang:order.label_phone','rules'=>'trim|valid_phone'),
-		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state')
+		array('field'=>'state','label'=>'lang:order.label_state','rules'=>'callback_valid_state'),
+		array('field' => 'source', 'label' => 'lang:order.label_source', 'rules' => 'trim|max_length[512]|xss_clean|html_escape')
 	);
 	
 	/*
@@ -108,7 +110,7 @@ class M_Order extends MY_Model{
 		*/
 		$this->table       = 'orders';
 		$this->primary_key = 'id';
-		$this->fields      = array('id','number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id','any_metro','any_region','created','delegated','finished','finish_status');
+		$this->fields      = array('id','number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','org_id','any_metro','any_region','created','delegated','finished','finish_status', 'source');
 		$this->result_mode = 'object';
 		/*
 		*	Правила валидации
@@ -574,7 +576,7 @@ class M_Order extends MY_Model{
 		/*
 		* Можно указывать какие поля нужно выбрать. По умолчанию выбираются все.
 		*/
-		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','any_metro','any_region','finish_status');
+		$allow_fields = array('number','create_date','category','deal_type','price','description','delegate_date','finish_date','phone','state','any_metro','any_region','finish_status', 'source');
 		$fields = array_flip(array_intersect_key(array_flip($fields),array_flip($allow_fields)));
 
 		if(empty($fields)) $fields = $allow_fields;
