@@ -8,7 +8,7 @@ $(function(){
 		var checkboxSelector = new Slick.CheckboxSelectColumn({
       		cssClass: "slick-cell-checkboxsel"
     	});
-    	var columns = [];
+    var columns = [];
 		columns.push(checkboxSelector.getColumnDefinition());
 		/*
 		* Добавляем поля из настроек

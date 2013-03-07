@@ -1,20 +1,8 @@
 	$(function(){	
 		/*
-		* Мои форматтеры
-		*/
-		function DescriptionFormatter(row,cell,value,columnDef,dataContext){
-			if(!value)
-				return;
-		  var cell_content = $('<div id="cell_description" style="height:40px;overflow:hidden;">').html(value);
-		  cell_content.attr('onmousemove','common.show_full_text(event,'+row+','+cell+',manager.orders.grid.getDataItem('+row+').description);');
-		  cell_content.attr('onmouseout','common.hide_full_text(event,'+row+','+cell+');');
-		  var wrap = $('<div>').html(cell_content);
-		  return wrap.html();
-		};
-		/*
 		* Настройки грида
 		*/
-		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true};
+		var options = {enableCellNavigation: true,rowHeight:25,forceFitColumns:true, editable: true, autoEdit: false};
 		var columns = [
 			{id: "number", name:lang['grid.title.number'], field:"number", width:30 , sortable:true},
 			{id: "create_date", name:lang['grid.title.create_date'],  width:65, field:"create_date", sortable:true},
@@ -60,6 +48,7 @@
 
 		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=off',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
+		common.grid = grid;
 
 		grid.onViewportChanged.subscribe(function(e,args){
 			var vp = grid.getViewport();

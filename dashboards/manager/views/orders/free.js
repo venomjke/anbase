@@ -38,6 +38,7 @@ $(function(){
 
 		var model = new Slick.Data.RemoteModel({BaseUrl:manager.baseUrl+'?act=view&s=free',PageSize:200});	
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
+		common.grid = grid;
 
 		grid.onViewportChanged.subscribe(function(e,args){
 			var vp = grid.getViewport();
