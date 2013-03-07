@@ -138,6 +138,7 @@ $(function(){
         $form = $('<div><textarea style="width:98%;" cols="10" rows="5" id="comment_text"></textarea><br/><button id="add_new_comment">Добавить</button></div>');
         $form.find('#add_new_comment').click(function(){
           var text = $('#comment_text').val();
+          $('#comment_text').val('');
           add_new_comment(text);
         });
 
