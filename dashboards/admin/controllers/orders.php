@@ -265,7 +265,7 @@ class Orders extends MX_Controller
 			/*
 			*	Вывод данных
 			*/
-			$this->template->build('orders/view',array('section'=>'free'));
+			$this->template->build('orders/view', array('section'=>'free'));
 		}
 	}
 
@@ -295,7 +295,7 @@ class Orders extends MX_Controller
 			/*
 			*	Вывод данных
 			*/
-			$this->template->build('orders/view',array('section'=>'delegate'));
+			$this->template->build('orders/view', array('section'=>'delegate'));
 		}
 	}
 
@@ -321,7 +321,7 @@ class Orders extends MX_Controller
 			/*
 			*	Вывод данных
 			*/
-			$this->template->build('orders/view',array('section'=>'off'));
+			$this->template->build('orders/view', array('section'=>'off'));
 		}
 	}
 	/**

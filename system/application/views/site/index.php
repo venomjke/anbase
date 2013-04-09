@@ -1,3 +1,21 @@
+<?php
+  if( ! empty($items)){
+    foreach($items as $item){
+      $item->created = strtotime($item->created);
+      ?>
+      <div class="zagolovok">
+        <div class="date"><div><?php echo date('d', $item->created); ?></div><?php echo russian_month(date('m', $item->created)); ?></div>
+        <h1><a href="<?php echo site_url('news/view/' . $item->id); ?>"><?php echo $item->title; ?></a></h1>
+      </div>
+      <?php
+      echo $item->anons;
+    }
+  }
+?>
+<div class="pagination">
+  <?php echo $pagination; ?>
+</div>
+<!--
 <div class="zagolovok">
 <div class="date"><div>7</div>ноября</div>
 <h1><a href="#">Нововведения ноября 2012. </a></h1>
@@ -57,7 +75,6 @@
  Помимо колонок метро и регион, также можно убрать и другие колонки: цену и телефон
 	.</p>
 
-<!-------------------->
 <div class="zagolovok">
 <div class="date"><div>19</div>мая</div>
 <h1><a href="#">Добавлен раздел Аналитики.</a></h1>
@@ -83,3 +100,4 @@
 </div>
 <p>Проект Anbase - результат совместной работы профессионалов рынка недвижимости и специалистов в области информационных технологий. Над тестированием функционала работали непосредственно сами клиенты системы, именно это и позволило команде разработчиков создать качественный продукт.
 </p>
+-->

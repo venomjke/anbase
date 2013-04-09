@@ -26,25 +26,29 @@ class Site extends MX_Controller {
 		}
 	}
 
-	public function migration()
-	{
-		$this->load->library('migration');
-
-		if ( ! $this->migration->latest())
-		{
-			show_error($this->migration->error_string());
-		}
-	}
-
 	/*
 	*	Главная страница:
 	*		- Форма входа
 	*		- Краткий обзор системы
 	*/
-	public function index(){
+	public function index($page = 0){
 
 		$this->load->library('users/users');	
-		$this->template->build('site/index');
+		$this->load->library('pagination');
+		$this->load->model('m_news');
+		$this->load->helper('russian_date_helper');
+
+		// TODO (alex): вынести лимит записей в конфиг
+		$limit = 5;
+		$config['uri_segment'] = 2;
+		$config['total_rows']  = $this->m_news->total_news();
+		$config['per_page']    = $limit;
+		$config['base_url']    = site_url('news');  
+
+		$this->pagination->initialize($config); 
+		$last_news = $this->m_news->get_last_news(5, $page);
+		
+		$this->template->build('site/index', array('items' => $last_news, 'pagination' => $this->pagination->create_links()));
 	}
 
 	/*
@@ -55,7 +59,8 @@ class Site extends MX_Controller {
 	public function company(){
 
 		$this->load->library('users/users');
-		$this->template->build('site/company');
+		$this->load->model('m_page');
+		$this->template->build('site/company', array('page' => $this->m_page->get(2)));
 	}
 
 	/*
@@ -65,7 +70,8 @@ class Site extends MX_Controller {
 	*/
 	public function prices(){
 		$this->load->library('users/users');
-		$this->template->build('site/prices');			
+		$this->load->model('m_page');
+		$this->template->build('site/prices', array('page' => $this->m_page->get(4)));			
 	}
 
 	/*
@@ -74,7 +80,8 @@ class Site extends MX_Controller {
 	*
 	*/
 	public function about(){
-		$this->template->build('site/about');
+		$this->load->model('m_page');
+		$this->template->build('site/about', array('page' => $this->m_page->get(3)));
 	}
 
 
@@ -132,7 +139,8 @@ class Site extends MX_Controller {
 	 **/
 	public function demo()
 	{
-		$this->template->build('site/demo');
+		$this->load->model('m_page');
+		$this->template->build('site/demo', array('page' => $this->m_page->get(1)));
 	}
 
 	/*
