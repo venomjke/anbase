@@ -56,7 +56,7 @@ var common = {
 			id:'status_msg',
 			type:'msg',
 			bgcolor:'#333',
-			msg:'<img src="/themes/dashboard/images/load.gif"/> Загрузка...',
+			msg:'<img src="/assets/images/dashboard/load.gif"/> Загрузка...',
 			timeout:0
 		};
 

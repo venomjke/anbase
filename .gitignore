@@ -7,3 +7,4 @@ system/application/logs/*
 system/application/cache/*
 *.sublime-workspace
 *.sublime-project
+assets/cache/*

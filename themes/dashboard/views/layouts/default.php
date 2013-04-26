@@ -4,7 +4,13 @@
 		<?php echo meta('Content-type','text/html; charset=utf-8','equiv'); ?>
 		<?php echo link_tag('themes/dashboard/images/an.ico', 'shortcut icon', 'image/ico'); ?>
 
-		<?php echo link_tag("themes/dashboard/css/style.css"); ?>
+
+		<?php Assets::css(array(
+					'dashboard/style.css', 
+					'dashboard/noty/jquery.noty.css', 
+					'dashboard/noty/noty_theme_default.css', 
+					'dashboard/slick.grid.css'
+			)); ?>
 
 		<?php if(is_production_mode()): ?>
 
@@ -14,44 +20,54 @@
 			<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>themes/dashboard/js/ui/themes/smoothness/jquery-ui-1.9.1.custom.min.css" />
 			<script type="text/javascript" src="<?php echo base_url(); ?>themes/dashboard/js/jquery-1.6.1.min.js" > </script>
 			<script type="text/javascript" src="<?php echo base_url(); ?>themes/dashboard/js/ui/jquery-ui-1.8.16.custom.min.js"> </script>
-
 		<?php endif; ?>
+
 
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script type="text/javascript">google.load("jquery","1.7.1");google.load("jqueryui","1.8");</script>
-
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/common.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/order_comments.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_map.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/metro_list.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/widgets/region_map.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.noty.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.center.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/lang.js"></script>
-
-		<?php echo link_tag("themes/dashboard/css/noty/jquery.noty.css"); ?>
-		<?php echo link_tag("themes/dashboard/css/noty/noty_theme_default.css"); ?>
-
-		<?php echo link_tag("themes/dashboard/css/slick.grid.css"); ?>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/jquery.event.drag-2.0.min.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.core.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.grid.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.checkboxselectcolumn.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.rowselectionmodel.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.cellrangeselector.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.cellrangedecorator.js"></script>
 		
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.formatters.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.fw_formatters.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.editors.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/slick_grid/slick.fw_editors.js"> </script>
-		
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.cookie.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.ui.datepicker-ru.js"> </script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.center.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.maphilight.min.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/jquery.keyfilter.js"></script>
+		<!--
+		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/common.js"> </script>-->
 
+		<?php Assets::js_group('common', array(
+					'dashboard/common.js', 
+					'dashboard/lang.js'
+			)); ?>
+
+		<?php Assets::js_group('slick.grid.widgets', array(
+						'dashboard/widgets/order_comments.js', 
+						'dashboard/widgets/metro_map.js',
+						'dashboard/widgets/metro_list.js',
+						'dashboard/widgets/region_map.js',
+				
+			)); ?>
+
+			<?php // echo Assets::js_group('region', array('dashboard/widgets/region_map.js')) ?>
+
+		<?php Assets::js_group('slickgrid', array(
+						'dashboard/slick_grid/jquery.event.drag-2.0.min.js',
+						'dashboard/slick_grid/slick.core.js',
+						'dashboard/slick_grid/slick.grid.js',
+						'dashboard/slick_grid/slick.checkboxselectcolumn.js',
+						'dashboard/slick_grid/slick.rowselectionmodel.js',
+						'dashboard/slick_grid/slick.cellrangeselector.js',
+						'dashboard/slick_grid/slick.cellrangedecorator.js',
+						'dashboard/slick_grid/slick.formatters.js',
+						'dashboard/slick_grid/slick.fw_formatters.js',
+						'dashboard/slick_grid/slick.editors.js',
+						'dashboard/slick_grid/slick.fw_editors.js'
+						));
+				?>
+
+
+		<?php Assets::js_group('plugins', array(
+						'dashboard/jquery.cookie.js',
+						'dashboard/jquery.ui.datepicker-ru.js',
+						'dashboard/jquery.center.js',
+						'dashboard/jquery.maphilight.min.js',
+						'dashboard/jquery.keyfilter.js'
+					)); ?>
+					
 		<script type="text/javascript">
 			common.baseUrl = '<?php echo base_url(); ?>';
 

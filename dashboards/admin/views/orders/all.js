@@ -125,6 +125,13 @@ $(function(){
 				sortable: true 
 			},
 			{
+				id: "source",
+				name: lang['grid.title.source'],
+				field: 'source',
+				editor: Slick.Editors.Text,
+				width: 70
+			},
+			{
 				id: "finish_status", 
 				name: lang['grid.title.finish_status'], 
 				field:'finish_status', 
@@ -140,16 +147,8 @@ $(function(){
 				formatter: Slick.Formatters.Comments,
 				editor: Slick.Editors.Comments,
 				width: 50
-			},
-			{
-				id: "source",
-				name: lang['grid.title.source'],
-				field: 'source',
-				editor: Slick.Editors.Text,
-				width: 70
 			}
 		]);
-
 
 		/*
 		* Создание грида

@@ -46,7 +46,7 @@ class M_Order_comments extends MY_Model
     $this->select("orders_comments.id");
     $this->select("orders_comments.user_id");
     $this->select("orders_comments.text");
-    $this->select("orders_comments.date_created");
+    $this->select("DATE_FORMAT(orders_comments.date_created, '%d/%m/%Y %H:%i:%s') as date_created", FALSE);
     $this->select("users.email");
     $this->select("users.name");
     $this->select("users.middle_name");
@@ -54,6 +54,7 @@ class M_Order_comments extends MY_Model
     $this->select("users.role");
 
     $this->join("users", "orders_comments.user_id = users.id");
+    $this->order_by('orders_comments.date_created', "DESC");
     $comments = $this->get_all(array("order_id" => $order_id));
     
     return $comments;

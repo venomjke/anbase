@@ -1,0 +1,249 @@
+body{
+	margin:0px;
+	padding:0px;
+}
+ul{
+	list-style-type:none;
+	margin:0px;
+	padding:0px;
+}
+#dashboard_head{
+	height: 100px;
+	border-bottom: 1px #B4B4B4 solid;
+}
+#dashboard_content{
+
+}
+#dashboard_foot{
+	border-top:1px #b4b4b4 solid;
+}
+#dashboard_head #menu{
+
+}
+ul#menu{
+	position: relative;
+	left: 10%;
+	height: 30px;
+	width: 200px;
+	float: left;
+	margin-top: 70px;
+}
+ul#menu li{
+	float:left;
+}
+ul#menu li a{
+	margin-right: 10px;
+	color: #333;
+}
+#dashboard_head #user_box{
+	float: right;
+	margin-right: 50px;
+	margin-top: 30px;
+}
+#user_box #greetings{
+	display:block;
+}
+#user_box #profile{
+	display: block;
+}
+#user_box .user_box_btn{
+	color:#333;
+	padding:5px;
+	text-decoration:none;
+	display:block;
+	float:left;
+	background-color:#ccc;
+	margin-right:10px;
+}
+#user_box a.user_box_btn:hover{
+	background-color:#cbb;
+}
+#dashboard_tabs{
+	overflow: auto;
+	border-bottom: 1px #B4B4B4 solid;
+}
+#dashboard_tabs ul{
+	position: relative;
+	left: 10%;
+	height: 30px;
+	width: 400px;
+	float: left;
+}
+#dashboard_tabs ul li{
+	float: left;
+}
+#dashboard_tabs ul li a{
+	margin-right: 15px;
+	display: block;
+	padding: 5px;
+}
+#wrap1{
+	padding: 20px;
+}
+#toolbar{
+
+}
+ul#toolbar{
+
+}
+ul#toolbar li{
+	float: left;
+}
+ul#toolbar li a{
+	display: block;
+	margin-right: 15px;
+}
+#dashboard_table{
+	clear: both;
+}
+#dashboard_table tr{
+
+}
+#dashboard_table tr td{
+	border:1px #b4b4b4 solid;
+}
+#org_box{
+	float: left;
+	margin-top: 30px;
+	margin-left: 20px;
+}
+#org_name{
+	width: 300px;
+	float:left;
+	margin-top: 35px;
+}
+#callmanager_box{
+
+}
+#manager_box{
+
+}
+#wrap2{
+	width: 725px;
+	margin: 0 auto;
+}
+#profileWrap{
+	border-left: 1px #B4B4B4 solid;
+	border-right: 1px #B4B4B4 solid;
+	padding: 15px 10px 0px 10px;
+	border-bottom: 1px white solid;
+}
+.profile_row{
+	font-size: 14pt;
+	margin-bottom: 15px;
+	height: 50px;
+}
+.profile_col{
+	display: inline-block;
+}
+.profile_col_img{
+	width: 32px;
+	height: 32px;
+}
+.profile_col_label{
+	width: 120px;
+	margin-left: 15px;
+	font-weight: bold;
+}
+.profile_col_text,.profile_col_input{
+	width: 390px;
+	font-size:14pt;
+}
+.profile_col_action{
+	font-size: 11pt;
+}
+#wrap3{
+	width: 1080px;
+	margin: 0 auto;
+	overflow: auto;
+	border: 1px #B4B4B4 solid;
+}
+#wrap3 .sidebar{
+	width: 250px;
+	float: left;
+	border-right: 1px #B4B4B4 solid;
+}
+#wrap3 .sidebar .action_box{
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
+#wrap4{
+	width: 800px;
+	margin-left: 250px;
+	padding-top: 10px;
+}
+#wrap4 .toolbar{
+	border-bottom: 1px #B4B4B4 solid;
+}
+#wrap4 .user_table{
+	padding: 10px 10px 0px 10px;
+}
+#wrap4 .user_table table{
+	width: 100%;
+}
+#wrap4 .user_table table tr{
+
+}
+#wrap4 .user_table table tr td{
+
+}
+#wrap4 .user_table .checkbox{
+	text-align:center;
+}
+#wrap1 #orders_grid .active{
+	border:1px #000 solid;
+}
+#wrap1 #orders_grid{
+	font-family:Calibri;
+}
+.cell_tooltip{
+	background-color: #fff;
+	border:1px #b4b4b4 solid;
+	padding: 10px;
+	z-index:999;
+	opacity:.95;
+	text-align:justify;
+	font-family:Calibri;
+}
+.hasDatepicker{
+	width:150px;
+}
+#dashboard_filter{
+	overflow: auto;
+	border-bottom: 1px #B4B4B4 solid;
+	padding-bottom:10px;
+}
+#filter_header{
+	margin-top: 3px;
+	overflow: auto;
+	width: 800px;
+	position:relative;
+	left:5%;
+}
+#filter_body{
+}
+ul#filter_controls{
+	width:650px;
+}
+ul#filter_controls li{
+
+}
+a#filter_toggle{
+
+	display:inline !important;
+	margin-right:0px !important;
+	padding:0px !important;
+	margin-left:20px !important;
+}
+.filter_section{
+	float:left;
+	margin-left: 25px;
+}
+.filter_section h4{
+
+}
+.filter_section table{
+
+}
