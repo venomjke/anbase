@@ -32,11 +32,6 @@ $(function(){
     var $comments;
     // форма добавления комментария
     var $form;
-    
-    // buttons для управления окном
-    var $saveBtn;
-    var $cancelBtn;
-    var $resetBtn;
 
     var added_comments = [];
     var del_comments   = [];
@@ -69,11 +64,6 @@ $(function(){
       options.onCancel();
     }
 
-    function reset_btn(event){
-      added_comments = [];
-      del_comments   = [];
-    }
-
 
     function is_order_comments_changed () {
       return added_comments.length || del_comments.length;
@@ -84,17 +74,25 @@ $(function(){
     */
     //TODO: код частично пересекается с add_comment, подумать над объединением.
     function add_new_comment (text) {
+
+      if( ! text){
+        return false;
+      }
+
       var comment = {
         text: text
       };
-      var now = new Date();
-      var $comment = $('<table class="widget-comments-comment"><tr><td style="width:40%"> - </td><td style="width:55%"> Вы </td><td><img title="удалить" src="'+ common.baseUrl +'themes/dashboard/images/delete.png"> </td></tr><tr><td colspan="3">' + text + '</td></tr></table>');
-      var $delBtn  = $comment.find('img');
+
+      // тело комментария
+      var $comment = $('<table class="widget-comments-comment" cellspacing="0"><tr><td colspan="3">' + common.fromText2Html(comment.text) + '</td></tr><tr><td><a href="#" class="widget-button widget-button-small widget-button-red widget-button-delete">' + lang['widgets.buttons.delete'] + '</a></td><td class="widget-comments-user">' + common.userName + '</td><td class="widget-comments-date">' + common.localDate() + '</td></tr></table>');
+
+      var $delBtn  = $comment.find('.widget-button-delete');
       // Сохраняем dom и обычный объект
       $delBtn.data('$comment', $comment);
       $delBtn.data('comment', comment);
 
-      $delBtn.click(function(){
+      $delBtn.click(function(event){
+        event.preventDefault();
         var $comment = $(this).data('$comment');
         var comment = $(this).data('comment');
         $comment.remove();
@@ -102,7 +100,7 @@ $(function(){
       });
 
       added_comments.push({text: text});
-      $comments.append($comment);
+      $comments.prepend($comment);
     }
 
     /*
@@ -113,7 +111,7 @@ $(function(){
       var delPointer = options.delComments ? '<td><a href="#" class="widget-button widget-button-small widget-button-red widget-button-delete">' + lang['widgets.buttons.delete'] + '</a></td>': '';
 
       // тело комментария
-      var $comment = $('<table class="widget-comments-comment" cellspacing="0"><tr><td colspan="3">' + comment.text + '</td></tr><tr>' + delPointer + '<td class="widget-comments-user">' + comment.last_name + ' ' + comment.name + ' ' + comment.middle_name + '</td><td class="widget-comments-date">' + comment.date_created + '</td></tr></table>');
+      var $comment = $('<table class="widget-comments-comment" cellspacing="0"><tr><td colspan="3">' + common.fromText2Html(comment.text) + '</td></tr><tr>' + delPointer + '<td class="widget-comments-user">' + comment.last_name + ' ' + comment.name + ' ' + comment.middle_name + '</td><td class="widget-comments-date">' + comment.date_created + '</td></tr></table>');
 
       var $delBtn = $comment.find('.widget-button-delete');
       // сохраняем DOM и обычный объект
@@ -162,7 +160,7 @@ $(function(){
         $wrapper.append($form);
         
         // Кнопки онка
-        var $right = $('<div class="widget-modal-buttons"><a class="widget-button widget-button-medium widget-button-green widget-button-save" href="#">' + lang['widgets.buttons.save'] + '</a><a href="#" class="widget-button widget-button-medium widget-button-orange widget-button-cancel">' + lang['widgets.buttons.cancel'] + '</a><a href="#" class="widget-button widget-button-medium widget-button-gray widget-button-reset">' + lang['widgets.buttons.reset'] + '</a></div>');
+        var $right = $('<div class="widget-modal-buttons"><a class="widget-button widget-button-medium widget-button-green widget-button-save" href="#">' + lang['widgets.buttons.save'] + '</a><a href="#" class="widget-button widget-button-medium widget-button-orange widget-button-cancel">' + lang['widgets.buttons.cancel'] + '</a></div>');
         $right.find('.widget-button-save').click(function(event){
           event.preventDefault();
           save_btn(event);
@@ -170,10 +168,6 @@ $(function(){
         $right.find('.widget-button-cancel').click(function(event){
           event.preventDefault();
           cancel_btn(event);
-        });
-        $right.find('.widget-button-reset').click(function(event){
-          event.preventDefault();
-          reset_btn(event);
         });
 
         $wrapper.append($right);  

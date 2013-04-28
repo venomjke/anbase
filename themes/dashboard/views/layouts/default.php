@@ -70,6 +70,7 @@
 					
 		<script type="text/javascript">
 			common.baseUrl = '<?php echo base_url(); ?>';
+			common.userName= '<?php $app = get_instance(); echo $app->users->get_official_name(); ?>';
 
 			/*
 			* Для разрешения 1024*(x)

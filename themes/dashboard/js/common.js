@@ -136,7 +136,7 @@ var common = {
 		  $(tooltip_id).css('top',event.pageY-$(tooltip_id).outerHeight(true)-20);
 		  $(tooltip_id).css('left',event.pageX-$(tooltip_id).outerWidth()-20);
 		}else{
-		  var tooltip = $('<div id="tooltip_'+row+'_'+cell+'" class="cell_tooltip" style="display:none;width:450">').html(value.replace(/(\n|\r\n)/g,'<br\/>'));
+		  var tooltip = $('<div id="tooltip_'+row+'_'+cell+'" class="cell_tooltip" style="display:none;width:450">').html(common.fromText2Html(value));
 		  $('body').append(tooltip);  
 		  tooltip.css('position','absolute');
 		  tooltip.css('top',event.pageY-tooltip.outerHeight(true)-20);
@@ -231,12 +231,12 @@ var common = {
 	},
 
 	/*
-	* Выбор значения Роли
+	* Получение имени роли по её идентификатору
 	*/
 	getRoleName:function(role){
 		if(role == common.role_list['USER_ROLE_ADMIN']) return lang['user.user_role_admin'];
 		else if(role == common.role_list['USER_ROLE_MANAGER']) return lang['user.user_role_manager'];
-		else if( role == common.role_list['USER_ROLE_AGENT']) return lang['user.user_role_agent'];
+		else if(role == common.role_list['USER_ROLE_AGENT']) return lang['user.user_role_agent'];
 
 		return lang['user.undefined_role'];
 	},
@@ -253,7 +253,7 @@ var common = {
 	},
 
 	/*
-	* Выбор значения типа сделки
+	* Получение названия типа сделки по её идентификатору
 	*/
 	getDealtypeName:function(dealtype){
 		if(dealtype == common.dealtype_list['ORDER_DEAL_TYPE_RENT']) return lang['order.order_deal_type_rent'];
@@ -263,19 +263,21 @@ var common = {
 
 		return lang['order.undefined_deal_type'];
 	},
+
 	/*
 	* Выбор значения Статуса завершения
 	*/
 	getFinishStatusName:function(finish_status,deal_type){
 
-	    function check_status(finish_status,success,failure){
-	      if(finish_status == 	common.finishstatus_list['ORDER_FINISH_STATUS_SUCCESS']){
-	        return success;
+	    function check_status(finish_status,success_text,failure_text){
+	      if(finish_status == common.finishstatus_list['ORDER_FINISH_STATUS_SUCCESS']){
+	        return success_text;
 	      }else if(finish_status == common.finishstatus_list['ORDER_FINISH_STATUS_FAILURE']){
-			return failure;
+					return failure_text;
 	      }
 	      return ''; // в том случае, если заявка еще не завершена
 	    }
+	    //Выводим текст статуса заявки в зависимости от типа сделки
       switch(parseInt(deal_type)){
         case common.dealtype_list['ORDER_DEAL_TYPE_RENT']: // Сдать
             return check_status(finish_status,lang['finish_status.rent.success'],lang['finish_status.rent.failure']);
@@ -290,5 +292,12 @@ var common = {
             return check_status(finish_status,lang['finish_status.buy.success'],lang['finish_status.buy.failure']);
           break;
       }
+	},
+
+	/*
+	* Преобразование спец. символов: переходы на новую строку, и.т.п в спец. символы html  
+	*/
+	fromText2Html:function(text){
+		return text.replace(/(\n|\r\n)/g,'<br\/>');
 	}
 }

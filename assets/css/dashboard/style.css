@@ -715,9 +715,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f6', end
 	background-image:url(../../images/dashboard/user.png);
 	background-repeat: no-repeat;
 	padding-left:20px;
+	width: 50%;
 }
 .widget-comments-date{
 	background-image:url(../../images/dashboard/time.png);
 	background-repeat: no-repeat;
 	padding-left:20px;
+	width: 32%;
 }

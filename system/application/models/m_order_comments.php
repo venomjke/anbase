@@ -54,7 +54,7 @@ class M_Order_comments extends MY_Model
     $this->select("users.role");
 
     $this->join("users", "orders_comments.user_id = users.id");
-    $this->order_by('orders_comments.date_created', "DESC");
+    $this->order_by('orders_comments.id', 'desc');
     $comments = $this->get_all(array("order_id" => $order_id));
     
     return $comments;

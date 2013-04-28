@@ -200,10 +200,8 @@
       var cell_content = $('<div id="cell_description" style="overflow:hidden">- Есть -</div>');
       var comments_content = $('<div></div>')
       for(var i in value){
-        var $item = $('<div/>');
-        $item.append('<b>' + value[i].name + ' ' + value[i].middle_name + ' ' + value[i].last_name + ' (' + value[i].email + ') </b>');
-        $item.append('<div>' + value[i].text + '</div>');
-        comments_content.append($item);
+        var $comment = $('<table class="widget-comments-comment" cellspacing="0"><tr><td colspan="3">' + common.fromText2Html(value[i].text) + '</td></tr><tr><td class="widget-comments-user">' + value[i].last_name + ' ' + value[i].name + ' ' + value[i].middle_name + '</td><td class="widget-comments-date">' + value[i].date_created + '</td></tr></table>');
+        comments_content.append($comment);
       }
       dataContext.comments_content = comments_content.html();
       cell_content.attr('onmousemove', 'common.show_full_text(event,' + row + ',' + cell + ', common.grid.getDataItem(' + row + ').comments_content);');
