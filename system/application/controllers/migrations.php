@@ -22,6 +22,14 @@ class Migrations extends MX_Controller {
     }
   }
 
+  public function latest()
+  {
+    $this->load->library('migration');
+    if( ! $this->migration->latest()){
+      show_error($this->migration->error_string());
+    }
+  }
+
 }
 
 /* End of file Site.php */
