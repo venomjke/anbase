@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('session','form_validation','template','database');
+$autoload['libraries'] = array('session','form_validation','template','database', 'assets', 'users/users');
 
 
 /*
@@ -64,7 +64,7 @@ $autoload['libraries'] = array('session','form_validation','template','database'
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('form','url','html','template','language','form_validation','russian_date','system');
+$autoload['helper'] = array('form','url','html','template','language','form_validation','russian_date','system', 'file', 'directory', 'string', 'html', 'assets');
 
 
 /*
@@ -80,7 +80,7 @@ $autoload['helper'] = array('form','url','html','template','language','form_vali
 |
 */
 
-$autoload['config'] = array();
+$autoload['config'] = array('assets', 'assets_cssmin', 'assets_cdn');
 
 
 /*
