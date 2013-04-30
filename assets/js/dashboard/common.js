@@ -131,10 +131,26 @@ var common = {
 	},
 
 	show_full_text:function(event, row, cell, value){
-		var tooltip_id = '#tooltip_'+row+'_'+cell;
-		if($(tooltip_id).length > 0){
-		  $(tooltip_id).css('top',event.pageY-$(tooltip_id).outerHeight(true)-20);
-		  $(tooltip_id).css('left',event.pageX-$(tooltip_id).outerWidth()-20);
+		common.showCellTooltip(event, row, cell, value);
+	},
+	hide_full_text:function(event,row,cell){
+		common.hideCellTooltip(event, row, cell);
+	},
+	make_official_name:function(name,middle_name,last_name){
+	  	name = name.charAt(0).toUpperCase();
+	  	middle_name = middle_name.charAt(0).toUpperCase();
+		last_name = last_name.charAt(0).toUpperCase()+last_name.substr(1,last_name.length);
+		return last_name+' '+name+'.'+middle_name;
+	},
+
+	/*
+	* Отображение подсказки
+	*/
+	showCellTooltip: function(event, row, cell, value){
+		var tooltipId = '#tooltip_'+row+'_'+cell;
+		if($(tooltipId).length > 0){
+		  $(tooltipId).css('top',event.pageY-$(tooltipId).outerHeight(true)-20);
+		  $(tooltipId).css('left',event.pageX-$(tooltipId).outerWidth()-20);
 		}else{
 		  var tooltip = $('<div id="tooltip_'+row+'_'+cell+'" class="cell_tooltip" style="display:none;width:450">').html(common.fromText2Html(value));
 		  $('body').append(tooltip);  
@@ -144,14 +160,9 @@ var common = {
 		  tooltip.css('display','block');
 		}
 	},
-	hide_full_text:function(event,row,cell){
+
+	hideCellTooltip: function(event, row, cell){
 	  $('#tooltip_'+row+'_'+cell).remove();
-	},
-	make_official_name:function(name,middle_name,last_name){
-	  	name = name.charAt(0).toUpperCase();
-	  	middle_name = middle_name.charAt(0).toUpperCase();
-		last_name = last_name.charAt(0).toUpperCase()+last_name.substr(1,last_name.length);
-		return last_name+' '+name+'.'+middle_name;
 	},
 
 	/*
@@ -222,12 +233,16 @@ var common = {
 	/*
 	* Переключатель с одного значения на другое
 	*/
-	switch:function($input,first,second){
+	turn: function($input, first, second){
 		if($input.val() == first){
 			$input.val(second);
 		}else{
 			$input.val(first);
 		}
+	},
+
+	switch:function($input,first,second){
+		common.turn($input, first, second);
 	},
 
 	/*
