@@ -5,7 +5,7 @@ $(function(){
 	$.extend(true,window,{
 		"common":{
 			"widgets":{
-				"metro_map":metro_map_widget				
+				"metro_map": metro_map_widget				
 			}
 		}
 	});

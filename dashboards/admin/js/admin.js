@@ -18,17 +18,15 @@ var admin = {
 	profile:{
 		init:function(){
 			admin.profile.hash_form = {};
-			common.load_form(admin.profile.hash_form,'personal');
-			common.load_form(admin.profile.hash_form,'system');
-			common.load_form(admin.profile.hash_form,'organization');
+			common.load_form(admin.profile.hash_form, 'personal');
+			common.load_form(admin.profile.hash_form, 'system');
+			common.load_form(admin.profile.hash_form, 'organization');
 		},
 		save_form:function(form){
-			common.save_form(admin.profile.hash_form,form,admin.profile.save_form_callback)
+			common.save_form(admin.profile.hash_form, form, admin.profile.save_form_callback)
 		},
-		save_form_callback:function(form,data){
-			/*
-			* Отправляем форму.
-			*/
+		save_form_callback:function(form, data){
+			// отправка формы
 			$.ajax({
 				url:admin.baseUrl+'/edit/?sct='+form,
 				type:'POST',
@@ -75,7 +73,6 @@ var admin = {
 	*/
 	user:{
 		/*
-		*
 		* Инициализация модуля init
 		*/
 		init:function(){
@@ -94,19 +91,19 @@ var admin = {
 		*/
 		unbind_manager:function(options){
 		},
-		del_users:function(grid,model){
+		del_users:function(grid, model){
 			var ids = [];
-			var SelectedRows = grid.getSelectedRows();
+			var selectedRows = grid.getSelectedRows();
 
-			for(var i in SelectedRows){
-				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
-					ids.push(grid.getDataItem(SelectedRows[i]).id);
+			for(var i in selectedRows){
+				if(grid.getDataItem(selectedRows[i]) && grid.getDataItem(selectedRows[i]).id){
+					ids.push(grid.getDataItem(selectedRows[i]).id);
 				}
 			}
 			if(ids.length){
 				$d = $('<div>');
 				$d.dialog({
-					'title':'Вы точно желаете уволить сотрудника(ов)?',
+					'title': lang['admin.user.confirm_delete_users'],
 					'modal':true,
 					'width':'auto',
 					'buttons':{
@@ -118,7 +115,7 @@ var admin = {
 							$d.dialog('close');
 						}
 					}
-				});		
+				});
 			}
 		}
 	},
@@ -136,18 +133,15 @@ var admin = {
 			buildings[common.category_list['ORDER_CATEGORY_COMMERCIAL_REAL_ESTATE']] = ['Офис',"Общепит","Магазин","Производство","Склад"];
 			buildings[common.category_list['ORDER_CATEGORY_COUNTRY_REAL_ESTATE']] = ['Коттедж',"Дом","Участок","Часть дома"]; 
 
-			var choose_buildings = function(category){
-				$building.empty();
-				for(var i in buildings[category]){
-					var $opt = $('<option value="'+buildings[category][i]+'">'+buildings[category][i]+'</option>');
-					$building.append($opt);
-				}
-			}
-
 			$d = $('#add_order_dialog');
-			$d.dialog({autoOpen:false,width:600,closeOnEscape:false});
+			$d.dialog({
+				autoOpen:false, 
+				width:600, 
+				closeOnEscape:false
+			});
 
-			if(!common.category_list || !common.dealtype_list){
+			if( ! common.category_list || ! common.dealtype_list){
+				common.debug('');
 				return false;
 			}
 
@@ -164,6 +158,15 @@ var admin = {
 			var $dealtype = $('#add_order_dealtype');
 			var $building = $('#add_order_building');
 			var $source   = $('#add_order_source');
+
+
+			var choose_buildings = function(category){
+				$building.empty();
+				for(var i in buildings[category]){
+					var $opt = $('<option value="'+buildings[category][i]+'">'+buildings[category][i]+'</option>');
+					$building.append($opt);
+				}
+			}
 
 			var regions = [];
 			var region_widget;
@@ -257,7 +260,7 @@ var admin = {
 				metros = {};
 			}
 
-			var callback_add_order = function(add_result,data){
+			var callback_add_order = function(add_result, data){
 				switch(add_result){
 					case 'success':
 						common.showSuccessMsg(data);
@@ -274,9 +277,9 @@ var admin = {
 				}
 			}
 
-			$d.dialog('option','modal',true);
-			$d.dialog('option','title','Добавление заявки');
-			$d.dialog('option','buttons',{
+			$d.dialog('option','modal', true);
+			$d.dialog('option','title', 'Добавление заявки');
+			$d.dialog('option','buttons', {
 				'Добавить':function(){
 					var data = {};
 
@@ -303,42 +306,46 @@ var admin = {
 					}
 					data['metros'] = metros;
 
-					model.addOrder(data,callback_add_order);
+					model.addOrder(data, callback_add_order);
 				},
 				'Отмена':function(){
 					$d.dialog('close');
 				}
 			});
 		},
+
 		add_order:function(){
 			$('#add_order_dialog').dialog('open');
 		},
+
 		print_orders:function(grid,model){
 			var ids = [];
-			var SelectedRows = grid.getSelectedRows();
+			var selectedRows = grid.getSelectedRows();
 
-			for(var i in SelectedRows){
-				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
-					ids.push(grid.getDataItem(SelectedRows[i]).id);
+			for(var i in selectedRows){
+				if(grid.getDataItem(selectedRows[i]) && grid.getDataItem(selectedRows[i]).id){
+					ids.push(grid.getDataItem(selectedRows[i]).id);
 				}
 			}
 			if(ids.length){
 				model.printOrders(ids);
 			}
 		},
+
 		del_orders:function(grid,model){
 			var ids = [];
-			var SelectedRows = grid.getSelectedRows();
+			var selectedRows = grid.getSelectedRows();
 
-			for(var i in SelectedRows){
-				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
-					ids.push(grid.getDataItem(SelectedRows[i]).id);
+			for(var i in selectedRows){
+				if(grid.getDataItem(selectedRows[i]) && grid.getDataItem(selectedRows[i]).id){
+					ids.push(grid.getDataItem(selectedRows[i]).id);
 				}
-			}
+			};
+
 			if(ids.length){
 				$d = $('<div>');
 				$d.dialog({
-					'title':'Вы точно желаете удалить записи?',
+					'title': lang['admin.orders.confirm_delete_orders'],
 					'modal':true,
 					'width':400,
 					'buttons':{
@@ -353,31 +360,31 @@ var admin = {
 				});		
 			}
 		},
-		finish_orders:function(grid,model){
+
+		finish_orders:function(grid, model){
 			var ids = {};
 			var cnt = 0;
-			var SelectedRows = grid.getSelectedRows();
+			var selectedRows = grid.getSelectedRows();
 			var $promptDialog = $('<div></div>');
 
 			function show_prompt(){
-				if(SelectedRows.length){
-					var item = SelectedRows.shift();
+				if(selectedRows.length != cnt){
+					var item = selectedRows[cnt];
 					var itemData = grid.getDataItem(item);
 
 					if(itemData && itemData.id){
-						++cnt;
 						$promptDialog.dialog({
-							'title':lang['prompt_finish_order_set_status']+' #:'+itemData.id,
+							'title': lang['prompt_finish_order_set_status'] + ' #:' + itemData.id,
 							'modal':true,
 							'width':'auto',
 							'autoOpen':false,
-							'buttons':{
-								'Сдал':function(){
+							'buttons': {
+								'Сдал': function(){
 									ids[itemData.id] = common.finishstatus_list['ORDER_FINISH_STATUS_SUCCESS'];
 									$promptDialog.dialog('close');
 									show_prompt();
 								},
-								'Не сдал':function(){
+								'Не сдал': function(){
 									ids[itemData.id] = common.finishstatus_list['ORDER_FINISH_STATUS_FAILURE'];
 									$promptDialog.dialog('close');
 									show_prompt();
@@ -386,6 +393,7 @@ var admin = {
 						});
 						$promptDialog.dialog('open');
 					}
+					++cnt;
 				}else{
 					finish();
 				}
@@ -401,7 +409,7 @@ var admin = {
 						'modal':true,
 						'width':400,
 						'buttons':{
-							'Завершить':function(){
+							'Завершить': function(){
 								model.finishOrders(ids);
 								$d.dialog('close');
 							},
@@ -412,15 +420,16 @@ var admin = {
 					});		
 				}	
 			}
+
 			show_prompt();	
 		},
 		restore_orders:function(grid,model){
 			var ids = [];
-			var SelectedRows = grid.getSelectedRows();
+			var selectedRows = grid.getSelectedRows();
 
-			for(var i in SelectedRows){
-				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
-					ids.push(grid.getDataItem(SelectedRows[i]).id);
+			for(var i in selectedRows){
+				if(grid.getDataItem(selectedRows[i]) && grid.getDataItem(selectedRows[i]).id){
+					ids.push(grid.getDataItem(selectedRows[i]).id);
 				}
 			}
 			if(ids.length){
@@ -448,11 +457,11 @@ var admin = {
 		},
 		del_invites:function(grid,model){
 			var ids = [];
-			var SelectedRows = grid.getSelectedRows();
+			var selectedRows = grid.getSelectedRows();
 
-			for(var i in SelectedRows){
-				if(grid.getDataItem(SelectedRows[i]) && grid.getDataItem(SelectedRows[i]).id){
-					ids.push(grid.getDataItem(SelectedRows[i]).id);
+			for(var i in selectedRows){
+				if(grid.getDataItem(selectedRows[i]) && grid.getDataItem(selectedRows[i]).id){
+					ids.push(grid.getDataItem(selectedRows[i]).id);
 				}
 			}
 			if(ids.length){

@@ -3,6 +3,7 @@
 */
 var lang = [];
 
+lang['common.loading'] = 'Загрузка ...';
 /*
 * Пользователи
 */
@@ -102,3 +103,10 @@ lang['widgets.buttons.save']             = 'Сохранить';
 lang['widgets.buttons.cancel']           = 'Отменить';
 lang['widgets.buttons.reset']            = 'Сбросить';
 lang['widgets.buttons.delete']           = 'Удалить';
+
+
+/*
+* Панель администратора
+*/
+lang['admin.user.confirm_delete_users']    = 'Вы точно желаете уволить сотрудника(ов)?';
+lang['admin.orders.confirm_delete_orders'] = 'Вы точно желаете удалить записи?';

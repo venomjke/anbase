@@ -14,6 +14,8 @@
 
 		<?php if(is_production_mode()): ?>
 
+			<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+			<script type="text/javascript">google.load("jquery","1.7.1");google.load("jqueryui","1.8");</script>
 			<?php echo link_tag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/smoothness/jquery-ui.css"); ?>
 
 		<?php else: ?>
@@ -21,10 +23,6 @@
 			<script type="text/javascript" src="<?php echo base_url(); ?>themes/dashboard/js/jquery-1.6.1.min.js" > </script>
 			<script type="text/javascript" src="<?php echo base_url(); ?>themes/dashboard/js/ui/jquery-ui-1.8.16.custom.min.js"> </script>
 		<?php endif; ?>
-
-
-		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-		<script type="text/javascript">google.load("jquery","1.7.1");google.load("jqueryui","1.8");</script>
 		
 		<!--
 		<script type="text/javascript" src="<?php echo base_url();?>themes/dashboard/js/common.js"> </script>-->
