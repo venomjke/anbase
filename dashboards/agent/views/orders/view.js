@@ -39,7 +39,7 @@ $(function(){
 				name:lang['grid.title.category'],
 				width:55, 
 				field:"category", 
-				editor:Slick.Editors.AnbaseCategory, 
+				// editor:Slick.Editors.AnbaseCategory, 
 				formatter:Slick.Formatters.Category
 			},
 			{
@@ -47,7 +47,7 @@ $(function(){
 				name:lang['grid.title.deal_type'], 
 				field:"deal_type",
 				width:50, 
-				editor:Slick.Editors.AnbaseDealType, 
+				// editor:Slick.Editors.AnbaseDealType, 
 				formatter:Slick.Formatters.Dealtype
 			}
 		]);
@@ -61,7 +61,7 @@ $(function(){
 					name: lang['grid.title.regions'],
 					width:60, 
 					field:"regions", 
-					editor:Slick.Editors.AnbaseRegions,
+					// editor:Slick.Editors.AnbaseRegions,
 					formatter:Slick.Formatters.RegionsList
 				}
 			]);
@@ -76,7 +76,7 @@ $(function(){
 					name: lang['grid.title.metros'], 
 					width:60, 
 					field:"metros",  
-					editor:Slick.Editors.AnbaseMetros,
+					// editor:Slick.Editors.AnbaseMetros,
 					formatter:Slick.Formatters.MetrosList
 				}
 			]);
@@ -90,7 +90,7 @@ $(function(){
 					width: 60, 
 					field: "price",  
 					formatter: Slick.Formatters.Rubbles,
-					editor: Slick.Editors.Integer, 
+					// editor: Slick.Editors.Integer, 
 					sortable:true
 				}
 			]);
@@ -104,7 +104,7 @@ $(function(){
 				cssClass: "cell_description", 
 				width: 303, 
 				formatter: Slick.Formatters.Description, 
-				editor: Slick.Editors.LongText
+				// editor: Slick.Editors.LongText
 			}
 		]);
 
@@ -116,7 +116,7 @@ $(function(){
 					field: "phone", 
 					width: 115, 
 					formatter: Slick.Formatters.Phone, 
-					editor:Slick.Editors.Integer
+					// editor:Slick.Editors.Integer
 				},
 				{
 					id: "comments",
