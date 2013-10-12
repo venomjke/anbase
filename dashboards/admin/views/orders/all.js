@@ -84,9 +84,9 @@ $(function(){
 					name:lang['grid.title.price'],
 					width:60, 
 					field:"price",  
-					formatter:Slick.Formatters.Rubbles,
-					editor:Slick.Editors.Integer, 
-					sortable:true
+					formatter: Slick.Formatters.Rubbles,
+					editor: Slick.Editors.Integer, 
+					sortable: true
 				}]);
 		}
 
@@ -153,11 +153,20 @@ $(function(){
 		/*
 		* Создание грида
 		*/
-		var model = new Slick.Data.RemoteModel({BaseUrl:admin.baseUrl+'?act=view&s=<?php echo $section; ?>',AddUrl:admin.baseUrl+'?act=add',DeleteUrl:admin.baseUrl+'?act=del',finishUrl:admin.baseUrl+'?act=finish',PrintUrl:admin.baseUrl+'?act=print',PageSize:200});	
+		var model = new Slick.Data.RemoteModel(
+			{
+				BaseUrl: admin.baseUrl + '?act=view&s=<?php echo $section; ?>',
+				AddUrl: admin.baseUrl + '?act=add',
+				DeleteUrl: admin.baseUrl + '?act=del',
+				finishUrl: admin.baseUrl + '?act=finish',
+				PrintUrl: admin.baseUrl + '?act=print',
+				PageSize:200
+			}
+		);	
 
 		var grid = new Slick.Grid("#orders_grid",model.data,columns,options);
-	    grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
-	    grid.registerPlugin(checkboxSelector);
+	  grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
+	  grid.registerPlugin(checkboxSelector);
 		common.grid = grid;
 
 		/*
@@ -197,7 +206,7 @@ $(function(){
 		});
 
 		/*
-		* Сохраняем backup значение
+		* Сохраняем значение перед началом редактирования
 		*/
 		grid.onBeforeEditCell.subscribe(function(e,handle){
 			handle.item.backupFieldValue = handle.item[handle.column.field]; 
@@ -206,7 +215,7 @@ $(function(){
 		/*
 		* Обработка события изменения ячейки
 		*/
-		grid.onCellChange.subscribe(function(e,handle){
+		grid.onCellChange.subscribe(function(e, handle){
 
 			var act  = 'edit';
 			var data = {};
@@ -216,8 +225,9 @@ $(function(){
 
 			data['id']  = item.id;
 			data[field] = item[field];
+
 			/*
-			* TODO Наверно, стоит подумать над тем как нормально сохранять эти данные
+			* TODO подумать над тем как нормально сохранять эти данные
 			*/
 			if(field == "metros"){
 				data["any_metro"] = item["any_metro"];
@@ -233,7 +243,7 @@ $(function(){
 			}
 			
 			$.ajax({
-				url:admin.baseUrl + '/?act='+act,
+				url:admin.baseUrl + '/?act=' + act,
 				type:'POST',
 				dataType:'json',
 				data:data,
@@ -241,12 +251,10 @@ $(function(){
 					if(response.code && response.data){
 						switch(response.code){
 							case 'success_edit_order':
-								common.showResultMsg(response.data);
+								common.showSuccessMsg(response.data);
 							break;
 							case 'error_edit_order':
-								/*
-								* Восстанавливаем старое значение
-								*/
+								// Восстанавливаем старое значение
 								item[field] = item.backupFieldValue;
 								grid.updateRow(handle.row);
 								
@@ -276,12 +284,12 @@ $(function(){
 		/*
 		* Обработка события неверного редактирования ячейки
 		*/
-		grid.onValidationError.subscribe(function(e,handle){
+		grid.onValidationError.subscribe(function(e, handle){
 			var column = handle.column;
 			var validationResults = handle.validationResults;
-			common.showResultMsg(validationResults.msg);
+			common.showErrorMsg(validationResults.msg);
 		});
-		grid.onViewportChanged.subscribe(function(e,args){
+		grid.onViewportChanged.subscribe(function(e, args){
 			var vp = grid.getViewport();
 			model.ensureData(vp.top,vp.bottom);
 		});
@@ -297,63 +305,54 @@ $(function(){
 			common.hideAjaxIndicator();
 		});
 
-		/*
-		* Обработчик создания записи
-		*/
+		// Обработчик создания записи		
 		admin.orders.init_add_order_dialog(model);
 		$('#add_order').click(function(){
 			admin.orders.add_order();
 		});
-		model.onDataCreating.subscribe(function(e,args){
+		model.onDataCreating.subscribe(function(e, args){
 			common.showAjaxIndicator();
 		});
-		model.onDataCreated.subscribe(function(e,args){
+		model.onDataCreated.subscribe(function(e, args){
 			common.hideAjaxIndicator();
 			vp = grid.getViewport();
-			model.reloadAll(vp.top,vp.bottom);
+			model.reloadAll(vp.top, vp.bottom);
 		});
 
-		/*
-		* Обработчики "удалить" "добавить"
-		*/
+		// Обработчики "удалить", "добавить"
 		$('#del_order').click(function(){
-			admin.orders.del_orders(grid,model);
+			admin.orders.del_orders(grid, model);
 		});
-		model.onDataDeleting.subscribe(function(e,args){
+		model.onDataDeleting.subscribe(function(e, args){
 			common.showAjaxIndicator()
 		})
-		model.onDataDeleted.subscribe(function(e,args){
+		model.onDataDeleted.subscribe(function(e, args){
 			common.hideAjaxIndicator();
 			grid.setSelectedRows([]);
 			vp = grid.getViewport();
-			model.reloadAll(vp.top,vp.bottom);
+			model.reloadAll(vp.top, vp.bottom);
 		})
 
-		/*
-		* Завершить заявки
-		*/
+		// Завершить заявки
 		$('#finish_order').click(function(){
-			admin.orders.finish_orders(grid,model);
+			admin.orders.finish_orders(grid, model);
 		});
-		model.onDataFinish.subscribe(function(e,args){
+		model.onDataFinish.subscribe(function(e, args){
 			common.showAjaxIndicator()
 		});
-		model.onDataFinished.subscribe(function(e,args){
+		model.onDataFinished.subscribe(function(e, args){
 			common.hideAjaxIndicator();
 			grid.setSelectedRows([]);
 			vp = grid.getViewport();
 			model.reloadAll(vp.top,vp.bottom);
 		});
 
-		/*
-		* Распечатать заявки
-		*/
+		// Распечатать заявки
 		$('#print_order').click(function(){
 			admin.orders.print_orders(grid,model);
 		});
-		/*
-		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
-		*/
+
+		// обработчик нажатия esc 
 		$(window).keydown(function(e){
 			if(e.keyCode == 27){
 				if(region_widget){
@@ -366,34 +365,8 @@ $(function(){
 					metro_widget = undefined;
 				}
 
-				/*
-				* Закрываем редактор
-				*/
-				var c = grid.getActiveCell();
-				var e = grid.getCellEditor(c);
-				if(e){
-					e.cancel();
-				}
-			}
-		});
-		/*
-		* Раз я не могу прикрутить keydown Внутри редактора, то размещу его здесь
-		*/
-		$(window).keydown(function(e){
-			if(e.keyCode == 27){
-				if(region_widget){
-					region_widget.destroy();
-					region_widget = undefined;
-				}
-
-				if(metro_widget){
-					metro_widget.destroy();
-					metro_widget = undefined;
-				}
-
-				/*
-				* Закрываем редактор
-				*/
+				
+				// Закрываем редактор
 				var c = grid.getActiveCell();
 				var e = grid.getCellEditor(c);
 				if(e){
@@ -402,9 +375,8 @@ $(function(){
 			}
 		});
 
-		/*
-		* Обработчики фильтра
-		*/
+		
+		//  Обработчики фильтра
 		$('#f_category').change(function(){
 			model.setCategory($(this).val());
 			vp = grid.getViewport();

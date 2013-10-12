@@ -1,92 +1,140 @@
-/*
-*
-* common модуль предназначен для хранения разделяемых всеми панелями функций
-* @author alex.strigin
-*/
+// common methods, objects etc.
 var common = {
 	baseUrl:'',
 
-	/**
-	* Методы уведомления о чем либо
-	**/
-	showMsg:function(text,options){
-		var def_options = {
+	// вывод текстового уведомления
+	notify: function(text, options){
+		var settings = {
 			text:'',
-			layout:'topRight',
-			textAlign:'left',
-			animateOpen:{opacity:'show'},
-			animateClose:{opacity:'hide'},
-			type:'success'
-		}
-		options = $.extend(def_options,options);
-		if(text){
-			noty($.extend(options,{text:text}));
+			typeNoty: '' 
+		};
+		settings = $.extend({}, settings, options, {text: text});
+
+		if(settings.text){
+			switch(settings.typeNoty){
+				case 'popup':
+					noty($.extend({
+							layout: 'topRight',
+							textAlign:'left',
+							animateOpen:{
+								opacity:'show'
+							},
+							animateClose:{
+								opacity:'hide'
+							},
+							type: 'success',
+						}, settings)
+					);
+					break;
+				case 'status':
+					if(settings.show){
+						common.showStatusMsg(settings)
+					} else {
+						common.hideStatusMsg(settings);
+					}
+					break;
+			};	
 		}
 	},
+
 	showNotySuccessMsg:function(text){
-		common.showMsg(text);
+		common.notify(text, {
+			typeNoty: 'popup',
+		});
 	},
+	
+
 	showNotyErrorMsg:function(text){
-		common.showMsg(text,{type:'error'});
+		common.notify(text, {
+			typeNoty: 'popup',
+			type: 'error'
+		})
 	},
+	
 	showAjaxIndicator:function(){
 		common.showStatusMsg();
 	},
+	
 	hideAjaxIndicator:function(){
 		common.hideStatusMsg();
 	},
+	
 	showErrorMsg:function(msg){
-		common.showStatusMsg({id:'result_msg',msg:msg,timeout:3000,bgcolor:'#92000a'});
+		common.notify({
+			id:'result_msg',
+			msg: msg,
+			timeout: 3000,
+			bgcolor: '#92000a',
+			show: true,
+			typeNoty: 'status'
+		});
 	},
+	
 	showSuccessMsg:function(msg){
-		common.showStatusMsg({id:'result_msg',msg:msg,timeout:3000,bgcolor:'#0f8434'});
-	}
-	,
+		common.notify({
+			id: 'result_msg',
+			msg: msg,
+			timeout: 3000,
+			bgcolor: '#0f8434',
+			show: true,
+			typeNoty: 'status'
+		});
+	},
+
 	showResultMsg:function(msg){
-		common.showStatusMsg({id:'result_msg',msg:msg,timeout:3000});
+		common.notify({
+			id:'result_msg',
+			msg: msg,
+			timeout: 3000,
+			typeNoty: 'status',
+			show: true
+		});
 	},
 
 	/*
 	* Показать статусное сообщение
 	*/
 	showStatusMsg:function(options){
-
-
-		var def_options = {
+		var settings = {
 			id:'status_msg',
-			type:'msg',
-			bgcolor:'#333',
-			msg:'<img src="/assets/images/dashboard/load.gif"/> Загрузка...',
-			timeout:0
+			type: 'msg',
+			bgcolor: '#333',
+			msg: '<img src="/assets/images/dashboard/load.gif"/> ' + lang['common.loading'] ,
+			timeout: 0
 		};
 
-		/*
-		* Сначала закрываем, если был открыт другой индикатор
-		*/
-		common.hideStatusMsg(options);
+		settings = $.extend(true, settings, options);
 
-		options = $.extend(true,def_options,options);
-		$('body').prepend('<div id="'+options.id+'" style="position:fixed;top: -20px;left: 45%;background-color:'+options.bgcolor+';z-index:99999999;padding:10px;-webkit-border-bottom-right-radius: 15px;-webkit-border-bottom-left-radius: 15px;-moz-border-radius-bottomright: 15px;-moz-border-radius-bottomleft: 15px;border-bottom-right-radius: 15px;border-bottom-left-radius: 15px;color:#fff" ><span style="padding: 3px;">'+options.msg+'</span></div>');
-		$('#'+options.id).animate({"top":"+=20px"},"fast");
+		// прячем открытый индикатор
+		common.hideStatusMsg(settings);
 
-		/*
-		* если был задан timeout, то закрываем наше сообщение через определенный timeout
-		*/
-		if(options.timeout){
-			setTimeout(function(){common.hideStatusMsg(options);},options.timeout);
+		$('body').prepend('<div id="' + settings.id + '" style="position:fixed;top: -20px;left: 45%;background-color:' +settings.bgcolor + ';z-index:99999999;padding:10px;-webkit-border-bottom-right-radius: 15px;-webkit-border-bottom-left-radius: 15px;-moz-border-radius-bottomright: 15px;-moz-border-radius-bottomleft: 15px;border-bottom-right-radius: 15px;border-bottom-left-radius: 15px;color:#fff" ><span style="padding: 3px;">' + settings.msg + '</span></div>');
+		$('#' + settings.id).animate({"top":"+=20px"}, "fast");
+
+		// закрываем по timeout
+		if(settings.timeout){
+			setTimeout(function(){ common.hideStatusMsg(settings); }, settings.timeout);
 		}
 	},
 
-
-	/*
-	* Отключить Ajax индикатор загрузки
-	*/
 	hideStatusMsg:function(options){
-		var def_options = {
+		var settings = {
 			id:'status_msg'
-		}
-		options = $.extend(true,def_options,options);
-		$('#'+options.id).animate({"top":"-=20px"},"fast",function(){$(this).remove();})
+		};
+
+		settings = $.extend(true, settings, options);
+
+		$('#' + settings.id).animate(
+				{ 
+					"top": "-=20px"
+				},
+
+				"fast",
+
+				function(){
+					$(this).remove();
+				}
+		);
 	},
 
 	/*
@@ -109,7 +157,7 @@ var common = {
 	},
 
 	/*
-	* Проверка объекта на пустотность
+	* Проверка имеет объект свойства или нет
 	*/
 	isEmptyObj:function(obj){
 	    for (var prop in obj) {

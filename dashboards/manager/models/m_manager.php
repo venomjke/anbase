@@ -14,10 +14,7 @@ if(!class_exists("M_User"))
 */
 class M_Manager extends M_User
 {
-
-	
 	/*
-	* 
 	* Правила валидации при регистрации.
 	*/
 	public $register_validation_rules = array(
@@ -59,6 +56,4 @@ class M_Manager extends M_User
 	{
 		return $this->validate;
 	}
-
-	
 }

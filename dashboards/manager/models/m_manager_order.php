@@ -1,7 +1,5 @@
 <?php defined("BASEPATH") or die("No direct access to script");
 
-
-
 if(!class_exists("M_Order")){
 	require APPPATH."models/m_order.php";
 }
