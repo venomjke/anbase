@@ -1,6 +1,7 @@
 *.*~
 !.gitignore
 !index.html
+.DS_Store
 
 #Commonly modified files
 system/application/logs/*

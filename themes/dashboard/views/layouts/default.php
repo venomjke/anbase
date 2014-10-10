@@ -53,7 +53,7 @@
 						'dashboard/slick_grid/slick.formatters.js',
 						'dashboard/slick_grid/slick.fw_formatters.js',
 						'dashboard/slick_grid/slick.editors.js',
-						'dashboard/slick_grid/slick.fw_editors.js'
+						'dashboard/slick_grid/slick.fw_editors.js',
 						));
 				?>
 
