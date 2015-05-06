@@ -81,7 +81,6 @@ class M_Admin extends M_User{
 	public function change_position($user_id,$old_role,$new_role)
 	{
 		/*
-		*
 		* Изменения происходят только при переходах Агент -> ( Менеджер | Админ ), а также ( Менеджер | Админ ) -> Агент
 		*/
 		if( ($old_role == M_User::USER_ROLE_MANAGER or $old_role == M_User::USER_ROLE_ADMIN) && $new_role == M_User::USER_ROLE_AGENT){

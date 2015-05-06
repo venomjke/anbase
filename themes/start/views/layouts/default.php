@@ -48,7 +48,13 @@
 	    			<?php echo $template['body']; ?>
 	    		</div>
 	    		<div class="right">
-				<?php if(!empty($loginBox))echo $loginBox; ?>
+					<?php if( ! empty($loginBox)):
+							echo $loginBox; 
+						  else :
+					?>
+						Вы уже авторизованы. <br/>
+						Войти в <a href="<?php echo site_url($this->users->resolve_user_redirect_uri()); ?>">панель управления</a>
+					<?php endif; ?>
 				</div>
 				<div class="clear"></div>
 			</div>

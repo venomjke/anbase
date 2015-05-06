@@ -76,10 +76,8 @@ class Users {
 				if ($hasher->CheckPassword($password, $user->password)) {		// password ok
 
 					/*
-					*
 					*	Если пользователь существует, и все впорядке, 
-					*	 то выбераем информацию об организации
-					*
+					*	 то выбираем информацию об организации
 					*/
 					if(!is_null($user_as_org = $this->ci->m_user_organization->get(array('user_id' => $user->id)))){
 
@@ -604,7 +602,6 @@ class Users {
 	*	Определение роли пользователя, является ли менеджером
 	*
 	*/
-
 	public function is_manager($user_id = ''){
 
 		if(empty($user_id)){
@@ -836,7 +833,6 @@ class Users {
 	*	@param object (user_as_org) - объект таблицы users_organizations
 	*/
 	protected function save_user_session_data($user,$user_as_org){
-
 		// Login user
 		$this->ci->session->set_userdata(array(
 				'user_id'	=> $user->id,

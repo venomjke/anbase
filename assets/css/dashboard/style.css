@@ -723,3 +723,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f6', end
 	padding-left:20px;
 	width: 32%;
 }
+.notification{
+	margin: 10px 35px;
+	padding: 15px;	
+}
+.notification h2{
+	font-size: 14px;
+  	margin: 0px;
+}
+.notification.warning-notification {
+	background: #ffe691;
+	border: 1px solid #f6db7b;
+}

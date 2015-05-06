@@ -14,13 +14,13 @@ class Migrations extends MX_Controller {
     parent::__construct();
   }
 
-  public function current()
-  {
-    $this->load->library('migration');
-    if( ! $this->migration->current()){
-      show_error($this->migration->error_string());
-    }
-  }
+  // public function current()
+  // {
+  //   $this->load->library('migration');
+  //   if( ! $this->migration->current()){
+  //     show_error($this->migration->error_string());
+  //   }
+  // }
 
   public function latest()
   {

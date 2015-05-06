@@ -216,7 +216,7 @@
       while (data[toPage * options.PageSize] !== undefined && fromPage < toPage)
         toPage--;
 
-      if (fromPage > toPage /*|| ((fromPage == toPage) && data[fromPage * options.PageSize] !== undefined)*/) {
+      if (fromPage > toPage || ((fromPage == toPage) && data[fromPage * options.PageSize] !== undefined)) {
         // TODO:  look-ahead
         return;
       }

@@ -18,9 +18,8 @@ class Site extends MX_Controller {
 		$this->template->set_partial('menu','common/menu',array("current" => $this->router->fetch_method()));
 
 		$this->load->library('users/users');
-		if($this->users->is_logged_in()){
-			redirect($this->users->resolve_user_redirect_uri());
-		}else{
+
+		if( ! $this->users->is_logged_in()){
 			$loginBox = Modules::run('users/auth/login');
 			$this->template->set('loginBox',$loginBox);
 		}
@@ -33,7 +32,10 @@ class Site extends MX_Controller {
 	*/
 	public function index($page = 0){
 
-		$this->load->library('users/users');	
+		if($this->users->is_logged_in()){
+			redirect($this->users->resolve_user_redirect_uri());
+		}
+
 		$this->load->library('pagination');
 		$this->load->model('m_news');
 		$this->load->helper('russian_date_helper');
